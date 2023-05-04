@@ -5,7 +5,7 @@ on:
     branches: [dev]
 jobs:
   flutter_test:
-    name: Run flutter test
+    name: Run React test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
