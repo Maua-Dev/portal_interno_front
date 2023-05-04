@@ -1,0 +1,78 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+    
+    
+}
+
+.id__label {
+    margin-bottom: 10px;
+    font-size: 28px;
+}
+
+.id__input {
+    margin-bottom: 10px;
+    width: 300px;
+    height: 40px;
+    font-size: 20px;
+}
+
+.name__label {
+    margin-bottom: 10px;
+    font-size: 28px;
+}
+
+.name__input {
+    margin-bottom: 10px;
+    width: 300px;
+    height: 40px;
+    font-size: 20px;
+}
+
+.email__label {
+    margin-bottom: 10px;
+    font-size: 28px;
+}
+
+.email__input {
+    margin-bottom: 10px;
+    width: 300px;
+    height: 40px;
+    font-size: 20px;
+}
+
+.state__label {
+    margin-bottom: 10px;
+    font-size: 28px;
+}
+
+.state__select {
+    margin-bottom: 10px;
+    width: 300px;
+    height: 40px;
+    font-size: 20px;
+}
+
+.button__submit {
+    margin-top: 20px;
+    width: 150px;
+    height: 40px;
+    background-color: #1145AA;
+    border-radius: 15px;
+    border: none;
+}
+
+.button__submit:hover {
+    background-color: #0D3A8B;
+}
+
+.container__users {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+}

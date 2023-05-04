@@ -1,0 +1,29 @@
+.button__submit {
+    width: 150px;
+    height: 40px;
+    background-color: #1145AA;
+    border-radius: 15px;
+    border: none;
+}
+
+.button__submit:hover {
+    background-color: #0D3A8B;
+}
+
+.form__container {
+    display: flex;
+    margin-left: 20px;
+}
+
+.page__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container__users__update {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
