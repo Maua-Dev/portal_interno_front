@@ -12,9 +12,9 @@
 .header {
   display: flex;
   flex-direction: row;
-  border-bottom: #000 1px solid;
-  width: 70%;
-  padding: 0 0 1rem 0;
+  border-bottom: #5b5a5a 2px solid;
+  width: 80%;
+  padding: 4rem 0 1rem 0;
   gap: 2rem;
   justify-content: space-between;
 }
@@ -27,6 +27,26 @@
   width: 70%;
 }
 
+.content div p {
+  text-decoration: underline;
+  color: #5b5a5a;
+}
+
+.content button {
+  background-color: #fff;
+  border: #0800ff 1px solid;
+  color: #0800ff;
+  border-radius: 24px;
+  padding: 3px 20px 3px 20px;
+  transition: all 0.3s ease-in-out;
+}
+
+.content button:hover {
+  background-color: #0800ff;
+  color: #fff;
+  cursor: pointer;
+}
+
 .hours {
   display: flex;
   flex-direction: column;
@@ -34,11 +54,144 @@
   justify-content: center;
 }
 
-.projects {
+.hours span {
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+.body {
   display: flex;
   flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 3rem 0 0 0;
+  width: 80%;
+  gap: 2rem;
+}
+
+.widgets {
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
-  padding: 1rem 0 0 0;
-  width: 70%;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.widgets div {
+  border: #5b5a5a 2px solid;
+  border-radius: 16px;
+  padding: 1rem 2rem 1rem 2rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.widgets div h2 {
+  font-size: 3.5rem;
+  font-weight: bold;
+}
+
+.widgets div button {
+  font-size: 3.5rem;
+  font-weight: bold;
+  border: none;
+  background-color: #fff;
+  color: #000;
+}
+
+.widgets div button:hover {
+  cursor: pointer;
+}
+
+.container {
+  width: 100%;
+  border: #5b5a5a 2px solid;
+  border-radius: 16px;
+  height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 1rem;
+  gap: 1.5rem;
+}
+
+.container div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0.5rem;
+}
+
+.container div h2 {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.container div p {
+  font-size: 1.5rem;
+  color: #5b5a5a;
+}
+
+.container div button {
+  background-color: #fff;
+  border: #0800ff 1px solid;
+  color: #0800ff;
+  border-radius: 24px;
+  padding: 3px 20px 3px 20px;
+  transition: all 0.3s ease-in-out;
+}
+
+.container div button:hover {
+  background-color: #0800ff;
+  color: #fff;
+  cursor: pointer;
+}
+
+.project {
+  display: flex;
+  flex-direction: row;
+  gap: 12rem;
+}
+
+.activities {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  background-color: #c3c2c2;
+  border-radius: 16px;
+  padding: 1rem;
+}
+
+.activities h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #000;
+}
+
+.activities-status {
+  font-size: 1.2rem;
+  color: #5b5a5a;
+}
+
+.activities div {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 8px;
+  gap: 0.2rem;
+  width: 20rem;
+}
+
+.activities div h4 {
+  color: #0800ff;
+  font-size: 1.2rem;
+}
+
+.activities div span,
+.activities div p {
+  font-size: 1.2rem;
+  color: #5b5a5a;
 }
