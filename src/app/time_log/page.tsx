@@ -1,8 +1,12 @@
+import NavBar from "../components/nav_bar/page";
 import styles from "./time_log.module.css";
 
 export default function TimeLog() {
   return (
     <>
+      <header>
+        <NavBar />
+      </header>
       <main className={styles.page}>
         <header className={styles.header}>
           <div className={styles.content}>
