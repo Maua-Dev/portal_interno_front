@@ -118,7 +118,7 @@
   gap: 1.5rem;
 }
 
-.container div {
+.area {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -146,6 +146,7 @@
 }
 
 .container div button:hover {
+  display: flex;
   background-color: #0800ff;
   color: #fff;
   cursor: pointer;
@@ -154,7 +155,7 @@
 .project {
   display: flex;
   flex-direction: row;
-  gap: 12rem;
+  gap: 2rem;
 }
 
 .activities {
@@ -178,6 +179,8 @@
 }
 
 .activities div {
+  display: flex;
+  flex-direction: column;
   background-color: #fff;
   border-radius: 8px;
   padding: 8px;
@@ -194,4 +197,8 @@
 .activities div p {
   font-size: 1.2rem;
   color: #5b5a5a;
+}
+
+.activities div button {
+  width: 40%;
 }

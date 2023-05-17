@@ -55,6 +55,22 @@ export default function TimeLog() {
                   <button>administrar</button>
                 </div>
               </div>
+              <div className={styles.activities}>
+                <h3>ATIVIDADES</h3>
+                <span className={styles["activities-status"]}>Concluídos</span>
+                <div>
+                  <h4>TÍTULO</h4>
+                  <p>Área da atividade</p>
+                  <span>Início 28/10/2023</span>
+                  <button>administrar</button>
+                </div>
+                <div>
+                  <h4>TÍTULO</h4>
+                  <p>Área da atividade</p>
+                  <span>Início 28/10/2023</span>
+                  <button>administrar</button>
+                </div>
+              </div>
             </div>
           </article>
         </section>
