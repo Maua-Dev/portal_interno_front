@@ -28,14 +28,19 @@ export default function NavBar() {
                     <h2>ev</h2>
                     <h3>community</h3>
                 </div>
-                <div className={styles.links}>
+            </div>
+            <div className={styles.links}>
                     {linksList.map((link) => {
                             return (
-                                <button>{link.text}<FaChevronDown></FaChevronDown></button>
+                                <button>
+                                    <p className={styles.inside_button}>
+                                        {link.text}
+                                        <FaChevronDown className={styles.icon}/>
+                                    </p>
+                                </button>
                             );
                         })
                     }
-                </div>
             </div>
         </div>
     );

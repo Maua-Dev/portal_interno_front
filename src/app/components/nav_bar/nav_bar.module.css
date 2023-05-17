@@ -2,6 +2,10 @@
     background-color: #023e8a;
     box-shadow: inset 0 0 1000px #4672ac;
 
+    height: 50px;
+
+    display: flex;
+    flex-direction: row;
 }
 
 .logo {
@@ -30,23 +34,30 @@
 
     display: flex;
     flex-direction: row;
-
 }
 
 .links button{
     margin-left: 40px;
+    padding: 0px 15px;
     
-    width: 150px;
     height: 100%;
     background: rgba(255, 255, 255, 0); 
 
     border: none;
 
-    font-size: 16px;
+    font-size: 18px;
     font-weight: lighter;
 }
 
 .links button:hover {
     color: black;
     background: rgba(255, 255, 255, 1);
+}
+
+.inside_button {
+    margin-top: 15px;
+}
+
+.icon {
+    height: 10px;
 }
