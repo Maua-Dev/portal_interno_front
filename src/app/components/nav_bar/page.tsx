@@ -1,5 +1,6 @@
 import styles from "./nav_bar.module.css";
-import {FaChevronDown} from "react-icons/fa"
+import {FaChevronDown, FaRegBell, FaRegQuestionCircle, FaRegUser} from "react-icons/fa"
+import { url } from "inspector";
 
 export default function NavBar() {
     const linksList = [
@@ -20,6 +21,24 @@ export default function NavBar() {
         },
     ]
 
+    const iconsList = [
+        {
+            id: 1,
+            icon_name: <FaRegBell className={styles.bell} />,
+            url: "",
+        },
+        {
+            id: 2,
+            icon_name: <FaRegQuestionCircle className={styles.question} />,
+            url: "",
+        },
+        {
+            id: 3,
+            icon_name: <FaRegUser className={styles.bigger}/>,
+            url: "",
+        }
+    ]
+
     return (
         <div className={styles.main}>
             <div className={styles.logo}>
@@ -35,12 +54,17 @@ export default function NavBar() {
                                 <button>
                                     <p className={styles.inside_button}>
                                         {link.text}
-                                        <FaChevronDown className={styles.icon}/>
+                                        <FaChevronDown className={styles.arrow_down}/>
                                     </p>
                                 </button>
-                            );
-                        })
-                    }
+                    );})}
+            </div>
+            <div className={styles.right_side}>
+                {iconsList.map((icon) => {
+                    return (
+                        <>{icon.icon_name}</>
+                    );
+                })}
             </div>
         </div>
     );

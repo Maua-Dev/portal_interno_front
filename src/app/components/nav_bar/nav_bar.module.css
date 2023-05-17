@@ -58,6 +58,27 @@
     margin-top: 15px;
 }
 
-.icon {
+.arrow_down { /* Button Icon */
     height: 10px;
+}
+
+.right_side {
+    margin: auto 10px auto auto;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.bell, .question {
+    font-size: 20px;
+    margin-right: 5px;
+}
+
+.bell {
+    rotate: 20deg;
+}
+
+.bigger {
+    font-size: 25px;
 }
