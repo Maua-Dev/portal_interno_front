@@ -20,7 +20,7 @@
 }
 
 .logo h2 { /* Text: ev */
-    margin-top: 6px;
+    margin-top: 8px;
 }
 
 .logo h3 { /* Text: Community */
@@ -31,7 +31,7 @@
 }
 
 .links {
-    margin-left: 40px;
+    margin-left: 10px;
 
     display: flex;
     flex-direction: row;
@@ -48,6 +48,8 @@
 
     font-size: 18px;
     font-weight: lighter;
+
+    cursor: pointer;
 }
 
 .links button:hover {
@@ -69,11 +71,13 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+
 }
 
 .bell, .question {
     font-size: 20px;
     margin-right: 5px;
+    cursor: pointer;
 }
 
 .bell {
@@ -82,4 +86,5 @@
 
 .bigger {
     font-size: 25px;
+    cursor: pointer;
 }

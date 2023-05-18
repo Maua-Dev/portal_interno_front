@@ -7,18 +7,23 @@ export default function NavBar() {
         {
             id: 1,
             text: "Contatos",
-            url: "contatos",
+            url: "",
         },
         {
-            id: 1,
+            id: 2,
             text: "Abrir denuncia",
-            url: "Abrir denuncia",
+            url: "",
         },
         {
-            id: 1,
+            id: 3,
             text: "Planilha excel",
-            url: "Planilha excel",
+            url: "",
         },
+        {
+            id: 4,
+            text: "Projetos",
+            url: ""
+        }
     ]
 
     const iconsList = [
@@ -63,8 +68,7 @@ export default function NavBar() {
                 {iconsList.map((icon) => {
                     return (
                         <>{icon.icon_name}</>
-                    );
-                })}
+                    );})}
             </div>
         </div>
     );
