@@ -29,7 +29,42 @@ export class Project {
             throw new EntityError('props.description')
         }
         this.props.description = props.description
-        
+
+    }
+
+    // Getters and Setters 
+
+    get code() {
+        return this.props.code
+    }
+
+    get name() {
+        return this.props.name
+    }
+
+    get description() {
+        return this.props.description
+    }
+
+    set setCode(code: string) {
+        if (!Project.validateCode(code)) {
+            throw new EntityError('props.code')
+        }
+        this.props.code = code 
+    }
+
+    set setName(name: string) {
+        if (!Project.validateName(name)) {
+            throw new EntityError('props.name')
+        }
+        this.props.name = name
+    }
+
+    set setDescription(description: string) {
+        if (!Project.validateDescription(description)) {
+            throw new EntityError('props.description')
+        }
+        this.props.description = description
     }
 
     // Validations
