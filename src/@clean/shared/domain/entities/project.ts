@@ -67,6 +67,24 @@ export class Project {
         this.props.description = description
     }
 
+    // JSON Conversion 
+
+    static fromJSON(json: JsonProps) {
+        return new Project({
+            code: json.code,
+            name: json.name,
+            description: json.description,
+        })
+    }
+
+    toJSON() {
+        return {
+            code: this.code,
+            name: this.name,
+            description: this.description
+        }
+    }
+
     // Validations
 
     static validateCode(code: string): boolean {
