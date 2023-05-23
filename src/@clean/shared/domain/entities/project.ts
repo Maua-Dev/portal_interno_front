@@ -15,17 +15,17 @@ export type JsonProps = {
 
 export class Project {
     constructor (public props: ProjectProps) {
-        if (!Project.validateCode(props.code as string)) {
+        if (!Project.validateCode(props.code)) {
             throw new EntityError('props.code')
         }
         this.props.code = props.code
 
-        if (!Project.validateName(props.name as string)) {
+        if (!Project.validateName(props.name)) {
             throw new EntityError('props.name')
         }
         this.props.name = props.name
 
-        if (!Project.validateDescription(props.description as string)) {
+        if (!Project.validateDescription(props.description)) {
             throw new EntityError('props.description')
         }
         this.props.description = props.description
@@ -94,7 +94,7 @@ export class Project {
             return false
         } else if (code.length != 2) {
             return false
-        } else if (code == code.toUpperCase()) {
+        } else if (code != code.toUpperCase()) {
             return false
         } else if (!code.match(/^[A-Za-z]+$/)) {
             return false
