@@ -1,3 +1,4 @@
+import { EntityError } from "../helpers/errors/domain_error";
 
 
 export type ProjectProps = {
@@ -14,7 +15,21 @@ export type JsonProps = {
 
 export class Project {
     constructor (public props: ProjectProps) {
+        if (!Project.validateCode(props.code as string)) {
+            throw new EntityError('props.code')
+        }
+        this.props.code = props.code
 
+        if (!Project.validateName(props.name as string)) {
+            throw new EntityError('props.name')
+        }
+        this.props.name = props.name
+
+        if (!Project.validateDescription(props.description as string)) {
+            throw new EntityError('props.description')
+        }
+        this.props.description = props.description
+        
     }
 
     // Validations
