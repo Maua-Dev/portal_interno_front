@@ -1,4 +1,5 @@
 import { Project } from "@/@clean/shared/domain/entities/project"
+import { EntityError } from "@/@clean/shared/domain/helpers/errors/domain_error";
 
 test('Test Project entity', () => {
     const project = new Project({
@@ -58,4 +59,42 @@ test('Test Project entity from JSON', () => {
     })
 
     expect(Project.fromJSON(project)).toBeInstanceOf(Project)
+})
+
+// Invalid attributes tests
+
+test('Test Project entity error code', () => {
+    expect(() => {
+        new Project({
+            code: 'pi', 
+            name: 'Portal Interno',
+            description: 'Site controle de membros', 
+        })
+    }).toThrowError(EntityError)
+
+    expect(() => {
+        new Project({
+            code: 'pi', 
+            name: 'Portal Interno',
+            description: 'Site controle de membros', 
+        })
+    }).toThrowError('Field props.code is not valid')
+})
+
+test('Test Project entity error name', () => {
+    expect(() => {
+        new Project({
+            code: 'PI', 
+            name: '--',
+            description: 'Site controle de membros', 
+        })
+    }).toThrowError(EntityError)
+
+    expect(() => {
+        new Project({
+            code: 'PI', 
+            name: '--',
+            description: 'Site controle de membros', 
+        })
+    }).toThrowError('Field props.name is not valid')
 })
