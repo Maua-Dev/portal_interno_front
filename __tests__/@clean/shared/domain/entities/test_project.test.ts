@@ -38,3 +38,24 @@ test('Test Project entity description', () => {
     expect(project.description).toBe('Site controle de membros')
 }) 
 
+// From JSON and to JSON tests 
+
+test('Test Project entity to JSON', () => {
+    const project = new Project({
+        code: 'PI', 
+        name: 'Portal Interno',
+        description: 'Site controle de membros', 
+    })
+
+    expect(project.toJSON()).toBeInstanceOf(Object)
+})
+
+test('Test Project entity from JSON', () => {
+    const project = new Project({
+        code: 'PI', 
+        name: 'Portal Interno',
+        description: 'Site controle de membros', 
+    })
+
+    expect(Project.fromJSON(project)).toBeInstanceOf(Project)
+})
