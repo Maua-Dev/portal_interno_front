@@ -1,10 +1,12 @@
+import { actionTypeToEnum } from "../enums/action_type_enum";
+import { stackToEnum } from "../enums/stack_enum";
 import { EntityError } from "../helpers/errors/domain_error";
-import { Action } from "./action";
+import { Action, ActionProps } from "./action";
 
 
 export type AssociatedActionProps = {
     member_ra: string
-    action: Action
+    action: ActionProps
 }
 
 export type JsonProps = {
@@ -58,6 +60,24 @@ export class AssociatedAction {
         }
         this.props.action = action
     }
+
+    // JSON Conversion
+
+    static fromJSON(json: JsonProps): AssociatedAction {
+        return new AssociatedAction({
+          member_ra: json.member_ra,
+          action: Action.fromJSON(json.action)
+        });
+    }
+
+    toJSON() {
+        return {
+            member_ra: this.member_ra,
+            action: this.action,
+        }
+    }
+
+    
 
     //Validations 
 
