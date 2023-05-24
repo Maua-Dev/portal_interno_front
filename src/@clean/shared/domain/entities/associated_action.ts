@@ -45,7 +45,7 @@ export class AssociatedAction {
         return this.props.action
     }
 
-    set setMemberId(member_ra: string) {
+    set setMemberRa(member_ra: string) {
         if(!AssociatedAction.validateMemberRa(member_ra)) {
             throw new EntityError('props.member_ra')
         }
