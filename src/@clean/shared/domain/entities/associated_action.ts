@@ -1,3 +1,4 @@
+import { EntityError } from "../helpers/errors/domain_error";
 import { Action } from "./action";
 
 
@@ -21,3 +22,31 @@ export type JsonProps = {
     }
 }
 
+export class AssociatedAction {
+    constructor(public props: AssociatedActionProps) {
+        if(!AssociatedAction.validateMemberRa(props.member_ra)) {
+            throw new EntityError('props.member_ra')
+        }
+        this.props.member_ra = props.member_ra
+
+        if(!(props.action instanceof Action)) {
+            throw new EntityError('props.action')
+        }
+        this.props.action = props.action
+    }
+
+    //Validations 
+
+    static validateMemberRa(member_ra: string): boolean {
+        if (member_ra == null) {
+            return false
+        } else if (typeof(member_ra) != "string") {
+            return false
+        } else if(member_ra.length != 8) {
+            return false
+        } else if (!member_ra.match(/^\d{2}\.\d{5}-\d$/)) {
+            return false;
+          }
+        return true
+    }
+}
