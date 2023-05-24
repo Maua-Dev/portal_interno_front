@@ -77,8 +77,6 @@ export class AssociatedAction {
         }
     }
 
-    
-
     //Validations 
 
     static validateMemberRa(member_ra: string): boolean {
@@ -86,7 +84,7 @@ export class AssociatedAction {
             return false
         } else if (typeof(member_ra) != "string") {
             return false
-        } else if(member_ra.length != 8) {
+        } else if(member_ra.length != 10) {
             return false
         } else if (!member_ra.match(/^\d{2}\.\d{5}-\d$/)) {
             return false;
