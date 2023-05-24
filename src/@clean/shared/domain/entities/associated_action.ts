@@ -26,13 +26,37 @@ export class AssociatedAction {
     constructor(public props: AssociatedActionProps) {
         if(!AssociatedAction.validateMemberRa(props.member_ra)) {
             throw new EntityError('props.member_ra')
-        }
+        } 
         this.props.member_ra = props.member_ra
 
         if(!(props.action instanceof Action)) {
             throw new EntityError('props.action')
         }
         this.props.action = props.action
+    }
+
+    // Getters and Setters
+
+    get member_ra() {
+        return this.props.member_ra
+    }
+
+    get action() {
+        return this.props.action
+    }
+
+    set setMemberId(member_ra: string) {
+        if(!AssociatedAction.validateMemberRa(member_ra)) {
+            throw new EntityError('props.member_ra')
+        }
+        this.props.member_ra = member_ra
+    }
+
+    set setAction(action: Action) {
+        if(!(action instanceof Action)) {
+            throw new EntityError('props.action')
+        }
+        this.props.action = action
     }
 
     //Validations 
