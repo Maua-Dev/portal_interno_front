@@ -14,10 +14,10 @@ export type JsonProps = {
   year: number;
   cellphone: string;
   course: string;
-  hired_date: number;
-  deactivated_date: number;
+  hiredDate: number;
+  deactivatedDate: number;
   active: string;
-  projects: Project[]; // Project
+  projects: Object[]; // Project
 };
 
 export type MemberProps = {
@@ -29,8 +29,8 @@ export type MemberProps = {
   year: number;
   cellphone: string;
   course: COURSE; // ENUM
-  hired_date: number;
-  deactivated_date: number;
+  hiredDate: number;
+  deactivatedDate: number;
   active: ACTIVE; // ENUM
   projects: Project[]; // Project
 };
@@ -77,15 +77,17 @@ export class Member {
     }
     this.props.course = props.course;
 
-    if (!Member.validateHiredDate(props.hired_date)) {
-      throw new EntityError("props.hired_date");
+    if (!Member.validateHiredDate(props.hiredDate)) {
+      throw new EntityError("props.hiredDate");
     }
-    this.props.hired_date = props.hired_date;
+    this.props.hiredDate = props.hiredDate;
 
-    if (!Member.validateDeactivatedDate(props.deactivated_date)) {
-      throw new EntityError("props.deactivated_date");
+    if (
+      !Member.validateDeactivatedDate(props.deactivatedDate, props.hiredDate)
+    ) {
+      throw new EntityError("props.deactivatedDate");
     }
-    this.props.deactivated_date = props.deactivated_date;
+    this.props.deactivatedDate = props.deactivatedDate;
 
     if (!Member.validateActive(props.active)) {
       throw new EntityError("props.active");
@@ -188,26 +190,31 @@ export class Member {
     this.props.course = course;
   }
 
-  get hired_date() {
-    return this.props.hired_date;
+  get hiredDate() {
+    return this.props.hiredDate;
   }
 
-  set hired_date(hired_date: number) {
-    if (!Member.validateHiredDate(hired_date)) {
-      throw new EntityError("hired_date");
+  set hiredDate(hiredDate: number) {
+    if (!Member.validateHiredDate(hiredDate)) {
+      throw new EntityError("hiredDate");
     }
-    this.props.hired_date = hired_date;
+    this.props.hiredDate = hiredDate;
   }
 
-  get deactivated_date() {
-    return this.props.deactivated_date;
+  get deactivatedDate() {
+    return this.props.deactivatedDate;
   }
 
-  set deactivated_date(deactivated_date: number) {
-    if (!Member.validateDeactivatedDate(deactivated_date)) {
-      throw new EntityError("deactivated_date");
+  set deactivatedDate(deactivatedDate: number) {
+    if (
+      !Member.validateDeactivatedDate(
+        this.props.deactivatedDate,
+        this.props.hiredDate
+      )
+    ) {
+      throw new EntityError("deactivatedDate");
     }
-    this.props.deactivated_date = deactivated_date;
+    this.props.deactivatedDate = deactivatedDate;
   }
 
   get active() {
@@ -244,8 +251,8 @@ export class Member {
       year: this.year,
       cellphone: this.cellphone,
       course: this.course,
-      hired_date: this.hired_date,
-      deactivated_date: this.deactivated_date,
+      hiredDate: this.hiredDate,
+      deactivatedDate: this.deactivatedDate,
       active: this.active,
       projects: this.projects,
     };
@@ -261,10 +268,10 @@ export class Member {
       year: json.year,
       cellphone: json.cellphone,
       course: courseToEnum(json.course),
-      hired_date: json.hired_date,
-      deactivated_date: json.deactivated_date,
+      hiredDate: json.hiredDate,
+      deactivatedDate: json.deactivatedDate,
       active: activeToEnum(json.active),
-      projects: json.projects,
+      projects: json.projects.map((project: any) => Project.fromJSON(project)),
     });
   }
 
@@ -336,7 +343,7 @@ export class Member {
       return false;
     } else if (typeof cellphone !== "string") {
       return false;
-    } else if (cellphone.length < 11) {
+    } else if (cellphone.length != 11) {
       return false;
     }
     return true;
@@ -351,19 +358,25 @@ export class Member {
     return true;
   }
 
-  static validateHiredDate(hired_date: number) {
-    if (hired_date == null) {
+  static validateHiredDate(hiredDate: number) {
+    if (hiredDate == null) {
       return false;
-    } else if (typeof hired_date != "number") {
+    } else if (typeof hiredDate != "number") {
+      return false;
+    } else if (hiredDate < 0) {
       return false;
     }
     return true;
   }
 
-  static validateDeactivatedDate(deactivated_date: number) {
-    if (deactivated_date == null) {
+  static validateDeactivatedDate(deactivatedDate: number, hiredDate: number) {
+    if (deactivatedDate == null) {
       return false;
-    } else if (typeof deactivated_date != "number") {
+    } else if (typeof deactivatedDate != "number") {
+      return false;
+    } else if (deactivatedDate < 0) {
+      return false;
+    } else if (deactivatedDate < hiredDate) {
       return false;
     }
     return true;

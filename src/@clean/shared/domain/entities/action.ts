@@ -3,121 +3,121 @@ import { STACK, stackToEnum } from "../enums/stack_enum";
 import { EntityError } from "../helpers/errors/domain_error";
 
 export type JsonProps = {
-  owner_ra: string;
-  start_time: number;
-  end_time: number;
-  action_id: string;
+  ownerRa: string;
+  startTime: number;
+  endTime: number;
+  actionId: string;
   title: string;
-  project_code: string;
-  associated_members_ra: string[];
-  stack_tags: string[];
-  action_type_tags: string[];
+  projectCode: string;
+  associatedMembersRa: string[];
+  stackTags: string[];
+  actionTypeTags: string[];
 };
 
 export type ActionProps = {
-  owner_ra: string;
-  start_time: number;
-  end_time: number;
-  action_id: string;
+  ownerRa: string;
+  startTime: number;
+  endTime: number;
+  actionId: string;
   title: string;
-  project_code: string;
-  associated_members_ra: string[];
-  stack_tags: STACK[];
-  action_type_tags: ACTION_TYPE[];
+  projectCode: string;
+  associatedMembersRa: string[];
+  stackTags: STACK[];
+  actionTypeTags: ACTION_TYPE[];
 };
 
 export class Action {
   constructor(public props: ActionProps) {
-    if (!Action.validateOwnerRa(props.owner_ra)) {
-      throw new EntityError("props.owner_ra");
+    if (!Action.validateOwnerRa(props.ownerRa)) {
+      throw new EntityError("props.ownerRa");
     }
-    this.props.owner_ra = props.owner_ra;
+    this.props.ownerRa = props.ownerRa;
 
-    if (!Action.validateStartTime(props.start_time)) {
-      throw new EntityError("props.start_time");
+    if (!Action.validateStartTime(props.startTime)) {
+      throw new EntityError("props.startTime");
     }
-    this.props.start_time = props.start_time;
+    this.props.startTime = props.startTime;
 
-    if (!Action.validateEndTime(props.end_time)) {
-      throw new EntityError("props.end_time");
+    if (!Action.validateEndTime(props.endTime)) {
+      throw new EntityError("props.endTime");
     }
-    this.props.end_time = props.end_time;
+    this.props.endTime = props.endTime;
 
-    if (!Action.validateActionId(props.action_id)) {
-      throw new EntityError("props.action_id");
+    if (!Action.validateActionId(props.actionId)) {
+      throw new EntityError("props.actionId");
     }
-    this.props.action_id = props.action_id;
+    this.props.actionId = props.actionId;
 
     if (!Action.validateTitle(props.title)) {
       throw new EntityError("props.title");
     }
     this.props.title = props.title;
 
-    if (!Action.validateProjectCode(props.project_code)) {
-      throw new EntityError("props.project_code");
+    if (!Action.validateProjectCode(props.projectCode)) {
+      throw new EntityError("props.projectCode");
     }
-    this.props.project_code = props.project_code;
+    this.props.projectCode = props.projectCode;
 
-    if (!Action.validateAssociatedMembersRa(props.associated_members_ra)) {
-      throw new EntityError("props.associated_members_ra");
+    if (!Action.validateAssociatedMembersRa(props.associatedMembersRa)) {
+      throw new EntityError("props.associatedMembersRa");
     }
-    this.props.associated_members_ra = props.associated_members_ra;
+    this.props.associatedMembersRa = props.associatedMembersRa;
 
-    if (!Action.validateStackTags(props.stack_tags)) {
-      throw new EntityError("props.stack_tags");
+    if (!Action.validateStackTags(props.stackTags)) {
+      throw new EntityError("props.stackTags");
     }
-    this.props.stack_tags = props.stack_tags;
+    this.props.stackTags = props.stackTags;
 
-    if (!Action.validateActionTypeTags(props.action_type_tags)) {
-      throw new EntityError("props.action_type_tags");
+    if (!Action.validateActionTypeTags(props.actionTypeTags)) {
+      throw new EntityError("props.actionTypeTags");
     }
-    this.props.action_type_tags = props.action_type_tags;
+    this.props.actionTypeTags = props.actionTypeTags;
   }
 
   // Getters and Setters
 
-  get owner_ra() {
-    return this.props.owner_ra;
+  get ownerRa() {
+    return this.props.ownerRa;
   }
 
-  set setOwnerRa(owner_ra: string) {
-    if (!Action.validateOwnerRa(owner_ra)) {
-      throw new EntityError("props.owner_ra");
+  set setOwnerRa(ownerRa: string) {
+    if (!Action.validateOwnerRa(ownerRa)) {
+      throw new EntityError("props.ownerRa");
     }
-    this.props.owner_ra = owner_ra;
+    this.props.ownerRa = ownerRa;
   }
 
-  get start_time() {
-    return this.props.start_time;
+  get startTime() {
+    return this.props.startTime;
   }
 
-  set setStartTime(start_time: number) {
-    if (!Action.validateStartTime(start_time)) {
-      throw new EntityError("props.start_time");
+  set setStartTime(startTime: number) {
+    if (!Action.validateStartTime(startTime)) {
+      throw new EntityError("props.startTime");
     }
-    this.props.start_time = start_time;
+    this.props.startTime = startTime;
   }
 
-  get end_time() {
-    return this.props.end_time;
+  get endTime() {
+    return this.props.endTime;
   }
 
-  set setEndTime(end_time: number) {
-    if (!Action.validateEndTime(end_time)) {
-      throw new EntityError("props.end_time");
+  set setEndTime(endTime: number) {
+    if (!Action.validateEndTime(endTime)) {
+      throw new EntityError("props.endTime");
     }
-    this.props.end_time = end_time;
+    this.props.endTime = endTime;
   }
 
-  get action_id() {
-    return this.props.action_id;
+  get actionId() {
+    return this.props.actionId;
   }
 
-  set setActionId(action_id: string) {
-    if (!Action.validateActionId(action_id)) {
-      throw new EntityError("props.action_id");
+  set setActionId(actionId: string) {
+    if (!Action.validateActionId(actionId)) {
+      throw new EntityError("props.actionId");
     }
-    this.props.action_id = action_id;
+    this.props.actionId = actionId;
   }
 
   get title() {
@@ -131,77 +131,77 @@ export class Action {
     this.props.title = title;
   }
 
-  get project_code() {
-    return this.props.project_code;
+  get projectCode() {
+    return this.props.projectCode;
   }
 
-  set setProjectCode(project_code: string) {
-    if (!Action.validateProjectCode(project_code)) {
-      throw new EntityError("props.project_code");
+  set setProjectCode(projectCode: string) {
+    if (!Action.validateProjectCode(projectCode)) {
+      throw new EntityError("props.projectCode");
     }
-    this.props.project_code = project_code;
+    this.props.projectCode = projectCode;
   }
 
-  get associated_members_ra() {
-    return this.props.associated_members_ra;
+  get associatedMembersRa() {
+    return this.props.associatedMembersRa;
   }
 
-  set setAssociatedMembersRa(associated_members_ra: string[]) {
-    if (!Action.validateAssociatedMembersRa(associated_members_ra)) {
-      throw new EntityError("props.associated_members_ra");
+  set setAssociatedMembersRa(associatedMembersRa: string[]) {
+    if (!Action.validateAssociatedMembersRa(associatedMembersRa)) {
+      throw new EntityError("props.associatedMembersRa");
     }
-    this.props.associated_members_ra = associated_members_ra;
+    this.props.associatedMembersRa = associatedMembersRa;
   }
 
-  get stack_tags() {
-    return this.props.stack_tags;
+  get stackTags() {
+    return this.props.stackTags;
   }
 
-  set setStackTags(stack_tags: STACK[]) {
-    if (!Action.validateStackTags(stack_tags)) {
-      throw new EntityError("props.stack_tags");
+  set setStackTags(stackTags: STACK[]) {
+    if (!Action.validateStackTags(stackTags)) {
+      throw new EntityError("props.stackTags");
     }
-    this.props.stack_tags = stack_tags;
+    this.props.stackTags = stackTags;
   }
 
-  get action_type_tags() {
-    return this.props.action_type_tags;
+  get actionTypeTags() {
+    return this.props.actionTypeTags;
   }
 
-  set setActionTypeTags(action_type_tags: ACTION_TYPE[]) {
-    if (!Action.validateActionTypeTags(action_type_tags)) {
-      throw new EntityError("props.action_type_tags");
+  set setActionTypeTags(actionTypeTags: ACTION_TYPE[]) {
+    if (!Action.validateActionTypeTags(actionTypeTags)) {
+      throw new EntityError("props.actionTypeTags");
     }
-    this.props.action_type_tags = action_type_tags;
+    this.props.actionTypeTags = actionTypeTags;
   }
 
   // JSON conversion
 
   toJSON() {
     return {
-      owner_ra: this.owner_ra,
-      start_time: this.start_time,
-      end_time: this.end_time,
-      action_id: this.action_id,
+      ownerRa: this.ownerRa,
+      startTime: this.startTime,
+      endTime: this.endTime,
+      actionId: this.actionId,
       title: this.title,
-      project_code: this.project_code,
-      associated_members_ra: this.associated_members_ra,
-      stack_tags: this.stack_tags,
-      action_type_tags: this.action_type_tags,
+      projectCode: this.projectCode,
+      associatedMembersRa: this.associatedMembersRa,
+      stackTags: this.stackTags,
+      actionTypeTags: this.actionTypeTags,
     };
   }
 
   static fromJSON(json: JsonProps) {
     return new Action({
-      owner_ra: json.owner_ra,
-      start_time: json.start_time,
-      end_time: json.end_time,
-      action_id: json.action_id,
+      ownerRa: json.ownerRa,
+      startTime: json.startTime,
+      endTime: json.endTime,
+      actionId: json.actionId,
       title: json.title,
-      project_code: json.project_code,
-      associated_members_ra: json.associated_members_ra,
-      stack_tags: json.stack_tags.map((stack_tag) => stackToEnum(stack_tag)),
-      action_type_tags: json.action_type_tags.map((action_type_tag) =>
+      projectCode: json.projectCode,
+      associatedMembersRa: json.associatedMembersRa,
+      stackTags: json.stackTags.map((stack_tag) => stackToEnum(stack_tag)),
+      actionTypeTags: json.actionTypeTags.map((action_type_tag) =>
         actionTypeToEnum(action_type_tag)
       ),
     });
@@ -220,30 +220,30 @@ export class Action {
     return true;
   }
 
-  static validateStartTime(start_time: number) {
-    if (start_time == null) {
+  static validateStartTime(startTime: number) {
+    if (startTime == null) {
       return false;
-    } else if (typeof start_time != "number") {
-      return false;
-    }
-    return true;
-  }
-
-  static validateEndTime(end_time: number) {
-    if (end_time == null) {
-      return false;
-    } else if (typeof end_time != "number") {
+    } else if (typeof startTime != "number") {
       return false;
     }
     return true;
   }
 
-  static validateActionId(action_id: string) {
-    if (action_id == null) {
+  static validateEndTime(endTime: number) {
+    if (endTime == null) {
       return false;
-    } else if (typeof action_id != "string") {
+    } else if (typeof endTime != "number") {
       return false;
-    } else if (action_id.length < 4) {
+    }
+    return true;
+  }
+
+  static validateActionId(actionId: string) {
+    if (actionId == null) {
+      return false;
+    } else if (typeof actionId != "string") {
+      return false;
+    } else if (actionId.length < 4) {
       return false;
     }
     return true;
@@ -260,56 +260,56 @@ export class Action {
     return true;
   }
 
-  static validateProjectCode(project_code: string) {
-    if (project_code == null) {
+  static validateProjectCode(projectCode: string) {
+    if (projectCode == null) {
       return false;
-    } else if (typeof project_code != "string") {
+    } else if (typeof projectCode != "string") {
       return false;
-    } else if (project_code.length != 2) {
+    } else if (projectCode.length != 2) {
       return false;
     }
     return true;
   }
 
-  static validateAssociatedMembersRa(associated_members_ra: string[]) {
-    if (associated_members_ra == null) {
+  static validateAssociatedMembersRa(associatedMembersRa: string[]) {
+    if (associatedMembersRa == null) {
       return false;
-    } else if (Array.isArray(associated_members_ra) == false) {
+    } else if (Array.isArray(associatedMembersRa) == false) {
       return false;
-    } else if (associated_members_ra.length == 0) {
+    } else if (associatedMembersRa.length == 0) {
       return false;
     } else if (
-      associated_members_ra.every((ra) => this.validateOwnerRa(ra)) == false
+      associatedMembersRa.every((ra) => this.validateOwnerRa(ra)) == false
     ) {
       return false;
     }
     return true;
   }
 
-  static validateStackTags(stack_tags: STACK[]) {
-    if (stack_tags == null) {
+  static validateStackTags(stackTags: STACK[]) {
+    if (stackTags == null) {
       return false;
-    } else if (Array.isArray(stack_tags) == false) {
+    } else if (Array.isArray(stackTags) == false) {
       return false;
-    } else if (stack_tags.length == 0) {
+    } else if (stackTags.length == 0) {
       return false;
     } else if (
-      stack_tags.every((stack) => Object.values(STACK).includes(stack)) == false
+      stackTags.every((stack) => Object.values(STACK).includes(stack)) == false
     ) {
       return false;
     }
     return true;
   }
 
-  static validateActionTypeTags(action_type_tags: ACTION_TYPE[]) {
-    if (action_type_tags == null) {
+  static validateActionTypeTags(actionTypeTags: ACTION_TYPE[]) {
+    if (actionTypeTags == null) {
       return false;
-    } else if (Array.isArray(action_type_tags) == false) {
+    } else if (Array.isArray(actionTypeTags) == false) {
       return false;
-    } else if (action_type_tags.length == 0) {
+    } else if (actionTypeTags.length == 0) {
       return false;
     } else if (
-      action_type_tags.every((action_type) =>
+      actionTypeTags.every((action_type) =>
         Object.values(ACTION_TYPE).includes(action_type)
       ) == false
     ) {
