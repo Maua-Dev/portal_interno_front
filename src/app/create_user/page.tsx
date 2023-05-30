@@ -21,14 +21,14 @@ export default function CreateUserPage() {
       id: Number(id),
       name: name as string,
       email: email as string,
-      state: state as STATE,
+      state: state as STATE
     })
 
     createUser(userCreated)
     console.log('User created: ', userCreated)
 
     const spanMessage: HTMLSpanElement = document.querySelector(
-      'span',
+      'span'
     ) as HTMLSpanElement
     spanMessage.style.display = 'block'
 
@@ -43,7 +43,7 @@ export default function CreateUserPage() {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'center'
       }}
     >
       <h1>Create User</h1>
