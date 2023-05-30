@@ -1,7 +1,6 @@
-import { JsonProps, User } from '@/@clean/shared/domain/entities/user'
+import { User } from '@/@clean/shared/domain/entities/user'
 import { STATE } from '@/@clean/shared/domain/enums/state_enum'
 import { EntityError } from '@/@clean/shared/domain/helpers/errors/domain_error'
-import { randomUUID } from 'node:crypto'
 
 test('Test User entity', () => {
   const user = new User({
