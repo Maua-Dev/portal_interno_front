@@ -1,5 +1,6 @@
 import { UserProvider } from '@/contexts/user_provider'
 import './globals.css'
+import React from 'react'
 
 export const metadata = {
   title: 'Template Clean Architecture Frontend',
@@ -14,9 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <UserProvider>
-          { children }
-        </UserProvider>  
+        <UserProvider>{children}</UserProvider>
       </body>
     </html>
   )
