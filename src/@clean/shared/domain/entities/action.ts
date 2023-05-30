@@ -202,7 +202,7 @@ export class Action {
       associatedMembersRa: json.associatedMembersRa,
       stackTags: json.stackTags.map((stackTag) => stackToEnum(stackTag)),
       actionTypeTags: json.actionTypeTags.map((actionTypeTag) =>
-        actionTypeToEnum(actionTypeTag)
+        actionTypeToEnum(actionTypeTag),
       ),
     })
   }
@@ -310,7 +310,7 @@ export class Action {
       return false
     } else if (
       actionTypeTags.every((actionType) =>
-        Object.values(ACTION_TYPE).includes(actionType)
+        Object.values(ACTION_TYPE).includes(actionType),
       ) === false
     ) {
       return false
