@@ -254,7 +254,7 @@ export class Member {
       hiredDate: this.hiredDate,
       deactivatedDate: this.deactivatedDate,
       active: this.active,
-      projects: this.projects,
+      projects: this.projects
     }
   }
 
@@ -271,7 +271,7 @@ export class Member {
       hiredDate: json.hiredDate,
       deactivatedDate: json.deactivatedDate,
       active: activeToEnum(json.active),
-      projects: json.projects.map((project: any) => Project.fromJSON(project)),
+      projects: json.projects.map((project: any) => Project.fromJSON(project))
     })
   }
 
