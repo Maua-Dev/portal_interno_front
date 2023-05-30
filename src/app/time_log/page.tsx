@@ -1,4 +1,4 @@
-import styles from "./time_log.module.css";
+import styles from './time_log.module.css'
 
 export default function TimeLog() {
   return (
@@ -28,5 +28,5 @@ export default function TimeLog() {
         </section>
       </main>
     </>
-  );
+  )
 }
