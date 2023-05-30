@@ -3,6 +3,11 @@
   "rules": {
     "semi": "off",
     "quotes": ["warn", "single"],
-    "prettier/prettier": "warn"
+    "prettier/prettier": "warn",
+    "comma-dangle": "off",
+    "no-new": "off",
+    "no-unused-vars": "warn",
+    "no-unused-expressions": "warn",
+    "no-unused-labels": "warn"
   }
 }
