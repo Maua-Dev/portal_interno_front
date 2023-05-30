@@ -4,6 +4,11 @@
     "semi": "off",
     "quotes": ["warn", "single"],
     "prettier/prettier": "warn",
-    "no-new" : "off"
+    "comma-dangle": "off",
+    "no-new": "off",
+    "no-unused-vars": "warn",
+    "no-unused-expressions": "warn",
+    "no-unused-labels": "warn",
+    "accessor-pairs": "off"
   }
 }
