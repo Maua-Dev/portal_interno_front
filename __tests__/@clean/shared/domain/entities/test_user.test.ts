@@ -7,16 +7,17 @@ test('Test User entity', () => {
     id: 1,
     name: 'Teste',
     email: 'rodrigo.dsiqueira1@gmailcom',
-    state: STATE.PENDING,
+    state: STATE.PENDING
   })
   expect(user).toBeInstanceOf(User)
 })
+
 test('Test User entity name', () => {
   const user = new User({
     id: 1,
     name: 'Teste',
     email: 'rodrigo.dsiqueira1@gmailcom',
-    state: STATE.PENDING,
+    state: STATE.PENDING
   })
   expect(user.name).toBe('Teste')
 })
@@ -25,7 +26,7 @@ test('Test User entity email', () => {
     id: 1,
     name: 'Teste',
     email: 'rodrigo.dsiqueira1@gmailcom',
-    state: STATE.PENDING,
+    state: STATE.PENDING
   })
   expect(user.email).toBe('rodrigo.dsiqueira1@gmailcom')
 })
@@ -35,7 +36,7 @@ test('Test User entity error email', () => {
       id: 1,
       name: 'Teste',
       email: 'rodrigo.dsiqueira1gmailcom',
-      state: STATE.PENDING,
+      state: STATE.PENDING
     })
   }).toThrowError(EntityError)
   expect(() => {
@@ -43,7 +44,7 @@ test('Test User entity error email', () => {
       id: 1,
       name: 'Teste',
       email: 'rodrigo.dsiqueira1gmailcom',
-      state: STATE.PENDING,
+      state: STATE.PENDING
     })
   }).toThrowError('Field props.email is not valid')
 })
@@ -52,7 +53,7 @@ test('Test to json', () => {
     id: 1,
     name: 'Teste',
     email: 'rodrigo.dsiqueira1@gmailcom',
-    state: STATE.PENDING,
+    state: STATE.PENDING
   })
 
   const userToJSON = user.toJSON()
@@ -65,7 +66,7 @@ test('Test from json', () => {
     user_id: 1,
     name: 'Teste',
     email: 'rodrigo.dsiqueira1@gmailcom',
-    state: 'PENDING',
+    state: 'PENDING'
   }
 
   const userFromJSON = User.fromJSON(user)
