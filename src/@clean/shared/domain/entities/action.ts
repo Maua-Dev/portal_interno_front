@@ -53,7 +53,6 @@ export class Action {
     }
     this.props.title = props.title
 
-
     if (!Action.validateProjectCode(props.projectCode)) {
       throw new EntityError('props.projectCode')
     }
@@ -220,7 +219,6 @@ export class Action {
     }
     return true
   }
-
 
   static validateStartTime(startTime: number) {
     if (startTime == null) {
