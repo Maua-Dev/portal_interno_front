@@ -29,6 +29,7 @@ export class UserHttpRepository implements IUserRepository {
       .post(`/mss-template/delete-user?user_id=${userId}`)
       .then((res) => {
         const userDeleted = User.fromJSON({
+          // eslint-disable-next-line camelcase
           user_id: res.data.user_id,
           name: res.data.name,
           email: res.data.email,
@@ -47,6 +48,7 @@ export class UserHttpRepository implements IUserRepository {
       .get(`/mss-template/get-user?user_id=${userId}`)
       .then((res) => {
         const user = User.fromJSON({
+          // eslint-disable-next-line camelcase
           user_id: res.data.user_id,
           name: res.data.name,
           email: res.data.email,
@@ -65,6 +67,7 @@ export class UserHttpRepository implements IUserRepository {
       .post(`/mss-template/update-user?user_id=${userId}&new_name=${newName}`)
       .then((res) => {
         const userUpdated = User.fromJSON({
+          // eslint-disable-next-line camelcase
           user_id: res.data.user_id,
           name: res.data.name,
           email: res.data.email,

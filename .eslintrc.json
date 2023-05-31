@@ -11,6 +11,7 @@
     "no-unused-expressions": "warn",
     "no-unused-labels": "warn",
     "accessor-pairs": "off",
-    "camelcase": "off"
+    "camelcase": "off",
+    "no-useless-constructor": "off"
   }
 }

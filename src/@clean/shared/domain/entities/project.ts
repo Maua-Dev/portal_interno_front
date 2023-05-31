@@ -88,11 +88,11 @@ export class Project {
   static validateCode(code: string): boolean {
     if (code == null) {
       return false
-    } else if (typeof code != 'string') {
+    } else if (typeof code !== 'string') {
       return false
-    } else if (code.length != 2) {
+    } else if (code.length !== 2) {
       return false
-    } else if (code != code.toUpperCase()) {
+    } else if (code !== code.toUpperCase()) {
       return false
     } else if (!code.match(/^[A-Za-z]+$/)) {
       return false
@@ -103,7 +103,7 @@ export class Project {
   static validateName(name: string): boolean {
     if (name == null) {
       return false
-    } else if (typeof name != 'string') {
+    } else if (typeof name !== 'string') {
       return false
     } else if (name.length < 3) {
       return false
@@ -114,7 +114,7 @@ export class Project {
   static validateDescription(description: string): boolean {
     if (description == null) {
       return false
-    } else if (typeof description != 'string') {
+    } else if (typeof description !== 'string') {
       return false
     }
     return true

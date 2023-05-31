@@ -1,8 +1,4 @@
 {
   "typescript.tsdk": "node_modules/typescript/lib",
-  "typescript.enablePromptUseWorkspaceTsdk": true,
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true,
-    "source.addMissingImports": true
-  },
+  "typescript.enablePromptUseWorkspaceTsdk": true
 }
