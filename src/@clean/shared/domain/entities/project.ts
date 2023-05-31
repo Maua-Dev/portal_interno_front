@@ -71,7 +71,7 @@ export class Project {
     return new Project({
       code: json.code,
       name: json.name,
-      description: json.description,
+      description: json.description
     })
   }
 
@@ -79,7 +79,7 @@ export class Project {
     return {
       code: this.code,
       name: this.name,
-      description: this.description,
+      description: this.description
     }
   }
 
