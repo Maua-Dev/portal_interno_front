@@ -7,7 +7,7 @@
     "prettier/prettier": "warn",
     "comma-dangle": "warn",
     "no-new": "off",
-    "no-unused-vars": "warn",
+    "no-unused-vars": "off",
     "no-unused-expressions": "warn",
     "no-unused-labels": "warn",
     "accessor-pairs": "off",
