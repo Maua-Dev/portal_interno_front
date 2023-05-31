@@ -12,6 +12,10 @@
     "no-unused-labels": "warn",
     "accessor-pairs": "off",
     "camelcase": "off",
-    "no-useless-constructor": "off"
+    "no-useless-constructor": "off",
+    "indent": [
+      "warn",
+      2
+    ]
   }
 }
