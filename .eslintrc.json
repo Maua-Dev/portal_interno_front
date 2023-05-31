@@ -1,3 +1,16 @@
 {
-  "extends": ["next/core-web-vitals", "@rocketseat/eslint-config/react"]
+  "extends": ["next/core-web-vitals", "prettier"],
+  "plugins": ["prettier"],
+  "rules": {
+    "semi": "off",
+    "quotes": ["warn", "single"],
+    "prettier/prettier": "warn",
+    "comma-dangle": "warn",
+    "no-new": "off",
+    "no-unused-vars": "warn",
+    "no-unused-expressions": "warn",
+    "no-unused-labels": "warn",
+    "accessor-pairs": "off",
+    "camelcase": "warn"
+  }
 }

@@ -1,2 +1,1 @@
-export const usersMock = {};
-
+export const usersMock = {}
