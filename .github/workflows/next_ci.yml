@@ -2,7 +2,7 @@ name: Next.js CI
 
 on:
   push:
-    branches: [main, develop]
+    branches: [prod, dev, homolog]
   pull_request:
     types: [opened, synchronize]
 jobs:
