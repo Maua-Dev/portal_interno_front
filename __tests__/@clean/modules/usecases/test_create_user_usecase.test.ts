@@ -10,7 +10,7 @@ test('Test use case', async () => {
     id: 1,
     name: 'Test',
     email: 'rodrigo.dsiqueira1@gmail.com',
-    state: STATE.PENDING,
+    state: STATE.PENDING
   })
   const userCreated = await usecase.execute(user)
 

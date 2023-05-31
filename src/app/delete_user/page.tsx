@@ -38,7 +38,7 @@ export default function DeleteUser() {
     console.log('User deleted', id)
 
     const spanMessage: HTMLSpanElement = document.querySelector(
-      'span',
+      'span'
     ) as HTMLSpanElement
     spanMessage.style.display = 'block'
 

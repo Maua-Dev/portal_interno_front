@@ -36,7 +36,7 @@ export default function UpdateUser() {
 
   function handleUpdateUser(
     id: number,
-    event: React.FormEvent<HTMLFormElement>,
+    event: React.FormEvent<HTMLFormElement>
   ) {
     event.preventDefault()
     const input = document.getElementById('newName') as HTMLInputElement

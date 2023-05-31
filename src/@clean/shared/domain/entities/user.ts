@@ -2,7 +2,7 @@ import { STATE, toEnum } from '../enums/state_enum'
 import { EntityError } from '../helpers/errors/domain_error'
 
 export type UserProps = {
-  id?: number // uuid
+  id?: number //uuid
   name: string
   email: string
   state?: STATE
@@ -87,7 +87,7 @@ export class User {
       id: json.user_id,
       name: json.name,
       email: json.email,
-      state: toEnum(json.state as string),
+      state: toEnum(json.state as string)
     })
   }
 
@@ -96,7 +96,7 @@ export class User {
       id: this.id,
       name: this.name,
       email: this.email,
-      state: this.state,
+      state: this.state
     }
   }
 
@@ -105,7 +105,7 @@ export class User {
   static validateId(id: number): boolean {
     if (id == null) {
       return false
-    } else if (typeof id !== 'number') {
+    } else if (typeof id != 'number') {
       return false
     }
     return true
@@ -114,7 +114,7 @@ export class User {
   static validateName(name: string): boolean {
     if (name == null) {
       return false
-    } else if (typeof name !== 'string') {
+    } else if (typeof name != 'string') {
       return false
     } else if (name.length < 3) {
       return false
@@ -128,7 +128,7 @@ export class User {
     if (email == null) {
       return false
     }
-    if (typeof email !== 'string') {
+    if (typeof email != 'string') {
       return false
     }
     if (!email.match(regexp)) {
@@ -140,7 +140,7 @@ export class User {
   static validateState(state: STATE): boolean {
     if (state == null) {
       return false
-    } else if (Object.values(STATE).includes(state) === false) {
+    } else if (Object.values(STATE).includes(state) == false) {
       return false
     }
     return true

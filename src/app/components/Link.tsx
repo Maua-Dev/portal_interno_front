@@ -4,7 +4,7 @@ import styles from './Link.module.css'
 
 export default function LinkComponent({
   href,
-  children,
+  children
 }: {
   href: string
   children: React.ReactNode
