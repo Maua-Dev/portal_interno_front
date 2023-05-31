@@ -8,7 +8,7 @@ test('Test create user', () => {
     id: 6,
     name: 'Teste',
     email: 'rodrigo.dsiqueira1@gmailcom',
-    state: STATE.PENDING,
+    state: STATE.PENDING
   })
   const userCreated = repo.createUser(user)
   expect(userCreated).toBeInstanceOf(Promise<User>)
