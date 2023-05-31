@@ -80,7 +80,7 @@ export class Action {
     return this.props.ownerRa
   }
 
-  set ownerRa(ownerRa: string) {
+  set setOwnerRa(ownerRa: string) {
     if (!Action.validateOwnerRa(ownerRa)) {
       throw new EntityError('props.ownerRa')
     }
@@ -91,7 +91,7 @@ export class Action {
     return this.props.startTime
   }
 
-  set startTime(startTime: number) {
+  set setStartTime(startTime: number) {
     if (!Action.validateStartTime(startTime)) {
       throw new EntityError('props.startTime')
     }
@@ -102,7 +102,7 @@ export class Action {
     return this.props.endTime
   }
 
-  set endTime(endTime: number) {
+  set setEndTime(endTime: number) {
     if (!Action.validateEndTime(endTime)) {
       throw new EntityError('props.endTime')
     }
@@ -113,7 +113,7 @@ export class Action {
     return this.props.actionId
   }
 
-  set actionId(actionId: string) {
+  set setActionId(actionId: string) {
     if (!Action.validateActionId(actionId)) {
       throw new EntityError('props.actionId')
     }
@@ -124,7 +124,7 @@ export class Action {
     return this.props.title
   }
 
-  set title(title: string) {
+  set setTitle(title: string) {
     if (!Action.validateTitle(title)) {
       throw new EntityError('props.title')
     }
@@ -135,7 +135,7 @@ export class Action {
     return this.props.projectCode
   }
 
-  set projectCode(projectCode: string) {
+  set setProjectCode(projectCode: string) {
     if (!Action.validateProjectCode(projectCode)) {
       throw new EntityError('props.projectCode')
     }
@@ -146,7 +146,7 @@ export class Action {
     return this.props.associatedMembersRa
   }
 
-  set associatedMembersRa(associatedMembersRa: string[]) {
+  set setAssociatedMembersRa(associatedMembersRa: string[]) {
     if (!Action.validateAssociatedMembersRa(associatedMembersRa)) {
       throw new EntityError('props.associatedMembersRa')
     }
@@ -157,7 +157,7 @@ export class Action {
     return this.props.stackTags
   }
 
-  set stackTags(stackTags: STACK[]) {
+  set setStackTags(stackTags: STACK[]) {
     if (!Action.validateStackTags(stackTags)) {
       throw new EntityError('props.stackTags')
     }
@@ -168,7 +168,7 @@ export class Action {
     return this.props.actionTypeTags
   }
 
-  set actionTypeTags(actionTypeTags: ACTION_TYPE[]) {
+  set setActionTypeTags(actionTypeTags: ACTION_TYPE[]) {
     if (!Action.validateActionTypeTags(actionTypeTags)) {
       throw new EntityError('props.actionTypeTags')
     }
