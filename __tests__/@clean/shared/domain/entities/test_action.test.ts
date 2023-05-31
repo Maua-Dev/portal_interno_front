@@ -1,479 +1,485 @@
-import { Action } from "@/@clean/shared/domain/entities/action";
-import { ACTION_TYPE } from "@/@clean/shared/domain/enums/action_type_enum";
-import { STACK } from "@/@clean/shared/domain/enums/stack_enum";
-import { EntityError } from "@/@clean/shared/domain/helpers/errors/domain_error";
+import { Action } from '@/@clean/shared/domain/entities/action'
+import { ACTION_TYPE } from '@/@clean/shared/domain/enums/action_type_enum'
+import { STACK } from '@/@clean/shared/domain/enums/stack_enum'
+import { EntityError } from '@/@clean/shared/domain/helpers/errors/domain_error'
 
-test("Test Action Entity", () => {
+test('Test Action Entity', () => {
   const action = new Action({
-    owner_ra: "21.00210-0",
-    start_time: 1000,
-    end_time: 2000,
-    action_id: "4000",
-    title: "Test Action Entity",
-    project_code: "76",
-    associated_members_ra: ["21.00833-7"],
-    stack_tags: [STACK.FRONTEND, STACK.BACKEND],
-    action_type_tags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
-  });
-  expect(action).toBeInstanceOf(Action);
-});
+    ownerRa: '21.00210-0',
+    startTime: 1000,
+    endTime: 2000,
+    actionId: '4000',
+    title: 'Test Action Entity',
+    projectCode: '76',
+    associatedMembersRa: ['21.00833-7'],
+    stackTags: [STACK.FRONTEND, STACK.BACKEND],
+    actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
+  })
+  expect(action).toBeInstanceOf(Action)
+})
 
-test("Test Action Entity owner_ra", () => {
+test('Test Action Entity ownerRa', () => {
   const action = new Action({
-    owner_ra: "21.00210-0",
-    start_time: 1000,
-    end_time: 2000,
-    action_id: "4000",
-    title: "Test Action Entity",
-    project_code: "76",
-    associated_members_ra: ["21.00833-7"],
-    stack_tags: [STACK.FRONTEND, STACK.BACKEND],
-    action_type_tags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
-  });
-  expect(action.owner_ra).toBe("21.00210-0");
-});
+    ownerRa: '21.00210-0',
+    startTime: 1000,
+    endTime: 2000,
+    actionId: '4000',
+    title: 'Test Action Entity',
+    projectCode: '76',
+    associatedMembersRa: ['21.00833-7'],
+    stackTags: [STACK.FRONTEND, STACK.BACKEND],
+    actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
+  })
+  expect(action.ownerRa).toBe('21.00210-0')
+})
 
-test("Test Action Entity start_time", () => {
+test('Test Action Entity startTime', () => {
   const action = new Action({
-    owner_ra: "21.00210-0",
-    start_time: 1000,
-    end_time: 2000,
-    action_id: "4000",
-    title: "Test Action Entity",
-    project_code: "76",
-    associated_members_ra: ["21.00833-7"],
-    stack_tags: [STACK.FRONTEND, STACK.BACKEND],
-    action_type_tags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
-  });
-  expect(action.start_time).toBe(1000);
-});
+    ownerRa: '21.00210-0',
+    startTime: 1000,
+    endTime: 2000,
+    actionId: '4000',
+    title: 'Test Action Entity',
+    projectCode: '76',
+    associatedMembersRa: ['21.00833-7'],
+    stackTags: [STACK.FRONTEND, STACK.BACKEND],
+    actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
+  })
+  expect(action.startTime).toBe(1000)
+})
 
-test("Test Action Entity end_time", () => {
+test('Test Action Entity endTime', () => {
   const action = new Action({
-    owner_ra: "21.00210-0",
-    start_time: 1000,
-    end_time: 2000,
-    action_id: "4000",
-    title: "Test Action Entity",
-    project_code: "76",
-    associated_members_ra: ["21.00833-7"],
-    stack_tags: [STACK.FRONTEND, STACK.BACKEND],
-    action_type_tags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
-  });
-  expect(action.end_time).toBe(2000);
-});
+    ownerRa: '21.00210-0',
+    startTime: 1000,
+    endTime: 2000,
+    actionId: '4000',
+    title: 'Test Action Entity',
+    projectCode: '76',
+    associatedMembersRa: ['21.00833-7'],
+    stackTags: [STACK.FRONTEND, STACK.BACKEND],
+    actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
+  })
+  expect(action.endTime).toBe(2000)
+})
 
-test("Test Action Entity action_id", () => {
+test('Test Action Entity actionId', () => {
   const action = new Action({
-    owner_ra: "21.00210-0",
-    start_time: 1000,
-    end_time: 2000,
-    action_id: "4000",
-    title: "Test Action Entity",
-    project_code: "76",
-    associated_members_ra: ["21.00833-7"],
-    stack_tags: [STACK.FRONTEND, STACK.BACKEND],
-    action_type_tags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
-  });
-  expect(action.action_id).toBe("4000");
-});
+    ownerRa: '21.00210-0',
+    startTime: 1000,
+    endTime: 2000,
+    actionId: '4000',
+    title: 'Test Action Entity',
+    projectCode: '76',
+    associatedMembersRa: ['21.00833-7'],
+    stackTags: [STACK.FRONTEND, STACK.BACKEND],
+    actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
+  })
+  expect(action.actionId).toBe('4000')
+})
 
-test("Test Action Entity title", () => {
+test('Test Action Entity title', () => {
   const action = new Action({
-    owner_ra: "21.00210-0",
-    start_time: 1000,
-    end_time: 2000,
-    action_id: "4000",
-    title: "Test Action Entity",
-    project_code: "76",
-    associated_members_ra: ["21.00833-7"],
-    stack_tags: [STACK.FRONTEND, STACK.BACKEND],
-    action_type_tags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
-  });
-  expect(action.title).toBe("Test Action Entity");
-});
+    ownerRa: '21.00210-0',
+    startTime: 1000,
+    endTime: 2000,
+    actionId: '4000',
+    title: 'Test Action Entity',
+    projectCode: '76',
+    associatedMembersRa: ['21.00833-7'],
+    stackTags: [STACK.FRONTEND, STACK.BACKEND],
+    actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
+  })
+  expect(action.title).toBe('Test Action Entity')
+})
 
-test("Test Action Entity project_code", () => {
+test('Test Action Entity projectCode', () => {
   const action = new Action({
-    owner_ra: "21.00210-0",
-    start_time: 1000,
-    end_time: 2000,
-    action_id: "4000",
-    title: "Test Action Entity",
-    project_code: "76",
-    associated_members_ra: ["21.00833-7"],
-    stack_tags: [STACK.FRONTEND, STACK.BACKEND],
-    action_type_tags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
-  });
-  expect(action.project_code).toBe("76");
-});
+    ownerRa: '21.00210-0',
+    startTime: 1000,
+    endTime: 2000,
+    actionId: '4000',
+    title: 'Test Action Entity',
+    projectCode: '76',
+    associatedMembersRa: ['21.00833-7'],
+    stackTags: [STACK.FRONTEND, STACK.BACKEND],
+    actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
+  })
+  expect(action.projectCode).toBe('76')
+})
 
-test("Test Action Entity associated_members_ra", () => {
+test('Test Action Entity associatedMembersRa', () => {
   const action = new Action({
-    owner_ra: "21.00210-0",
-    start_time: 1000,
-    end_time: 2000,
-    action_id: "4000",
-    title: "Test Action Entity",
-    project_code: "76",
-    associated_members_ra: ["21.00833-7", "21.00833-8"],
-    stack_tags: [STACK.FRONTEND, STACK.BACKEND],
-    action_type_tags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
-  });
+    ownerRa: '21.00210-0',
+    startTime: 1000,
+    endTime: 2000,
+    actionId: '4000',
+    title: 'Test Action Entity',
+    projectCode: '76',
+    associatedMembersRa: ['21.00833-7', '21.00833-8'],
+    stackTags: [STACK.FRONTEND, STACK.BACKEND],
+    actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
+  })
 
-  expect(action.associated_members_ra).toEqual(["21.00833-7", "21.00833-8"]);
-});
+  expect(action.associatedMembersRa).toEqual(['21.00833-7', '21.00833-8'])
+  action.associatedMembersRa.forEach((ra) => {
+    expect(ra).toMatch(/^[0-9]{2}.[0-9]{5}-[0-9]$/)
+  })
+})
 
-test("Test Action Entity stack_tags", () => {
+test('Test Action Entity stackTags', () => {
   const action = new Action({
-    owner_ra: "21.00210-0",
-    start_time: 1000,
-    end_time: 2000,
-    action_id: "4000",
-    title: "Test Action Entity",
-    project_code: "76",
-    associated_members_ra: ["21.00833-7", "21.00833-8"],
-    stack_tags: [STACK.FRONTEND, STACK.BACKEND],
-    action_type_tags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
-  });
+    ownerRa: '21.00210-0',
+    startTime: 1000,
+    endTime: 2000,
+    actionId: '4000',
+    title: 'Test Action Entity',
+    projectCode: '76',
+    associatedMembersRa: ['21.00833-7', '21.00833-8'],
+    stackTags: [STACK.FRONTEND, STACK.BACKEND],
+    actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
+  })
 
-  expect(action.stack_tags).toEqual([STACK.FRONTEND, STACK.BACKEND]);
-});
+  expect(action.stackTags).toEqual([STACK.FRONTEND, STACK.BACKEND])
+  action.stackTags.forEach((stackTags) => {
+    expect(Object.values(STACK)).toContain(stackTags)
+  })
+})
 
-test("Test Action Entity action_type_tags", () => {
+test('Test Action Entity actionTypeTags', () => {
   const action = new Action({
-    owner_ra: "21.00210-0",
-    start_time: 1000,
-    end_time: 2000,
-    action_id: "4000",
-    title: "Test Action Entity",
-    project_code: "76",
-    associated_members_ra: ["21.00833-7", "21.00833-8"],
-    stack_tags: [STACK.FRONTEND, STACK.BACKEND],
-    action_type_tags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
-  });
+    ownerRa: '21.00210-0',
+    startTime: 1000,
+    endTime: 2000,
+    actionId: '4000',
+    title: 'Test Action Entity',
+    projectCode: '76',
+    associatedMembersRa: ['21.00833-7', '21.00833-8'],
+    stackTags: [STACK.FRONTEND, STACK.BACKEND],
+    actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
+  })
 
-  expect(action.action_type_tags).toEqual([
-    ACTION_TYPE.CODE,
-    ACTION_TYPE.LEARN,
-  ]);
-});
+  expect(action.actionTypeTags).toEqual([ACTION_TYPE.CODE, ACTION_TYPE.LEARN])
+  action.actionTypeTags.forEach((actionTypeTags) => {
+    expect(Object.values(ACTION_TYPE)).toContain(actionTypeTags)
+  })
+})
 
-test("Test Action Entity to JSON", () => {
+test('Test Action Entity to JSON', () => {
   const action = new Action({
-    owner_ra: "21.00210-0",
-    start_time: 1000,
-    end_time: 2000,
-    action_id: "4000",
-    title: "Test Action Entity",
-    project_code: "76",
-    associated_members_ra: ["21.00833-7", "21.00833-8"],
-    stack_tags: [STACK.FRONTEND, STACK.BACKEND],
-    action_type_tags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
-  });
+    ownerRa: '21.00210-0',
+    startTime: 1000,
+    endTime: 2000,
+    actionId: '4000',
+    title: 'Test Action Entity',
+    projectCode: '76',
+    associatedMembersRa: ['21.00833-7', '21.00833-8'],
+    stackTags: [STACK.FRONTEND, STACK.BACKEND],
+    actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
+  })
 
   expect(action.toJSON()).toEqual({
-    owner_ra: "21.00210-0",
-    start_time: 1000,
-    end_time: 2000,
-    action_id: "4000",
-    title: "Test Action Entity",
-    project_code: "76",
-    associated_members_ra: ["21.00833-7", "21.00833-8"],
-    stack_tags: [STACK.FRONTEND, STACK.BACKEND],
-    action_type_tags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
-  });
+    ownerRa: '21.00210-0',
+    startTime: 1000,
+    endTime: 2000,
+    actionId: '4000',
+    title: 'Test Action Entity',
+    projectCode: '76',
+    associatedMembersRa: ['21.00833-7', '21.00833-8'],
+    stackTags: [STACK.FRONTEND, STACK.BACKEND],
+    actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
+  })
 
-  expect(action.toJSON()).toBeInstanceOf(Object);
-});
+  expect(action.toJSON()).toBeInstanceOf(Object)
+})
 
-test("Test Action Entity from JSON", () => {
+test('Test Action Entity from JSON', () => {
   const action = {
-    owner_ra: "21.00210-0",
-    start_time: 1000,
-    end_time: 2000,
-    action_id: "4000",
-    title: "Test Action Entity",
-    project_code: "76",
-    associated_members_ra: ["21.00833-7", "21.00833-8"],
-    stack_tags: ["FRONTEND", "BACKEND"],
-    action_type_tags: ["CODE", "LEARN"],
-  };
+    ownerRa: '21.00210-0',
+    startTime: 1000,
+    endTime: 2000,
+    actionId: '4000',
+    title: 'Test Action Entity',
+    projectCode: '76',
+    associatedMembersRa: ['21.00833-7', '21.00833-8'],
+    stackTags: ['FRONTEND', 'BACKEND'],
+    actionTypeTags: ['CODE', 'LEARN'],
+  }
 
-  const actionFromJSON = Action.fromJSON(action);
+  const actionFromJSON = Action.fromJSON(action)
 
   // expect(actionFromJSON).toEqual({
-  //   owner_ra: "21.00210-0",
-  //   start_time: 1000,
-  //   end_time: 2000,
-  //   action_id: "4000",
+  //   ownerRa: "21.00210-0",
+  //   startTime: 1000,
+  //   endTime: 2000,
+  //   actionId: "4000",
   //   title: "Test Action Entity",
-  //   project_code: "76",
-  //   associated_members_ra: ["21.00833-7", "21.00833-8"],
-  //   stack_tags: [STACK.FRONTEND, STACK.BACKEND],
-  //   action_type_tags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
+  //   projectCode: "76",
+  //   associatedMembersRa: ["21.00833-7", "21.00833-8"],
+  //   stackTags: [STACK.FRONTEND, STACK.BACKEND],
+  //   actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
   // });
 
-  expect(actionFromJSON).toBeInstanceOf(Action);
-});
+  expect(actionFromJSON).toBeInstanceOf(Action)
+})
 
-test("Test Action Entity with invalid owner_ra", () => {
+test('Test Action Entity with invalid ownerRa', () => {
   expect(() => {
     new Action({
-      owner_ra: "21.00210.0",
-      start_time: 1000,
-      end_time: 2000,
-      title: "Test Action Entity",
-      project_code: "76",
-      action_id: "4000",
-      associated_members_ra: ["21.00833-7"],
-      stack_tags: [STACK.FRONTEND, STACK.BACKEND],
-      action_type_tags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
-    });
-  }).toThrowError(EntityError);
+      ownerRa: '21.00210.0',
+      startTime: 1000,
+      endTime: 2000,
+      title: 'Test Action Entity',
+      projectCode: '76',
+      actionId: '4000',
+      associatedMembersRa: ['21.00833-7'],
+      stackTags: [STACK.FRONTEND, STACK.BACKEND],
+      actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
+    })
+  }).toThrowError(EntityError)
   expect(() => {
     new Action({
-      owner_ra: "21.00210.0",
-      start_time: 1000,
-      end_time: 2000,
-      title: "Test Action Entity",
-      project_code: "76",
-      action_id: "4000",
-      associated_members_ra: ["21.00833-7"],
-      stack_tags: [STACK.FRONTEND, STACK.BACKEND],
-      action_type_tags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
-    });
-  }).toThrowError("Field props.owner_ra is not valid");
-});
+      ownerRa: '21.00210.0',
+      startTime: 1000,
+      endTime: 2000,
+      title: 'Test Action Entity',
+      projectCode: '76',
+      actionId: '4000',
+      associatedMembersRa: ['21.00833-7'],
+      stackTags: [STACK.FRONTEND, STACK.BACKEND],
+      actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
+    })
+  }).toThrowError('Field props.ownerRa is not valid')
+})
 
-test("Test Action Entity with invalid title", () => {
+test('Test Action Entity with invalid title', () => {
   expect(() => {
     new Action({
-      owner_ra: "21.00210-0",
-      start_time: 1000,
-      end_time: 2000,
-      title: "xxx",
-      project_code: "76",
-      action_id: "4000",
-      associated_members_ra: ["21.00833-7"],
-      stack_tags: [STACK.FRONTEND, STACK.BACKEND],
-      action_type_tags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
-    });
-  }).toThrowError(EntityError);
+      ownerRa: '21.00210-0',
+      startTime: 1000,
+      endTime: 2000,
+      title: 'xxx',
+      projectCode: '76',
+      actionId: '4000',
+      associatedMembersRa: ['21.00833-7'],
+      stackTags: [STACK.FRONTEND, STACK.BACKEND],
+      actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
+    })
+  }).toThrowError(EntityError)
   expect(() => {
     new Action({
-      owner_ra: "21.00210-0",
-      start_time: 1000,
-      end_time: 2000,
-      title: "xxx",
-      project_code: "76",
-      action_id: "4000",
-      associated_members_ra: ["21.00833-7"],
-      stack_tags: [STACK.FRONTEND, STACK.BACKEND],
-      action_type_tags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
-    });
-  }).toThrowError("Field props.title is not valid");
-});
+      ownerRa: '21.00210-0',
+      startTime: 1000,
+      endTime: 2000,
+      title: 'xxx',
+      projectCode: '76',
+      actionId: '4000',
+      associatedMembersRa: ['21.00833-7'],
+      stackTags: [STACK.FRONTEND, STACK.BACKEND],
+      actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
+    })
+  }).toThrowError('Field props.title is not valid')
+})
 
-test("Test Action Entity with invalid project_code", () => {
+test('Test Action Entity with invalid projectCode', () => {
   expect(() => {
     new Action({
-      owner_ra: "21.00210-0",
-      start_time: 1000,
-      end_time: 2000,
-      title: "Test Action Entity",
-      project_code: "762",
-      action_id: "4000",
-      associated_members_ra: ["21.00833-7"],
-      stack_tags: [STACK.FRONTEND, STACK.BACKEND],
-      action_type_tags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
-    });
-  }).toThrowError(EntityError);
+      ownerRa: '21.00210-0',
+      startTime: 1000,
+      endTime: 2000,
+      title: 'Test Action Entity',
+      projectCode: '762',
+      actionId: '4000',
+      associatedMembersRa: ['21.00833-7'],
+      stackTags: [STACK.FRONTEND, STACK.BACKEND],
+      actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
+    })
+  }).toThrowError(EntityError)
   expect(() => {
     new Action({
-      owner_ra: "21.00210-0",
-      start_time: 1000,
-      end_time: 2000,
-      title: "Test Action Entity",
-      project_code: "762",
-      action_id: "4000",
-      associated_members_ra: ["21.00833-7"],
-      stack_tags: [STACK.FRONTEND, STACK.BACKEND],
-      action_type_tags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
-    });
-  }).toThrowError("Field props.project_code is not valid");
-});
+      ownerRa: '21.00210-0',
+      startTime: 1000,
+      endTime: 2000,
+      title: 'Test Action Entity',
+      projectCode: '762',
+      actionId: '4000',
+      associatedMembersRa: ['21.00833-7'],
+      stackTags: [STACK.FRONTEND, STACK.BACKEND],
+      actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
+    })
+  }).toThrowError('Field props.projectCode is not valid')
+})
 
-test("Test Action Entity with invalid action_id", () => {
+test('Test Action Entity with invalid actionId', () => {
   expect(() => {
     new Action({
-      owner_ra: "21.00210-0",
-      start_time: 1000,
-      end_time: 2000,
-      title: "Test Action Entity",
-      project_code: "76",
-      action_id: "111",
-      associated_members_ra: ["21.00833-7"],
-      stack_tags: [STACK.FRONTEND, STACK.BACKEND],
-      action_type_tags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
-    });
-  }).toThrowError(EntityError);
+      ownerRa: '21.00210-0',
+      startTime: 1000,
+      endTime: 2000,
+      title: 'Test Action Entity',
+      projectCode: '76',
+      actionId: '111',
+      associatedMembersRa: ['21.00833-7'],
+      stackTags: [STACK.FRONTEND, STACK.BACKEND],
+      actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
+    })
+  }).toThrowError(EntityError)
   expect(() => {
     new Action({
-      owner_ra: "21.00210-0",
-      start_time: 1000,
-      end_time: 2000,
-      title: "Test Action Entity",
-      project_code: "76",
-      action_id: "111",
-      associated_members_ra: ["21.00833-7"],
-      stack_tags: [STACK.FRONTEND, STACK.BACKEND],
-      action_type_tags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
-    });
-  }).toThrowError("Field props.action_id is not valid");
-});
+      ownerRa: '21.00210-0',
+      startTime: 1000,
+      endTime: 2000,
+      title: 'Test Action Entity',
+      projectCode: '76',
+      actionId: '111',
+      associatedMembersRa: ['21.00833-7'],
+      stackTags: [STACK.FRONTEND, STACK.BACKEND],
+      actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
+    })
+  }).toThrowError('Field props.actionId is not valid')
+})
 
-test("Test Action Entity with empty associated_members_ra", () => {
+test('Test Action Entity with empty associatedMembersRa', () => {
   expect(() => {
     new Action({
-      owner_ra: "21.00210-0",
-      start_time: 1000,
-      end_time: 2000,
-      title: "Test Action Entity",
-      project_code: "76",
-      action_id: "4000",
-      associated_members_ra: [],
-      stack_tags: [STACK.FRONTEND, STACK.BACKEND],
-      action_type_tags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
-    });
-  }).toThrowError(EntityError);
+      ownerRa: '21.00210-0',
+      startTime: 1000,
+      endTime: 2000,
+      title: 'Test Action Entity',
+      projectCode: '76',
+      actionId: '4000',
+      associatedMembersRa: [],
+      stackTags: [STACK.FRONTEND, STACK.BACKEND],
+      actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
+    })
+  }).toThrowError(EntityError)
   expect(() => {
     new Action({
-      owner_ra: "21.00210-0",
-      start_time: 1000,
-      end_time: 2000,
-      title: "Test Action Entity",
-      project_code: "76",
-      action_id: "4000",
-      associated_members_ra: [],
-      stack_tags: [STACK.FRONTEND, STACK.BACKEND],
-      action_type_tags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
-    });
-  }).toThrowError("Field props.associated_members_ra is not valid");
-});
+      ownerRa: '21.00210-0',
+      startTime: 1000,
+      endTime: 2000,
+      title: 'Test Action Entity',
+      projectCode: '76',
+      actionId: '4000',
+      associatedMembersRa: [],
+      stackTags: [STACK.FRONTEND, STACK.BACKEND],
+      actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
+    })
+  }).toThrowError('Field props.associatedMembersRa is not valid')
+})
 
-test("Test Action Entity with invalid associated_members_ra", () => {
+test('Test Action Entity with invalid associatedMembersRa', () => {
   expect(() => {
     new Action({
-      owner_ra: "21.00210-0",
-      start_time: 1000,
-      end_time: 2000,
-      title: "Test Action Entity",
-      project_code: "76",
-      action_id: "4000",
-      associated_members_ra: ["kkk", "21.00210.0"],
-      stack_tags: [STACK.FRONTEND, STACK.BACKEND],
-      action_type_tags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
-    });
-  }).toThrowError(EntityError);
+      ownerRa: '21.00210-0',
+      startTime: 1000,
+      endTime: 2000,
+      title: 'Test Action Entity',
+      projectCode: '76',
+      actionId: '4000',
+      associatedMembersRa: ['kkk', '21.00210.0'],
+      stackTags: [STACK.FRONTEND, STACK.BACKEND],
+      actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
+    })
+  }).toThrowError(EntityError)
   expect(() => {
     new Action({
-      owner_ra: "21.00210-0",
-      start_time: 1000,
-      end_time: 2000,
-      title: "Test Action Entity",
-      project_code: "76",
-      action_id: "4000",
-      associated_members_ra: ["kkk", "21.00210.0"],
-      stack_tags: [STACK.FRONTEND, STACK.BACKEND],
-      action_type_tags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
-    });
-  }).toThrowError("Field props.associated_members_ra is not valid");
-});
+      ownerRa: '21.00210-0',
+      startTime: 1000,
+      endTime: 2000,
+      title: 'Test Action Entity',
+      projectCode: '76',
+      actionId: '4000',
+      associatedMembersRa: ['kkk', '21.00210.0'],
+      stackTags: [STACK.FRONTEND, STACK.BACKEND],
+      actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
+    })
+  }).toThrowError('Field props.associatedMembersRa is not valid')
+})
 
-test("Test Action Entity with invalid number associated_members_ra", () => {
+test('Test Action Entity with invalid number associatedMembersRa', () => {
   expect(() => {
     new Action({
-      owner_ra: "21.00210-0",
-      start_time: 1000,
-      end_time: 2000,
-      title: "Test Action Entity",
-      project_code: "76",
-      action_id: "4000",
-      associated_members_ra: ["21002100"],
-      stack_tags: [STACK.FRONTEND, STACK.BACKEND],
-      action_type_tags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
-    });
-  }).toThrowError(EntityError);
+      ownerRa: '21.00210-0',
+      startTime: 1000,
+      endTime: 2000,
+      title: 'Test Action Entity',
+      projectCode: '76',
+      actionId: '4000',
+      associatedMembersRa: ['21002100'],
+      stackTags: [STACK.FRONTEND, STACK.BACKEND],
+      actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
+    })
+  }).toThrowError(EntityError)
   expect(() => {
     new Action({
-      owner_ra: "21.00210-0",
-      start_time: 1000,
-      end_time: 2000,
-      title: "Test Action Entity",
-      project_code: "76",
-      action_id: "4000",
-      associated_members_ra: ["21002100"],
-      stack_tags: [STACK.FRONTEND, STACK.BACKEND],
-      action_type_tags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
-    });
-  }).toThrowError("Field props.associated_members_ra is not valid");
-});
+      ownerRa: '21.00210-0',
+      startTime: 1000,
+      endTime: 2000,
+      title: 'Test Action Entity',
+      projectCode: '76',
+      actionId: '4000',
+      associatedMembersRa: ['21002100'],
+      stackTags: [STACK.FRONTEND, STACK.BACKEND],
+      actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
+    })
+  }).toThrowError('Field props.associatedMembersRa is not valid')
+})
 
-test("Test Action Entity with invalid stack_tags", () => {
+test('Test Action Entity with invalid stackTags', () => {
   expect(() => {
     new Action({
-      owner_ra: "21.00210-0",
-      start_time: 1000,
-      end_time: 2000,
-      title: "Test Action Entity",
-      project_code: "76",
-      action_id: "4000",
-      associated_members_ra: ["21.00833-7"],
-      stack_tags: [],
-      action_type_tags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
-    });
-  }).toThrowError(EntityError);
+      ownerRa: '21.00210-0',
+      startTime: 1000,
+      endTime: 2000,
+      title: 'Test Action Entity',
+      projectCode: '76',
+      actionId: '4000',
+      associatedMembersRa: ['21.00833-7'],
+      stackTags: [],
+      actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
+    })
+  }).toThrowError(EntityError)
   expect(() => {
     new Action({
-      owner_ra: "21.00210-0",
-      start_time: 1000,
-      end_time: 2000,
-      title: "Test Action Entity",
-      project_code: "76",
-      action_id: "4000",
-      associated_members_ra: ["21.00833-7"],
-      stack_tags: [],
-      action_type_tags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
-    });
-  }).toThrowError("Field props.stack_tags is not valid");
-});
+      ownerRa: '21.00210-0',
+      startTime: 1000,
+      endTime: 2000,
+      title: 'Test Action Entity',
+      projectCode: '76',
+      actionId: '4000',
+      associatedMembersRa: ['21.00833-7'],
+      stackTags: [],
+      actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN],
+    })
+  }).toThrowError('Field props.stackTags is not valid')
+})
 
-test("Test Action Entity with invalid action_type_tags", () => {
+test('Test Action Entity with invalid actionTypeTags', () => {
   expect(() => {
     new Action({
-      owner_ra: "21.00210-0",
-      start_time: 1000,
-      end_time: 2000,
-      title: "Test Action Entity",
-      project_code: "76",
-      action_id: "4000",
-      associated_members_ra: ["21.00833-7"],
-      stack_tags: [STACK.FRONTEND, STACK.BACKEND],
-      action_type_tags: [],
-    });
-  }).toThrowError(EntityError);
+      ownerRa: '21.00210-0',
+      startTime: 1000,
+      endTime: 2000,
+      title: 'Test Action Entity',
+      projectCode: '76',
+      actionId: '4000',
+      associatedMembersRa: ['21.00833-7'],
+      stackTags: [STACK.FRONTEND, STACK.BACKEND],
+      actionTypeTags: [],
+    })
+  }).toThrowError(EntityError)
   expect(() => {
     new Action({
-      owner_ra: "21.00210-0",
-      start_time: 1000,
-      end_time: 2000,
-      title: "Test Action Entity",
-      project_code: "76",
-      action_id: "4000",
-      associated_members_ra: ["21.00833-7"],
-      stack_tags: [STACK.FRONTEND, STACK.BACKEND],
-      action_type_tags: [],
-    });
-  }).toThrowError("Field props.action_type_tags is not valid");
-});
+      ownerRa: '21.00210-0',
+      startTime: 1000,
+      endTime: 2000,
+      title: 'Test Action Entity',
+      projectCode: '76',
+      actionId: '4000',
+      associatedMembersRa: ['21.00833-7'],
+      stackTags: [STACK.FRONTEND, STACK.BACKEND],
+      actionTypeTags: [],
+    })
+  }).toThrowError('Field props.actionTypeTags is not valid')
+})
