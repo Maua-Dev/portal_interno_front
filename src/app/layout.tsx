@@ -1,4 +1,4 @@
-import { UserProvider } from '@/contexts/user_provider'
+// import { UserProvider } from '@/contexts/user_provider'
 import './globals.css'
 import React from 'react'
 
@@ -14,9 +14,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        <UserProvider>{children}</UserProvider>
-      </body>
+      <body>{children}</body>
     </html>
   )
 }
