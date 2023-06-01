@@ -1,19 +1,16 @@
 name: aws_cd
-
 on:
   push:
     branches:
       - dev
-      - create-cd
-
 jobs:
   DeployToAWS:
-    environment: dev
+    environment: 
+      name: dev
     runs-on: ubuntu-latest
     permissions:
       id-token: write
       contents: read
-
     steps:
         - uses: actions/checkout@v2
         - name: Setup AWS Credentials
@@ -22,28 +19,41 @@ jobs:
             aws-region: ${{ vars.AWS_REGION }}
             role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/GithubActionsRole
             role-session-name: github-action
-
         - name: Setting stage and stack name
           run: |
             echo "STAGE=${{ github.ref_name }}" 
             echo "STACK_NAME=PortalInternoStackFront${{github.ref_name}}" >> $GITHUB_ENV
-
         - uses: actions/checkout@v3
-
         - name: Installing Dependencies
           run: |
-            npm install -g aws-cdk
-            npm install -g typescript
-            npm install -g
+            npm install --global yarn
+            yarn install -g aws-cdk
+            yarn install -g typescript
+            yarn install -g next@13.2.4
+            yarn install -g
             cd iac
-            npm install
-
-        - name: DeployWithCDK
+            yarn install
+        - name: Build and Export
+          run: |
+            yarn next build
+            yarn next export
+        - name: Deploy with CDK
           run: |
             cd iac
             cdk synth
             cdk deploy --require-approval never 
-
+        - name: Set CloudFront ID
+          run: |
+            CLOUD_FRONT_ID=$(aws cloudformation --region ${{vars.AWS_REGION}} describe-stacks --stack-name ${{env.STACK_NAME}} --query "Stacks[0].Outputs[?OutputKey=='CloudfrontId'].OutputValue" --output text)
+            echo "CLOUD_FRONT_ID='$CLOUD_FRONT_ID'" >> $GITHUB_ENV
+        - name: Set AWS Bucket
+          run: |
+            AWS_BUCKET=$(aws cloudformation --region ${{vars.AWS_REGION}} describe-stacks --stack-name ${{env.STACK_NAME}} --query "Stacks[0].Outputs[?OutputKey=='AwsBucket'].OutputValue" --output text)
+            echo "AWS_BUCKET='$AWS_BUCKET'" >> $GITHUB_ENV
+        - name: Upload to S3
+          run: aws s3 cp build/web s3://${{env.AWS_BUCKET}}/ --recursive --region ${{ vars.AWS_REGION }}
+        - name: Clear CDN cache
+          run: aws cloudfront create-invalidation --distribution-id ${{env.CLOUD_FRONT_ID}} --paths "/*" --region us-east-1
           env:
               AWS_REGION: ${{ vars.AWS_REGION }}
               AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
