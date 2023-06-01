@@ -19,14 +19,16 @@ jobs:
             aws-region: ${{ vars.AWS_REGION }}
             role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/GithubActionsRole
             role-session-name: github-action
+        - name: Use Node.js 18.x
+          uses: actions/setup-node@v3
+          with:
+            node-version: 18.x
         - name: Setting stage and stack name
           run: |
             echo "STAGE=${{ github.ref_name }}" 
             echo "STACK_NAME=PortalInternoStackFront${{github.ref_name}}" >> $GITHUB_ENV
-        - uses: actions/checkout@v3
         - name: Installing Dependencies
           run: |
-            npm install --global yarn
             yarn install -g aws-cdk
             yarn install -g typescript
             yarn install -g next@13.2.4
