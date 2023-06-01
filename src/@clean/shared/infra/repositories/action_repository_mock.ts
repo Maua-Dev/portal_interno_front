@@ -14,8 +14,8 @@
 //   private actions: Action[] = [
 //     new Action({
 //       ownerRa: this.members[0].ra,
-//       startTime: 1612137600000,
-//       endTime: 1612141200000,
+//       startDate: 1612137600000,
+//       endDate: 1612141200000,
 //       actionId: 'uuid1',
 //       associatedMembersRa: [this.members[0].ra, this.members[1].ra],
 //       title: '**Reunião de como instalar yarn**',

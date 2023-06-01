@@ -12,10 +12,13 @@ export type JsonProps = {
   member_ra: string
   action: {
     ownerRa: string
-    startTime: number
-    endTime: number
+    startDate: number
+    endDate: number
+    duration: number
     actionId: string
+    storyId: number
     title: string
+    description: string
     projectCode: string
     associatedMembersRa: string[]
     stackTags: string[]
