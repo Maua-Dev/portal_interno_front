@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - dev
+      - create-cd
 jobs:
   DeployToAWS:
     environment: 
