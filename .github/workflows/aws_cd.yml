@@ -30,9 +30,7 @@ jobs:
             echo "STACK_NAME=PortalInternoStackFront${{github.ref_name}}" >> $GITHUB_ENV
         - name: Installing Dependencies
           run: |
-            yarn install -g aws-cdk
-            yarn install -g typescript
-            yarn install -g next@13.2.4
+            yarn global add aws-cdk
             yarn install -g
             cd iac
             yarn install
