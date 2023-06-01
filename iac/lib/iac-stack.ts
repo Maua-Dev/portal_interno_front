@@ -32,7 +32,7 @@ export class IacStack extends cdk.Stack {
 
     const cloudfrontDistribution = new cloudfront.Distribution(this, 'PortalInternoFrontDistribution-' + stage, {
       domainNames: [alternativeDomain],
-      certificate: Certificate.fromCertificateArn(this, 'PortalInternoFrontCertificate-' + stage, acmCertificateArn),
+      // certificate: Certificate.fromCertificateArn(this, 'PortalInternoFrontCertificate-' + stage, acmCertificateArn),
       comment: 'portal-interno-front-distribution-' + stage,
       defaultBehavior: {
         origin: new origins.S3Origin(bucket,{
