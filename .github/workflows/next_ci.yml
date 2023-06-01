@@ -19,7 +19,10 @@ jobs:
           node-version: 18.x
 
       - name: Install dependencies
-        run: yarn install
+        run: |
+          yarn install
+          cd iac
+          yarn install
 
       - name: Run tests
         run: yarn test --coverage --watchAll=false
