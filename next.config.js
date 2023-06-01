@@ -1,9 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    appDir: true,
-  },
-  transpilePackages: ['@acme/ui', 'lodash-es'],
+  output: 'export'
 }
 
 module.exports = nextConfig
