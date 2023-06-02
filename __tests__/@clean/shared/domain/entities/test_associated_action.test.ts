@@ -136,15 +136,10 @@ test('Test Associated Action entity from JSON', () => {
     member_ra: '20.02194-0',
     action: action
   })
-  if (
-    associatedAction.action.storyId !== undefined &&
-    associatedAction.action.description !== undefined &&
-    associatedAction.action.associatedMembersRa !== undefined
-  ) {
-    expect(AssociatedAction.fromJSON(associatedAction)).toBeInstanceOf(
-      AssociatedAction
-    )
-  }
+
+  expect(AssociatedAction.fromJSON(associatedAction)).toBeInstanceOf(
+    AssociatedAction
+  )
 })
 
 // Invalid attributes tests
