@@ -686,3 +686,54 @@ test('Test Action Entity with invalid duration', () => {
     })
   }).toThrowError('Field props.duration is not valid')
 })
+
+test('Test Action Entity without storyId prop', () => {
+  const action = new Action({
+    ownerRa: '21.00210-0',
+    startDate: 1000,
+    endDate: 2000,
+    duration: 1000,
+    actionId: '4000',
+    title: 'Test Action Entity',
+    description: 'Testing',
+    projectCode: '76',
+    associatedMembersRa: ['21.00833-7'],
+    stackTags: [STACK.FRONTEND, STACK.BACKEND],
+    actionTypeTag: ACTION_TYPE.CODE
+  })
+  expect(action.storyId).toBe(-1)
+})
+
+test('Test Action Entity without description prop', () => {
+  const action = new Action({
+    ownerRa: '21.00210-0',
+    startDate: 1000,
+    endDate: 2000,
+    duration: 1000,
+    actionId: '4000',
+    storyId: 1000,
+    title: 'Test Action Entity',
+    projectCode: '76',
+    associatedMembersRa: ['21.00833-7'],
+    stackTags: [STACK.FRONTEND, STACK.BACKEND],
+    actionTypeTag: ACTION_TYPE.CODE
+  })
+  expect(action.description).toBe('')
+})
+
+test('Test Action Entity without associatedMembersRa prop', () => {
+  const action = new Action({
+    ownerRa: '21.00210-0',
+    startDate: 1000,
+    endDate: 2000,
+    duration: 1000,
+    actionId: '4000',
+    storyId: 1000,
+    title: 'Test Action Entity',
+    description: 'Testing',
+    projectCode: '76',
+    stackTags: [STACK.FRONTEND, STACK.BACKEND],
+    actionTypeTag: ACTION_TYPE.CODE
+  })
+  expect(action.associatedMembersRa).toStrictEqual([])
+})
