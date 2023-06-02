@@ -5,6 +5,8 @@ import { IacStack } from '../lib/iac-stack';
 
 const app = new cdk.App();
 
+require('dotenv').config();
+
 const env = {
   account: process.env.AWS_ACCOUNT_ID,
   region: process.env.AWS_REGION
