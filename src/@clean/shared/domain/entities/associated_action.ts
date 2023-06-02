@@ -22,7 +22,7 @@ export type JsonProps = {
     projectCode: string
     associatedMembersRa: string[]
     stackTags: string[]
-    actionTypeTags: string[]
+    actionTypeTag: string
   }
 }
 
