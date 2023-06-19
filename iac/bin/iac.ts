@@ -11,6 +11,7 @@ const env = {
 }
 
 const stackName = process.env.STACK_NAME || 'PortalInternoStackDev'
+console.log('Certificado: ' + process.env.ACM_CERTIFICATE_ARN)
 
 new IacStack(app, stackName, {
   env: env
