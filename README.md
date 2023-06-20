@@ -1,3 +1,4 @@
+[![codecov](https://codecov.io/gh/Maua-Dev/portal_interno_front/branch/develop/graph/badge.svg?token=DUL3UPD6I6)](https://codecov.io/gh/Maua-Dev/portal_interno_front)
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
