@@ -5,6 +5,7 @@ import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import * as route53 from 'aws-cdk-lib/aws-route53';
 import * as route53Targets from 'aws-cdk-lib/aws-route53-targets';
+import * as iam from 'aws-cdk-lib/aws-iam';
 
 import { Construct } from 'constructs';
 
@@ -17,34 +18,65 @@ export class IacStack extends cdk.Stack {
     const alternativeDomain = process.env.ALTERNATIVE_DOMAIN || 'onlydevs-dev.devmaua.com';
     const hostedZoneIdValue = process.env.HOSTED_ZONE_ID || 'Z1UJRXOUMOOFQ8';
 
-    const bucket = new s3.Bucket(this, 'PortalInternoFrontBucket' + stage, {
+    const s3Bucket = new s3.Bucket(this, 'PortalInternoFrontBucket' + stage, {
       versioned: true,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       accessControl: s3.BucketAccessControl.PRIVATE,
     });
 
-    const oai = new cloudfront.OriginAccessIdentity(this, 'PortalInternoFrontOAI-' + stage, {
-      comment: 'OAI for PortalInternoFrontBucket',
-    });
-
-    bucket.grantRead(oai);
-
-    const cloudfrontDistribution = new cloudfront.Distribution(this, 'PortalInternoFrontDistribution-' + stage, {
-      domainNames: [alternativeDomain],
-      certificate: Certificate.fromCertificateArn(this, 'PortalInternoFrontCertificate-' + stage, acmCertificateArn),
-      comment: 'portal-interno-front-distribution-' + stage,
-      defaultBehavior: {
-        origin: new origins.S3Origin(bucket,{
-          originAccessIdentity: oai,
-        }),
-        viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-        cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
-        allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
+    const oac = new cloudfront.CfnOriginAccessControl(this, 'AOC', {
+      originAccessControlConfig: {
+        name: 'Portal Interno Front Bucket OAC ' + stage,
+        originAccessControlOriginType: 's3',
+        signingBehavior: 'always',
+        signingProtocol: 'sigv4',
       },
-      defaultRootObject: 'index.html',
-      minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
-    });
+    })
+
+    const cloudFrontWebDistribution = new cloudfront.CloudFrontWebDistribution(this, 'CDN', {
+      comment: 'Portal Interno Front Distribution ' + stage,
+      originConfigs: [
+        {
+          s3OriginSource: {
+            s3BucketSource: s3Bucket,
+          },
+          behaviors: [
+            {
+              isDefaultBehavior: true,
+              allowedMethods: cloudfront.CloudFrontAllowedMethods.GET_HEAD,
+              compress: true,
+              cachedMethods: cloudfront.CloudFrontAllowedCachedMethods.GET_HEAD,
+              viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+              minTtl: cdk.Duration.seconds(0),
+              maxTtl: cdk.Duration.seconds(86400),
+              defaultTtl: cdk.Duration.seconds(3600),
+            },
+          ],
+        },
+      ],
+      viewerCertificate: cloudfront.ViewerCertificate.fromAcmCertificate(
+        Certificate.fromCertificateArn(this, 'PortalInternoFrontCertificate-' + stage, acmCertificateArn),
+        {
+          aliases: [alternativeDomain],
+          securityPolicy: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
+        },
+      ),
+    })
+
+    const cfnDistribution = cloudFrontWebDistribution.node.defaultChild as cloudfront.CfnDistribution
+
+    cfnDistribution.addPropertyOverride('DistributionConfig.Origins.0.OriginAccessControlId', oac.getAtt('Id'))
+
+    
+    s3Bucket.addToResourcePolicy(
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        actions: ['s3:GetObject'],
+        principals: [new iam.ServicePrincipal('cloudfront.amazonaws.com')],
+        resources: [s3Bucket.arnForObjects('*')],
+      }),
+    )  
 
     const zone = route53.HostedZone.fromHostedZoneAttributes(this, 'PortalInternoFrontHostedZone-' + stage, {
       hostedZoneId: hostedZoneIdValue,
@@ -54,15 +86,15 @@ export class IacStack extends cdk.Stack {
     new route53.ARecord(this, 'PortalInternoFrontAliasRecord-' + stage, {
       zone: zone,
       recordName: alternativeDomain,
-      target: route53.RecordTarget.fromAlias(new route53Targets.CloudFrontTarget(cloudfrontDistribution)),
+      target: route53.RecordTarget.fromAlias(new route53Targets.CloudFrontTarget(cloudFrontWebDistribution)),
     });
-    
+      
     new cdk.CfnOutput(this, 'PortalInternoFrontBucketName-' + stage, {
-      value: bucket.bucketName,
+      value: s3Bucket.bucketName,
     });
 
     new cdk.CfnOutput(this, 'PortalInternoFrontDistributionId-' + stage, {
-      value: cloudfrontDistribution.distributionId,
+      value: cloudFrontWebDistribution.distributionId,
     });
 
   }
