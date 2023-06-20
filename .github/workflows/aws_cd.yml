@@ -3,11 +3,12 @@ on:
   push:
     branches:
       - dev
-      - create-cd
+      - homolog
+      - prod
 jobs:
   DeployToAWS:
     environment: 
-      name: dev
+      name: ${{ github.ref_name }}
     runs-on: ubuntu-latest
     permissions:
       id-token: write
