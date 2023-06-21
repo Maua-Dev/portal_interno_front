@@ -4,7 +4,6 @@ on:
   push:
     branches: [prod, dev, homolog]
   pull_request:
-    types: [opened, synchronize]
 jobs:
   next_js_ci:
     name: Run Next.js CI
