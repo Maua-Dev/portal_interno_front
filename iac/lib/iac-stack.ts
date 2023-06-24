@@ -34,14 +34,11 @@ export class IacStack extends cdk.Stack {
         signingProtocol: 'sigv4',
       },
     })
-
-    const path = require('path');
-    const lambdaPath = path.join(__dirname, '../lambda_trigger');
   
     const myFunc = new cloudfront.experimental.EdgeFunction(this, 'PortalInternoFrontEdgeFunction' + stage, {
       runtime: lambda.Runtime.NODEJS_14_X,
       handler: 'edge_function.lambda_handler',
-      code: lambda.Code.fromAsset(lambdaPath),
+      code: lambda.Code.fromAsset("lambda_triggers"),
     });
     
     const cloudFrontWebDistribution = new cloudfront.CloudFrontWebDistribution(this, 'CDN', {
