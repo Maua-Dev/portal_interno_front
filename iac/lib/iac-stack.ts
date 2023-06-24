@@ -34,12 +34,12 @@ export class IacStack extends cdk.Stack {
         signingProtocol: 'sigv4',
       },
     })
-  
-    const myFunc = new cloudfront.experimental.EdgeFunction(this, 'PortalInternoFrontEdgeFunction' + stage, {
-      runtime: lambda.Runtime.NODEJS_14_X,
-      handler: 'edge_function.lambda_handler',
-      code: lambda.Code.fromAsset("lambda_triggers"),
-    });
+    
+    // const myFunc = new cloudfront.experimental.EdgeFunction(this, 'PortalInternoFrontEdgeFunction' + stage, {
+    //   runtime: lambda.Runtime.NODEJS_14_X,
+    //   handler: 'edge_function.lambda_handler',
+    //   code: lambda.Code.fromAsset("lambda_triggers"),
+    // });
     
     const cloudFrontWebDistribution = new cloudfront.CloudFrontWebDistribution(this, 'CDN', {
       comment: 'Portal Interno Front Distribution ' + stage,
@@ -58,12 +58,12 @@ export class IacStack extends cdk.Stack {
               minTtl: cdk.Duration.seconds(0),
               maxTtl: cdk.Duration.seconds(86400),
               defaultTtl: cdk.Duration.seconds(3600),
-              lambdaFunctionAssociations: [
-                {
-                  eventType: cloudfront.LambdaEdgeEventType.VIEWER_REQUEST,
-                  lambdaFunction: myFunc.currentVersion,
-                },
-              ],
+              // lambdaFunctionAssociations: [
+              //   {
+              //     eventType: cloudfront.LambdaEdgeEventType.VIEWER_REQUEST,
+              //     lambdaFunction: myFunc.currentVersion,
+              //   },
+              // ],
             },
           ],
         },
