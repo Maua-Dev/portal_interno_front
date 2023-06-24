@@ -6,8 +6,10 @@ import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import * as route53 from 'aws-cdk-lib/aws-route53';
 import * as route53Targets from 'aws-cdk-lib/aws-route53-targets';
 import * as iam from 'aws-cdk-lib/aws-iam';
+import * as lambda from "aws-cdk-lib/aws-lambda";
 
 import { Construct } from 'constructs';
+import path = require('path');
 
 export class IacStack extends cdk.Stack {
   constructor(scope: Construct, id: string,  props?: cdk.StackProps) {
@@ -34,6 +36,13 @@ export class IacStack extends cdk.Stack {
       },
     })
 
+    
+    const myFunc = new cloudfront.experimental.EdgeFunction(this, 'PortalInternoFrontEdgeFunction' + stage, {
+      runtime: lambda.Runtime.NODEJS_14_X,
+      handler: 'edge_function.lambda_handler',
+      code: lambda.Code.fromAsset(path.join("lambda_trigger")),
+    });
+    
     const cloudFrontWebDistribution = new cloudfront.CloudFrontWebDistribution(this, 'CDN', {
       comment: 'Portal Interno Front Distribution ' + stage,
       originConfigs: [
@@ -51,6 +60,12 @@ export class IacStack extends cdk.Stack {
               minTtl: cdk.Duration.seconds(0),
               maxTtl: cdk.Duration.seconds(86400),
               defaultTtl: cdk.Duration.seconds(3600),
+              lambdaFunctionAssociations: [
+                {
+                  eventType: cloudfront.LambdaEdgeEventType.VIEWER_REQUEST,
+                  lambdaFunction: myFunc.currentVersion,
+                },
+              ],
             },
           ],
         },
