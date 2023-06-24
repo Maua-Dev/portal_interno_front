@@ -9,7 +9,6 @@ import * as iam from 'aws-cdk-lib/aws-iam';
 import * as lambda from "aws-cdk-lib/aws-lambda";
 
 import { Construct } from 'constructs';
-import path = require('path');
 
 export class IacStack extends cdk.Stack {
   constructor(scope: Construct, id: string,  props?: cdk.StackProps) {
@@ -40,7 +39,7 @@ export class IacStack extends cdk.Stack {
     const myFunc = new cloudfront.experimental.EdgeFunction(this, 'PortalInternoFrontEdgeFunction' + stage, {
       runtime: lambda.Runtime.NODEJS_14_X,
       handler: 'edge_function.lambda_handler',
-      code: lambda.Code.fromAsset(path.join("lambda_trigger")),
+      code: lambda.Code.fromAsset("lambda_trigger"),
     });
     
     const cloudFrontWebDistribution = new cloudfront.CloudFrontWebDistribution(this, 'CDN', {
