@@ -19,7 +19,7 @@
 //       actionId: 'uuid1',
 //       associatedMembersRa: [this.members[0].ra, this.members[1].ra],
 //       title: '**Reunião de como instalar yarn**',
-//       actionTypeTags: ACTION_TYPE.MEETING,
+//       actionTypeTag: ACTION_TYPE.MEETING,
 //       des
 
 //     }),

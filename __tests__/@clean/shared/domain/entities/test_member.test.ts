@@ -13,7 +13,6 @@ test('Test Member Entity', () => {
     ra: '21.00210-0',
     role: ROLE.DEV,
     stack: STACK.FRONTEND,
-
     year: 2,
     cellphone: '11999999999',
     course: COURSE.ECM,
@@ -770,4 +769,27 @@ test('Test Member Entity with empty projects', () => {
       projects: []
     })
   }).toThrowError('Field props.projects is not valid')
+})
+
+test('Test Member Entity without deactivatedDate prop', () => {
+  const member = new Member({
+    name: 'Furlan mata pomba',
+    email: 'furlas@maua.br',
+    ra: '21.00210-0',
+    role: ROLE.DEV,
+    stack: STACK.FRONTEND,
+    year: 2,
+    cellphone: '11999999999',
+    course: COURSE.ECM,
+    hiredDate: 10,
+    active: ACTIVE.ACTIVE,
+    projects: [
+      new Project({
+        code: 'PI',
+        name: 'Portal Interno',
+        description: 'Site controle de membros'
+      })
+    ]
+  })
+  expect(member.deactivatedDate).toBe(-1)
 })

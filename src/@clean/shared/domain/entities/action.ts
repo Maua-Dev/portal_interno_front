@@ -8,13 +8,13 @@ export type JsonProps = {
   endDate: number
   duration: number
   actionId: string
-  storyId: number
+  storyId?: number
   title: string
-  description: string
+  description?: string
   projectCode: string
-  associatedMembersRa: string[]
+  associatedMembersRa?: string[]
   stackTags: string[]
-  actionTypeTags: string[]
+  actionTypeTag: string
 }
 
 export type ActionProps = {
@@ -23,13 +23,13 @@ export type ActionProps = {
   endDate: number
   duration: number
   actionId: string
-  storyId: number | 0
+  storyId?: number
   title: string
-  description: string | ''
+  description?: string
   projectCode: string
-  associatedMembersRa: string[] | []
+  associatedMembersRa?: string[]
   stackTags: STACK[]
-  actionTypeTags: ACTION_TYPE[]
+  actionTypeTag: ACTION_TYPE
 }
 
 export class Action {
@@ -61,40 +61,52 @@ export class Action {
     }
     this.props.actionId = props.actionId
 
-    if (!Action.validateStoryId(props.storyId)) {
-      throw new EntityError('props.storyId')
+    if (props.storyId != null) {
+      if (!Action.validateStoryId(props.storyId)) {
+        throw new EntityError('props.storyId')
+      }
+      this.props.storyId = props.storyId
+    } else {
+      this.props.storyId = -1
     }
-    this.props.storyId = props.storyId
 
     if (!Action.validateTitle(props.title)) {
       throw new EntityError('props.title')
     }
     this.props.title = props.title
 
-    if (!Action.validateDescription(props.description)) {
-      throw new EntityError('props.description')
+    if (props.description != null) {
+      if (!Action.validateDescription(props.description)) {
+        throw new EntityError('props.description')
+      }
+      this.props.description = props.description
+    } else {
+      this.props.description = ''
     }
-    this.props.description = props.description
 
     if (!Action.validateProjectCode(props.projectCode)) {
       throw new EntityError('props.projectCode')
     }
     this.props.projectCode = props.projectCode
 
-    if (!Action.validateAssociatedMembersRa(props.associatedMembersRa)) {
-      throw new EntityError('props.associatedMembersRa')
+    if (props.associatedMembersRa != null) {
+      if (!Action.validateAssociatedMembersRa(props.associatedMembersRa)) {
+        throw new EntityError('props.associatedMembersRa')
+      }
+      this.props.associatedMembersRa = props.associatedMembersRa
+    } else {
+      this.props.associatedMembersRa = []
     }
-    this.props.associatedMembersRa = props.associatedMembersRa
 
     if (!Action.validateStackTags(props.stackTags)) {
       throw new EntityError('props.stackTags')
     }
     this.props.stackTags = props.stackTags
 
-    if (!Action.validateActionTypeTags(props.actionTypeTags)) {
-      throw new EntityError('props.actionTypeTags')
+    if (!Action.validateActionTypeTag(props.actionTypeTag)) {
+      throw new EntityError('props.actionTypeTag')
     }
-    this.props.actionTypeTags = props.actionTypeTags
+    this.props.actionTypeTag = props.actionTypeTag
   }
 
   // Getters and Setters
@@ -220,15 +232,15 @@ export class Action {
     this.props.stackTags = stackTags
   }
 
-  get actionTypeTags() {
-    return this.props.actionTypeTags
+  get actionTypeTag() {
+    return this.props.actionTypeTag
   }
 
-  set setActionTypeTags(actionTypeTags: ACTION_TYPE[]) {
-    if (!Action.validateActionTypeTags(actionTypeTags)) {
-      throw new EntityError('props.actionTypeTags')
+  set setactionTypeTag(actionTypeTag: ACTION_TYPE) {
+    if (!Action.validateActionTypeTag(actionTypeTag)) {
+      throw new EntityError('props.actionTypeTag')
     }
-    this.props.actionTypeTags = actionTypeTags
+    this.props.actionTypeTag = actionTypeTag
   }
 
   // JSON conversion
@@ -246,7 +258,7 @@ export class Action {
       projectCode: this.projectCode,
       associatedMembersRa: this.associatedMembersRa,
       stackTags: this.stackTags,
-      actionTypeTags: this.actionTypeTags
+      actionTypeTag: this.actionTypeTag
     }
   }
 
@@ -263,9 +275,7 @@ export class Action {
       projectCode: json.projectCode,
       associatedMembersRa: json.associatedMembersRa,
       stackTags: json.stackTags.map((stackTag) => stackToEnum(stackTag)),
-      actionTypeTags: json.actionTypeTags.map((actionTypeTag) =>
-        actionTypeToEnum(actionTypeTag)
-      )
+      actionTypeTag: actionTypeToEnum(json.actionTypeTag)
     })
   }
 
@@ -372,7 +382,7 @@ export class Action {
     return true
   }
 
-  static validateAssociatedMembersRa(associatedMembersRa: string[] | null) {
+  static validateAssociatedMembersRa(associatedMembersRa: string[]) {
     if (associatedMembersRa != null) {
       if (Array.isArray(associatedMembersRa) === false) {
         return false
@@ -402,18 +412,10 @@ export class Action {
     return true
   }
 
-  static validateActionTypeTags(actionTypeTags: ACTION_TYPE[]) {
-    if (actionTypeTags == null) {
+  static validateActionTypeTag(actionTypeTag: ACTION_TYPE) {
+    if (actionTypeTag == null) {
       return false
-    } else if (Array.isArray(actionTypeTags) === false) {
-      return false
-    } else if (actionTypeTags.length === 0) {
-      return false
-    } else if (
-      actionTypeTags.every((actionType) =>
-        Object.values(ACTION_TYPE).includes(actionType)
-      ) === false
-    ) {
+    } else if (typeof actionTypeTag !== 'string') {
       return false
     }
     return true
