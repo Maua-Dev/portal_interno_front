@@ -15,7 +15,7 @@ export type JsonProps = {
   cellphone: string
   course: string
   hiredDate: number
-  deactivatedDate: number
+  deactivatedDate?: number
   active: string
   projects: Object[] // Project
 }
@@ -30,7 +30,7 @@ export type MemberProps = {
   cellphone: string
   course: COURSE // ENUM
   hiredDate: number
-  deactivatedDate: number
+  deactivatedDate?: number
   active: ACTIVE // ENUM
   projects: Project[] // Project
 }
@@ -82,12 +82,16 @@ export class Member {
     }
     this.props.hiredDate = props.hiredDate
 
-    if (
-      !Member.validateDeactivatedDate(props.deactivatedDate, props.hiredDate)
-    ) {
-      throw new EntityError('props.deactivatedDate')
+    if (props.deactivatedDate != null) {
+      if (
+        !Member.validateDeactivatedDate(props.deactivatedDate, props.hiredDate)
+      ) {
+        throw new EntityError('props.deactivatedDate')
+      }
+      this.props.deactivatedDate = props.deactivatedDate
+    } else {
+      this.props.deactivatedDate = -1
     }
-    this.props.deactivatedDate = props.deactivatedDate
 
     if (!Member.validateActive(props.active)) {
       throw new EntityError('props.active')
@@ -202,13 +206,16 @@ export class Member {
   }
 
   get deactivatedDate() {
+    if (this.props.deactivatedDate == null) {
+      return -1
+    }
     return this.props.deactivatedDate
   }
 
   set deactivatedDate(deactivatedDate: number) {
     if (
       !Member.validateDeactivatedDate(
-        this.props.deactivatedDate,
+        this.props.deactivatedDate ?? -1,
         this.props.hiredDate
       )
     ) {
@@ -370,14 +377,14 @@ export class Member {
   }
 
   static validateDeactivatedDate(deactivatedDate: number, hiredDate: number) {
-    if (deactivatedDate == null) {
-      return false
-    } else if (typeof deactivatedDate !== 'number') {
-      return false
-    } else if (deactivatedDate < 0) {
-      return false
-    } else if (deactivatedDate < hiredDate) {
-      return false
+    if (deactivatedDate != null) {
+      if (typeof deactivatedDate !== 'number') {
+        return false
+      } else if (deactivatedDate < 0) {
+        return false
+      } else if (deactivatedDate < hiredDate) {
+        return false
+      }
     }
     return true
   }
