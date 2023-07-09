@@ -79,3 +79,33 @@ test('Test get action error', () => {
   expect(action).rejects.toThrow(NoItemsFoundError)
   expect(action).rejects.toThrow('actionId: uuid6')
 })
+
+test('Test create associated action', async () => {
+  const repo = new ActionRepositoryMock()
+
+  const action = new Action({
+    ownerRa: '20.02194-0',
+    startDate: 1612137600000,
+    endDate: 1612141200000,
+    duration: 3600000,
+    actionId: 'uuid5',
+    associatedMembersRa: ['22.00680-0', '22.22222-2'],
+    title: '**Reunião**',
+    actionTypeTags: [ACTION_TYPE.MEETING],
+    projectCode: 'PT',
+    stackTags: [STACK.FRONTEND],
+    storyId: 150,
+    description: 'Reunião de como instalar o yarn'
+  })
+
+  const associated_action = new AssociatedAction({
+    member_ra: '20.02194-0',
+    action: action
+  })
+
+  const createdAssociatedAction = await repo.createAssociatedAction(
+    associated_action
+  )
+  expect(createdAssociatedAction).toBe(associated_action)
+  expect(repo['associatedActions']).toContainEqual(createdAssociatedAction)
+})
