@@ -15,7 +15,7 @@ export type JsonProps = {
   cellphone: string
   course: string
   hiredDate: number
-  deactivatedDate: number
+  deactivatedDate: number | 0
   active: string
   projects: Object[] // Project
 }
@@ -30,7 +30,7 @@ export type MemberProps = {
   cellphone: string
   course: COURSE // ENUM
   hiredDate: number
-  deactivatedDate: number
+  deactivatedDate: number | 0
   active: ACTIVE // ENUM
   projects: Project[] // Project
 }
@@ -376,8 +376,10 @@ export class Member {
       return false
     } else if (deactivatedDate < 0) {
       return false
-    } else if (deactivatedDate < hiredDate) {
-      return false
+    } else if (deactivatedDate > 0) {
+      if (deactivatedDate < hiredDate) {
+        return false
+      }
     }
     return true
   }

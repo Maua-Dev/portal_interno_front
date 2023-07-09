@@ -10,6 +10,7 @@ import { COURSE } from '../../domain/enums/course_enum'
 import { ACTIVE } from '../../domain/enums/active_enum'
 import { ACTION_TYPE } from '../../domain/enums/action_type_enum'
 import { NoItemsFoundError } from '../../domain/helpers/errors/domain_error'
+import 'reflect-metadata'
 
 export class ActionRepositoryMock implements IActionRepository {
   private projects: Project[] = [
@@ -50,9 +51,9 @@ export class ActionRepositoryMock implements IActionRepository {
       cellphone: '11999999999',
       course: COURSE.CIC,
       hiredDate: 1612137600000,
+      deactivatedDate: 0,
       active: ACTIVE.ACTIVE,
-      projects: [this.projects[1], this.projects[4]],
-      deactivatedDate: 0
+      projects: [this.projects[1], this.projects[4]]
     }),
     new Member({
       name: 'Bruno fevs',
@@ -64,65 +65,65 @@ export class ActionRepositoryMock implements IActionRepository {
       cellphone: '11999999999',
       course: COURSE.ECM,
       hiredDate: 1612137600000,
+      deactivatedDate: 0,
       active: ACTIVE.ACTIVE,
-      projects: [this.projects[1], this.projects[4]],
-      deactivatedDate: 0
+      projects: [this.projects[1], this.projects[4]]
     }),
     new Member({
       name: 'Rubicks Cube',
       email: 'rcube.devmaua@gmail.com',
-      ra: '19017311',
+      ra: '19.01731-1',
       role: ROLE.DEV,
       stack: STACK.BACKEND,
       year: 3,
       cellphone: '11911758098',
       course: COURSE.ECM,
       hiredDate: 1640192165000,
+      deactivatedDate: 0,
       active: ACTIVE.ACTIVE,
-      projects: [this.projects[1], this.projects[4]],
-      deactivatedDate: 0
+      projects: [this.projects[1], this.projects[4]]
     }),
     new Member({
       name: 'Enzo sakas',
       email: 'esakas.devmaua@gmail.com',
-      ra: '19017311',
+      ra: '19.01731-1',
       role: ROLE.DEV,
       stack: STACK.FRONTEND,
       year: 3,
       cellphone: '11911758098',
       course: COURSE.ECM,
       hiredDate: 1640192165000,
+      deactivatedDate: 0,
       active: ACTIVE.ACTIVE,
-      projects: [this.projects[1], this.projects[4]],
-      deactivatedDate: 0
+      projects: [this.projects[1], this.projects[4]]
     }),
     new Member({
       name: 'Lounis Televisas',
       email: 'ltelevision.devmaua@gmail.com',
-      ra: '19017311',
+      ra: '19.01731-1',
       role: ROLE.DEV,
       stack: STACK.DATA_SCIENCE,
       year: 3,
       cellphone: '11911758098',
       course: COURSE.CIC,
       hiredDate: 1640192165000,
+      deactivatedDate: 0,
       active: ACTIVE.ACTIVE,
-      projects: [this.projects[1], this.projects[4]],
-      deactivatedDate: 0
+      projects: [this.projects[1], this.projects[4]]
     }),
     new Member({
       name: 'MAGIC WHITE HANDS',
       email: 'jbranco.devmaua@gmail.com',
-      ra: '21002101',
+      ra: '21.00210-1',
       role: ROLE.DEV,
       stack: STACK.BACKEND,
       year: 3,
       cellphone: '11911758198',
       course: COURSE.ECM,
       hiredDate: 1640192165000,
+      deactivatedDate: 0,
       active: ACTIVE.ACTIVE,
-      projects: [this.projects[1], this.projects[4]],
-      deactivatedDate: 0
+      projects: [this.projects[1], this.projects[4]]
     })
   ]
   private actions: Action[] = [
