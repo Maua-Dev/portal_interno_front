@@ -1,9 +1,10 @@
 import { Action } from '@/@clean/shared/domain/entities/action'
+import { AssociatedAction } from '@/@clean/shared/domain/entities/associated_action'
 import { ACTION_TYPE } from '@/@clean/shared/domain/enums/action_type_enum'
 import { STACK } from '@/@clean/shared/domain/enums/stack_enum'
 import { ActionRepositoryMock } from '@/@clean/shared/infra/repositories/action_repository_mock'
 
-test('Test create action', () => {
+test('Test create action', async () => {
   const repo = new ActionRepositoryMock()
 
   const action = new Action({
@@ -21,6 +22,15 @@ test('Test create action', () => {
     description: 'Reunião de como instalar o yarn'
   })
 
-  const actionCreated = repo.createAction(action)
-  expect(actionCreated).toBeInstanceOf(Promise<Action>)
+  const actionCreatedPromisse = repo.createAction(action)
+  const actionCreated = await repo.createAction(action)
+  expect(actionCreatedPromisse).toBeInstanceOf(Promise<Action>)
+  expect(actionCreated).toEqual(action)
+  expect(repo['actions']).toContain(action)
+  expect(repo['associatedActions']).toContainEqual(
+    new AssociatedAction({
+      member_ra: '22.00680-0',
+      action: action
+    })
+  )
 })
