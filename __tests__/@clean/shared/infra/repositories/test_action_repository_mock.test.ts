@@ -2,6 +2,7 @@ import { Action } from '@/@clean/shared/domain/entities/action'
 import { AssociatedAction } from '@/@clean/shared/domain/entities/associated_action'
 import { ACTION_TYPE } from '@/@clean/shared/domain/enums/action_type_enum'
 import { STACK } from '@/@clean/shared/domain/enums/stack_enum'
+import { NoItemsFoundError } from '@/@clean/shared/domain/helpers/errors/domain_error'
 import { ActionRepositoryMock } from '@/@clean/shared/infra/repositories/action_repository_mock'
 
 test('Test create action', async () => {
@@ -68,4 +69,13 @@ test('Test get action', () => {
   expect(action1StackTags).resolves.toStrictEqual([STACK.FRONTEND])
   expect(action1StoryId).resolves.toBe(150)
   expect(action1Description).resolves.toBe('Reunião de como instalar o yarn')
+})
+
+test('Test get action error', () => {
+  const repo = new ActionRepositoryMock()
+
+  const action = repo.getAction('uuid6')
+
+  expect(action).rejects.toThrow(NoItemsFoundError)
+  expect(action).rejects.toThrow('actionId: uuid6')
 })
