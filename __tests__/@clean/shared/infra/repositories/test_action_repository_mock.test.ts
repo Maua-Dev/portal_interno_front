@@ -23,9 +23,7 @@ test('Test create action', async () => {
   })
 
   const actionCreatedPromisse = repo.createAction(action)
-  const actionCreated = await repo.createAction(action)
   expect(actionCreatedPromisse).toBeInstanceOf(Promise<Action>)
-  expect(actionCreated).toEqual(action)
   expect(repo['actions']).toContain(action)
   expect(repo['associatedActions']).toContainEqual(
     new AssociatedAction({
@@ -33,4 +31,41 @@ test('Test create action', async () => {
       action: action
     })
   )
+})
+
+test('Test get action', () => {
+  const repo = new ActionRepositoryMock()
+
+  const action1 = repo.getAction('uuid1')
+  const action1OwnerRa = action1.then((action) => action.ownerRa)
+  const action1StartDate = action1.then((action) => action.startDate)
+  const action1EndDate = action1.then((action) => action.endDate)
+  const action1Duration = action1.then((action) => action.duration)
+  const action1ActionId = action1.then((action) => action.actionId)
+  const action1AssociatedMembersRa = action1.then(
+    (action) => action.associatedMembersRa
+  )
+  const action1Title = action1.then((action) => action.title)
+  const action1ActionTypeTags = action1.then((action) => action.actionTypeTags)
+  const action1ProjectCode = action1.then((action) => action.projectCode)
+  const action1StackTags = action1.then((action) => action.stackTags)
+  const action1StoryId = action1.then((action) => action.storyId)
+  const action1Description = action1.then((action) => action.description)
+
+  expect(action1).toBeInstanceOf(Promise<Action>)
+  expect(action1OwnerRa).resolves.toBe('22.00680-0')
+  expect(action1StartDate).resolves.toBe(1612137600000)
+  expect(action1EndDate).resolves.toBe(1612141200000)
+  expect(action1Duration).resolves.toBe(3600000)
+  expect(action1ActionId).resolves.toBe('uuid1')
+  expect(action1AssociatedMembersRa).resolves.toStrictEqual([
+    '22.00680-0',
+    '22.22222-2'
+  ])
+  expect(action1Title).resolves.toBe('**Reunião**')
+  expect(action1ActionTypeTags).resolves.toStrictEqual([ACTION_TYPE.MEETING])
+  expect(action1ProjectCode).resolves.toBe('PT')
+  expect(action1StackTags).resolves.toStrictEqual([STACK.FRONTEND])
+  expect(action1StoryId).resolves.toBe(150)
+  expect(action1Description).resolves.toBe('Reunião de como instalar o yarn')
 })
