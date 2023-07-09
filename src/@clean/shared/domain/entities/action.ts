@@ -311,7 +311,7 @@ export class Action {
       return false
     } else if (duration <= 0) {
       return false
-    } else if (duration > endDate - startDate) {
+    } else if (duration !== endDate - startDate) {
       return false
     }
     return true
@@ -329,7 +329,7 @@ export class Action {
   }
 
   static validateStoryId(storyId: number) {
-    if (storyId != null) {
+    if (storyId !== null) {
       if (typeof storyId !== 'number') {
         return false
       } else if (storyId < 100 || storyId > 9999) {

@@ -10,17 +10,17 @@ test('Test create action', () => {
     ownerRa: '20.02194-0',
     startDate: 1612137600000,
     endDate: 1612141200000,
-    duration: 3700000,
+    duration: 3600000,
     actionId: 'uuid5',
     associatedMembersRa: ['22.00680-0', '22.22222-2'],
     title: '**Reunião**',
     actionTypeTags: [ACTION_TYPE.MEETING],
     projectCode: 'PT',
     stackTags: [STACK.FRONTEND],
-    storyId: 1,
+    storyId: 150,
     description: 'Reunião de como instalar o yarn'
   })
 
   const actionCreated = repo.createAction(action)
-  expect(action).toBeInstanceOf(Promise<Action>)
+  expect(actionCreated).toBeInstanceOf(Promise<Action>)
 })

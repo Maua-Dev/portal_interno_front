@@ -138,13 +138,13 @@ export class ActionRepositoryMock implements IActionRepository {
       actionTypeTags: [ACTION_TYPE.MEETING],
       projectCode: this.projects[1].code,
       stackTags: [STACK.FRONTEND],
-      storyId: 1,
+      storyId: 150,
       description: 'Reunião de como instalar o yarn'
     }),
     new Action({
       ownerRa: this.members[0].ra,
       startDate: 1612137600000,
-      endDate: 1612611200000,
+      endDate: 1612141200000,
       duration: 3600000,
       actionId: 'uuid2',
       associatedMembersRa: [
@@ -156,13 +156,13 @@ export class ActionRepositoryMock implements IActionRepository {
       actionTypeTags: [ACTION_TYPE.MEETING],
       projectCode: this.projects[1].code,
       stackTags: [STACK.FRONTEND],
-      storyId: 1,
+      storyId: 150,
       description: 'Reunião do front'
     }),
     new Action({
       ownerRa: this.members[2].ra,
       startDate: 1612137600000,
-      endDate: 1612189200000,
+      endDate: 1612141200000,
       duration: 3600000,
       actionId: 'uuid3',
       associatedMembersRa: [this.members[2].ra, this.members[4].ra],
@@ -170,13 +170,13 @@ export class ActionRepositoryMock implements IActionRepository {
       actionTypeTags: [ACTION_TYPE.MEETING],
       projectCode: this.projects[1].code,
       stackTags: [STACK.BACKEND],
-      storyId: 1,
+      storyId: 150,
       description: 'Reunião do back'
     }),
     new Action({
       ownerRa: this.members[2].ra,
       startDate: 1612137600000,
-      endDate: 1612199200000,
+      endDate: 1612141200000,
       duration: 3600000,
       actionId: 'uuid4',
       associatedMembersRa: [this.members[2].ra, this.members[4].ra],
@@ -184,7 +184,7 @@ export class ActionRepositoryMock implements IActionRepository {
       actionTypeTags: [ACTION_TYPE.MEETING],
       projectCode: this.projects[1].code,
       stackTags: [STACK.BACKEND],
-      storyId: 1,
+      storyId: 150,
       description: 'Reunião do back codando o repo'
     })
   ]
