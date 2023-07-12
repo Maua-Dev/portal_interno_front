@@ -238,7 +238,7 @@ test('Test Action with invalid storyId', async () => {
   }).toThrowError('Field props.storyId is not valid')
 })
 
-test('Test Action with invalid actionId', async () => {
+test('Test Action with invalid title', async () => {
   const repo = new ActionRepositoryMock()
   const actionUsecase = new CreateAction(repo)
 
@@ -278,4 +278,46 @@ test('Test Action with invalid actionId', async () => {
       })
     )
   }).toThrowError('Field props.title is not valid')
+})
+
+test('Test Action with invalid description', async () => {
+  const repo = new ActionRepositoryMock()
+  const actionUsecase = new CreateAction(repo)
+
+  expect(() => {
+    actionUsecase.execute(
+      new Action({
+        ownerRa: '22.40680-0',
+        startDate: 1612137600000,
+        endDate: 1612141200000,
+        duration: 3600000,
+        actionId: 'uuid6',
+        associatedMembersRa: ['22.00680-0', '22.22222-2'],
+        title: '**Reunião**',
+        actionTypeTags: [ACTION_TYPE.MEETING],
+        projectCode: 'PT',
+        stackTags: [STACK.FRONTEND],
+        storyId: 150,
+        description: 'aaa'
+      })
+    )
+  }).toThrowError(EntityError)
+  expect(() => {
+    actionUsecase.execute(
+      new Action({
+        ownerRa: '22.40680-0',
+        startDate: 1612137600000,
+        endDate: 1612141200000,
+        duration: 3600000,
+        actionId: 'uuid6',
+        associatedMembersRa: ['22.00680-0', '22.22222-2'],
+        title: '**Reunião**',
+        actionTypeTags: [ACTION_TYPE.MEETING],
+        projectCode: 'PT',
+        stackTags: [STACK.FRONTEND],
+        storyId: 150,
+        description: 'aaa'
+      })
+    )
+  }).toThrowError('Field props.description is not valid')
 })
