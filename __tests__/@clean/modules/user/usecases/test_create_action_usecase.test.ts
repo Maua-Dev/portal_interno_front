@@ -363,3 +363,45 @@ test('Test Action with invalid projectCode', async () => {
     )
   }).toThrowError('Field props.projectCode is not valid')
 })
+
+test('Test Action with invalid associatedMembersRa', async () => {
+  const repo = new ActionRepositoryMock()
+  const actionUsecase = new CreateAction(repo)
+
+  expect(() => {
+    actionUsecase.execute(
+      new Action({
+        ownerRa: '22.40680-0',
+        startDate: 1612137600000,
+        endDate: 1612141200000,
+        duration: 3600000,
+        actionId: 'uuid6',
+        associatedMembersRa: [],
+        title: '**Reunião**',
+        actionTypeTags: [ACTION_TYPE.MEETING],
+        projectCode: 'PT',
+        stackTags: [STACK.FRONTEND],
+        storyId: 150,
+        description: 'Reunião de como instalar o yarn'
+      })
+    )
+  }).toThrowError(EntityError)
+  expect(() => {
+    actionUsecase.execute(
+      new Action({
+        ownerRa: '22.40680-0',
+        startDate: 1612137600000,
+        endDate: 1612141200000,
+        duration: 3600000,
+        actionId: 'uuid6',
+        associatedMembersRa: [],
+        title: '**Reunião**',
+        actionTypeTags: [ACTION_TYPE.MEETING],
+        projectCode: 'PT',
+        stackTags: [STACK.FRONTEND],
+        storyId: 150,
+        description: 'Reunião de como instalar o yarn'
+      })
+    )
+  }).toThrowError('Field props.associatedMembersRa is not valid')
+})
