@@ -195,3 +195,45 @@ test('Test Action with invalid actionId', async () => {
     )
   }).toThrowError('Field props.actionId is not valid')
 })
+
+test('Test Action with invalid storyId', async () => {
+  const repo = new ActionRepositoryMock()
+  const actionUsecase = new CreateAction(repo)
+
+  expect(() => {
+    actionUsecase.execute(
+      new Action({
+        ownerRa: '22.40680-0',
+        startDate: 1612137600000,
+        endDate: 1612141200000,
+        duration: 3600000,
+        actionId: 'uuid6',
+        associatedMembersRa: ['22.00680-0', '22.22222-2'],
+        title: '**Reunião**',
+        actionTypeTags: [ACTION_TYPE.MEETING],
+        projectCode: 'PT',
+        stackTags: [STACK.FRONTEND],
+        storyId: 99,
+        description: 'Reunião de como instalar o yarn'
+      })
+    )
+  }).toThrowError(EntityError)
+  expect(() => {
+    actionUsecase.execute(
+      new Action({
+        ownerRa: '22.40680-0',
+        startDate: 1612137600000,
+        endDate: 1612141200000,
+        duration: 3600000,
+        actionId: 'uuid6',
+        associatedMembersRa: ['22.00680-0', '22.22222-2'],
+        title: '**Reunião**',
+        actionTypeTags: [ACTION_TYPE.MEETING],
+        projectCode: 'PT',
+        stackTags: [STACK.FRONTEND],
+        storyId: 99,
+        description: 'Reunião de como instalar o yarn'
+      })
+    )
+  }).toThrowError('Field props.storyId is not valid')
+})
