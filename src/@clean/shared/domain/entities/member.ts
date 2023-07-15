@@ -88,6 +88,9 @@ export class Member {
       ) {
         throw new EntityError('props.deactivatedDate')
       }
+      if (this.active === ACTIVE.ACTIVE) {
+        throw new EntityError('props.deactivatedDate')
+      }
       this.props.deactivatedDate = props.deactivatedDate
     } else {
       this.props.deactivatedDate = -1
