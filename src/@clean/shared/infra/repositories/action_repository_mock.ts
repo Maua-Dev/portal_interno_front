@@ -51,7 +51,6 @@ export class ActionRepositoryMock implements IActionRepository {
       cellphone: '11999999999',
       course: COURSE.CIC,
       hiredDate: 1612137600000,
-      deactivatedDate: 0,
       active: ACTIVE.ACTIVE,
       projects: [this.projects[1], this.projects[4]]
     }),
@@ -65,7 +64,6 @@ export class ActionRepositoryMock implements IActionRepository {
       cellphone: '11999999999',
       course: COURSE.ECM,
       hiredDate: 1612137600000,
-      deactivatedDate: 0,
       active: ACTIVE.ACTIVE,
       projects: [this.projects[1], this.projects[4]]
     }),
@@ -79,7 +77,6 @@ export class ActionRepositoryMock implements IActionRepository {
       cellphone: '11911758098',
       course: COURSE.ECM,
       hiredDate: 1640192165000,
-      deactivatedDate: 0,
       active: ACTIVE.ACTIVE,
       projects: [this.projects[1], this.projects[4]]
     }),
@@ -93,7 +90,6 @@ export class ActionRepositoryMock implements IActionRepository {
       cellphone: '11911758098',
       course: COURSE.ECM,
       hiredDate: 1640192165000,
-      deactivatedDate: 0,
       active: ACTIVE.ACTIVE,
       projects: [this.projects[1], this.projects[4]]
     }),
@@ -107,7 +103,6 @@ export class ActionRepositoryMock implements IActionRepository {
       cellphone: '11911758098',
       course: COURSE.CIC,
       hiredDate: 1640192165000,
-      deactivatedDate: 0,
       active: ACTIVE.ACTIVE,
       projects: [this.projects[1], this.projects[4]]
     }),
@@ -121,7 +116,6 @@ export class ActionRepositoryMock implements IActionRepository {
       cellphone: '11911758198',
       course: COURSE.ECM,
       hiredDate: 1640192165000,
-      deactivatedDate: 0,
       active: ACTIVE.ACTIVE,
       projects: [this.projects[1], this.projects[4]]
     })
@@ -135,7 +129,7 @@ export class ActionRepositoryMock implements IActionRepository {
       actionId: 'uuid1',
       associatedMembersRa: [this.members[0].ra, this.members[1].ra],
       title: '**Reunião**',
-      actionTypeTags: [ACTION_TYPE.MEETING],
+      actionTypeTag: ACTION_TYPE.MEETING,
       projectCode: this.projects[1].code,
       stackTags: [STACK.FRONTEND],
       storyId: 150,
@@ -153,7 +147,7 @@ export class ActionRepositoryMock implements IActionRepository {
         this.members[3].ra
       ],
       title: '**Reunião do Front**',
-      actionTypeTags: [ACTION_TYPE.MEETING],
+      actionTypeTag: ACTION_TYPE.MEETING,
       projectCode: this.projects[1].code,
       stackTags: [STACK.FRONTEND],
       storyId: 150,
@@ -167,7 +161,7 @@ export class ActionRepositoryMock implements IActionRepository {
       actionId: 'uuid3',
       associatedMembersRa: [this.members[2].ra, this.members[4].ra],
       title: '**Reunião do Back**',
-      actionTypeTags: [ACTION_TYPE.MEETING],
+      actionTypeTag: ACTION_TYPE.MEETING,
       projectCode: this.projects[1].code,
       stackTags: [STACK.BACKEND],
       storyId: 150,
@@ -181,7 +175,7 @@ export class ActionRepositoryMock implements IActionRepository {
       actionId: 'uuid4',
       associatedMembersRa: [this.members[2].ra, this.members[4].ra],
       title: '**Reunião do Back para codar o repo**',
-      actionTypeTags: [ACTION_TYPE.MEETING],
+      actionTypeTag: ACTION_TYPE.MEETING,
       projectCode: this.projects[1].code,
       stackTags: [STACK.BACKEND],
       storyId: 150,
@@ -243,15 +237,17 @@ export class ActionRepositoryMock implements IActionRepository {
         action: action
       })
     )
-    if (action.associatedMembersRa.length > 0) {
-      action.associatedMembersRa.forEach((memberRa) => {
-        this.createAssociatedAction(
-          new AssociatedAction({
-            member_ra: memberRa,
-            action: action
-          })
-        )
-      })
+    if (action.associatedMembersRa !== undefined) {
+      if (action.associatedMembersRa.length > 0) {
+        action.associatedMembersRa.forEach((memberRa) => {
+          this.createAssociatedAction(
+            new AssociatedAction({
+              member_ra: memberRa,
+              action: action
+            })
+          )
+        })
+      }
     }
     return action
   }

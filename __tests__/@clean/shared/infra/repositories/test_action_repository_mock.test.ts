@@ -16,7 +16,7 @@ test('Test create action', async () => {
     actionId: 'uuid5',
     associatedMembersRa: ['22.00680-0', '22.22222-2'],
     title: '**Reunião**',
-    actionTypeTags: [ACTION_TYPE.MEETING],
+    actionTypeTag: ACTION_TYPE.MEETING,
     projectCode: 'PT',
     stackTags: [STACK.FRONTEND],
     storyId: 150,
@@ -47,7 +47,7 @@ test('Test get action', () => {
     (action) => action.associatedMembersRa
   )
   const action1Title = action1.then((action) => action.title)
-  const action1ActionTypeTags = action1.then((action) => action.actionTypeTags)
+  const action1actionTypeTag = action1.then((action) => action.actionTypeTag)
   const action1ProjectCode = action1.then((action) => action.projectCode)
   const action1StackTags = action1.then((action) => action.stackTags)
   const action1StoryId = action1.then((action) => action.storyId)
@@ -64,7 +64,7 @@ test('Test get action', () => {
     '22.22222-2'
   ])
   expect(action1Title).resolves.toBe('**Reunião**')
-  expect(action1ActionTypeTags).resolves.toStrictEqual([ACTION_TYPE.MEETING])
+  expect(action1actionTypeTag).resolves.toStrictEqual(ACTION_TYPE.MEETING)
   expect(action1ProjectCode).resolves.toBe('PT')
   expect(action1StackTags).resolves.toStrictEqual([STACK.FRONTEND])
   expect(action1StoryId).resolves.toBe(150)
@@ -91,7 +91,7 @@ test('Test create associated action', async () => {
     actionId: 'uuid5',
     associatedMembersRa: ['22.00680-0', '22.22222-2'],
     title: '**Reunião**',
-    actionTypeTags: [ACTION_TYPE.MEETING],
+    actionTypeTag: ACTION_TYPE.MEETING,
     projectCode: 'PT',
     stackTags: [STACK.FRONTEND],
     storyId: 150,
