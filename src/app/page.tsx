@@ -9,7 +9,7 @@ export default function Home() {
     <main className={styles.main}>
       <div className={styles.description}>
         <div>
-          <h1>P.I: Bem vindo ao nosso Portal Interno</h1>
+          <h1 className="text-7xl">P.I: Bem vindo ao nosso Portal Interno</h1>
         </div>
       </div>
     </main>
