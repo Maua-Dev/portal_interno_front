@@ -11,7 +11,7 @@ const Container = ({ children }: { children: ReactNode }) => {
 
 const Components = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="flex flex-row items-center justify-center gap-10">
+    <div className="flex flex-row items-center justify-center gap-4">
       {children}
     </div>
   )
@@ -27,7 +27,7 @@ const ProfileSquare = ({ name }: { name: string }) => {
 
 const EditButton = () => {
   return (
-    <button className="h-8 rounded-full border-2 border-blue-600 px-8">
+    <button className="h-8 rounded-full border-2 border-blue-600 px-7">
       Editar
     </button>
   )
