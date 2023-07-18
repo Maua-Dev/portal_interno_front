@@ -8,7 +8,7 @@ export default function Home() {
     <main className="">
       <div className="flex flex-col">
         <div>
-          <h1 className="text-7xl">P.I: Bem vindo ao nosso Portal Interno</h1>
+          <h1 className="text-7xl"></h1>
         </div>
       </div>
     </main>
