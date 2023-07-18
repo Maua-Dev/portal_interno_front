@@ -1,0 +1,90 @@
+.main {
+    background-color: #023e8a;
+    box-shadow: inset 0 0 1000px #4672ac;
+
+    height: 50px;
+
+    display: flex;
+    flex-direction: row;
+}
+
+.logo {
+    margin-left: 15px;
+
+    display: flex;
+    align-items: center;
+}
+
+.logo h1 { /* Text: D */
+    font-size: 40px;
+}
+
+.logo h2 { /* Text: ev */
+    margin-top: 8px;
+}
+
+.logo h3 { /* Text: Community */
+    font-size: 18px;
+    font-weight: lighter;
+    position: relative;
+    bottom: 10px;
+}
+
+.links {
+    margin-left: 10px;
+
+    display: flex;
+    flex-direction: row;
+}
+
+.links button{
+    margin-left: 40px;
+    padding: 0px 15px;
+    
+    height: 100%;
+    background: rgba(255, 255, 255, 0); 
+
+    border: none;
+
+    font-size: 18px;
+    font-weight: lighter;
+
+    cursor: pointer;
+}
+
+.links button:hover {
+    color: black;
+    background: rgba(255, 255, 255, 1);
+}
+
+.inside_button {
+    margin-top: 15px;
+}
+
+.arrow_down { /* Button Icon */
+    height: 10px;
+}
+
+.right_side {
+    margin: auto 10px auto auto;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+}
+
+.bell, .question {
+    font-size: 20px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.bell {
+    rotate: 20deg;
+}
+
+.bigger {
+    font-size: 25px;
+    cursor: pointer;
+}

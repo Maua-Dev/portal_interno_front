@@ -11,6 +11,10 @@
     "test": "jest -u"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.14.0",
+    "@mui/material": "^5.14.0",
     "@types/node": "^18.15.11",
     "@types/react": "18.0.32",
     "@types/react-dom": "18.0.11",
