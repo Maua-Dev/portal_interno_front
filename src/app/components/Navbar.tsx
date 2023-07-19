@@ -4,10 +4,14 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
-import IconButton from '@mui/material/IconButton'
 import { DefaultIconButton } from './little-components/Buttons'
+import { useState } from 'react'
 
 export default function NavBar() {
+  const [HoveredButtonIndex, setHoveredButtonIndex] = useState<number | null>(
+    null
+  )
+
   const linksList = [
     {
       id: 1,
@@ -49,33 +53,57 @@ export default function NavBar() {
     }
   ]
 
+  const handleButtonHovered = (index: number) => {
+    setHoveredButtonIndex(index)
+  }
+
+  const handleButtonLeave = () => {
+    setHoveredButtonIndex(null)
+  }
+
   return (
-    <div className="bg-blue-900 text-white">
-      <div>
-        <h1>D</h1>
-        <div>
-          <h2>ev</h2>
-          <h3>community</h3>
+    <div className="flex justify-between bg-blue-900 text-white">
+      <div className="flex gap-4">
+        <div className="flex pb-2 pl-2 pt-2">
+          <h1 className="text-4xl">D</h1>
+          <div className="flex-col">
+            <h2>ev</h2>
+            <h3>community</h3>
+          </div>
         </div>
-      </div>
-      <div>
-        {linksList.map((link, index) => {
-          return (
-            <button key={index} className="hover:bg-blue-600">
-              <p>
-                {link.text}
-                <DefaultIconButton color="text-white" key={index}>
-                  <KeyboardArrowDownIcon />
-                </DefaultIconButton>
-              </p>
-            </button>
-          )
-        })}
+        <div className="h-max">
+          {linksList.map((link, index) => {
+            return (
+              <button
+                key={index}
+                className="h-max p-2 hover:bg-white hover:text-blue-900"
+                onMouseEnter={() => {
+                  handleButtonHovered(link.id)
+                }}
+                onMouseLeave={handleButtonLeave}
+              >
+                <p>
+                  {link.text}
+                  <DefaultIconButton
+                    style={
+                      HoveredButtonIndex == link.id
+                        ? 'text-blue-900'
+                        : 'text-white'
+                    }
+                    key={index}
+                  >
+                    <KeyboardArrowDownIcon />
+                  </DefaultIconButton>
+                </p>
+              </button>
+            )
+          })}
+        </div>
       </div>
       <div>
         {iconsList.map((icon, index) => {
           return (
-            <DefaultIconButton color="text-white" key={index}>
+            <DefaultIconButton style="text-white" key={index}>
               {icon.icon_name}
             </DefaultIconButton>
           )

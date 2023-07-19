@@ -3,12 +3,12 @@ import { ReactNode } from 'react'
 
 interface DefaultIconButtonProps {
   children: ReactNode
-  color: string
+  style: string
 }
 
-const DefaultIconButton = ({ children, color }: DefaultIconButtonProps) => {
+const DefaultIconButton = ({ children, style }: DefaultIconButtonProps) => {
   return (
-    <IconButton className={'hover:bg-transparent ' + color}>
+    <IconButton className={'hover:bg-transparent ' + style}>
       {children}
     </IconButton>
   )
