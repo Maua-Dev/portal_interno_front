@@ -8,7 +8,7 @@ interface DefaultIconButtonProps {
 
 const DefaultIconButton = ({ children, style }: DefaultIconButtonProps) => {
   return (
-    <IconButton disableRipple className={'p-0 hover:bg-transparent ' + style}>
+    <IconButton disableRipple className={'hover:bg-transparent p-0 ' + style}>
       {children}
     </IconButton>
   )

@@ -62,12 +62,14 @@ export default function NavBar() {
   }
 
   return (
-    <div className="flex h-full items-center justify-between bg-blue-900 text-white shadow-inner shadow-white/10">
+    <div className="flex h-full items-center justify-between bg-gradient-to-t from-blue-900 to-blue-800/90 px-2 text-white">
       <div className="flex gap-12">
         <div className="flex pb-2 pl-2 pt-2">
           <h1 className="text-5xl">D</h1>
           <div className="flex-col">
-            <h2 className="mt-2 leading-none">ev</h2>
+            <h2 className="mt-2.5 leading-none">
+              <strong>EV</strong>
+            </h2>
             <h3 className="leading-none">community</h3>
           </div>
         </div>
@@ -100,7 +102,7 @@ export default function NavBar() {
           })}
         </div>
       </div>
-      <div className="mr-2 flex gap-1">
+      <div className="flex gap-1">
         {iconsList.map((icon, index) => {
           return (
             <DefaultIconButton style="text-white" key={index}>
