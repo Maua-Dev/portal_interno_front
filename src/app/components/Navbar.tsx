@@ -62,13 +62,13 @@ export default function NavBar() {
   }
 
   return (
-    <div className="flex h-full items-center justify-between bg-blue-900 text-white">
+    <div className="flex h-full items-center justify-between bg-blue-900 text-white shadow-inner shadow-white/10">
       <div className="flex gap-12">
         <div className="flex pb-2 pl-2 pt-2">
-          <h1 className="text-4xl">D</h1>
+          <h1 className="text-5xl">D</h1>
           <div className="flex-col">
-            <h2>ev</h2>
-            <h3>community</h3>
+            <h2 className="mt-2 leading-none">ev</h2>
+            <h3 className="leading-none">community</h3>
           </div>
         </div>
         <div className="m-0 flex gap-5">
