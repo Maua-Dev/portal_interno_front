@@ -50,7 +50,7 @@ export default function NavBar() {
   ]
 
   return (
-    <div>
+    <div className="bg-blue-900 text-white">
       <div>
         <h1>D</h1>
         <div>
@@ -64,7 +64,7 @@ export default function NavBar() {
             <button key={index} className="hover:bg-blue-600">
               <p>
                 {link.text}
-                <DefaultIconButton key={index}>
+                <DefaultIconButton color="text-white" key={index}>
                   <KeyboardArrowDownIcon />
                 </DefaultIconButton>
               </p>
@@ -75,7 +75,9 @@ export default function NavBar() {
       <div>
         {iconsList.map((icon, index) => {
           return (
-            <DefaultIconButton key={index}>{icon.icon_name}</DefaultIconButton>
+            <DefaultIconButton color="text-white" key={index}>
+              {icon.icon_name}
+            </DefaultIconButton>
           )
         })}
       </div>
