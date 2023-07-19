@@ -1,3 +1,5 @@
+'use client'
+
 import { Inter } from 'next/font/google'
 import NameHeader from './components/NameHeader'
 import NavBar from './components/Navbar'
