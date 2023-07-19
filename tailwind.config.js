@@ -13,7 +13,7 @@ module.exports = {
     //   'navbar-gradient-blue-top': '#3D65E0',
     //   white: '#FFFFFF'
 
-    //  PASTE IN NAVBAR ClassNames from-navbar-gradient-blue-bottom to-navbar-gradient-blue-top
+    //  PASTE IN NAVBAR ClassNames =====> from-navbar-gradient-blue-bottom to-navbar-gradient-blue-top
     // },
     extend: {}
   },

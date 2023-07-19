@@ -67,10 +67,10 @@ export default function NavBar() {
         <div className="flex pb-2 pl-2 pt-2">
           <h1 className="text-5xl">D</h1>
           <div className="flex-col">
-            <h2 className="mt-2.5 leading-none">
+            <h2 className="mt-3 leading-none">
               <strong>EV</strong>
             </h2>
-            <h3 className="leading-none">community</h3>
+            <h3 className="text-xs leading-none">COMMUNITY</h3>
           </div>
         </div>
         <div className="m-0 flex gap-5">
