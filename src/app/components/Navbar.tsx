@@ -38,17 +38,17 @@ export default function NavBar() {
   const iconsList = [
     {
       id: 1,
-      icon_name: <NotificationsNoneIcon className="rotate-5" />,
+      icon_name: <NotificationsNoneIcon className="h-6 w-6 rotate-12" />,
       url: ''
     },
     {
       id: 2,
-      icon_name: <HelpOutlineIcon />,
+      icon_name: <HelpOutlineIcon className="h-6 w-6" />,
       url: ''
     },
     {
       id: 3,
-      icon_name: <AccountCircleIcon />,
+      icon_name: <AccountCircleIcon className=" h-8 w-8" />,
       url: ''
     }
   ]
@@ -100,7 +100,7 @@ export default function NavBar() {
           })}
         </div>
       </div>
-      <div>
+      <div className="mr-2 flex gap-1">
         {iconsList.map((icon, index) => {
           return (
             <DefaultIconButton style="text-white" key={index}>
