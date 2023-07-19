@@ -12,7 +12,7 @@ export default function Home() {
           <NameHeader
             name="Lucas Fernandes"
             course="Design"
-            year="1ª Ano"
+            year="1º Ano"
             stack="UX/UI"
           />
         </div>
