@@ -1,4 +1,3 @@
-import styles from './navbar.module.css'
 import { url } from 'inspector'
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
@@ -6,6 +5,7 @@ import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import IconButton from '@mui/material/IconButton'
+import { DefaultIconButton } from './little-components/Buttons'
 
 export default function NavBar() {
   const linksList = [
@@ -34,47 +34,49 @@ export default function NavBar() {
   const iconsList = [
     {
       id: 1,
-      icon_name: <NotificationsNoneIcon className={styles.bell} />,
+      icon_name: <NotificationsNoneIcon />,
       url: ''
     },
     {
       id: 2,
-      icon_name: <HelpOutlineIcon className={styles.question} />,
+      icon_name: <HelpOutlineIcon />,
       url: ''
     },
     {
       id: 3,
-      icon_name: <AccountCircleIcon className={styles.bigger} />,
+      icon_name: <AccountCircleIcon />,
       url: ''
     }
   ]
 
   return (
-    <div className={styles.main}>
-      <div className={styles.logo}>
+    <div>
+      <div>
         <h1>D</h1>
         <div>
           <h2>ev</h2>
           <h3>community</h3>
         </div>
       </div>
-      <div className={styles.links}>
+      <div>
         {linksList.map((link, index) => {
           return (
-            <button key={index}>
-              <p className={styles.inside_button}>
+            <button key={index} className="hover:bg-blue-600">
+              <p>
                 {link.text}
-                <IconButton key={index} className="bg-transparent">
+                <DefaultIconButton key={index}>
                   <KeyboardArrowDownIcon />
-                </IconButton>
+                </DefaultIconButton>
               </p>
             </button>
           )
         })}
       </div>
-      <div className={styles.right_side}>
+      <div>
         {iconsList.map((icon, index) => {
-          return <IconButton key={index}>{icon.icon_name}</IconButton>
+          return (
+            <DefaultIconButton key={index}>{icon.icon_name}</DefaultIconButton>
+          )
         })}
       </div>
     </div>
