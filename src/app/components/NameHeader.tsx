@@ -3,7 +3,13 @@ import { ReactNode } from 'react'
 
 const Container = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="mx-10 mt-40 flex flex-col items-center justify-between gap-4 border-b-2 border-gray-500 py-4 sm:flex-row md:mx-40 md:gap-0">
+    <div className="flex w-full items-center justify-between">{children}</div>
+  )
+}
+
+const Border = ({ children }: { children: ReactNode }) => {
+  return (
+    <div className="flex w-full flex-col items-center justify-between gap-4 border-b-2 border-gray-500 py-4 sm:flex-row md:gap-0">
       {children}
     </div>
   )
@@ -50,17 +56,19 @@ export default function NameHeader({
 }) {
   return (
     <Container>
-      <Components>
-        <ProfileSquare
-          name={name.charAt(0) + name.charAt(name.indexOf(' ') + 1)}
-        />
-        <NameComponents>
-          <p className="font-bold md:text-xl xl:text-2xl">{`${name.toUpperCase()} (${stack.toUpperCase()})`}</p>
-          <p className="text-sm md:text-base xl:text-lg">{`${year.toUpperCase()} / ${course.toUpperCase()}`}</p>
-        </NameComponents>
-        <EditButton />
-      </Components>
-      <DisplayHours hours="00:00" />
+      <Border>
+        <Components>
+          <ProfileSquare
+            name={name.charAt(0) + name.charAt(name.indexOf(' ') + 1)}
+          />
+          <NameComponents>
+            <p className="font-bold md:text-xl xl:text-2xl">{`${name.toUpperCase()} (${stack.toUpperCase()})`}</p>
+            <p className="text-sm md:text-base xl:text-lg">{`${year.toUpperCase()} / ${course.toUpperCase()}`}</p>
+          </NameComponents>
+          <EditButton />
+        </Components>
+        <DisplayHours hours="00:00" />
+      </Border>
     </Container>
   )
 }
