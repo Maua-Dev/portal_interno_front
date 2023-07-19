@@ -38,7 +38,7 @@ export default function NavBar() {
   const iconsList = [
     {
       id: 1,
-      icon_name: <NotificationsNoneIcon />,
+      icon_name: <NotificationsNoneIcon className="rotate-5" />,
       url: ''
     },
     {
@@ -62,8 +62,8 @@ export default function NavBar() {
   }
 
   return (
-    <div className="flex justify-between bg-blue-900 text-white">
-      <div className="flex gap-4">
+    <div className="flex h-full items-center justify-between bg-blue-900 text-white">
+      <div className="flex gap-12">
         <div className="flex pb-2 pl-2 pt-2">
           <h1 className="text-4xl">D</h1>
           <div className="flex-col">
@@ -71,18 +71,18 @@ export default function NavBar() {
             <h3>community</h3>
           </div>
         </div>
-        <div className="h-max">
+        <div className="m-0 flex gap-5">
           {linksList.map((link, index) => {
             return (
               <button
                 key={index}
-                className="h-max p-2 hover:bg-white hover:text-blue-900"
+                className="flex px-2 pb-3 hover:bg-white hover:text-blue-900"
                 onMouseEnter={() => {
                   handleButtonHovered(link.id)
                 }}
                 onMouseLeave={handleButtonLeave}
               >
-                <p>
+                <p className="mt-auto flex items-center justify-center gap-2 text-lg font-light">
                   {link.text}
                   <DefaultIconButton
                     style={
