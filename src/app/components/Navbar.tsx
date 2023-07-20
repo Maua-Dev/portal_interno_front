@@ -4,6 +4,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
+import MenuIcon from '@mui/icons-material/Menu'
 import { DefaultIconButton } from './little-components/Buttons'
 import { useState } from 'react'
 
@@ -62,9 +63,9 @@ export default function NavBar() {
   }
 
   return (
-    <div className="flex h-full items-center justify-between bg-gradient-to-t from-blue-900 to-blue-800/90 px-2 text-white">
+    <div className="flex h-full items-center justify-between bg-gradient-to-t from-blue-900 to-blue-800/90 pl-3 pr-2 text-white lg:pl-11">
       <div className="flex gap-12">
-        <div className="flex pb-2 pl-2 pt-2">
+        <div className="flex pb-2 pt-2">
           <h1 className="text-5xl">D</h1>
           <div className="flex-col">
             <h2 className="mt-3 leading-none">
@@ -78,13 +79,13 @@ export default function NavBar() {
             return (
               <button
                 key={index}
-                className="flex px-2 pb-3 hover:bg-white hover:text-blue-900"
+                className="flex px-2 pb-1 hover:bg-white hover:text-blue-900"
                 onMouseEnter={() => {
                   handleButtonHovered(link.id)
                 }}
                 onMouseLeave={handleButtonLeave}
               >
-                <p className="mt-auto flex items-center justify-center gap-2 text-lg font-light">
+                <p className="mt-auto flex items-center justify-center gap-2 text-lg font-light max-[950px]:hidden">
                   {link.text}
                   <DefaultIconButton
                     style={
@@ -102,14 +103,20 @@ export default function NavBar() {
           })}
         </div>
       </div>
-      <div className="flex gap-1">
+      <div className="flex gap-1 ">
         {iconsList.map((icon, index) => {
           return (
-            <DefaultIconButton style="text-white" key={index}>
+            <DefaultIconButton
+              style="text-white max-[950px]:hidden"
+              key={index}
+            >
               {icon.icon_name}
             </DefaultIconButton>
           )
         })}
+        <DefaultIconButton style="text-white min-[950px]:hidden" key={''}>
+          <MenuIcon />
+        </DefaultIconButton>
       </div>
     </div>
   )
