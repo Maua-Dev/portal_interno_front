@@ -4,7 +4,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
-import { DefaultIconButton } from './little-components/Buttons'
+import { DefaultIconButton } from './little_components/Buttons'
 import { useState } from 'react'
 
 export default function NavBar() {
