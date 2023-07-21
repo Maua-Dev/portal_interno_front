@@ -1,6 +1,6 @@
 import { IconButton } from '@mui/material'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import { ReactNode } from 'react'
+import { ReactNode, useState } from 'react'
 
 interface DefaultIconButtonProps {
   children: ReactNode
@@ -27,34 +27,48 @@ const DefaultIconButton = ({
 interface NavbarButtonProps {
   key: number
   link_id: number
-  hovered_button_id: number | null
   link_text: string
-  onMouseEnter: (id: number) => {}
-  onMouseLeave: () => {}
+  button_style: string
+  p_style: string
 }
 
 const NavBarButton = ({
   key,
   link_id,
-  hovered_button_id,
   link_text,
-  onMouseEnter,
-  onMouseLeave
+  button_style,
+  p_style
 }: NavbarButtonProps) => {
+  const [HoveredButtonIndex, setHoveredButtonIndex] = useState<number | null>(
+    null
+  )
+
+  const handleButtonHovered = (index: number) => {
+    setHoveredButtonIndex(index)
+  }
+
+  const handleButtonLeave = () => {
+    setHoveredButtonIndex(null)
+  }
+
   return (
     <button
       key={key}
-      className="flex px-2 hover:bg-white hover:text-blue-900"
+      className={'flex px-2 hover:bg-white hover:text-blue-900' + button_style}
       onMouseEnter={() => {
-        onMouseEnter(link_id)
+        handleButtonHovered(link_id)
       }}
-      onMouseLeave={onMouseLeave}
+      onMouseLeave={handleButtonLeave}
     >
       <p className="mt-auto flex items-center justify-center gap-2 text-lg font-light">
         {link_text}
         <DefaultIconButton
           onClick={() => {}}
-          style={hovered_button_id == link_id ? 'text-blue-900' : 'text-white'}
+          style={
+            HoveredButtonIndex == link_id
+              ? 'text-blue-900' + p_style
+              : 'text-white' + p_style
+          }
           key={key}
         >
           <KeyboardArrowDownIcon />

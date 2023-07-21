@@ -5,14 +5,10 @@ import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import MenuIcon from '@mui/icons-material/Menu'
-import { DefaultIconButton, NavBarButton } from './little-components/Buttons'
+import { DefaultIconButton, NavBarButton } from './little_components/Buttons'
 import { useState } from 'react'
 
 export default function NavBar() {
-  const [HoveredButtonIndex, setHoveredButtonIndex] = useState<number | null>(
-    null
-  )
-
   const [isOpen, setOpen] = useState(false)
 
   const linksList = [
@@ -56,14 +52,6 @@ export default function NavBar() {
     }
   ]
 
-  const handleButtonHovered = (index: number) => {
-    setHoveredButtonIndex(index)
-  }
-
-  const handleButtonLeave = () => {
-    setHoveredButtonIndex(null)
-  }
-
   const handleHamburguerClick = () => {
     setOpen(!isOpen)
   }
@@ -87,14 +75,9 @@ export default function NavBar() {
                 <NavBarButton
                   key={index}
                   link_id={link.id}
-                  hovered_button_id={HoveredButtonIndex}
                   link_text={link.text}
-                  onMouseEnter={() => {
-                    return handleButtonHovered
-                  }}
-                  onMouseLeave={() => {
-                    return handleButtonLeave
-                  }}
+                  button_style=""
+                  p_style=""
                 />
               )
             })}
@@ -128,20 +111,15 @@ export default function NavBar() {
             : 'h-fit flex-col justify-evenly gap-3 bg-blue-950 py-3 duration-500 min-[950px]:hidden'
         }
       >
-        <div className="flex-col">
+        <div className="flex-col justify-center">
           {linksList.map((link, index) => {
             return (
               <NavBarButton
                 key={index}
                 link_id={link.id}
-                hovered_button_id={HoveredButtonIndex}
                 link_text={link.text}
-                onMouseEnter={() => {
-                  return handleButtonHovered
-                }}
-                onMouseLeave={() => {
-                  return handleButtonLeave
-                }}
+                button_style=""
+                p_style=""
               />
             )
           })}
