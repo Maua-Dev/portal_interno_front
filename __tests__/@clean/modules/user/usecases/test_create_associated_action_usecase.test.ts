@@ -21,7 +21,7 @@ test('Test usecase', async () => {
     projectCode: '76',
     associatedMembersRa: ['21.00833-7'],
     stackTags: [STACK.FRONTEND, STACK.BACKEND],
-    actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN]
+    actionTypeTag: ACTION_TYPE.CODE
   })
 
   const associatedAction = new AssociatedAction({
@@ -49,7 +49,7 @@ test('Test usecase with invalid member Ra', async () => {
     projectCode: '76',
     associatedMembersRa: ['21.00833-7'],
     stackTags: [STACK.FRONTEND, STACK.BACKEND],
-    actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN]
+    actionTypeTag: ACTION_TYPE.CODE
   })
 
   expect(action).toBeInstanceOf(Action)
