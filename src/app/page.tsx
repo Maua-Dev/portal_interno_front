@@ -11,15 +11,21 @@ import {
   ContainerMainCards
 } from './components/little_components/Container'
 import { useState } from 'react'
+import { activities } from './components/actions'
 // import { UserProvider } from '@/contexts/user_provider'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
   const [on, setOn] = useState(false)
+  const [isHistoryOpen, setIsHistoryOpen] = useState<boolean>(false)
 
   const handleOnClick = () => {
     setOn(!on)
+  }
+
+  const handleHistoryClick = () => {
+    setIsHistoryOpen(!isHistoryOpen)
   }
 
   return (
@@ -35,7 +41,11 @@ export default function Home() {
         <ContainerMainCards>
           <ContainerActivitiesHistory>
             <ActivitiesButton onClick={handleOnClick} />
-            <HistoryButton />
+            <HistoryButton
+              activities={activities}
+              isOpen={isHistoryOpen}
+              onClick={handleHistoryClick}
+            />
           </ContainerActivitiesHistory>
           {on ? <AddActivity /> : null}
         </ContainerMainCards>
