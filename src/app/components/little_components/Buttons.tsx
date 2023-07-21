@@ -25,7 +25,6 @@ const DefaultIconButton = ({
 }
 
 interface NavbarButtonProps {
-  key: number
   link_id: number
   link_text: string
   button_style: string
@@ -33,7 +32,6 @@ interface NavbarButtonProps {
 }
 
 const NavBarButton = ({
-  key,
   link_id,
   link_text,
   button_style,
@@ -53,7 +51,6 @@ const NavBarButton = ({
 
   return (
     <button
-      key={key}
       className={
         'flex px-2 hover:bg-white hover:text-blue-900  ' + button_style
       }
@@ -77,7 +74,6 @@ const NavBarButton = ({
           style={
             HoveredButtonIndex == link_id ? 'text-blue-900 ' : 'text-white'
           }
-          key={key}
         >
           <KeyboardArrowDownIcon />
         </DefaultIconButton>
