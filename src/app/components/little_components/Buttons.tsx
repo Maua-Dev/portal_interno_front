@@ -62,7 +62,7 @@ const NavBarButton = ({
       <p
         className={
           HoveredButtonIndex == link_id
-            ? 'mt-auto flex items-center justify-center gap-2 text-lg font-light text-blue-950 ' +
+            ? 'mt-auto flex items-center justify-center gap-2 text-lg font-light text-blue-950' +
               p_style
             : 'mt-auto flex items-center justify-center gap-2 text-lg font-light text-white ' +
               p_style
