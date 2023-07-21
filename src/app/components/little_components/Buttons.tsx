@@ -54,20 +54,28 @@ const NavBarButton = ({
   return (
     <button
       key={key}
-      className={'flex px-2 hover:bg-white hover:text-blue-900' + button_style}
+      className={
+        'flex px-2 hover:bg-white hover:text-blue-900  ' + button_style
+      }
       onMouseEnter={() => {
         handleButtonHovered(link_id)
       }}
       onMouseLeave={handleButtonLeave}
     >
-      <p className="mt-auto flex items-center justify-center gap-2 text-lg font-light">
+      <p
+        className={
+          HoveredButtonIndex == link_id
+            ? 'mt-auto flex items-center justify-center gap-2 text-lg font-light text-blue-950 ' +
+              p_style
+            : 'mt-auto flex items-center justify-center gap-2 text-lg font-light text-white ' +
+              p_style
+        }
+      >
         {link_text}
         <DefaultIconButton
           onClick={() => {}}
           style={
-            HoveredButtonIndex == link_id
-              ? 'text-blue-900' + p_style
-              : 'text-white' + p_style
+            HoveredButtonIndex == link_id ? 'text-blue-900 ' : 'text-white'
           }
           key={key}
         >

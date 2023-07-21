@@ -107,19 +107,23 @@ export default function NavBar() {
       <div
         className={
           isOpen
-            ? 'relative h-0 duration-700'
-            : 'h-fit flex-col justify-evenly gap-3 bg-blue-950 py-3 duration-500 min-[950px]:hidden'
+            ? 'h-fit flex-col justify-evenly gap-3 bg-blue-950 py-3 duration-500 min-[950px]:hidden'
+            : 'relative h-0 duration-700'
         }
       >
-        <div className="flex-col justify-center">
+        <div>
           {linksList.map((link, index) => {
             return (
               <NavBarButton
                 key={index}
                 link_id={link.id}
                 link_text={link.text}
-                button_style=""
-                p_style=""
+                button_style={
+                  isOpen
+                    ? 'w-full flex justify-center py-3 min-[950px]:hidden'
+                    : 'hidden'
+                }
+                p_style="text-white"
               />
             )
           })}
@@ -127,7 +131,7 @@ export default function NavBar() {
         <div>
           <div
             className={
-              isOpen ? 'hidden' : 'mt-6 flex items-center justify-center gap-2'
+              isOpen ? 'mt-6 flex items-center justify-center gap-2' : 'hidden'
             }
           >
             {iconsList.map((icon, index) => {
