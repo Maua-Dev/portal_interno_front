@@ -5,13 +5,15 @@ import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import MenuIcon from '@mui/icons-material/Menu'
-import { DefaultIconButton } from './little-components/Buttons'
+import { DefaultIconButton, NavBarButton } from './little-components/Buttons'
 import { useState } from 'react'
 
 export default function NavBar() {
   const [HoveredButtonIndex, setHoveredButtonIndex] = useState<number | null>(
     null
   )
+
+  const [isOpen, setOpen] = useState(false)
 
   const linksList = [
     {
@@ -62,61 +64,114 @@ export default function NavBar() {
     setHoveredButtonIndex(null)
   }
 
+  const handleHamburguerClick = () => {
+    setOpen(!isOpen)
+  }
+
   return (
-    <div className="flex h-full items-center justify-between bg-gradient-to-t from-blue-900 to-blue-800/90 pl-3 pr-2 text-white lg:pl-11">
-      <div className="flex gap-12">
-        <div className="flex pb-2 pt-2">
-          <h1 className="text-5xl">D</h1>
-          <div className="flex-col">
-            <h2 className="mt-3 leading-none">
-              <strong>EV</strong>
-            </h2>
-            <h3 className="text-xs leading-none">COMMUNITY</h3>
+    <div className="flex-col">
+      <div className="flex h-full items-center justify-between bg-gradient-to-t from-blue-900 to-blue-800/90 pl-3 pr-3 text-white lg:pl-11">
+        <div className="flex gap-12">
+          <div className="flex pb-2 pt-2">
+            <h1 className="text-5xl">D</h1>
+            <div className="flex-col">
+              <h2 className="mt-3 leading-none">
+                <strong>EV</strong>
+              </h2>
+              <h3 className="text-xs leading-none">COMMUNITY</h3>
+            </div>
+          </div>
+          <div className="m-0 flex gap-5  max-[950px]:hidden">
+            {linksList.map((link, index) => {
+              return (
+                <NavBarButton
+                  key={index}
+                  link_id={link.id}
+                  hovered_button_id={HoveredButtonIndex}
+                  link_text={link.text}
+                  onMouseEnter={() => {
+                    return handleButtonHovered
+                  }}
+                  onMouseLeave={() => {
+                    return handleButtonLeave
+                  }}
+                />
+              )
+            })}
           </div>
         </div>
-        <div className="m-0 flex gap-5">
+        <div className="flex gap-1 ">
+          {iconsList.map((icon, index) => {
+            return (
+              <DefaultIconButton
+                onClick={() => {}}
+                style="text-white max-[950px]:hidden"
+                key={index}
+              >
+                {icon.icon_name}
+              </DefaultIconButton>
+            )
+          })}
+          <DefaultIconButton
+            onClick={handleHamburguerClick}
+            style="text-white min-[950px]:hidden"
+            key={''}
+          >
+            <MenuIcon />
+          </DefaultIconButton>
+        </div>
+      </div>
+      <div
+        className={
+          isOpen
+            ? 'relative h-0 duration-700'
+            : 'h-fit flex-col justify-evenly gap-3 bg-blue-950 py-3 duration-500 min-[950px]:hidden'
+        }
+      >
+        <div className="flex-col">
           {linksList.map((link, index) => {
             return (
-              <button
+              <NavBarButton
                 key={index}
-                className="flex px-2 pb-1 hover:bg-white hover:text-blue-900"
+                link_id={link.id}
+                hovered_button_id={HoveredButtonIndex}
+                link_text={link.text}
                 onMouseEnter={() => {
-                  handleButtonHovered(link.id)
+                  return handleButtonHovered
                 }}
-                onMouseLeave={handleButtonLeave}
-              >
-                <p className="mt-auto flex items-center justify-center gap-2 text-lg font-light max-[950px]:hidden">
-                  {link.text}
-                  <DefaultIconButton
-                    style={
-                      HoveredButtonIndex == link.id
-                        ? 'text-blue-900'
-                        : 'text-white'
-                    }
-                    key={index}
-                  >
-                    <KeyboardArrowDownIcon />
-                  </DefaultIconButton>
-                </p>
-              </button>
+                onMouseLeave={() => {
+                  return handleButtonLeave
+                }}
+              />
             )
           })}
         </div>
-      </div>
-      <div className="flex gap-1 ">
-        {iconsList.map((icon, index) => {
-          return (
+        <div>
+          <div
+            className={
+              isOpen ? 'hidden' : 'mt-6 flex items-center justify-center gap-2'
+            }
+          >
+            {iconsList.map((icon, index) => {
+              return (
+                <DefaultIconButton
+                  onClick={() => {}}
+                  style="text-white min-[950px]:hidden"
+                  key={index}
+                >
+                  {icon.icon_name}
+                </DefaultIconButton>
+              )
+            })}
             <DefaultIconButton
+              onClick={handleHamburguerClick}
               style="text-white max-[950px]:hidden"
-              key={index}
+              key={''}
             >
-              {icon.icon_name}
+              <MenuIcon />
             </DefaultIconButton>
-          )
-        })}
-        <DefaultIconButton style="text-white min-[950px]:hidden" key={''}>
-          <MenuIcon />
-        </DefaultIconButton>
+          </div>
+        </div>
       </div>
     </div>
   )
