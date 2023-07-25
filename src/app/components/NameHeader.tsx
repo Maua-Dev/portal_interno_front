@@ -1,3 +1,4 @@
+import { DefaultButton } from './little_components/Buttons'
 import { DisplayHours } from './little_components/DisplayHours'
 import { ReactNode } from 'react'
 
@@ -31,14 +32,6 @@ const ProfileSquare = ({ name }: { name: string }) => {
   )
 }
 
-const EditButton = () => {
-  return (
-    <button className="hidden h-6 rounded-full border-2 border-blue-600 px-4 text-xs lg:block xl:h-8 xl:px-7 xl:text-base">
-      Editar
-    </button>
-  )
-}
-
 const NameComponents = ({ children }: { children: ReactNode }) => {
   return <div className="flex flex-col">{children}</div>
 }
@@ -65,7 +58,7 @@ export default function NameHeader({
             <p className="font-bold md:text-xl xl:text-2xl">{`${name.toUpperCase()} (${stack.toUpperCase()})`}</p>
             <p className="text-sm md:text-base xl:text-lg">{`${year.toUpperCase()} / ${course.toUpperCase()}`}</p>
           </NameComponents>
-          <EditButton />
+          <DefaultButton label={'Editar'} color={'blue'} />
         </Components>
         <DisplayHours hours="00:00" />
       </Border>
