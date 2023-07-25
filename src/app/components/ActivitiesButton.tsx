@@ -4,7 +4,7 @@ import { ReactNode } from 'react'
 
 const Container = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="mb-5 flex h-16 w-48 items-center justify-between rounded-xl border-2 border-gray-400 px-4 sm:w-80">
+    <div className="mb-5 flex h-16 w-64 items-center justify-between rounded-xl border-2 border-gray-400 px-4 sm:w-80">
       {children}
     </div>
   )

@@ -14,7 +14,7 @@ const Container = ({
     <div
       className={`flex ${
         isOpen ? 'h-auto' : 'h-16'
-      } w-48 transform flex-col items-start justify-between rounded-xl border-2 border-gray-400 px-4 py-3 transition-all duration-500 sm:w-80`}
+      } w-64 transform flex-col items-start justify-between rounded-xl border-2 border-gray-400 px-4 py-3 transition-all duration-500 sm:w-80`}
     >
       {children}
     </div>
@@ -115,7 +115,9 @@ export default function HistoryButton({
             return (
               <ActionDisplay key={index}>
                 <Line>
-                  <p className="text-center font-bold">{activity.title}</p>
+                  <p className="w-20 overflow-hidden text-ellipsis whitespace-nowrap text-center text-sm font-bold sm:w-36">
+                    {activity.title}
+                  </p>
                   <ActionButton text="Abrir" color="blue" />
                 </Line>
                 <Line>

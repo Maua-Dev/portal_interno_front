@@ -48,7 +48,7 @@ export const activities: Action[] = [
     endDate: 1689976380000,
     duration: 6780000,
     actionId: 'uuid2',
-    title: 'Componente',
+    title: 'Componente Histórico e Atividades',
     actionTypeTag: ACTION_TYPE.MEETING,
     projectCode: 'PT',
     stackTags: [STACK.FRONTEND],
