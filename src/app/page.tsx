@@ -21,7 +21,7 @@ export default function Home() {
           year="1º Ano"
           stack="UX/UI"
         />
-        <div className="flex gap-52">
+        <div className=" flex gap-44">
           <div className="flex flex-col gap-4">
             <ActivitiesButton />
             <HistoryButton />
