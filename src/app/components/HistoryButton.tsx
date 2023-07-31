@@ -1,7 +1,9 @@
 import { Action } from '@/@clean/shared/domain/entities/action'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import IconButton from '@mui/material/IconButton'
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode } from 'react'
+import historyIcon from '../assets/history_image_button.png'
+import Image from 'next/image'
 
 const Container = ({
   children,
@@ -13,7 +15,7 @@ const Container = ({
   return (
     <div
       className={`flex ${
-        isOpen ? 'h-auto' : 'h-16'
+        isOpen ? 'h-auto' : 'h-28'
       } w-64 transform flex-col items-start justify-between rounded-xl border-2 border-gray-400 px-4 py-3 transition-all duration-500 sm:w-80`}
     >
       {children}
@@ -23,7 +25,7 @@ const Container = ({
 
 const Header = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="flex w-full flex-row items-center justify-between">
+    <div className="mt-1 flex w-full flex-row items-center justify-between">
       {children}
     </div>
   )
@@ -104,7 +106,7 @@ export default function HistoryButton({
   return (
     <Container isOpen={isOpen}>
       <Header>
-        <p className="text-xl">Histórico</p>
+        <Image src={historyIcon} alt="History Icon" className="w-36 sm:w-48" />
         <IconButton onClick={onClick}>
           <ExpandMoreIcon className="place-items-center text-2xl" />
         </IconButton>
