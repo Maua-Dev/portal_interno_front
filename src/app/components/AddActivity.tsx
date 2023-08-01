@@ -129,15 +129,21 @@ const Description = () => {
   )
 }
 
-export default function AddActivity() {
+export default function AddActivity({
+  cancel,
+  save
+}: {
+  cancel: () => void
+  save: () => void
+}) {
   return (
     <Container>
       <Border mainCard>
         <FlexColCenter>
-          <p className="text-2xl font-bold">TITUTLO DA ATIVIDADE</p>
+          <p className="text-2xl font-bold">TITULO DA ATIVIDADE</p>
         </FlexColCenter>
         <FlexColCenter>
-          <CancelAndSaveButtons />
+          <CancelAndSaveButtons cancel={cancel} save={save} />
           <DisplayHours hours="00:00" mainCard />
         </FlexColCenter>
       </Border>

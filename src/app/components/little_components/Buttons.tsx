@@ -14,13 +14,27 @@ const DefaultIconButton = ({ children, style }: DefaultIconButtonProps) => {
   )
 }
 
-const CancelAndSaveButtons = ({ className }: { className?: string }) => {
+const CancelAndSaveButtons = ({
+  className,
+  cancel,
+  save
+}: {
+  className?: string
+  cancel: () => void
+  save: () => void
+}) => {
   return (
     <div className={'mb-3 flex flex-row gap-4' + className}>
-      <button className="mr-2 rounded-md border-2 border-red-600 p-1 font-bold text-red-600">
+      <button
+        onClick={cancel}
+        className="mr-2 rounded-md border-2 border-red-600 p-1 font-bold text-red-600"
+      >
         CANCELAR
       </button>
-      <button className="rounded-md border-2 border-blue-600 p-1 font-bold text-blue-600">
+      <button
+        onClick={save}
+        className="rounded-md border-2 border-blue-600 p-1 font-bold text-blue-600"
+      >
         SALVAR
       </button>
     </div>

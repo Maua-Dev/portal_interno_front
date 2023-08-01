@@ -22,10 +22,20 @@ export default function Home() {
     setOn(!on)
   }
 
+  const saveOnClick = () => {
+    return
+  }
+
+  const cancelOnClick = () => {
+    setOn(false)
+  }
+
   return (
-    <main className="">
-      <NavBar />
-      <section className="mt-20 flex flex-col gap-4 px-10 md:px-40">
+    <>
+      <header className="">
+        <NavBar />
+      </header>
+      <main className="mt-20 flex flex-col gap-4 px-10 md:px-40">
         <NameHeader
           name="Lucas Fernandes"
           course="Design"
@@ -37,9 +47,12 @@ export default function Home() {
             <ActivitiesButton onClick={handleOnClick} />
             <HistoryButton />
           </ContainerActivitiesHistory>
-          {on ? <AddActivity /> : null}
+          {on ? (
+            <AddActivity cancel={cancelOnClick} save={saveOnClick} />
+          ) : null}
         </ContainerMainCards>
-      </section>
-    </main>
+      </main>
+      <footer className=""></footer>
+    </>
   )
 }

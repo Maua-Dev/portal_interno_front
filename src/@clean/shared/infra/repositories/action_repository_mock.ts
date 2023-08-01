@@ -1,4 +1,4 @@
-import { IActionRepository } from '@/@clean/modules/user/domain/repositories/action_repository_interface'
+import { IActionRepository } from '@/@clean/modules/action/domain/repositories/action_repository_interface'
 import { Action } from '../../domain/entities/action'
 import { AssociatedAction } from '../../domain/entities/associated_action'
 import { Project } from '../../domain/entities/project'

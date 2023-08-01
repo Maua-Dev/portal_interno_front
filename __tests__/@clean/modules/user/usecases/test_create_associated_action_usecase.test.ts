@@ -1,4 +1,4 @@
-import { CreateAssociatedAction } from '@/@clean/modules/user/usecases/create_associated_action_usecase'
+import { CreateAssociatedAction } from '@/@clean/modules/action/usecases/create_associated_action_usecase'
 import { Action } from '@/@clean/shared/domain/entities/action'
 import { AssociatedAction } from '@/@clean/shared/domain/entities/associated_action'
 import { ACTION_TYPE } from '@/@clean/shared/domain/enums/action_type_enum'
