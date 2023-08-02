@@ -11,22 +11,41 @@ import {
   ContainerActivitiesHistory,
   ContainerMainCards
 } from './components/little_components/Container'
-import { useState } from 'react'
+import { ReactNode, useState } from 'react'
 import { activities } from './components/actions'
 // import { UserProvider } from '@/contexts/user_provider'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
-  const [on, setOn] = useState(false)
-  const [isHistoryOpen, setIsHistoryOpen] = useState<boolean>(false)
+  const [isOpen, setOpen] = useState(false)
+  const [mainCardId, setMainCardId] = useState<number>()
+  const [isHistoryButtonCliked, setHistoryButtonCliked] = useState(false)
+  const [mainCard, setMainCard] = useState<ReactNode>(null)
+  const [isHistoryDropDown, setHistoryDropDown] = useState<boolean>(false)
 
-  const handleOnClick = () => {
-    setOn(!on)
+  const handleSideButtonClick = () => {
+    setOpen(!isOpen)
   }
 
-  const handleHistoryClick = () => {
-    setIsHistoryOpen(!isHistoryOpen)
+  const handleMainCards = (mainCardComponent: ReactNode, id: number) => {
+    if (isOpen) {
+      if (mainCardId === id) {
+        handleSideButtonClick()
+        setMainCard(null)
+      } else if (mainCardId !== id) {
+        setMainCardId(id)
+        setMainCard(mainCardComponent)
+      }
+    } else if (!isOpen) {
+      handleSideButtonClick()
+      setMainCardId(id)
+      setMainCard(mainCardComponent)
+    }
+  }
+
+  const handleHistoryDropDown = () => {
+    setHistoryDropDown(!isHistoryDropDown)
   }
 
   return (
@@ -44,14 +63,21 @@ export default function Home() {
         </div>
         <ContainerMainCards>
           <ContainerActivitiesHistory>
-            <ActivitiesButton onClick={handleOnClick} />
+            <ActivitiesButton
+              onClick={() => {
+                handleMainCards(<AddActivity />, 1)
+              }}
+            />
             <HistoryButton
               activities={activities}
-              isOpen={isHistoryOpen}
-              onClick={handleHistoryClick}
+              isOpen={isHistoryDropDown}
+              onClick={() => {
+                handleMainCards(<HistoryMainCard />, 2)
+                handleHistoryDropDown()
+              }}
             />
           </ContainerActivitiesHistory>
-          {on ? <AddActivity /> : <HistoryMainCard />}
+          {mainCard}
         </ContainerMainCards>
       </section>
     </main>
