@@ -14,22 +14,17 @@ export default function NavBar() {
   const linksList = [
     {
       id: 1,
-      text: 'Contatos',
+      text: 'Tela de perfil',
       url: ''
     },
     {
       id: 2,
-      text: 'Abrir denuncia',
+      text: 'Projetos da Dev',
       url: ''
     },
     {
       id: 3,
-      text: 'Planilha excel',
-      url: ''
-    },
-    {
-      id: 4,
-      text: 'Projetos',
+      text: 'Registro das horas de trabalho',
       url: ''
     }
   ]
