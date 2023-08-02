@@ -8,9 +8,21 @@ const Container = ({ children }: { children: ReactNode }) => {
   )
 }
 
-const Border = ({ children }: { children: ReactNode }) => {
+const Border = ({
+  children,
+  mainCard
+}: {
+  children: ReactNode
+  mainCard?: boolean
+}) => {
   return (
-    <div className="flex w-full flex-col items-center justify-between gap-4 border-b-2 border-gray-500 py-4 sm:flex-row md:gap-0">
+    <div
+      className={
+        mainCard
+          ? 'mb-5 flex w-full flex-col justify-between gap-4 border-b-2 border-gray-500 py-4 sm:flex-row md:gap-0'
+          : 'flex w-full flex-col items-center justify-between gap-4 border-b-2 border-gray-500 py-4 sm:flex-row md:gap-0'
+      }
+    >
       {children}
     </div>
   )
@@ -65,3 +77,5 @@ export default function NameHeader({
     </Container>
   )
 }
+
+export { Border }
