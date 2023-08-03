@@ -10,20 +10,17 @@ import {
   ContainerActivitiesHistory,
   ContainerMainCards
 } from './components/little_components/Container'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { activities } from './components/actions'
 import dynamic from 'next/dynamic'
 // import { UserProvider } from '@/contexts/user_provider'
-
-const NavbarWithNoSSR = dynamic(() => import('./components/Navbar'), {
-  ssr: false
-})
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
   const [on, setOn] = useState(false)
   const [isHistoryOpen, setIsHistoryOpen] = useState<boolean>(false)
+  const [isClient, setClient] = useState(false)
 
   const handleOnClick = () => {
     setOn(!on)
@@ -33,9 +30,13 @@ export default function Home() {
     setIsHistoryOpen(!isHistoryOpen)
   }
 
+  useEffect(() => {
+    setClient(true)
+  }, [])
+
   return (
     <main className="">
-      <NavbarWithNoSSR />
+      {isClient ? <NavBar /> : null}
       <section className="mt-20 flex flex-col gap-4 px-10 md:px-40">
         <NameHeader
           name="Lucas Fernandes"
