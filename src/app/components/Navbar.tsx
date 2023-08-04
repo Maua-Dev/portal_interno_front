@@ -6,7 +6,7 @@ import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import MenuIcon from '@mui/icons-material/Menu'
 import { DefaultIconButton, NavBarButton } from './little_components/Buttons'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function NavBar() {
   const [isOpen, setOpen] = useState(false)
@@ -15,22 +15,22 @@ export default function NavBar() {
     {
       id: 1,
       text: 'Contatos',
-      url: ''
+      url: '/contatos'
     },
     {
       id: 2,
       text: 'Abrir denuncia',
-      url: ''
+      url: '/denuncia'
     },
     {
       id: 3,
       text: 'Planilha excel',
-      url: ''
+      url: '/planilha'
     },
     {
       id: 4,
       text: 'Projetos',
-      url: ''
+      url: '/projetos'
     }
   ]
 
@@ -38,17 +38,17 @@ export default function NavBar() {
     {
       id: 1,
       icon_name: <NotificationsNoneIcon className="h-6 w-6 rotate-12" />,
-      url: ''
+      url: '/notifications'
     },
     {
       id: 2,
       icon_name: <HelpOutlineIcon className="h-6 w-6" />,
-      url: ''
+      url: '/help'
     },
     {
       id: 3,
       icon_name: <AccountCircleIcon className=" h-8 w-8" />,
-      url: ''
+      url: '/account'
     }
   ]
 
@@ -148,7 +148,6 @@ export default function NavBar() {
             <DefaultIconButton
               onClick={handleHamburguerClick}
               style="text-white max-[950px]:hidden"
-              key={''}
             >
               <MenuIcon />
             </DefaultIconButton>

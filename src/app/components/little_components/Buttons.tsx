@@ -5,7 +5,7 @@ import { ReactNode, useState } from 'react'
 interface DefaultIconButtonProps {
   children: ReactNode
   style: string
-  onClick: () => void
+  onClick?: () => void
 }
 
 const DefaultIconButton = ({
