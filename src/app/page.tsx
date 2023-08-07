@@ -10,13 +10,17 @@ import {
   ContainerActivitiesHistory,
   ContainerMainCards
 } from './components/little_components/Container'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { activities } from './components/actions'
+import dynamic from 'next/dynamic'
 // import { UserProvider } from '@/contexts/user_provider'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
   const [on, setOn] = useState(false)
+  const [isHistoryOpen, setIsHistoryOpen] = useState<boolean>(false)
+  const [isClient, setClient] = useState(false)
 
   const handleOnClick = () => {
     setOn(!on)
@@ -30,27 +34,39 @@ export default function Home() {
     setOn(false)
   }
 
+  const handleHistoryClick = () => {
+    setIsHistoryOpen(!isHistoryOpen)
+  }
+
+  useEffect(() => {
+    setClient(true)
+  }, [])
+
   return (
     <>
-      <header className="">
-        <NavBar />
-      </header>
-      <main className="mt-20 flex flex-col gap-4 px-10 md:px-40">
-        <NameHeader
-          name="Lucas Fernandes"
-          course="Design"
-          year="1º Ano"
-          stack="UX/UI"
-        />
-        <ContainerMainCards>
-          <ContainerActivitiesHistory>
-            <ActivitiesButton onClick={handleOnClick} />
-            <HistoryButton />
-          </ContainerActivitiesHistory>
-          {on ? (
-            <AddActivity cancel={cancelOnClick} save={saveOnClick} />
-          ) : null}
-        </ContainerMainCards>
+      <main className="">
+        {isClient ? <NavBar /> : null}
+        <section className="mt-20 flex flex-col gap-4 px-10 md:px-40">
+          <NameHeader
+            name="Lucas Fernandes"
+            course="Design"
+            year="1º Ano"
+            stack="UX/UI"
+          />
+          <ContainerMainCards>
+            <ContainerActivitiesHistory>
+              <ActivitiesButton onClick={handleOnClick} />
+              <HistoryButton
+                activities={activities}
+                isOpen={isHistoryOpen}
+                onClick={handleHistoryClick}
+              />
+            </ContainerActivitiesHistory>
+            {on ? (
+              <AddActivity cancel={cancelOnClick} save={saveOnClick} />
+            ) : null}
+          </ContainerMainCards>
+        </section>
       </main>
       <footer className=""></footer>
     </>

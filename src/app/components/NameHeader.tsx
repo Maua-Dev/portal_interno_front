@@ -45,7 +45,7 @@ const ProfileSquare = ({ name }: { name: string }) => {
 
 const EditButton = () => {
   return (
-    <button className="hidden h-6 rounded-full border-2 border-blue-600 px-4 text-xs lg:block xl:h-8 xl:px-7 xl:text-base">
+    <button className="hidden h-6 rounded-full border-2 border-blue-600 px-4 text-xs text-blue-600 lg:block xl:h-8 xl:px-7 xl:text-base">
       Editar
     </button>
   )
