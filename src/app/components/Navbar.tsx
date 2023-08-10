@@ -8,14 +8,6 @@ import MenuIcon from '@mui/icons-material/Menu'
 import { DefaultIconButton, NavBarButton } from './little_components/Buttons'
 import { ReactNode, useState } from 'react'
 
-// const Container = ({ children }: { children: ReactNode }) => {
-//   return (
-//     <div className="flex h-full w-3/4 flex-col rounded-xl border-2 border-gray-400 px-4">
-//       {children}
-//     </div>
-//   )
-// }
-
 const NavBarContainer = ({ children }: { children: ReactNode }) => {
   return (
     <div className="flex h-full items-center justify-between bg-gradient-to-t from-blue-900 to-blue-800/90 pl-3 pr-3 text-white lg:pl-11">
