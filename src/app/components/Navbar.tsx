@@ -11,6 +11,7 @@ import TableChartIcon from '@mui/icons-material/TableChart'
 import PollIcon from '@mui/icons-material/Poll'
 import { DefaultIconButton, NavBarButton } from './little_components/Buttons'
 import { ReactNode, useState } from 'react'
+import { id } from 'inversify'
 
 const NavBarContainer = ({ children }: { children: ReactNode }) => {
   return (
@@ -152,14 +153,21 @@ const MobileNavbar = ({
   children: ReactNode
 }) => {
   return (
-    <div
-      className={
-        isOpen
-          ? 'absolute z-10 h-full w-96 justify-evenly bg-blue-100 pt-12 duration-500 min-[950px]:hidden'
-          : 'absolute h-full w-0 duration-700'
-      }
-    >
-      {children}
+    <div className=" absolute flex h-screen w-full">
+      <div
+        className={
+          isOpen
+            ? 'z-10  w-96 justify-evenly bg-blue-100 pt-12 duration-500 min-[950px]:hidden'
+            : 'w-0 duration-700'
+        }
+      >
+        {children}
+      </div>
+      <div
+        className={
+          isOpen ? 'absolute h-full w-full bg-black opacity-60' : 'hidden'
+        }
+      />
     </div>
   )
 }
