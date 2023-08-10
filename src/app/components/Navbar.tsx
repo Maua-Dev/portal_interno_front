@@ -165,7 +165,9 @@ const MobileNavbar = ({
       </div>
       <div
         className={
-          isOpen ? 'absolute h-full w-full bg-black opacity-60' : 'hidden'
+          isOpen
+            ? 'absolute h-full w-full bg-black opacity-60 min-[950px]:hidden'
+            : 'hidden'
         }
       />
     </div>
