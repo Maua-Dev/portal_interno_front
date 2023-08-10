@@ -5,6 +5,10 @@ import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import MenuIcon from '@mui/icons-material/Menu'
+import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone'
+import ErrorIcon from '@mui/icons-material/Error'
+import TableChartIcon from '@mui/icons-material/TableChart'
+import PollIcon from '@mui/icons-material/Poll'
 import { DefaultIconButton, NavBarButton } from './little_components/Buttons'
 import { ReactNode, useState } from 'react'
 
@@ -34,6 +38,7 @@ interface LinkListProps {
   id: number
   text: string
   url: string
+  icon: ReactNode
 }
 
 const ButtonListWeb = ({ linkList }: { linkList: LinkListProps[] }) => {
@@ -89,7 +94,7 @@ const RightSideIcons = ({
         style="text-white min-[950px]:hidden"
         key={''}
       >
-        <MenuIcon />
+        <MenuIcon className="h-10 w-10" />
       </DefaultIconButton>
     </div>
   )
@@ -102,56 +107,44 @@ const ButtonListMoblie = ({
   linkList: LinkListProps[]
   isOpen: boolean
 }) => {
+  const [hoveredButtonIndex, setHoveredButtonIndex] = useState<number | null>(
+    null
+  )
+
+  const handleHovered = (index: number) => {
+    setHoveredButtonIndex(index)
+  }
+
+  const handleLeave = () => {
+    setHoveredButtonIndex(null)
+  }
+
   return (
-    <div>
+    <div className={isOpen ? 'flex flex-col gap-5' : 'hidden'}>
       {linkList.map((link, index) => {
         return (
-          <NavBarButton
+          <button
+            onMouseEnter={() => {
+              handleHovered(index)
+            }}
+            onMouseLeave={handleLeave}
             key={index}
-            link_id={link.id}
-            link_text={link.text}
-            button_style={
-              isOpen
-                ? 'w-full flex justify-center py-3 min-[950px]:hidden'
-                : 'hidden'
-            }
-            p_style="text-white"
-          />
-        )
-      })}
-    </div>
-  )
-}
-
-const IconsListMoblie = ({
-  isOpen,
-  iconList
-}: {
-  iconList: IconListProps[]
-  isOpen: boolean
-}) => {
-  return (
-    <div
-      className={
-        isOpen ? 'mt-6 flex items-center justify-center gap-2' : 'hidden'
-      }
-    >
-      {iconList.map((icon, index) => {
-        return (
-          <DefaultIconButton
-            onClick={() => {}}
-            style="text-white min-[950px]:hidden"
-            key={index}
+            className="flex items-center gap-4 py-3 pl-7 text-left text-xl text-slate-600 hover:bg-blue-900 hover:text-white"
           >
-            {icon.icon_name}
-          </DefaultIconButton>
+            <DefaultIconButton
+              style={hoveredButtonIndex === index ? 'text-white' : 'text-black'}
+            >
+              {link.icon}
+            </DefaultIconButton>
+            <p>{link.text}</p>
+          </button>
         )
       })}
     </div>
   )
 }
 
-const MobileDropDown = ({
+const MobileNavbar = ({
   isOpen,
   children
 }: {
@@ -162,8 +155,8 @@ const MobileDropDown = ({
     <div
       className={
         isOpen
-          ? 'h-fit flex-col justify-evenly gap-3 bg-blue-950 py-3 duration-500 min-[950px]:hidden'
-          : 'relative h-0 duration-700'
+          ? 'absolute z-10 h-full w-96 justify-evenly bg-blue-100 pt-12 duration-500 min-[950px]:hidden'
+          : 'absolute h-full w-0 duration-700'
       }
     >
       {children}
@@ -178,21 +171,25 @@ export default function NavBar() {
     {
       id: 1,
       text: 'Contatos',
+      icon: <PhoneIphoneIcon className="h-7 w-7"></PhoneIphoneIcon>,
       url: '/contatos'
     },
     {
       id: 2,
       text: 'Abrir denuncia',
+      icon: <ErrorIcon className="h-7 w-7"></ErrorIcon>,
       url: '/denuncia'
     },
     {
       id: 3,
       text: 'Planilha excel',
+      icon: <TableChartIcon className="h-7 w-7"></TableChartIcon>,
       url: '/planilha'
     },
     {
       id: 4,
       text: 'Projetos',
+      icon: <PollIcon className="h-7 w-7"></PollIcon>,
       url: '/projetos'
     }
   ]
@@ -231,10 +228,9 @@ export default function NavBar() {
           iconList={iconsList}
         />
       </NavBarContainer>
-      <MobileDropDown isOpen={isOpen}>
+      <MobileNavbar isOpen={isOpen}>
         <ButtonListMoblie isOpen={isOpen} linkList={linksList} />
-        <IconsListMoblie isOpen={isOpen} iconList={iconsList} />
-      </MobileDropDown>
+      </MobileNavbar>
     </div>
   )
 }
