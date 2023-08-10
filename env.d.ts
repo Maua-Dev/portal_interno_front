@@ -1,5 +1,5 @@
-namespace NodeJS {
+export namespace NodeJS {
   interface ProcessEnv {
-    NEXT_PUBLIC_STAGE: string
+    REACT_PUBLIC_STAGE: string
   }
 }

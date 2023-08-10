@@ -1,12 +1,9 @@
-import { url } from 'inspector'
-
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import MenuIcon from '@mui/icons-material/Menu'
 import { DefaultIconButton, NavBarButton } from './little_components/Buttons'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 export default function NavBar() {
   const [isOpen, setOpen] = useState(false)
@@ -74,10 +71,10 @@ export default function NavBar() {
               return (
                 <NavBarButton
                   key={index}
-                  link_id={link.id}
-                  link_text={link.text}
-                  button_style=""
-                  p_style=""
+                  linkId={link.id}
+                  linkText={link.text}
+                  buttonStyle=""
+                  pStyle=""
                 />
               )
             })}
@@ -116,14 +113,14 @@ export default function NavBar() {
             return (
               <NavBarButton
                 key={index}
-                link_id={link.id}
-                link_text={link.text}
-                button_style={
+                linkId={link.id}
+                linkText={link.text}
+                buttonStyle={
                   isOpen
                     ? 'w-full flex justify-center py-3 min-[950px]:hidden'
                     : 'hidden'
                 }
-                p_style="text-white"
+                pStyle="text-white"
               />
             )
           })}

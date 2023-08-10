@@ -1,13 +1,14 @@
-import { CreateAction } from '@/@clean/modules/action/usecases/create_action_usecase'
-import { Action } from '@/@clean/shared/domain/entities/action'
-import { ACTION_TYPE } from '@/@clean/shared/domain/enums/action_type_enum'
-import { STACK } from '@/@clean/shared/domain/enums/stack_enum'
-import { EntityError } from '@/@clean/shared/domain/helpers/errors/domain_error'
-import { ActionRepositoryMock } from '@/@clean/shared/infra/repositories/action_repository_mock'
+import { CreateActionUsecase } from '../../../../../src/@clean/modules/action/usecases/create_action_usecase'
+import { Action } from '../../../../../src/@clean/shared/domain/entities/action'
+import { ACTION_TYPE } from '../../../../../src/@clean/shared/domain/enums/action_type_enum'
+import { STACK } from '../../../../../src/@clean/shared/domain/enums/stack_enum'
+import { EntityError } from '../../../../../src/@clean/shared/domain/helpers/errors/domain_error'
+import { ActionRepositoryMock } from '../../../../../src/@clean/shared/infra/repositories/action_repository_mock'
+
 
 test('Test Action usecase', async () => {
   const repo = new ActionRepositoryMock()
-  const actionUsecase = new CreateAction(repo)
+  const actionUsecase = new CreateActionUsecase(repo)
 
   const action = new Action({
     ownerRa: '22.00680-0',
@@ -30,7 +31,7 @@ test('Test Action usecase', async () => {
 
 test('Test Action with invalid ownerRa', async () => {
   const repo = new ActionRepositoryMock()
-  const actionUsecase = new CreateAction(repo)
+  const actionUsecase = new CreateActionUsecase(repo)
 
   expect(() => {
     actionUsecase.execute(
@@ -72,7 +73,7 @@ test('Test Action with invalid ownerRa', async () => {
 
 test('Test Action with invalid endDate', async () => {
   const repo = new ActionRepositoryMock()
-  const actionUsecase = new CreateAction(repo)
+  const actionUsecase = new CreateActionUsecase(repo)
 
   expect(() => {
     actionUsecase.execute(
@@ -114,7 +115,7 @@ test('Test Action with invalid endDate', async () => {
 
 test('Test Action with invalid duration', async () => {
   const repo = new ActionRepositoryMock()
-  const actionUsecase = new CreateAction(repo)
+  const actionUsecase = new CreateActionUsecase(repo)
 
   expect(() => {
     actionUsecase.execute(
@@ -156,7 +157,7 @@ test('Test Action with invalid duration', async () => {
 
 test('Test Action with invalid actionId', async () => {
   const repo = new ActionRepositoryMock()
-  const actionUsecase = new CreateAction(repo)
+  const actionUsecase = new CreateActionUsecase(repo)
 
   expect(() => {
     actionUsecase.execute(
@@ -198,7 +199,7 @@ test('Test Action with invalid actionId', async () => {
 
 test('Test Action with invalid storyId', async () => {
   const repo = new ActionRepositoryMock()
-  const actionUsecase = new CreateAction(repo)
+  const actionUsecase = new CreateActionUsecase(repo)
 
   expect(() => {
     actionUsecase.execute(
@@ -240,7 +241,7 @@ test('Test Action with invalid storyId', async () => {
 
 test('Test Action with invalid title', async () => {
   const repo = new ActionRepositoryMock()
-  const actionUsecase = new CreateAction(repo)
+  const actionUsecase = new CreateActionUsecase(repo)
 
   expect(() => {
     actionUsecase.execute(
@@ -282,7 +283,7 @@ test('Test Action with invalid title', async () => {
 
 test('Test Action with invalid description', async () => {
   const repo = new ActionRepositoryMock()
-  const actionUsecase = new CreateAction(repo)
+  const actionUsecase = new CreateActionUsecase(repo)
 
   expect(() => {
     actionUsecase.execute(
@@ -324,7 +325,7 @@ test('Test Action with invalid description', async () => {
 
 test('Test Action with invalid projectCode', async () => {
   const repo = new ActionRepositoryMock()
-  const actionUsecase = new CreateAction(repo)
+  const actionUsecase = new CreateActionUsecase(repo)
 
   expect(() => {
     actionUsecase.execute(
@@ -366,7 +367,7 @@ test('Test Action with invalid projectCode', async () => {
 
 test('Test Action with invalid associatedMembersRa', async () => {
   const repo = new ActionRepositoryMock()
-  const actionUsecase = new CreateAction(repo)
+  const actionUsecase = new CreateActionUsecase(repo)
 
   expect(() => {
     actionUsecase.execute(
@@ -408,7 +409,7 @@ test('Test Action with invalid associatedMembersRa', async () => {
 
 test('Test Action with invalid stackTags', async () => {
   const repo = new ActionRepositoryMock()
-  const actionUsecase = new CreateAction(repo)
+  const actionUsecase = new CreateActionUsecase(repo)
 
   expect(() => {
     actionUsecase.execute(

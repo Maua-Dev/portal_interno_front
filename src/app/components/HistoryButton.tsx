@@ -2,8 +2,7 @@ import { Action } from '@/@clean/shared/domain/entities/action'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import IconButton from '@mui/material/IconButton'
 import { ReactNode } from 'react'
-import historyIcon from '../assets/history_image_button.png'
-import Image from 'next/image'
+import historyIcon from '@/app/assets/history_image_button.png'
 
 const Container = ({
   children,
@@ -106,7 +105,7 @@ export default function HistoryButton({
   return (
     <Container isOpen={isOpen}>
       <Header>
-        <Image src={historyIcon} alt="History Icon" className="w-36 sm:w-48" />
+        <img src={historyIcon} alt="History Icon" className="w-36 sm:w-48" />
         <IconButton onClick={onClick}>
           <ExpandMoreIcon className="place-items-center text-2xl" />
         </IconButton>

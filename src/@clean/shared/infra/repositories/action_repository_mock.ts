@@ -225,10 +225,6 @@ export class ActionRepositoryMock implements IActionRepository {
     })
   ]
 
-  // createAction(action: Action): Promise<Action> {
-  //   throw new Error('Method not implemented.')
-  // }
-
   async createAction(action: Action): Promise<Action> {
     this.actions.push(action)
     this.createAssociatedAction(
@@ -252,10 +248,6 @@ export class ActionRepositoryMock implements IActionRepository {
     return action
   }
 
-  // getAction(actionId: string): Promise<Action> {
-  //   throw new Error('Method not implemented.')
-  // }
-
   async getAction(actionId: string): Promise<Action> {
     const action = this.actions.find((action) => action.actionId === actionId)
     if (!action) {
@@ -263,12 +255,6 @@ export class ActionRepositoryMock implements IActionRepository {
     }
     return action
   }
-
-  // createAssociatedAction(
-  //   associatedAction: AssociatedAction
-  // ): Promise<AssociatedAction> {
-  //   throw new Error('Method not implemented.')
-  // }
 
   async createAssociatedAction(
     associatedAction: AssociatedAction

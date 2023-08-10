@@ -1,8 +1,7 @@
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import IconButton from '@mui/material/IconButton'
 import { ReactNode } from 'react'
-import Image from 'next/image'
-import activityIcon from '../assets/activities_image_button.png'
+import activityIcon from '@/app/assets/activities_image_button.png'
 
 const Container = ({ children }: { children: ReactNode }) => {
   return (
@@ -15,7 +14,7 @@ const Container = ({ children }: { children: ReactNode }) => {
 export default function ActivitiesButton({ onClick }: { onClick: () => void }) {
   return (
     <Container>
-      <Image src={activityIcon} alt="Activity Icon" className="w-36 sm:w-48" />
+      <img src={activityIcon} alt="Activity Icon" className="w-36 sm:w-48" />
       <IconButton onClick={onClick}>
         <AddCircleOutlineIcon />
       </IconButton>

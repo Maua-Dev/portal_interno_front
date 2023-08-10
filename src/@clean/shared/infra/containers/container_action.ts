@@ -1,5 +1,5 @@
 import 'reflect-metadata'
-import { Container, injectable } from 'inversify'
+import { Container } from 'inversify'
 import { http } from '../http'
 import { ActionRepositoryMock } from '../repositories/action_repository_mock'
 import { CreateActionUsecase } from '@/@clean/modules/action/usecases/create_action_usecase'
@@ -39,11 +39,11 @@ containerAction
 containerAction
   .bind(RegistryAction.CreateActionUsecase)
   .toDynamicValue((context) => {
-    if (process.env.NEXT_PUBLIC_STAGE === 'TEST') {
+    if (process.env.REACT_PUBLIC_STAGE === 'TEST') {
       return new CreateActionUsecase(
         context.container.get(RegistryAction.ActionRepositoryMock)
       )
-    } else if (process.env.NEXT_PUBLIC_STAGE === 'DEV') {
+    } else if (process.env.REACT_PUBLIC_STAGE === 'DEV') {
       return new CreateActionUsecase(
         context.container.get(RegistryAction.ActionRepositoryMock)
       )
@@ -57,13 +57,13 @@ containerAction
 containerAction
   .bind(RegistryAction.CreateAssociatedActionUsecase)
   .toDynamicValue((context) => {
-    if (process.env.NEXT_PUBLIC_STAGE === 'TEST') {
+    if (process.env.REACT_PUBLIC_STAGE === 'TEST') {
       return new CreateAssociatedActionUsecase(
         context.container.get(RegistryAction.ActionRepositoryMock)
       )
     } else if (
-      process.env.NEXT_PUBLIC_STAGE === 'DEV' ||
-      process.env.NEXT_PUBLIC_STAGE === 'PROD'
+      process.env.REACT_PUBLIC_STAGE === 'DEV' ||
+      process.env.REACT_PUBLIC_STAGE === 'PROD'
     ) {
       return new CreateAssociatedActionUsecase(
         context.container.get(RegistryAction.ActionRepositoryMock)
