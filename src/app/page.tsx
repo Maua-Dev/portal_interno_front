@@ -5,7 +5,7 @@ import NameHeader from './components/NameHeader'
 import NavBar from './components/Navbar'
 import ActivitiesButton from './components/ActivitiesButton'
 import HistoryButton from './components/HistoryButton'
-import HistoryMainCard from './components/HistoryMainCard'
+import HistoricMainCard from './components/HistoricMainCard'
 import AddActivity from './components/AddActivity'
 import {
   ContainerActivitiesHistory,
@@ -72,7 +72,7 @@ export default function Home() {
               activities={activities}
               isOpen={isHistoryDropDown}
               onClick={() => {
-                handleMainCards(<HistoryMainCard />, 2)
+                handleMainCards(<HistoricMainCard />, 2)
                 handleHistoryDropDown()
               }}
             />
