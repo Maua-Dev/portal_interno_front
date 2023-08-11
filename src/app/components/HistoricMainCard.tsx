@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { ReactNode, useState } from 'react'
 import { DefaultButton } from './little_components/Buttons'
 import { ListComponent } from './little_components/ListComponent'
 import { MainCard } from './little_components/MainCard'
@@ -108,8 +108,58 @@ const WebHistoricMainCard = () => {
   )
 }
 
-// const MobileHistory
+const UnfocusedBG = ({
+  isOpen,
+  handleLeave
+}: {
+  isOpen: boolean
+  handleLeave: () => void
+}) => {
+  return (
+    <div
+      onClick={handleLeave}
+      className={
+        isOpen
+          ? 'absolute bottom-0 left-0 right-0 top-0 z-10 h-screen w-screen bg-black opacity-50'
+          : 'hidden'
+      }
+    />
+  )
+}
+
+const MobilePopUp = ({ isOpen }: { isOpen: boolean }) => {
+  return (
+    <div
+      className={
+        isOpen
+          ? 'absolute bottom-0 left-0 right-0 top-0 z-20 m-auto h-5/6 w-5/6 rounded-md bg-white p-4'
+          : 'hidden'
+      }
+    >
+      <h1>teste</h1>
+    </div>
+  )
+}
+
+const MobileHistoric = () => {
+  const [isOpen, setOpen] = useState(true)
+
+  const handleLeave = () => {
+    setOpen(false)
+  }
+  return (
+    <div>
+      <MobilePopUp isOpen={isOpen} />
+      <UnfocusedBG isOpen={isOpen} handleLeave={handleLeave} />
+    </div>
+  )
+}
 
 export default function HistoricMainCard() {
-  return <WebHistoricMainCard />
+  return (
+    <div>
+      <WebHistoricMainCard />
+      <MobileHistoric />
+    </div>
+  )
 }
