@@ -92,9 +92,9 @@ const BodySection = ({ children }: { children: ReactNode }) => {
   return <div className="flex flex-col gap-4 py-3">{children}</div>
 }
 
-export default function HistoryMainCard() {
+const MobileHistoryMainCard = () => {
   return (
-    <MainCard>
+    <MainCard width="max-[1050px]:hidden">
       <CardHeader>
         <LeftSideHeader />
         <RightSideHeader />
@@ -106,4 +106,8 @@ export default function HistoryMainCard() {
       </BodySection>
     </MainCard>
   )
+}
+
+export default function HistoryMainCard() {
+  return <MobileHistoryMainCard />
 }
