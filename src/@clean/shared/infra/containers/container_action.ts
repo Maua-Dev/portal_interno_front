@@ -2,9 +2,9 @@ import 'reflect-metadata'
 import { Container } from 'inversify'
 import { http } from '../http'
 import { ActionRepositoryMock } from '../repositories/action_repository_mock'
-import { CreateActionUsecase } from '@/@clean/modules/action/usecases/create_action_usecase'
-import { CreateAssociatedActionUsecase } from '@/@clean/modules/action/usecases/create_associated_action_usecase'
 import { ActionRepositoryHttp } from '../repositories/action_repository_http'
+import { CreateActionUsecase } from '../../../modules/action/usecases/create_action_usecase'
+import { CreateAssociatedActionUsecase } from '../../../modules/action/usecases/create_associated_action_usecase'
 
 export const RegistryAction = {
   // Axios Adapter

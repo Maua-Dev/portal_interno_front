@@ -1,4 +1,4 @@
-import { IActionRepository } from '@/@clean/modules/action/domain/repositories/action_repository_interface'
+import 'reflect-metadata'
 import { Action } from '../../domain/entities/action'
 import { AssociatedAction } from '../../domain/entities/associated_action'
 import { Project } from '../../domain/entities/project'
@@ -10,7 +10,7 @@ import { COURSE } from '../../domain/enums/course_enum'
 import { ACTIVE } from '../../domain/enums/active_enum'
 import { ACTION_TYPE } from '../../domain/enums/action_type_enum'
 import { NoItemsFoundError } from '../../domain/helpers/errors/domain_error'
-import 'reflect-metadata'
+import { IActionRepository } from '../../../modules/action/domain/repositories/action_repository_interface'
 
 export class ActionRepositoryMock implements IActionRepository {
   private projects: Project[] = [

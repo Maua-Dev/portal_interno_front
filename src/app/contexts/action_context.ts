@@ -1,10 +1,12 @@
-import { Action } from "@/@clean/shared/domain/entities/action"
-import { AssociatedAction } from "@/@clean/shared/domain/entities/associated_action"
-import { createContext } from "react"
+import { createContext } from 'react'
+import { Action } from '../../@clean/shared/domain/entities/action'
+import { AssociatedAction } from '../../@clean/shared/domain/entities/associated_action'
 
 export type ActionContextType = {
   createAction: (action: Action) => Promise<Action>
-  createAssociatedAction: (associatedAction: AssociatedAction) => Promise<AssociatedAction>
+  createAssociatedAction: (
+    associatedAction: AssociatedAction
+  ) => Promise<AssociatedAction>
 }
 
 const defaultContext: ActionContextType = {

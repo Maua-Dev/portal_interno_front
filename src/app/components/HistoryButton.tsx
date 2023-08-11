@@ -1,8 +1,8 @@
-import { Action } from '@/@clean/shared/domain/entities/action'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import IconButton from '@mui/material/IconButton'
 import { ReactNode } from 'react'
-import historyIcon from '@/app/assets/history_image_button.png'
+import historyIcon from '../assets/history_image_button.png'
+import { Action } from '../../@clean/shared/domain/entities/action'
 
 const Container = ({
   children,

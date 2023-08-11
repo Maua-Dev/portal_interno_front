@@ -5,7 +5,6 @@ import { STACK } from '../../../../../src/@clean/shared/domain/enums/stack_enum'
 import { EntityError } from '../../../../../src/@clean/shared/domain/helpers/errors/domain_error'
 import { ActionRepositoryMock } from '../../../../../src/@clean/shared/infra/repositories/action_repository_mock'
 
-
 test('Test Action usecase', async () => {
   const repo = new ActionRepositoryMock()
   const actionUsecase = new CreateActionUsecase(repo)

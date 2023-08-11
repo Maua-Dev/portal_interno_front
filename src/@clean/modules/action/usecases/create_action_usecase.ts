@@ -1,4 +1,4 @@
-import { Action } from '@/@clean/shared/domain/entities/action'
+import { Action } from '../../../shared/domain/entities/action'
 import { IActionRepository } from '../domain/repositories/action_repository_interface'
 
 export class CreateActionUsecase {

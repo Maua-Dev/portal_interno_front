@@ -1,6 +1,6 @@
-import { Action } from '@/@clean/shared/domain/entities/action'
-import { ACTION_TYPE } from '@/@clean/shared/domain/enums/action_type_enum'
-import { STACK } from '@/@clean/shared/domain/enums/stack_enum'
+import { Action } from '../../@clean/shared/domain/entities/action'
+import { ACTION_TYPE } from '../../@clean/shared/domain/enums/action_type_enum'
+import { STACK } from '../../@clean/shared/domain/enums/stack_enum'
 
 export const activities: Action[] = [
   new Action({

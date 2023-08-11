@@ -1,7 +1,7 @@
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import IconButton from '@mui/material/IconButton'
 import { ReactNode } from 'react'
-import activityIcon from '@/app/assets/activities_image_button.png'
+import activityIcon from '../assets/activities_image_button.png'
 
 const Container = ({ children }: { children: ReactNode }) => {
   return (
