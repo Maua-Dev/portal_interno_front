@@ -30,7 +30,16 @@ const CardHeader = ({ children }: { children: ReactNode }) => {
   )
 }
 
-export default function HistoryMainCard() {
+const TopSection = () => {
+  return (
+    <div>
+      <h1 className="text-xl font-extrabold text-blue-800">PROJETO:</h1>
+      <h1 className="text-lg font-extrabold">ÁREA:</h1>
+    </div>
+  )
+}
+
+const MiddleSection = () => {
   const mock_users = ['Bruno', 'Sakas', 'Rods', 'Furlas']
 
   interface TasksProps {
@@ -44,42 +53,57 @@ export default function HistoryMainCard() {
   ]
 
   return (
+    <div className="flex gap-2">
+      <ListComponent label={'MEMBROS'}>
+        {mock_users.map((user, index) => {
+          return <div key={''}>{user + ' .' + (index + 1)}</div>
+        })}
+      </ListComponent>
+      <ListComponent label={'ESPECIFICAÇÕES'}>
+        {mock_tasks.map((task) => {
+          return (
+            <div key={''} className="flex justify-between">
+              <p>{task.name}</p>
+              <p>{task.time}</p>
+            </div>
+          )
+        })}
+      </ListComponent>
+    </div>
+  )
+}
+
+const BottomSection = () => {
+  return (
+    <MainCard width="w-1/1">
+      <div>
+        <h1 className="mb-3 font-semibold">DESCRIÇÃO</h1>
+        <p>
+          Lorem Ipsum is simply dummy text of the printing and typesetting
+          industry. Lorem Ipsum has been the industrys standard dummy text ever
+          since the 1500s, when an unknown printer took a
+        </p>
+      </div>
+    </MainCard>
+  )
+}
+
+const BodySection = ({ children }: { children: ReactNode }) => {
+  return <div className="flex flex-col gap-4 py-3">{children}</div>
+}
+
+export default function HistoryMainCard() {
+  return (
     <MainCard>
       <CardHeader>
         <LeftSideHeader />
         <RightSideHeader />
       </CardHeader>
-      <div className="flex flex-col gap-4 py-3">
-        <h1 className="text-xl font-extrabold text-blue-800">PROJETO:</h1>
-        <h1 className="text-lg font-extrabold">ÁREA:</h1>
-        <div className="flex gap-2">
-          <ListComponent label={'MEMBROS'}>
-            {mock_users.map((user, index) => {
-              return <div key={''}>{user + ' .' + (index + 1)}</div>
-            })}
-          </ListComponent>
-          <ListComponent label={'ESPECIFICAÇÕES'}>
-            {mock_tasks.map((task) => {
-              return (
-                <div key={''} className="flex justify-between">
-                  <p>{task.name}</p>
-                  <p>{task.time}</p>
-                </div>
-              )
-            })}
-          </ListComponent>
-        </div>
-        <MainCard width="w-1/1">
-          <div>
-            <h1 className="mb-3 font-semibold">DESCRIÇÃO</h1>
-            <p>
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industrys standard dummy text
-              ever since the 1500s, when an unknown printer took a
-            </p>
-          </div>
-        </MainCard>
-      </div>
+      <BodySection>
+        <TopSection />
+        <MiddleSection />
+        <BottomSection />
+      </BodySection>
     </MainCard>
   )
 }
