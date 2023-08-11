@@ -1,6 +1,34 @@
+import { ReactNode } from 'react'
 import { DefaultButton } from './little_components/Buttons'
 import { ListComponent } from './little_components/ListComponent'
 import { MainCard } from './little_components/MainCard'
+
+const LeftSideHeader = () => {
+  return (
+    <div>
+      <h3 className="text-lg">ATIVIDADE ( 00:00 )</h3>
+      <p className="font-light">Inicio 28 / 10 / 2022</p>
+      <h1 className="text-2xl font-extrabold">VÁLIDO</h1>
+    </div>
+  )
+}
+
+const RightSideHeader = () => {
+  return (
+    <div className="flex flex-col items-start justify-evenly">
+      <h1 className="text-xl text-blue-800">(Task ID#)</h1>
+      <DefaultButton label={'Editar'} color={'blue'}></DefaultButton>
+    </div>
+  )
+}
+
+const CardHeader = ({ children }: { children: ReactNode }) => {
+  return (
+    <div className="flex justify-between rounded-s border-b-4 border-gray-400 pb-2 pl-4">
+      {children}
+    </div>
+  )
+}
 
 export default function HistoryMainCard() {
   const mock_users = ['Bruno', 'Sakas', 'Rods', 'Furlas']
@@ -17,17 +45,10 @@ export default function HistoryMainCard() {
 
   return (
     <MainCard>
-      <div className="flex justify-between rounded-s border-b-4 border-gray-400 pb-2 pl-4">
-        <div>
-          <h3 className="text-lg">ATIVIDADE ( 00:00 )</h3>
-          <p className="font-light">Inicio 28 / 10 / 2022</p>
-          <h1 className="text-2xl font-extrabold">VÁLIDO</h1>
-        </div>
-        <div className="flex flex-col items-start justify-evenly">
-          <h1 className="text-xl text-blue-800">(Task ID#)</h1>
-          <DefaultButton label={'Editar'} color={'blue'}></DefaultButton>
-        </div>
-      </div>
+      <CardHeader>
+        <LeftSideHeader />
+        <RightSideHeader />
+      </CardHeader>
       <div className="flex flex-col gap-4 py-3">
         <h1 className="text-xl font-extrabold text-blue-800">PROJETO:</h1>
         <h1 className="text-lg font-extrabold">ÁREA:</h1>
