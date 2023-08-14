@@ -262,6 +262,47 @@ export class ActionRepositoryMock implements IActionRepository {
     this.associatedActions.push(associatedAction)
     return associatedAction
   }
+
+  async getAssociatedActionsByRa(
+    ra: string,
+    amount: number,
+    start?: number | undefined,
+    end?: number | undefined,
+    exclusiveStartKey?: string | undefined
+  ): Promise<AssociatedAction[]> {
+    const associatedActions = this.associatedActions.sort(
+      (a, b) => b.action.startDate - a.action.startDate
+    )
+
+    if (exclusiveStartKey) {
+      let action0 = associatedActions[0]
+      while (
+        action0 !== undefined &&
+        action0.action.actionId !== exclusiveStartKey
+      ) {
+        associatedActions.shift()
+        if (associatedActions.length > 0) action0 = associatedActions[0]
+      }
+      associatedActions.shift()
+    }
+
+    if (start) {
+      associatedActions.filter(
+        (associatedAction) => associatedAction.action.startDate >= start
+      )
+    }
+
+    if (end) {
+      associatedActions.filter(
+        (associatedAction) => associatedAction.action.endDate <= end
+      )
+    }
+    associatedActions.filter(
+      (associatedAction) => associatedAction.member_ra === ra
+    )
+
+    return associatedActions.slice(0, amount)
+  }
 }
 
 decorate(injectable(), ActionRepositoryMock)
