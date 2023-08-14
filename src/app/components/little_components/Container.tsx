@@ -1,10 +1,4 @@
-const ContainerMainCards = ({
-  children,
-  className
-}: {
-  children: React.ReactNode
-  className?: string
-}) => {
+const ContainerMainCards = ({ children }: { children: React.ReactNode }) => {
   return <div className="mb-10 flex flex-row">{children}</div>
 }
 

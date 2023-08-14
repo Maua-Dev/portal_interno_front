@@ -1,10 +1,10 @@
-import { Member } from '@/@clean/shared/domain/entities/member'
-import { Project } from '@/@clean/shared/domain/entities/project'
-import { ACTIVE } from '@/@clean/shared/domain/enums/active_enum'
-import { COURSE } from '@/@clean/shared/domain/enums/course_enum'
-import { ROLE } from '@/@clean/shared/domain/enums/role_enum'
-import { STACK } from '@/@clean/shared/domain/enums/stack_enum'
-import { EntityError } from '@/@clean/shared/domain/helpers/errors/domain_error'
+import { Member } from '../../../../../src/@clean/shared/domain/entities/member'
+import { Project } from '../../../../../src/@clean/shared/domain/entities/project'
+import { ACTIVE } from '../../../../../src/@clean/shared/domain/enums/active_enum'
+import { COURSE } from '../../../../../src/@clean/shared/domain/enums/course_enum'
+import { ROLE } from '../../../../../src/@clean/shared/domain/enums/role_enum'
+import { STACK } from '../../../../../src/@clean/shared/domain/enums/stack_enum'
+import { EntityError } from '../../../../../src/@clean/shared/domain/helpers/errors/domain_error'
 
 test('Test Member Entity', () => {
   const member = new Member({

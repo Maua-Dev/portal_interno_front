@@ -1,5 +1,5 @@
-import { Project } from '@/@clean/shared/domain/entities/project'
-import { EntityError } from '@/@clean/shared/domain/helpers/errors/domain_error'
+import { Project } from '../../../../../src/@clean/shared/domain/entities/project'
+import { EntityError } from '../../../../../src/@clean/shared/domain/helpers/errors/domain_error'
 
 test('Test Project entity', () => {
   const project = new Project({
