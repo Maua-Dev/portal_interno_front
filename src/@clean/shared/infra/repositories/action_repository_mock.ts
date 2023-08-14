@@ -303,6 +303,16 @@ export class ActionRepositoryMock implements IActionRepository {
 
     return associatedActions.slice(0, amount)
   }
+
+  async batchGetActions(actionIds: string[]): Promise<Action[]> {
+    let actions: Action[] = []
+    this.actions.forEach((action) => {
+      if (actionIds.includes(action.actionId)) {
+        actions.push(action)
+      }
+    })
+    return actions
+  }
 }
 
 decorate(injectable(), ActionRepositoryMock)

@@ -17,6 +17,8 @@ export interface IActionRepository {
     exclusiveStartKey?: string
   ): Promise<AssociatedAction[]>
 
+  batchGetActions(actionIds: string[]): Promise<Action[]>
+
   createAssociatedAction(
     associatedAction: AssociatedAction
   ): Promise<AssociatedAction>
