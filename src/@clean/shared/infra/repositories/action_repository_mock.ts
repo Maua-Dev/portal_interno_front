@@ -83,7 +83,7 @@ export class ActionRepositoryMock implements IActionRepository {
     new Member({
       name: 'Enzo sakas',
       email: 'esakas.devmaua@gmail.com',
-      ra: '19.01731-1',
+      ra: '21.00210-0',
       role: ROLE.DEV,
       stack: STACK.FRONTEND,
       year: 3,
@@ -109,7 +109,7 @@ export class ActionRepositoryMock implements IActionRepository {
     new Member({
       name: 'MAGIC WHITE HANDS',
       email: 'jbranco.devmaua@gmail.com',
-      ra: '21.00210-1',
+      ra: '21.00833-1',
       role: ROLE.DEV,
       stack: STACK.BACKEND,
       year: 3,
@@ -127,7 +127,11 @@ export class ActionRepositoryMock implements IActionRepository {
       endDate: 1612141200000,
       duration: 3600000,
       actionId: 'uuid1',
-      associatedMembersRa: [this.members[0].ra, this.members[1].ra],
+      associatedMembersRa: [
+        this.members[0].ra,
+        this.members[1].ra,
+        this.members[3].ra
+      ],
       title: '**Reunião**',
       actionTypeTag: ACTION_TYPE.MEETING,
       projectCode: this.projects[1].code,
@@ -137,8 +141,8 @@ export class ActionRepositoryMock implements IActionRepository {
     }),
     new Action({
       ownerRa: this.members[0].ra,
-      startDate: 1612137600000,
-      endDate: 1612141200000,
+      startDate: 1612141200000,
+      endDate: 1612144800000,
       duration: 3600000,
       actionId: 'uuid2',
       associatedMembersRa: [
@@ -270,9 +274,9 @@ export class ActionRepositoryMock implements IActionRepository {
     end?: number | undefined,
     exclusiveStartKey?: string | undefined
   ): Promise<AssociatedAction[]> {
-    const associatedActions = this.associatedActions.sort(
-      (a, b) => b.action.startDate - a.action.startDate
-    )
+    let associatedActions = this.associatedActions.sort((a, b) => {
+      return b.action.startDate - a.action.startDate
+    })
 
     if (exclusiveStartKey) {
       let action0 = associatedActions[0]
@@ -287,17 +291,18 @@ export class ActionRepositoryMock implements IActionRepository {
     }
 
     if (start) {
-      associatedActions.filter(
+      associatedActions = associatedActions.filter(
         (associatedAction) => associatedAction.action.startDate >= start
       )
     }
 
     if (end) {
-      associatedActions.filter(
+      associatedActions = associatedActions.filter(
         (associatedAction) => associatedAction.action.endDate <= end
       )
     }
-    associatedActions.filter(
+
+    associatedActions = associatedActions.filter(
       (associatedAction) => associatedAction.member_ra === ra
     )
 
@@ -305,7 +310,7 @@ export class ActionRepositoryMock implements IActionRepository {
   }
 
   async batchGetActions(actionIds: string[]): Promise<Action[]> {
-    let actions: Action[] = []
+    const actions: Action[] = []
     this.actions.forEach((action) => {
       if (actionIds.includes(action.actionId)) {
         actions.push(action)

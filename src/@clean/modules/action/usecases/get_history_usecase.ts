@@ -26,7 +26,9 @@ export class GetHistoryUsecase {
       (associatedAction) => associatedAction.action.actionId
     )
     const actions = (await this.actionRepo.batchGetActions(actionIds)).sort(
-      (a, b) => b.startDate - a.startDate
+      (a, b) => {
+        return b.startDate - a.startDate
+      }
     )
 
     return actions
