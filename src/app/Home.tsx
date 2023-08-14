@@ -16,7 +16,7 @@ import { STACK } from '../@clean/shared/domain/enums/stack_enum'
 
 export default function Home() {
   const [on, setOn] = useState(false)
-  const [isHistoryOpen, setIsHistoryOpen] = useState < boolean > false
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false)
   const [isClient, setClient] = useState(false)
 
   const activities: Action[] = [

@@ -143,7 +143,7 @@ export default function AddActivity({
           <p className="text-2xl font-bold">TITULO DA ATIVIDADE</p>
         </FlexColCenter>
         <FlexColCenter>
-          <CancelAndSaveButtons cancel={cancel} save={save} />
+          <CancelAndSaveButtons onClickCancel={cancel} onClickSave={save} />
           <DisplayHours hours="00:00" mainCard />
         </FlexColCenter>
       </Border>

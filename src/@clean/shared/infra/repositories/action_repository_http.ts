@@ -9,15 +9,16 @@ export class ActionRepositoryHttp implements IActionRepository {
   constructor(private http: AxiosInstance) {}
 
   createAction(action: Action): Promise<Action> {
-    throw new Error('Method not implemented.')
+    console.log(this.http)
+    throw new Error('Method not implemented.' + action)
   }
   getAction(actionId: string): Promise<Action> {
-    throw new Error('Method not implemented.')
+    throw new Error('Method not implemented.' + actionId)
   }
   createAssociatedAction(
     associatedAction: AssociatedAction
   ): Promise<AssociatedAction> {
-    throw new Error('Method not implemented.')
+    throw new Error('Method not implemented. ' + associatedAction)
   }
 }
 

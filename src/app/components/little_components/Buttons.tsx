@@ -79,16 +79,14 @@ const NavBarButton = ({
 }
 
 const CancelAndSaveButtons = ({
-  className,
   onClickSave,
   onClickCancel
 }: {
-  className?: string
   onClickSave: () => void
   onClickCancel: () => void
 }) => {
   return (
-    <div className={'mb-3 flex flex-row gap-4' + className}>
+    <div className={'mb-3 flex flex-row gap-4'}>
       <button
         onClick={onClickCancel}
         className="mr-2 rounded-md border-2 border-red-600 p-1 font-bold text-red-600"
