@@ -32,14 +32,14 @@ const Header = ({ children }: { children: ReactNode }) => {
 
 const ActionDisplay = ({
   children,
-  key
+  index
 }: {
   children: ReactNode
-  key: number
+  index: string
 }) => {
   return (
     <ul
-      key={key}
+      key={index}
       className="flex w-full flex-row items-center justify-center py-2 sm:grid-cols-2"
     >
       {children}
@@ -100,7 +100,7 @@ export default function HistoryButton({
 }: {
   onClick: () => void
   isOpen: boolean
-  activities: Action[]
+  activities: Action[] | undefined
 }) {
   return (
     <Container isOpen={isOpen}>
@@ -112,9 +112,10 @@ export default function HistoryButton({
       </Header>
       <ActionContainer isOpen={isOpen}>
         {isOpen &&
-          activities.map((activity, index) => {
+          activities &&
+          activities.map((activity) => {
             return (
-              <ActionDisplay key={index}>
+              <ActionDisplay index={activity.actionId}>
                 <Line>
                   <p className="w-20 overflow-hidden text-ellipsis whitespace-nowrap text-center text-sm font-bold sm:w-36">
                     {activity.title}

@@ -19,6 +19,7 @@ export default function Home() {
   const [on, setOn] = useState(false)
   const [isHistoryOpen, setIsHistoryOpen] = useState(false)
   const [isClient, setClient] = useState(false)
+  const [history, setHistory] = useState<Action[] | undefined>([])
 
   const activities: Action[] = [
     new Action({
@@ -75,7 +76,8 @@ export default function Home() {
     })
   ]
 
-  const { createAction } = useContext(ActionContext)
+  const { createAction, createAssociatedAction, getHistory } =
+    useContext(ActionContext)
 
   const handleOnClick = () => {
     setOn(!on)
@@ -89,20 +91,25 @@ export default function Home() {
     setOn(false)
   }
 
-  const handleHistoryClick = () => {
-    setIsHistoryOpen(!isHistoryOpen)
-  }
-
   const actionCreated = async () => {
     const created = await createAction(activities[0])
     console.log(created)
     return created
   }
 
+  const userHistory = async () => {
+    const history = await getHistory('21.00210-0', 10)
+    setHistory(history)
+  }
+
+  const handleHistoryClick = () => {
+    userHistory()
+    setIsHistoryOpen(!isHistoryOpen)
+  }
+
   useEffect(() => {
-    actionCreated()
     setClient(true)
-  }, [actionCreated])
+  }, [])
 
   return (
     <>
@@ -119,7 +126,7 @@ export default function Home() {
             <ContainerActivitiesHistory>
               <ActivitiesButton onClick={handleOnClick} />
               <HistoryButton
-                activities={activities}
+                activities={history}
                 isOpen={isHistoryOpen}
                 onClick={handleHistoryClick}
               />

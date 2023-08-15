@@ -7,6 +7,18 @@ import { IActionRepository } from '../../../modules/action/domain/repositories/a
 
 export class ActionRepositoryHttp implements IActionRepository {
   constructor(private http: AxiosInstance) {}
+  getAssociatedActionsByRa(
+    ra: string,
+    amount: number,
+    start?: number | undefined,
+    end?: number | undefined,
+    exclusiveStartKey?: string | undefined
+  ): Promise<AssociatedAction[]> {
+    throw new Error('Method not implemented.')
+  }
+  batchGetActions(actionIds: string[]): Promise<Action[]> {
+    throw new Error('Method not implemented.')
+  }
 
   createAction(action: Action): Promise<Action> {
     console.log(this.http)
