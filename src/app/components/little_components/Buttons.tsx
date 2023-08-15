@@ -17,7 +17,7 @@ const DefaultIconButton = ({
     <IconButton
       onClick={onClick}
       disableRipple
-      className={'p-0 hover:bg-transparent ' + style}
+      className={`p-0 hover:bg-transparent ${style}`}
     >
       {children}
     </IconButton>

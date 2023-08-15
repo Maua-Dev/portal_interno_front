@@ -8,7 +8,6 @@ import TableChartIcon from '@mui/icons-material/TableChart'
 import PollIcon from '@mui/icons-material/Poll'
 import { DefaultIconButton, NavBarButton } from './little_components/Buttons'
 import { ReactNode, useState } from 'react'
-import { id } from 'inversify'
 
 const NavBarContainer = ({ children }: { children: ReactNode }) => {
   return (
@@ -80,7 +79,7 @@ const RightSideIcons = ({
         return (
           <DefaultIconButton
             onClick={() => {}}
-            style="text-white max-[950px]:hidden"
+            style="text-white min-[950px]:hidden"
             key={index}
           >
             {icon.icon_name}
@@ -129,11 +128,7 @@ const ButtonListMoblie = ({
             key={index}
             className="flex items-center gap-4 py-3 pl-7 text-left text-xl text-slate-600 hover:bg-blue-900 hover:text-white"
           >
-            <DefaultIconButton
-              style={hoveredButtonIndex === index ? 'text-white' : 'text-black'}
-            >
-              {link.icon}
-            </DefaultIconButton>
+            {link.icon}
             <p>{link.text}</p>
           </button>
         )
