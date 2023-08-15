@@ -1,6 +1,3 @@
-import { url } from 'inspector'
-
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
@@ -44,15 +41,15 @@ interface LinkListProps {
 
 const ButtonListWeb = ({ linkList }: { linkList: LinkListProps[] }) => {
   return (
-    <div className="m-0 flex gap-5  max-[950px]:hidden">
+    <div className="m-0 flex gap-5  max-[1100px]:hidden">
       {linkList.map((link, index) => {
         return (
           <NavBarButton
             key={index}
-            link_id={link.id}
-            link_text={link.text}
-            button_style=""
-            p_style=""
+            linkId={link.id}
+            linkText={link.text}
+            buttonStyle=""
+            pStyle=""
           />
         )
       })}

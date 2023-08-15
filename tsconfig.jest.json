@@ -7,15 +7,6 @@
         "strict": true,
         "moduleResolution": "node",
         "baseUrl": ".",
-        "paths": {
-        "@/components/": ["components/"],
-        "@/lib/": ["lib/"],
-        "@/pages/": ["pages/"],
-        "@/public/": ["public/"],
-        "@/styles/": ["styles/"],
-        "@/types/": ["types/"],
-        "@/utils/": ["utils/"]
-        },
         "skipLibCheck": true
     }
 }

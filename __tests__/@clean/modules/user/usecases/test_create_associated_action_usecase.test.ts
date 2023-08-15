@@ -1,14 +1,14 @@
-import { CreateAssociatedAction } from '@/@clean/modules/user/usecases/create_associated_action_usecase'
-import { Action } from '@/@clean/shared/domain/entities/action'
-import { AssociatedAction } from '@/@clean/shared/domain/entities/associated_action'
-import { ACTION_TYPE } from '@/@clean/shared/domain/enums/action_type_enum'
-import { STACK } from '@/@clean/shared/domain/enums/stack_enum'
-import { EntityError } from '@/@clean/shared/domain/helpers/errors/domain_error'
-import { ActionRepositoryMock } from '@/@clean/shared/infra/repositories/action_repository_mock'
+import { CreateAssociatedActionUsecase } from '../../../../../src/@clean/modules/action/usecases/create_associated_action_usecase'
+import { Action } from '../../../../../src/@clean/shared/domain/entities/action'
+import { AssociatedAction } from '../../../../../src/@clean/shared/domain/entities/associated_action'
+import { ACTION_TYPE } from '../../../../../src/@clean/shared/domain/enums/action_type_enum'
+import { STACK } from '../../../../../src/@clean/shared/domain/enums/stack_enum'
+import { EntityError } from '../../../../../src/@clean/shared/domain/helpers/errors/domain_error'
+import { ActionRepositoryMock } from '../../../../../src/@clean/shared/infra/repositories/action_repository_mock'
 
 test('Test usecase', async () => {
   const repo = new ActionRepositoryMock()
-  const useCase = new CreateAssociatedAction(repo)
+  const useCase = new CreateAssociatedActionUsecase(repo)
   const action = new Action({
     ownerRa: '21.00210-0',
     startDate: 1000,
@@ -36,7 +36,7 @@ test('Test usecase', async () => {
 
 test('Test usecase with invalid member Ra', async () => {
   const repo = new ActionRepositoryMock()
-  const useCase = new CreateAssociatedAction(repo)
+  const useCase = new CreateAssociatedActionUsecase(repo)
   const action = new Action({
     ownerRa: '21.00210-0',
     startDate: 1000,
