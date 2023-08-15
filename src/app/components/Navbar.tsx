@@ -8,6 +8,7 @@ import TableChartIcon from '@mui/icons-material/TableChart'
 import PollIcon from '@mui/icons-material/Poll'
 import { DefaultIconButton, NavBarButton } from './little_components/Buttons'
 import { ReactNode, useState } from 'react'
+import { IconButton } from '@mui/material'
 
 const NavBarContainer = ({ children }: { children: ReactNode }) => {
   return (
@@ -128,7 +129,14 @@ const ButtonListMoblie = ({
             key={index}
             className="flex items-center gap-4 py-3 pl-7 text-left text-xl text-slate-600 hover:bg-blue-900 hover:text-white"
           >
-            {link.icon}
+            <IconButton
+              disableRipple
+              style={{
+                color: hoveredButtonIndex === index ? 'white' : '#6B7280',
+              }}
+            >
+              {link.icon}
+            </IconButton>
             <p>{link.text}</p>
           </button>
         )
