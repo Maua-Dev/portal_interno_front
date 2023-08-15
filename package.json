@@ -7,7 +7,8 @@
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint --fix": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix",
-    "test": "jest -u"
+    "test": "jest -u",
+    "test:debug": "jest --runInBand"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
