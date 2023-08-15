@@ -7,10 +7,11 @@ import {
   ContainerActivitiesHistory,
   ContainerMainCards
 } from './components/little_components/Container'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Action } from '../@clean/shared/domain/entities/action'
 import { ACTION_TYPE } from '../@clean/shared/domain/enums/action_type_enum'
 import { STACK } from '../@clean/shared/domain/enums/stack_enum'
+import { ActionContext } from './contexts/action_context'
 
 // import { UserProvider } from '@/contexts/user_provider'
 
@@ -74,6 +75,8 @@ export default function Home() {
     })
   ]
 
+  const { createAction } = useContext(ActionContext)
+
   const handleOnClick = () => {
     setOn(!on)
   }
@@ -90,9 +93,16 @@ export default function Home() {
     setIsHistoryOpen(!isHistoryOpen)
   }
 
+  const actionCreated = async () => {
+    const created = await createAction(activities[0])
+    console.log(created)
+    return created
+  }
+
   useEffect(() => {
+    actionCreated()
     setClient(true)
-  }, [])
+  }, [actionCreated])
 
   return (
     <>

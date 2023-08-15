@@ -12,6 +12,7 @@ export const RegistryAction = {
 
   // Repositories
   ActionRepositoryMock: Symbol.for('ActionRepositoryMock'),
+  ActionRepositoryHttp: Symbol.for('ActionRepositoryHttp'),
 
   // Usecases
   CreateActionUsecase: Symbol.for('CreateActionUsecase'),
@@ -28,7 +29,7 @@ containerAction
   .bind(RegistryAction.ActionRepositoryMock)
   .to(ActionRepositoryMock)
 containerAction
-  .bind(RegistryAction.ActionRepositoryMock)
+  .bind(RegistryAction.ActionRepositoryHttp)
   .toDynamicValue((context) => {
     return new ActionRepositoryHttp(
       context.container.get(RegistryAction.AxiosAdapter)
@@ -39,13 +40,13 @@ containerAction
 containerAction
   .bind(RegistryAction.CreateActionUsecase)
   .toDynamicValue((context) => {
-    if (process.env.REACT_PUBLIC_STAGE === 'TEST') {
+    if (import.meta.env.VITE_STAGE === 'TEST') {
       return new CreateActionUsecase(
         context.container.get(RegistryAction.ActionRepositoryMock)
       )
-    } else if (process.env.REACT_PUBLIC_STAGE === 'DEV') {
+    } else if (import.meta.env.VITE_STAGE === 'DEV') {
       return new CreateActionUsecase(
-        context.container.get(RegistryAction.ActionRepositoryMock)
+        context.container.get(RegistryAction.ActionRepositoryHttp)
       )
     } else {
       return new CreateActionUsecase(
@@ -57,16 +58,16 @@ containerAction
 containerAction
   .bind(RegistryAction.CreateAssociatedActionUsecase)
   .toDynamicValue((context) => {
-    if (process.env.REACT_PUBLIC_STAGE === 'TEST') {
+    if (import.meta.env.VITE_STAGE === 'TEST') {
       return new CreateAssociatedActionUsecase(
         context.container.get(RegistryAction.ActionRepositoryMock)
       )
     } else if (
-      process.env.REACT_PUBLIC_STAGE === 'DEV' ||
-      process.env.REACT_PUBLIC_STAGE === 'PROD'
+      import.meta.env.VITE_STAGE === 'DEV' ||
+      import.meta.env.VITE_STAGE === 'PROD'
     ) {
       return new CreateAssociatedActionUsecase(
-        context.container.get(RegistryAction.ActionRepositoryMock)
+        context.container.get(RegistryAction.ActionRepositoryHttp)
       )
     } else {
       return new CreateAssociatedActionUsecase(

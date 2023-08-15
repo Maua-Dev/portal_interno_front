@@ -4,5 +4,5 @@ export const http = axios.create({
   headers: {
     'Content-Type': 'application/json'
   },
-  baseURL: process.env.NEXT_PUBLIC_API_URL
+  baseURL: 'http://localhost:3001'
 })

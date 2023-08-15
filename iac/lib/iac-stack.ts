@@ -14,13 +14,13 @@ export class IacStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props)
 
-    const stage = process.env.GITHUB_REF_NAME || 'dev'
+    const stage = import.meta.env.GITHUB_REF_NAME || 'dev'
     const acmCertificateArn =
-      process.env.ACM_CERTIFICATE_ARN ||
+      import.meta.env.ACM_CERTIFICATE_ARN ||
       'arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-123456789012'
     const alternativeDomain =
-      process.env.ALTERNATIVE_DOMAIN_NAME || 'onlydevs-dev.devmaua.com'
-    const hostedZoneIdValue = process.env.HOSTED_ZONE_ID || 'Z1UJRXOUMOOFQ8'
+      import.meta.env.ALTERNATIVE_DOMAIN_NAME || 'onlydevs-dev.devmaua.com'
+    const hostedZoneIdValue = import.meta.env.HOSTED_ZONE_ID || 'Z1UJRXOUMOOFQ8'
 
     const s3Bucket = new s3.Bucket(this, 'PortalInternoFrontBucket' + stage, {
       versioned: true,
