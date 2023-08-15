@@ -76,24 +76,26 @@ const RightSideIcons = ({
 }) => {
   return (
     <div className="flex gap-1 ">
-      {iconList.map((icon, index) => {
-        return (
-          <DefaultIconButton
-            onClick={() => {}}
-            style="text-white min-[950px]:hidden"
-            key={index}
-          >
-            {icon.icon_name}
-          </DefaultIconButton>
-        )
-      })}
-      <DefaultIconButton
-        onClick={handleHamburguerClick}
-        style="text-white min-[950px]:hidden"
-        key={''}
-      >
-        <MenuIcon className="h-10 w-10" />
-      </DefaultIconButton>
+      <div className='max-[950px]:hidden'>
+        {iconList.map((icon, index) => {
+          return (
+            <DefaultIconButton
+              onClick={() => {}}
+              key={index}
+            >
+              {icon.icon_name}
+            </DefaultIconButton>
+          )
+        })}
+      </div>
+      <div className='min-[950px]:hidden'>
+        <DefaultIconButton
+          onClick={handleHamburguerClick}
+          key={''}
+        >
+          <MenuIcon className="text-white" />
+        </DefaultIconButton>
+      </div>
     </div>
   )
 }
@@ -207,17 +209,17 @@ export default function NavBar() {
   const iconsList = [
     {
       id: 1,
-      icon_name: <NotificationsNoneIcon className="h-6 w-6 rotate-12" />,
+      icon_name: <NotificationsNoneIcon className="h-6 w-6 rotate-12 text-white" />,
       url: '/notifications'
     },
     {
       id: 2,
-      icon_name: <HelpOutlineIcon className="h-6 w-6" />,
+      icon_name: <HelpOutlineIcon className="h-6 w-6 text-white" />,
       url: '/help'
     },
     {
       id: 3,
-      icon_name: <AccountCircleIcon className=" h-8 w-8" />,
+      icon_name: <AccountCircleIcon className=" h-8 w-8 text-white" />,
       url: '/account'
     }
   ]

@@ -4,20 +4,17 @@ import { ReactNode, useState } from 'react'
 
 interface DefaultIconButtonProps {
   children: ReactNode
-  style: string
   onClick?: () => void
 }
 
 const DefaultIconButton = ({
   children,
-  style,
   onClick
 }: DefaultIconButtonProps) => {
   return (
     <IconButton
       onClick={onClick}
       disableRipple
-      className={`p-0 hover:bg-transparent ${style}`}
     >
       {children}
     </IconButton>
