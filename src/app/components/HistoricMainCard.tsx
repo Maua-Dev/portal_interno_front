@@ -137,6 +137,15 @@ const PopUpHeader = ({ handleIconClose }: { handleIconClose: () => void }) => {
   )
 }
 
+const PopUpTitle = () => {
+  return (
+    <div>
+      <h1 className=" mt-6 text-2xl">ATIVIDADE ( 00:00 )</h1>
+      <h1 className="mt-2 text-2xl text-gray-500">Inicio 28/10/2022</h1>
+    </div>
+  )
+}
+
 const MobilePopUp = ({ handleClose }: { handleClose: () => void }) => {
   return (
     <div
@@ -145,7 +154,7 @@ const MobilePopUp = ({ handleClose }: { handleClose: () => void }) => {
       }
     >
       <PopUpHeader handleIconClose={handleClose} />
-      <div></div>
+      <PopUpTitle />
     </div>
   )
 }
