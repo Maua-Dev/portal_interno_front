@@ -9,10 +9,11 @@ import PollIcon from '@mui/icons-material/Poll'
 import { DefaultIconButton, NavBarButton } from './little_components/Buttons'
 import { ReactNode, useState } from 'react'
 import { IconButton } from '@mui/material'
+import { UnfocusedBG } from './little_components/UnfocusedBG'
 
 const NavBarContainer = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="flex h-full items-center justify-between bg-gradient-to-t from-blue-900 to-blue-800/90 pl-3 pr-3 text-white lg:pl-11">
+    <div className="flex items-center justify-between bg-gradient-to-t from-blue-900 to-blue-800/90 pl-3 pr-3 text-white lg:pl-11">
       {children}
     </div>
   )
@@ -143,29 +144,27 @@ const ButtonListMoblie = ({
 
 const MobileNavbar = ({
   isOpen,
-  children
+  children,
+  handleSidebar
 }: {
   isOpen: boolean
   children: ReactNode
+  handleSidebar: () => void
 }) => {
   return (
-    <div className=" absolute flex h-screen w-full">
+    <div className={'absolute flex h-screen w-fit'}>
       <div
         className={
           isOpen
-            ? 'z-10  w-96 justify-evenly bg-blue-100 pt-12 duration-500 min-[950px]:hidden'
+            ? 'z-20 w-96 justify-evenly bg-blue-100 pt-12 duration-500 min-[950px]:hidden'
             : 'w-0 duration-700'
         }
       >
         {children}
       </div>
-      <div
-        className={
-          isOpen
-            ? 'absolute h-full w-full bg-black opacity-60 min-[950px]:hidden'
-            : 'hidden'
-        }
-      />
+      <div className={isOpen ? '' : 'hidden'}>
+        <UnfocusedBG handleLeave={handleSidebar} z_number="-z-10" />
+      </div>
     </div>
   )
 }
@@ -215,12 +214,12 @@ export default function NavBar() {
     },
     {
       id: 3,
-      icon_name: <AccountCircleIcon className=" h-8 w-8 text-white" />,
+      icon_name: <AccountCircleIcon className="h-8 w-8 text-white" />,
       url: '/account'
     }
   ]
 
-  const handleHamburguerClick = () => {
+  const handleSidebar = () => {
     setOpen(!isOpen)
   }
 
@@ -232,11 +231,11 @@ export default function NavBar() {
           <ButtonListWeb linkList={linksList} />
         </LeftSide>
         <RightSideIcons
-          handleHamburguerClick={handleHamburguerClick}
+          handleHamburguerClick={handleSidebar}
           iconList={iconsList}
         />
       </NavBarContainer>
-      <MobileNavbar isOpen={isOpen}>
+      <MobileNavbar isOpen={isOpen} handleSidebar={handleSidebar}>
         <ButtonListMoblie isOpen={isOpen} linkList={linksList} />
       </MobileNavbar>
     </div>

@@ -13,7 +13,7 @@ const MainCard = ({ children, width, height, style }: MainCardProps) => {
   return (
     <div
       className={
-        'rounded-xl border-2 border-gray-400 px-7 py-2 ' +
+        'rounded-xl border-2 border-gray-400 px-7 py-5 ' +
         widthApplied +
         ' ' +
         heightApplied +

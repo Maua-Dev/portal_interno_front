@@ -123,9 +123,9 @@ export default function Home() {
 
   return (
     <>
-      <main className="">
+      <main className={isHistoryOpen ? 'pb-11' : ''}>
         <NavBar />
-        <section className="mt-20 flex flex-col gap-4 px-10 md:px-40">
+        <section className="-z-20 mb-12 mt-20 flex flex-col gap-4 px-10 md:px-40">
           <NameHeader
             name="Lucas Fernandes"
             course="Design"

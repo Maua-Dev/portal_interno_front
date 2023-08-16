@@ -10,10 +10,10 @@ interface ListComponentProps {
 
 const ListComponent = ({ children, label }: ListComponentProps) => {
   return (
-    <MainCard>
+    <MainCard width="w-full">
       <div className="flex justify-between">
         <h1 className="font-semibold">{label}</h1>
-        <DefaultIconButton style={''} onClick={() => {}}>
+        <DefaultIconButton onClick={() => {}}>
           <ExpandMoreIcon className="text-2xl" />
         </DefaultIconButton>
       </div>
