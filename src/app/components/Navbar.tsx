@@ -175,27 +175,21 @@ export default function NavBar() {
   const linksList = [
     {
       id: 1,
-      text: 'Contatos',
-      icon: <PhoneIphoneIcon className="h-7 w-7"></PhoneIphoneIcon>,
+      text: 'Tela de perfil',
+      icon: <AccountCircleIcon className="h-7 w-7" />,
       url: '/contatos'
     },
     {
       id: 2,
-      text: 'Abrir denuncia',
-      icon: <ErrorIcon className="h-7 w-7"></ErrorIcon>,
-      url: '/denuncia'
+      text: 'Projetos da Dev',
+      icon: <PollIcon className="h-7 w-7"></PollIcon>,
+      url: '/projetos'
     },
     {
       id: 3,
-      text: 'Planilha excel',
+      text: 'Registro das horas de trabalho',
       icon: <TableChartIcon className="h-7 w-7"></TableChartIcon>,
       url: '/planilha'
-    },
-    {
-      id: 4,
-      text: 'Projetos',
-      icon: <PollIcon className="h-7 w-7"></PollIcon>,
-      url: '/projetos'
     }
   ]
 
