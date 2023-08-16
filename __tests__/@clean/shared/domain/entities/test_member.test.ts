@@ -5,6 +5,7 @@ import { COURSE } from '../../../../../src/@clean/shared/domain/enums/course_enu
 import { ROLE } from '../../../../../src/@clean/shared/domain/enums/role_enum'
 import { STACK } from '../../../../../src/@clean/shared/domain/enums/stack_enum'
 import { EntityError } from '../../../../../src/@clean/shared/domain/helpers/errors/domain_error'
+import '@testing-library/jest-dom'
 
 test('Test Member Entity', () => {
   const member = new Member({
