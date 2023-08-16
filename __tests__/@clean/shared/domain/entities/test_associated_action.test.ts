@@ -3,6 +3,7 @@ import { AssociatedAction } from '../../../../../src/@clean/shared/domain/entiti
 import { ACTION_TYPE } from '../../../../../src/@clean/shared/domain/enums/action_type_enum'
 import { STACK } from '../../../../../src/@clean/shared/domain/enums/stack_enum'
 import { EntityError } from '../../../../../src/@clean/shared/domain/helpers/errors/domain_error'
+import '@testing-library/jest-dom'
 
 // Instance Test
 

@@ -4,21 +4,12 @@ import { ReactNode, useState } from 'react'
 
 interface DefaultIconButtonProps {
   children: ReactNode
-  style: string
   onClick?: () => void
 }
 
-const DefaultIconButton = ({
-  children,
-  style,
-  onClick
-}: DefaultIconButtonProps) => {
+const DefaultIconButton = ({ children, onClick }: DefaultIconButtonProps) => {
   return (
-    <IconButton
-      onClick={onClick}
-      disableRipple
-      className={'p-0 hover:bg-transparent ' + style}
-    >
+    <IconButton onClick={onClick} disableRipple>
       {children}
     </IconButton>
   )
@@ -67,12 +58,11 @@ const NavBarButton = ({
         }
       >
         {linkText}
-        <DefaultIconButton
-          onClick={() => {}}
-          style={HoveredButtonIndex == linkId ? 'text-blue-900 ' : 'text-white'}
-        >
-          <KeyboardArrowDownIcon />
-        </DefaultIconButton>
+        <KeyboardArrowDownIcon
+          className={
+            HoveredButtonIndex == linkId ? 'text-blue-950' : 'text-white'
+          }
+        />
       </p>
     </button>
   )
