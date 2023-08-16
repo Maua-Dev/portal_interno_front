@@ -1,7 +1,10 @@
-import { ReactNode, useState } from 'react'
+import { ReactNode } from 'react'
 import { DefaultButton } from './little_components/Buttons'
 import { ListComponent } from './little_components/ListComponent'
 import { MainCard } from './little_components/MainCard'
+import historyIcon from '../assets/history_image_button.png'
+import CloseIcon from '@mui/icons-material/Close'
+import { IconButton } from '@mui/material'
 
 const LeftSideHeader = () => {
   return (
@@ -119,14 +122,29 @@ const UnfocusedBG = ({ handleLeave }: { handleLeave: () => void }) => {
   )
 }
 
-const MobilePopUp = () => {
+const PopUpHeader = ({ handleIconClose }: { handleIconClose: () => void }) => {
+  return (
+    <div className="flex flex-row justify-between">
+      <img src={historyIcon} alt="History Icon" className="w-36 sm:w-48" />
+      <IconButton
+        disableRipple
+        onClick={handleIconClose}
+        className=" text-blue-700"
+      >
+        <CloseIcon className="text-blue-900" />
+      </IconButton>
+    </div>
+  )
+}
+
+const MobilePopUp = ({ handleClose }: { handleClose: () => void }) => {
   return (
     <div
       className={
-        'absolute bottom-0 left-0 right-0 top-0 z-20 m-auto h-5/6 w-5/6 rounded-md bg-white p-4 min-[950px]:hidden'
+        'absolute bottom-0 left-0 right-0 top-0 z-20 m-auto h-5/6 w-5/6 rounded-md bg-white p-6 min-[950px]:hidden'
       }
     >
-      <h1>teste</h1>
+      <PopUpHeader handleIconClose={handleClose} />
     </div>
   )
 }
@@ -134,7 +152,7 @@ const MobilePopUp = () => {
 const MobileHistoric = ({ handleLeave }: { handleLeave: () => void }) => {
   return (
     <div>
-      <MobilePopUp />
+      <MobilePopUp handleClose={handleLeave} />
       <UnfocusedBG handleLeave={handleLeave} />
     </div>
   )
