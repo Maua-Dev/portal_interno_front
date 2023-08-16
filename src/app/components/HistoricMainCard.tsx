@@ -145,6 +145,7 @@ const MobilePopUp = ({ handleClose }: { handleClose: () => void }) => {
       }
     >
       <PopUpHeader handleIconClose={handleClose} />
+      <div></div>
     </div>
   )
 }
