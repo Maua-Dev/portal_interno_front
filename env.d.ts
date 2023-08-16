@@ -1,5 +1,7 @@
-namespace NodeJS {
+import 'vite/client'
+
+export namespace NodeJS {
   interface ProcessEnv {
-    NEXT_PUBLIC_STAGE: string
+    VITE_STAGE: string
   }
 }

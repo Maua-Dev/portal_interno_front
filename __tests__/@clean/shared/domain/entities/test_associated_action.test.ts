@@ -1,8 +1,9 @@
-import { Action } from '@/@clean/shared/domain/entities/action'
-import { AssociatedAction } from '@/@clean/shared/domain/entities/associated_action'
-import { ACTION_TYPE } from '@/@clean/shared/domain/enums/action_type_enum'
-import { STACK } from '@/@clean/shared/domain/enums/stack_enum'
-import { EntityError } from '@/@clean/shared/domain/helpers/errors/domain_error'
+import { Action } from '../../../../../src/@clean/shared/domain/entities/action'
+import { AssociatedAction } from '../../../../../src/@clean/shared/domain/entities/associated_action'
+import { ACTION_TYPE } from '../../../../../src/@clean/shared/domain/enums/action_type_enum'
+import { STACK } from '../../../../../src/@clean/shared/domain/enums/stack_enum'
+import { EntityError } from '../../../../../src/@clean/shared/domain/helpers/errors/domain_error'
+import '@testing-library/jest-dom'
 
 // Instance Test
 

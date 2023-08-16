@@ -1,9 +1,10 @@
-import { Action } from '@/@clean/shared/domain/entities/action'
-import { AssociatedAction } from '@/@clean/shared/domain/entities/associated_action'
-import { ACTION_TYPE } from '@/@clean/shared/domain/enums/action_type_enum'
-import { STACK } from '@/@clean/shared/domain/enums/stack_enum'
-import { NoItemsFoundError } from '@/@clean/shared/domain/helpers/errors/domain_error'
-import { ActionRepositoryMock } from '@/@clean/shared/infra/repositories/action_repository_mock'
+import { Action } from '../../../../../src/@clean/shared/domain/entities/action'
+import { AssociatedAction } from '../../../../../src/@clean/shared/domain/entities/associated_action'
+import { ACTION_TYPE } from '../../../../../src/@clean/shared/domain/enums/action_type_enum'
+import { STACK } from '../../../../../src/@clean/shared/domain/enums/stack_enum'
+import { NoItemsFoundError } from '../../../../../src/@clean/shared/domain/helpers/errors/domain_error'
+import { ActionRepositoryMock } from '../../../../../src/@clean/shared/infra/repositories/action_repository_mock'
+import '@testing-library/jest-dom'
 
 test('Test create action', async () => {
   const repo = new ActionRepositoryMock()
