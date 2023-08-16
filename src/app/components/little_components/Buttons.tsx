@@ -7,15 +7,9 @@ interface DefaultIconButtonProps {
   onClick?: () => void
 }
 
-const DefaultIconButton = ({
-  children,
-  onClick
-}: DefaultIconButtonProps) => {
+const DefaultIconButton = ({ children, onClick }: DefaultIconButtonProps) => {
   return (
-    <IconButton
-      onClick={onClick}
-      disableRipple
-    >
+    <IconButton onClick={onClick} disableRipple>
       {children}
     </IconButton>
   )
@@ -64,7 +58,11 @@ const NavBarButton = ({
         }
       >
         {linkText}
-        <KeyboardArrowDownIcon className={HoveredButtonIndex == linkId ? 'text-blue-950' : 'text-white'} />
+        <KeyboardArrowDownIcon
+          className={
+            HoveredButtonIndex == linkId ? 'text-blue-950' : 'text-white'
+          }
+        />
       </p>
     </button>
   )

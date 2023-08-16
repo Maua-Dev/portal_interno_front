@@ -76,23 +76,17 @@ const RightSideIcons = ({
 }) => {
   return (
     <div className="flex gap-1 ">
-      <div className='max-[950px]:hidden'>
+      <div className="max-[950px]:hidden">
         {iconList.map((icon, index) => {
           return (
-            <DefaultIconButton
-              onClick={() => {}}
-              key={index}
-            >
+            <DefaultIconButton onClick={() => {}} key={index}>
               {icon.icon_name}
             </DefaultIconButton>
           )
         })}
       </div>
-      <div className='min-[950px]:hidden'>
-        <DefaultIconButton
-          onClick={handleHamburguerClick}
-          key={''}
-        >
+      <div className="min-[950px]:hidden">
+        <DefaultIconButton onClick={handleHamburguerClick} key={''}>
           <MenuIcon className="text-white" />
         </DefaultIconButton>
       </div>
@@ -134,7 +128,7 @@ const ButtonListMoblie = ({
             <IconButton
               disableRipple
               style={{
-                color: hoveredButtonIndex === index ? 'white' : '#6B7280',
+                color: hoveredButtonIndex === index ? 'white' : '#6B7280'
               }}
             >
               {link.icon}
@@ -209,7 +203,9 @@ export default function NavBar() {
   const iconsList = [
     {
       id: 1,
-      icon_name: <NotificationsNoneIcon className="h-6 w-6 rotate-12 text-white" />,
+      icon_name: (
+        <NotificationsNoneIcon className="h-6 w-6 rotate-12 text-white" />
+      ),
       url: '/notifications'
     },
     {
