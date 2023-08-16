@@ -7,10 +7,11 @@ import {
   ContainerActivitiesHistory,
   ContainerMainCards
 } from './components/little_components/Container'
-import { useState } from 'react'
+import { ReactNode, useState } from 'react'
 import { Action } from '../@clean/shared/domain/entities/action'
 import { ACTION_TYPE } from '../@clean/shared/domain/enums/action_type_enum'
 import { STACK } from '../@clean/shared/domain/enums/stack_enum'
+import HistoricMainCard from './components/HistoricMainCard'
 // import { ActionContext } from './contexts/action_context'
 
 // import { UserProvider } from '@/contexts/user_provider'
@@ -18,6 +19,9 @@ import { STACK } from '../@clean/shared/domain/enums/stack_enum'
 export default function Home() {
   const [on, setOn] = useState(false)
   const [isHistoryOpen, setIsHistoryOpen] = useState(false)
+  const [isOpen, setOpen] = useState(false)
+  const [mainCardId, setMainCardId] = useState<number>()
+  const [mainCard, setMainCard] = useState<ReactNode>(null)
   // const [isClient, setClient] = useState(false)
 
   const activities: Action[] = [
@@ -77,6 +81,10 @@ export default function Home() {
 
   // const { createAction } = useContext(ActionContext)
 
+  const handleSideButtonClick = () => {
+    setOpen(!isOpen)
+  }
+
   const handleOnClick = () => {
     setOn(!on)
   }
@@ -93,6 +101,22 @@ export default function Home() {
     setIsHistoryOpen(!isHistoryOpen)
   }
 
+  const handleMainCards = (mainCardComponent: ReactNode, id: number) => {
+    if (isOpen) {
+      if (mainCardId === id) {
+        handleSideButtonClick()
+        setMainCard(null)
+      } else if (mainCardId !== id) {
+        setMainCardId(id)
+        setMainCard(mainCardComponent)
+      }
+    } else if (!isOpen) {
+      handleSideButtonClick()
+      setMainCardId(id)
+      setMainCard(mainCardComponent)
+    }
+  }
+
   return (
     <>
       <main className="">
@@ -106,16 +130,36 @@ export default function Home() {
           />
           <ContainerMainCards>
             <ContainerActivitiesHistory>
-              <ActivitiesButton onClick={handleOnClick} />
+              <ActivitiesButton
+                onClick={() => {
+                  handleMainCards(
+                    <AddActivity
+                      cancel={function (): void {
+                        throw new Error('Function not implemented.')
+                      }}
+                      save={function (): void {
+                        throw new Error('Function not implemented.')
+                      }}
+                    />,
+                    1
+                  )
+                }}
+              />
               <HistoryButton
                 activities={activities}
                 isOpen={isHistoryOpen}
-                onClick={handleHistoryClick}
+                onClick={() => {
+                  handleHistoryClick()
+                }}
+                openHistoric={() => {
+                  handleMainCards(<HistoricMainCard />, 2)
+                }}
               />
             </ContainerActivitiesHistory>
             {on ? (
               <AddActivity cancel={cancelOnClick} save={saveOnClick} />
             ) : null}
+            {mainCard}
           </ContainerMainCards>
         </section>
       </main>

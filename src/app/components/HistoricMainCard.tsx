@@ -159,7 +159,7 @@ export default function HistoricMainCard() {
   return (
     <div>
       <WebHistoricMainCard />
-      <MobileHistoric />
+      {/* <MobileHistoric /> */}
     </div>
   )
 }
