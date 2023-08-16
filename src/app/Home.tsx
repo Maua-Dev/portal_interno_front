@@ -11,9 +11,6 @@ import { useState } from 'react'
 import { Action } from '../@clean/shared/domain/entities/action'
 import { ACTION_TYPE } from '../@clean/shared/domain/enums/action_type_enum'
 import { STACK } from '../@clean/shared/domain/enums/stack_enum'
-// import { ActionContext } from './contexts/action_context'
-
-// import { UserProvider } from '@/contexts/user_provider'
 
 export default function Home() {
   const [on, setOn] = useState(false)
@@ -75,9 +72,6 @@ export default function Home() {
     })
   ]
 
-  const {  } = useContext(ActionContext)
-
-
   const handleOnClick = () => {
     setOn(!on)
   }
@@ -93,10 +87,6 @@ export default function Home() {
   const handleHistoryClick = () => {
     setIsHistoryOpen(!isHistoryOpen)
   }
-  
-  useEffect(() => {
-    setClient(true)
-  }, [])
 
   return (
     <>
