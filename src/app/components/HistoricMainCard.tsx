@@ -108,32 +108,22 @@ const WebHistoricMainCard = () => {
   )
 }
 
-const UnfocusedBG = ({
-  isOpen,
-  handleLeave
-}: {
-  isOpen: boolean
-  handleLeave: () => void
-}) => {
+const UnfocusedBG = ({ handleLeave }: { handleLeave: () => void }) => {
   return (
     <div
       onClick={handleLeave}
       className={
-        isOpen
-          ? 'absolute bottom-0 left-0 right-0 top-0 z-10 h-screen w-screen bg-black opacity-50'
-          : 'hidden'
+        'absolute bottom-0 left-0 right-0 top-0 z-10 h-screen w-screen bg-black opacity-50 min-[950px]:hidden'
       }
     />
   )
 }
 
-const MobilePopUp = ({ isOpen }: { isOpen: boolean }) => {
+const MobilePopUp = () => {
   return (
     <div
       className={
-        isOpen
-          ? 'absolute bottom-0 left-0 right-0 top-0 z-20 m-auto h-5/6 w-5/6 rounded-md bg-white p-4'
-          : 'hidden'
+        'absolute bottom-0 left-0 right-0 top-0 z-20 m-auto h-5/6 w-5/6 rounded-md bg-white p-4 min-[950px]:hidden'
       }
     >
       <h1>teste</h1>
@@ -141,25 +131,24 @@ const MobilePopUp = ({ isOpen }: { isOpen: boolean }) => {
   )
 }
 
-const MobileHistoric = () => {
-  const [isOpen, setOpen] = useState(true)
-
-  const handleLeave = () => {
-    setOpen(false)
-  }
+const MobileHistoric = ({ handleLeave }: { handleLeave: () => void }) => {
   return (
     <div>
-      <MobilePopUp isOpen={isOpen} />
-      <UnfocusedBG isOpen={isOpen} handleLeave={handleLeave} />
+      <MobilePopUp />
+      <UnfocusedBG handleLeave={handleLeave} />
     </div>
   )
 }
 
-export default function HistoricMainCard() {
+export default function HistoricMainCard({
+  handleCloseMobilePopUp
+}: {
+  handleCloseMobilePopUp: () => void
+}) {
   return (
     <div>
       <WebHistoricMainCard />
-      {/* <MobileHistoric /> */}
+      <MobileHistoric handleLeave={handleCloseMobilePopUp} />
     </div>
   )
 }

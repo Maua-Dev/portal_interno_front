@@ -101,20 +101,24 @@ export default function Home() {
     setIsHistoryOpen(!isHistoryOpen)
   }
 
+  const closeMainCard = () => {
+    setOpen(false)
+    setMainCard(null)
+  }
+
   const handleMainCards = (mainCardComponent: ReactNode, id: number) => {
     if (isOpen) {
       if (mainCardId === id) {
-        handleSideButtonClick()
-        setMainCard(null)
+        closeMainCard()
       } else if (mainCardId !== id) {
         setMainCardId(id)
         setMainCard(mainCardComponent)
       }
     } else if (!isOpen) {
-      handleSideButtonClick()
       setMainCardId(id)
       setMainCard(mainCardComponent)
     }
+    handleSideButtonClick()
   }
 
   return (
@@ -152,7 +156,14 @@ export default function Home() {
                   handleHistoryClick()
                 }}
                 openHistoric={() => {
-                  handleMainCards(<HistoricMainCard />, 2)
+                  handleMainCards(
+                    <HistoricMainCard
+                      handleCloseMobilePopUp={() => {
+                        closeMainCard()
+                      }}
+                    />,
+                    2
+                  )
                 }}
               />
             </ContainerActivitiesHistory>
