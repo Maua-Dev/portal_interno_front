@@ -75,7 +75,7 @@ export default function Home() {
     })
   ]
 
-  const { createAction } = useContext(ActionContext)
+  const {  } = useContext(ActionContext)
 
   const handleOnClick = () => {
     setOn(!on)
@@ -93,16 +93,11 @@ export default function Home() {
     setIsHistoryOpen(!isHistoryOpen)
   }
 
-  const actionCreated = async () => {
-    const created = await createAction(activities[0])
-    console.log(created)
-    return created
-  }
+  
 
   useEffect(() => {
-    actionCreated()
     setClient(true)
-  }, [actionCreated])
+  }, [])
 
   return (
     <>
