@@ -113,7 +113,7 @@ export class IacStack extends cdk.Stack {
       })
     )
 
-    if (stage === 'prod'){
+    if (stage === 'prod' || stage === 'homolog' || stage === 'dev'){
       const zone = route53.HostedZone.fromHostedZoneAttributes(
         this,
         'PortalInternoFrontHostedZone-' + stage,
