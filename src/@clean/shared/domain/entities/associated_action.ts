@@ -1,5 +1,3 @@
-import { actionTypeToEnum } from '../enums/action_type_enum'
-import { stackToEnum } from '../enums/stack_enum'
 import { EntityError } from '../helpers/errors/domain_error'
 import { Action, ActionProps } from './action'
 
@@ -16,13 +14,13 @@ export type JsonProps = {
     endDate: number
     duration: number
     actionId: string
-    storyId: number
+    storyId?: number
     title: string
-    description: string
+    description?: string
     projectCode: string
-    associatedMembersRa: string[]
+    associatedMembersRa?: string[]
     stackTags: string[]
-    actionTypeTags: string[]
+    actionTypeTag: string
   }
 }
 

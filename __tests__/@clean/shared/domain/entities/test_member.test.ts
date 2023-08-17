@@ -1,10 +1,11 @@
-import { Member } from '@/@clean/shared/domain/entities/member'
-import { Project } from '@/@clean/shared/domain/entities/project'
-import { ACTIVE } from '@/@clean/shared/domain/enums/active_enum'
-import { COURSE } from '@/@clean/shared/domain/enums/course_enum'
-import { ROLE } from '@/@clean/shared/domain/enums/role_enum'
-import { STACK } from '@/@clean/shared/domain/enums/stack_enum'
-import { EntityError } from '@/@clean/shared/domain/helpers/errors/domain_error'
+import { Member } from '../../../../../src/@clean/shared/domain/entities/member'
+import { Project } from '../../../../../src/@clean/shared/domain/entities/project'
+import { ACTIVE } from '../../../../../src/@clean/shared/domain/enums/active_enum'
+import { COURSE } from '../../../../../src/@clean/shared/domain/enums/course_enum'
+import { ROLE } from '../../../../../src/@clean/shared/domain/enums/role_enum'
+import { STACK } from '../../../../../src/@clean/shared/domain/enums/stack_enum'
+import { EntityError } from '../../../../../src/@clean/shared/domain/helpers/errors/domain_error'
+import '@testing-library/jest-dom'
 
 test('Test Member Entity', () => {
   const member = new Member({
@@ -13,12 +14,10 @@ test('Test Member Entity', () => {
     ra: '21.00210-0',
     role: ROLE.DEV,
     stack: STACK.FRONTEND,
-
     year: 2,
     cellphone: '11999999999',
     course: COURSE.ECM,
     hiredDate: 10,
-    deactivatedDate: 20,
     active: ACTIVE.ACTIVE,
     projects: [
       new Project({
@@ -42,7 +41,6 @@ test('Test Member Entity RA', () => {
     cellphone: '11999999999',
     course: COURSE.ECM,
     hiredDate: 10,
-    deactivatedDate: 20,
     active: ACTIVE.ACTIVE,
     projects: [
       new Project({
@@ -66,7 +64,6 @@ test('Test Member Entity Name', () => {
     cellphone: '11999999999',
     course: COURSE.ECM,
     hiredDate: 10,
-    deactivatedDate: 20,
     active: ACTIVE.ACTIVE,
     projects: [
       new Project({
@@ -90,7 +87,6 @@ test('Test Member Entity email', () => {
     cellphone: '11999999999',
     course: COURSE.ECM,
     hiredDate: 10,
-    deactivatedDate: 20,
     active: ACTIVE.ACTIVE,
     projects: [
       new Project({
@@ -114,7 +110,6 @@ test('Test Member Entity role', () => {
     cellphone: '11999999999',
     course: COURSE.ECM,
     hiredDate: 10,
-    deactivatedDate: 20,
     active: ACTIVE.ACTIVE,
     projects: [
       new Project({
@@ -139,7 +134,6 @@ test('Test Member Entity stack', () => {
     cellphone: '11999999999',
     course: COURSE.ECM,
     hiredDate: 10,
-    deactivatedDate: 20,
     active: ACTIVE.ACTIVE,
     projects: [
       new Project({
@@ -164,7 +158,6 @@ test('Test Member Entity year', () => {
     cellphone: '11999999999',
     course: COURSE.ECM,
     hiredDate: 10,
-    deactivatedDate: 20,
     active: ACTIVE.ACTIVE,
     projects: [
       new Project({
@@ -188,7 +181,6 @@ test('Test Member Entity cellphone', () => {
     cellphone: '11999999999',
     course: COURSE.ECM,
     hiredDate: 10,
-    deactivatedDate: 20,
     active: ACTIVE.ACTIVE,
     projects: [
       new Project({
@@ -212,7 +204,6 @@ test('Test Member Entity course', () => {
     cellphone: '11999999999',
     course: COURSE.ECM,
     hiredDate: 10,
-    deactivatedDate: 20,
     active: ACTIVE.ACTIVE,
     projects: [
       new Project({
@@ -237,7 +228,6 @@ test('Test Member Entity hiredDate', () => {
     cellphone: '11999999999',
     course: COURSE.ECM,
     hiredDate: 10,
-    deactivatedDate: 20,
     active: ACTIVE.ACTIVE,
     projects: [
       new Project({
@@ -261,7 +251,6 @@ test('Test Member Entity deactivatedDate', () => {
     cellphone: '11999999999',
     course: COURSE.ECM,
     hiredDate: 10,
-    deactivatedDate: 20,
     active: ACTIVE.ACTIVE,
     projects: [
       new Project({
@@ -271,7 +260,7 @@ test('Test Member Entity deactivatedDate', () => {
       })
     ]
   })
-  expect(member.deactivatedDate).toBe(20)
+  expect(member.deactivatedDate).toBe(-1)
 })
 
 test('Test Member Entity active', () => {
@@ -285,7 +274,6 @@ test('Test Member Entity active', () => {
     cellphone: '11999999999',
     course: COURSE.ECM,
     hiredDate: 10,
-    deactivatedDate: 20,
     active: ACTIVE.ACTIVE,
     projects: [
       new Project({
@@ -310,7 +298,6 @@ test('Test Member Entity projects', () => {
     cellphone: '11999999999',
     course: COURSE.ECM,
     hiredDate: 10,
-    deactivatedDate: 20,
     active: ACTIVE.ACTIVE,
     projects: [
       new Project({
@@ -346,7 +333,6 @@ test('Test Member Entity to JSON', () => {
     cellphone: '11999999999',
     course: COURSE.ECM,
     hiredDate: 10,
-    deactivatedDate: 20,
     active: ACTIVE.ACTIVE,
     projects: [
       new Project({
@@ -366,8 +352,8 @@ test('Test Member Entity to JSON', () => {
     year: 2,
     cellphone: '11999999999',
     course: COURSE.ECM,
+    deactivatedDate: -1,
     hiredDate: 10,
-    deactivatedDate: 20,
     active: ACTIVE.ACTIVE,
     projects: [
       new Project({
@@ -392,7 +378,6 @@ test('Test Member Entity from JSON', () => {
     cellphone: '11999999999',
     course: 'ECM',
     hiredDate: 10,
-    deactivatedDate: 20,
     active: 'ACTIVE',
     projects: [
       {
@@ -420,7 +405,6 @@ test('Test Member Entity with invalid name', () => {
       cellphone: '11999999999',
       course: COURSE.ECM,
       hiredDate: 10,
-      deactivatedDate: 20,
       active: ACTIVE.ACTIVE,
       projects: [
         new Project({
@@ -442,7 +426,6 @@ test('Test Member Entity with invalid name', () => {
       cellphone: '11999999999',
       course: COURSE.ECM,
       hiredDate: 10,
-      deactivatedDate: 20,
       active: ACTIVE.ACTIVE,
       projects: [
         new Project({
@@ -467,7 +450,6 @@ test('Test Member Entity with invalid email', () => {
       cellphone: '11999999999',
       course: COURSE.ECM,
       hiredDate: 10,
-      deactivatedDate: 20,
       active: ACTIVE.ACTIVE,
       projects: [
         new Project({
@@ -489,7 +471,6 @@ test('Test Member Entity with invalid email', () => {
       cellphone: '11999999999',
       course: COURSE.ECM,
       hiredDate: 10,
-      deactivatedDate: 20,
       active: ACTIVE.ACTIVE,
       projects: [
         new Project({
@@ -514,7 +495,6 @@ test('Test Member Entity with invalid ra', () => {
       cellphone: '11999999999',
       course: COURSE.ECM,
       hiredDate: 10,
-      deactivatedDate: 20,
       active: ACTIVE.ACTIVE,
       projects: [
         new Project({
@@ -536,7 +516,6 @@ test('Test Member Entity with invalid ra', () => {
       cellphone: '11999999999',
       course: COURSE.ECM,
       hiredDate: 10,
-      deactivatedDate: 20,
       active: ACTIVE.ACTIVE,
       projects: [
         new Project({
@@ -561,7 +540,6 @@ test('Test Member Entity with invalid year', () => {
       cellphone: '11999999999',
       course: COURSE.ECM,
       hiredDate: 10,
-      deactivatedDate: 20,
       active: ACTIVE.ACTIVE,
       projects: [
         new Project({
@@ -583,7 +561,6 @@ test('Test Member Entity with invalid year', () => {
       cellphone: '11999999999',
       course: COURSE.ECM,
       hiredDate: 10,
-      deactivatedDate: 20,
       active: ACTIVE.ACTIVE,
       projects: [
         new Project({
@@ -608,7 +585,6 @@ test('Test Member Entity with invalid cellphone', () => {
       cellphone: '119999931239999',
       course: COURSE.ECM,
       hiredDate: 10,
-      deactivatedDate: 20,
       active: ACTIVE.ACTIVE,
       projects: [
         new Project({
@@ -630,7 +606,6 @@ test('Test Member Entity with invalid cellphone', () => {
       cellphone: '119999931239999', //11999999999
       course: COURSE.ECM,
       hiredDate: 10,
-      deactivatedDate: 20,
       active: ACTIVE.ACTIVE,
       projects: [
         new Project({
@@ -655,7 +630,6 @@ test('Test Member Entity with invalid hiredDate', () => {
       cellphone: '11999999999',
       course: COURSE.ECM,
       hiredDate: -1,
-      deactivatedDate: 20,
       active: ACTIVE.ACTIVE,
       projects: [
         new Project({
@@ -677,7 +651,6 @@ test('Test Member Entity with invalid hiredDate', () => {
       cellphone: '11999999999', //11999999999
       course: COURSE.ECM,
       hiredDate: -1,
-      deactivatedDate: 20,
       active: ACTIVE.ACTIVE,
       projects: [
         new Project({
@@ -749,7 +722,7 @@ test('Test Member Entity with empty projects', () => {
       cellphone: '11999999999',
       course: COURSE.ECM,
       hiredDate: 10,
-      deactivatedDate: 20,
+
       active: ACTIVE.ACTIVE,
       projects: []
     })
@@ -765,9 +738,34 @@ test('Test Member Entity with empty projects', () => {
       cellphone: '11999999999', //11999999999
       course: COURSE.ECM,
       hiredDate: 10,
-      deactivatedDate: 20,
+
       active: ACTIVE.ACTIVE,
       projects: []
     })
   }).toThrowError('Field props.projects is not valid')
+})
+
+test('Test Member Entity with deactivatedDate prop', () => {
+  const member = new Member({
+    name: 'Furlan mata pomba',
+    email: 'furlas@maua.br',
+    ra: '21.00210-0',
+    role: ROLE.DEV,
+    stack: STACK.FRONTEND,
+    year: 2,
+    cellphone: '11999999999',
+    course: COURSE.ECM,
+    hiredDate: 10,
+    deactivatedDate: 20,
+    active: ACTIVE.DISCONNECTED,
+    projects: [
+      new Project({
+        code: 'PI',
+        name: 'Portal Interno',
+        description: 'Site controle de membros'
+      })
+    ]
+  })
+  expect(member).toBeInstanceOf(Member)
+  expect(member.deactivatedDate).toBe(20)
 })

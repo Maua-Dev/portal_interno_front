@@ -1,8 +1,9 @@
-import { Action } from '@/@clean/shared/domain/entities/action'
-import { AssociatedAction } from '@/@clean/shared/domain/entities/associated_action'
-import { ACTION_TYPE } from '@/@clean/shared/domain/enums/action_type_enum'
-import { STACK } from '@/@clean/shared/domain/enums/stack_enum'
-import { EntityError } from '@/@clean/shared/domain/helpers/errors/domain_error'
+import { Action } from '../../../../../src/@clean/shared/domain/entities/action'
+import { AssociatedAction } from '../../../../../src/@clean/shared/domain/entities/associated_action'
+import { ACTION_TYPE } from '../../../../../src/@clean/shared/domain/enums/action_type_enum'
+import { STACK } from '../../../../../src/@clean/shared/domain/enums/stack_enum'
+import { EntityError } from '../../../../../src/@clean/shared/domain/helpers/errors/domain_error'
+import '@testing-library/jest-dom'
 
 // Instance Test
 
@@ -19,7 +20,7 @@ test('Test Associated Action entity', () => {
     projectCode: '76',
     associatedMembersRa: ['21.00833-7'],
     stackTags: [STACK.FRONTEND, STACK.BACKEND],
-    actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN]
+    actionTypeTag: ACTION_TYPE.CODE
   })
   const associatedAction = new AssociatedAction({
     member_ra: '20.02194-0',
@@ -44,7 +45,7 @@ test('Test Associated Action entity member_ra', () => {
     projectCode: '76',
     associatedMembersRa: ['21.00833-7'],
     stackTags: [STACK.FRONTEND, STACK.BACKEND],
-    actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN]
+    actionTypeTag: ACTION_TYPE.CODE
   })
   const associatedAction = new AssociatedAction({
     member_ra: '20.02194-0',
@@ -67,7 +68,7 @@ test('Test Associated Action entity action', () => {
     projectCode: '76',
     associatedMembersRa: ['21.00833-7'],
     stackTags: [STACK.FRONTEND, STACK.BACKEND],
-    actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN]
+    actionTypeTag: ACTION_TYPE.CODE
   })
   const associatedAction = new AssociatedAction({
     member_ra: '20.02194-0',
@@ -87,7 +88,7 @@ test('Test Associated Action entity action', () => {
       projectCode: '76',
       associatedMembersRa: ['21.00833-7'],
       stackTags: [STACK.FRONTEND, STACK.BACKEND],
-      actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN]
+      actionTypeTag: ACTION_TYPE.CODE
     })
   )
 })
@@ -107,7 +108,7 @@ test('Test Associated Action entity to JSON', () => {
     projectCode: '76',
     associatedMembersRa: ['21.00833-7'],
     stackTags: [STACK.FRONTEND, STACK.BACKEND],
-    actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN]
+    actionTypeTag: ACTION_TYPE.CODE
   })
   const associatedAction = new AssociatedAction({
     member_ra: '20.02194-0',
@@ -130,7 +131,7 @@ test('Test Associated Action entity from JSON', () => {
     projectCode: '76',
     associatedMembersRa: ['21.00833-7'],
     stackTags: [STACK.FRONTEND, STACK.BACKEND],
-    actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN]
+    actionTypeTag: ACTION_TYPE.CODE
   })
   const associatedAction = new AssociatedAction({
     member_ra: '20.02194-0',
@@ -157,7 +158,7 @@ test('Test Associated Action entity error member_ra', () => {
     projectCode: '76',
     associatedMembersRa: ['21.00833-7'],
     stackTags: [STACK.FRONTEND, STACK.BACKEND],
-    actionTypeTags: [ACTION_TYPE.CODE, ACTION_TYPE.LEARN]
+    actionTypeTag: ACTION_TYPE.CODE
   })
 
   expect(() => {
