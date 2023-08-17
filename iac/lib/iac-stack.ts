@@ -44,7 +44,7 @@ export class IacStack extends cdk.Stack {
     // });
 
     let viewerCertificate = cloudfront.ViewerCertificate.fromCloudFrontDefaultCertificate()
-    if (stage === 'prod') {
+    if (stage === 'prod' || stage === 'homolog' || stage === 'dev') {
       viewerCertificate = cloudfront.ViewerCertificate.fromAcmCertificate(
         Certificate.fromCertificateArn(this, 'PortalInternoFrontCertificate-' + stage, acmCertificateArn),
         {
