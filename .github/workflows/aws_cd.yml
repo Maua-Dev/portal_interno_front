@@ -38,7 +38,7 @@ jobs:
             yarn install -g
         - name: Build and Export
           run: |
-            vite build
+            yarn vite build
         - name: Setup envs
           run: |
             echo AWS_REGION=${{ vars.AWS_REGION }} >> $GITHUB_ENV
