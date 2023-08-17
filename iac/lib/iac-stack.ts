@@ -15,18 +15,17 @@ export class IacStack extends cdk.Stack {
     super(scope, id, props)
 
     const stage = import.meta.env.GITHUB_REF_NAME || 'dev'
-    const acmCertificateArn =
-      import.meta.env.ACM_CERTIFICATE_ARN ||
-      'arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-123456789012'
-    const alternativeDomain =
-      import.meta.env.ALTERNATIVE_DOMAIN_NAME || 'onlydevs-dev.devmaua.com'
+    const acmCertificateArn = import.meta.env.ACM_CERTIFICATE_ARN || 'arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-123456789012'
+    const alternativeDomain = import.meta.env.ALTERNATIVE_DOMAIN_NAME || 'onlydevs-dev.devmaua.com'
     const hostedZoneIdValue = import.meta.env.HOSTED_ZONE_ID || 'Z1UJRXOUMOOFQ8'
+    const projectName = import.meta.env.PROJECT_NAME || 'PortalInternoFront'
 
     const s3Bucket = new s3.Bucket(this, 'PortalInternoFrontBucket' + stage, {
       versioned: true,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
-      accessControl: s3.BucketAccessControl.PRIVATE
+      accessControl: s3.BucketAccessControl.PRIVATE,
+      autoDeleteObjects: true,
     })
 
     const oac = new cloudfront.CfnOriginAccessControl(this, 'AOC', {
@@ -43,6 +42,17 @@ export class IacStack extends cdk.Stack {
     //   handler: 'edge_function.lambda_handler',
     //   code: lambda.Code.fromAsset("lambda_triggers"),
     // });
+
+    let viewerCertificate = cloudfront.ViewerCertificate.fromCloudFrontDefaultCertificate()
+    if (stage === 'prod') {
+      viewerCertificate = cloudfront.ViewerCertificate.fromAcmCertificate(
+        Certificate.fromCertificateArn(this, 'PortalInternoFrontCertificate-' + stage, acmCertificateArn),
+        {
+          aliases: [alternativeDomain],
+          securityPolicy: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
+        },
+        )
+    }
 
     const cloudFrontWebDistribution = new cloudfront.CloudFrontWebDistribution(
       this,
@@ -76,22 +86,18 @@ export class IacStack extends cdk.Stack {
             ]
           }
         ],
-        viewerCertificate: cloudfront.ViewerCertificate.fromAcmCertificate(
-          Certificate.fromCertificateArn(
-            this,
-            'PortalInternoFrontCertificate-' + stage,
-            acmCertificateArn
-          ),
+        viewerCertificate: viewerCertificate,
+        errorConfigurations: [
           {
-            aliases: [alternativeDomain],
-            securityPolicy: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021
-          }
-        )
-      }
-    )
+            errorCode: 403,
+            responseCode: 200,
+            responsePagePath: '/index.html',
+            errorCachingMinTtl: 0,
+          },
+        ],
+      })
 
-    const cfnDistribution = cloudFrontWebDistribution.node
-      .defaultChild as cloudfront.CfnDistribution
+    const cfnDistribution = cloudFrontWebDistribution.node.defaultChild as cloudfront.CfnDistribution
 
     cfnDistribution.addPropertyOverride(
       'DistributionConfig.Origins.0.OriginAccessControlId',
@@ -107,29 +113,36 @@ export class IacStack extends cdk.Stack {
       })
     )
 
-    const zone = route53.HostedZone.fromHostedZoneAttributes(
-      this,
-      'PortalInternoFrontHostedZone-' + stage,
-      {
-        hostedZoneId: hostedZoneIdValue,
-        zoneName: alternativeDomain
-      }
-    )
-
-    new route53.ARecord(this, 'PortalInternoFrontAliasRecord-' + stage, {
-      zone: zone,
-      recordName: alternativeDomain,
-      target: route53.RecordTarget.fromAlias(
-        new route53Targets.CloudFrontTarget(cloudFrontWebDistribution)
+    if (stage === 'prod'){
+      const zone = route53.HostedZone.fromHostedZoneAttributes(
+        this,
+        'PortalInternoFrontHostedZone-' + stage,
+        {
+          hostedZoneId: hostedZoneIdValue,
+          zoneName: alternativeDomain
+        }
       )
-    })
 
-    new cdk.CfnOutput(this, 'PortalInternoFrontBucketName-' + stage, {
-      value: s3Bucket.bucketName
-    })
+        new route53.ARecord(this, 'PortalInternoFrontAliasRecord-' + stage, {
+          zone: zone,
+          recordName: alternativeDomain,
+          target: route53.RecordTarget.fromAlias(
+            new route53Targets.CloudFrontTarget(cloudFrontWebDistribution)
+          )
+        })
+      }
 
-    new cdk.CfnOutput(this, 'PortalInternoFrontDistributionId-' + stage, {
-      value: cloudFrontWebDistribution.distributionId
-    })
-  }
+      new cdk.CfnOutput(this, 'PortalInternoFrontBucketName-' + stage, {
+        value: s3Bucket.bucketName
+      })
+
+      new cdk.CfnOutput(this, 'PortalInternoFrontDistributionId-' + stage, {
+        value: cloudFrontWebDistribution.distributionId
+      })
+
+      new cdk.CfnOutput(this, 'PortalInternoFrontDistributionDomainName-' + stage, {
+        value: cloudFrontWebDistribution.distributionDomainName,
+      });
+
+    }
 }
