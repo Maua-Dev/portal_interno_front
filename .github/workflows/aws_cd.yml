@@ -31,7 +31,7 @@ jobs:
             echo "STACK_NAME=PortalInternoStackFront${{github.ref_name}}" >> $GITHUB_ENV
         - name: Installing Dependencies
           run: |
-            yarn install vite
+            yarn add vite
             yarn global add aws-cdk
             yarn install -g
             cd iac
