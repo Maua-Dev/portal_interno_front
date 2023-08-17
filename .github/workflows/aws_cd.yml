@@ -31,14 +31,14 @@ jobs:
             echo "STACK_NAME=PortalInternoStackFront${{github.ref_name}}" >> $GITHUB_ENV
         - name: Installing Dependencies
           run: |
+            yarn install vite
             yarn global add aws-cdk
             yarn install -g
             cd iac
             yarn install -g
         - name: Build and Export
           run: |
-            yarn next build
-            yarn next export
+            vite build
         - name: Setup envs
           run: |
             echo AWS_REGION=${{ vars.AWS_REGION }} >> $GITHUB_ENV
@@ -62,6 +62,6 @@ jobs:
             AWS_BUCKET=$(aws cloudformation --region ${{vars.AWS_REGION}} describe-stacks --stack-name ${{env.STACK_NAME}} --query "Stacks[0].Outputs[?OutputKey=='PortalInternoFrontBucketName${{github.ref_name}}'].OutputValue" --output text)
             echo "AWS_BUCKET='$AWS_BUCKET'" >> $GITHUB_ENV
         - name: Upload to S3
-          run: aws s3 cp out s3://${{env.AWS_BUCKET}}/ --recursive --region ${{ vars.AWS_REGION }}
+          run: aws s3 cp dist s3://${{env.AWS_BUCKET}}/ --recursive --region ${{ vars.AWS_REGION }}
         - name: Clear CDN cache
           run: aws cloudfront create-invalidation --distribution-id ${{env.CLOUD_FRONT_ID}} --paths "/*" --region us-east-1
