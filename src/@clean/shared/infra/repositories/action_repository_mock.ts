@@ -184,6 +184,58 @@ export class ActionRepositoryMock implements IActionRepository {
       stackTags: [STACK.BACKEND],
       storyId: 150,
       description: 'Reunião do back codando o repo'
+    }),
+    new Action({
+      ownerRa: '21.00210-0',
+      startDate: 1689948000000,
+      endDate: 1689955200000,
+      duration: 7200000,
+      actionId: 'uuid5',
+      title: 'Reunião do Front',
+      actionTypeTag: ACTION_TYPE.MEETING,
+      projectCode: 'PT',
+      stackTags: [STACK.FRONTEND],
+      storyId: 150,
+      description: 'Reunião do front'
+    }),
+    new Action({
+      ownerRa: '21.00210-0',
+      startDate: 1689955200000,
+      endDate: 1689964020000,
+      duration: 8820000,
+      actionId: 'uuid6',
+      title: 'Imp. Navbar',
+      actionTypeTag: ACTION_TYPE.CODE,
+      projectCode: 'PT',
+      stackTags: [STACK.FRONTEND],
+      storyId: 150,
+      description: 'Navbar codada'
+    }),
+    new Action({
+      ownerRa: '21.00210-0',
+      startDate: 1689966000000,
+      endDate: 1689966420000,
+      duration: 420000,
+      actionId: 'uuid7',
+      title: 'Daily',
+      actionTypeTag: ACTION_TYPE.MEETING,
+      projectCode: 'PT',
+      stackTags: [STACK.FRONTEND],
+      storyId: 150,
+      description: 'Reunião Daily'
+    }),
+    new Action({
+      ownerRa: '21.00210-0',
+      startDate: 1689969600000,
+      endDate: 1689976380000,
+      duration: 6780000,
+      actionId: 'uuid8',
+      title: 'Componente Histórico e Atividades',
+      actionTypeTag: ACTION_TYPE.MEETING,
+      projectCode: 'PT',
+      stackTags: [STACK.FRONTEND],
+      storyId: 150,
+      description: 'Reunião Daily'
     })
   ]
   private associatedActions: AssociatedAction[] = [
@@ -210,6 +262,22 @@ export class ActionRepositoryMock implements IActionRepository {
     new AssociatedAction({
       member_ra: this.members[3].ra,
       action: this.actions[1]
+    }),
+    new AssociatedAction({
+      member_ra: this.members[3].ra,
+      action: this.actions[4]
+    }),
+    new AssociatedAction({
+      member_ra: this.members[3].ra,
+      action: this.actions[5]
+    }),
+    new AssociatedAction({
+      member_ra: this.members[3].ra,
+      action: this.actions[6]
+    }),
+    new AssociatedAction({
+      member_ra: this.members[3].ra,
+      action: this.actions[7]
     }),
     new AssociatedAction({
       member_ra: this.members[2].ra,

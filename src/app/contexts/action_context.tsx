@@ -60,7 +60,7 @@ const getHistoryUsecase = containerAction.get<GetHistoryUsecase>(
 
 export function ActionProvider({ children }: PropsWithChildren) {
   const [createdActions, setCreatedActions] = useState<Action[]>([])
-  // const [history, setHistory] = useState<Action[]>([])
+  const [history, setHistory] = useState<Action[]>([])
 
   async function createAction(action: Action) {
     try {
@@ -90,15 +90,17 @@ export function ActionProvider({ children }: PropsWithChildren) {
     exclusiveStartKey?: string
   ) {
     try {
-      const history = await getHistoryUsecase.execute(
+      const { actions, lastId } = await getHistoryUsecase.execute(
         ra,
         amount,
         start,
         end,
         exclusiveStartKey
       )
-      setHistory([...history])
-      return history
+      console.log('lastId: ', lastId)
+      setHistory(actions)
+      console.log(history)
+      return actions
     } catch (error: any) {
       console.error('Something went wrong on get history: ', error)
     }

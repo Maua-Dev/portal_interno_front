@@ -76,10 +76,10 @@ test('Test get action', () => {
 test('Test get action error', () => {
   const repo = new ActionRepositoryMock()
 
-  const action = repo.getAction('uuid6')
+  const action = repo.getAction('uuid10')
 
   expect(action).rejects.toThrow(NoItemsFoundError)
-  expect(action).rejects.toThrow('actionId: uuid6')
+  expect(action).rejects.toThrow('actionId: uuid10')
 })
 
 test('Test create associated action', async () => {
