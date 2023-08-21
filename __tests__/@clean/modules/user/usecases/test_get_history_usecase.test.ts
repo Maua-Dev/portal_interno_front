@@ -1,5 +1,6 @@
 import { ActionRepositoryMock } from '../../../../../src/@clean/shared/infra/repositories/action_repository_mock'
 import { GetHistoryUsecase } from '../../../../../src/@clean/modules/action/usecases/get_history_usecase'
+import '@testing-library/jest-dom'
 
 test('Test Get History Usecase', async () => {
   const repo = new ActionRepositoryMock()
