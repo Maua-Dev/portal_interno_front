@@ -6,7 +6,7 @@ test('Test Get History Usecase', async () => {
   const repo = new ActionRepositoryMock()
   const getHistoryUsecase = new GetHistoryUsecase(repo)
 
-  const actions = await getHistoryUsecase.execute('21.00210-0', 10)
+  const { actions, lastId } = await getHistoryUsecase.execute('21.00210-0', 10)
 
   expect(actions.length).toBe(2)
   expect(actions[0].title).toBe('**Reunião do Front**')
@@ -14,13 +14,15 @@ test('Test Get History Usecase', async () => {
 
   expect(actions[1].title).toBe('**Reunião**')
   expect(actions[1].description).toBe('Reunião de como instalar o yarn')
+
+  expect(lastId).toBe('uuid1')
 })
 
 test('Test Get History Usecase with start and end', async () => {
   const repo = new ActionRepositoryMock()
   const getHistoryUsecase = new GetHistoryUsecase(repo)
 
-  const actions = await getHistoryUsecase.execute(
+  const { actions, lastId } = await getHistoryUsecase.execute(
     '21.00210-0',
     10,
     1612137600000,
@@ -30,13 +32,15 @@ test('Test Get History Usecase with start and end', async () => {
   expect(actions.length).toBe(1)
   expect(actions[0].title).toBe('**Reunião**')
   expect(actions[0].description).toBe('Reunião de como instalar o yarn')
+
+  expect(lastId).toBe('uuid1')
 })
 
 test('Test Get History Usecase with start and end - example 2', async () => {
   const repo = new ActionRepositoryMock()
   const getHistoryUsecase = new GetHistoryUsecase(repo)
 
-  const actions = await getHistoryUsecase.execute(
+  const { actions, lastId } = await getHistoryUsecase.execute(
     '21.00210-0',
     10,
     1612141200000,
@@ -46,21 +50,25 @@ test('Test Get History Usecase with start and end - example 2', async () => {
   expect(actions.length).toBe(1)
   expect(actions[0].title).toBe('**Reunião do Front**')
   expect(actions[0].description).toBe('Reunião do front')
+
+  expect(lastId).toBe('uuid2')
 })
 
-// test('Test Get History Usecase with exclusiveStartKey', async () => {
-//   const repo = new ActionRepositoryMock()
-//   const getHistoryUsecase = new GetHistoryUsecase(repo)
+test('Test Get History Usecase with exclusiveStartKey', async () => {
+  const repo = new ActionRepositoryMock()
+  const getHistoryUsecase = new GetHistoryUsecase(repo)
 
-//   const actions = await getHistoryUsecase.execute(
-//     '21.00210-0',
-//     10,
-//     undefined,
-//     undefined,
-//     'uuid1'
-//   )
+  const { actions, lastId } = await getHistoryUsecase.execute(
+    '21.00210-0',
+    10,
+    undefined,
+    undefined,
+    'uuid1'
+  )
 
-//   expect(actions.length).toBe(2)
-//   expect(actions[0].title).toBe('**Reunião do Front**')
-//   expect(actions[0].description).toBe('Reunião do front')
-// })
+  expect(actions.length).toBe(1)
+  expect(actions[0].title).toBe('**Reunião**')
+  expect(actions[0].description).toBe('Reunião de como instalar o yarn')
+
+  expect(lastId).toBe('uuid1')
+})

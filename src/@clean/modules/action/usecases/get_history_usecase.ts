@@ -2,6 +2,10 @@ import { Action } from '../../../shared/domain/entities/action'
 import { NoItemsFoundError } from '../../../shared/domain/helpers/errors/domain_error'
 import { IActionRepository } from '../domain/repositories/action_repository_interface'
 
+interface History {
+  actions: Action[]
+  lastId: string
+}
 export class GetHistoryUsecase {
   constructor(private actionRepo: IActionRepository) {}
 
@@ -11,7 +15,7 @@ export class GetHistoryUsecase {
     start?: number,
     end?: number,
     exclusiveStartKey?: string
-  ): Promise<Action[]> {
+  ): Promise<History> {
     const associatedActions = await this.actionRepo.getAssociatedActionsByRa(
       ra,
       amount,
@@ -31,7 +35,12 @@ export class GetHistoryUsecase {
       }
     )
 
-    return actions
-    // return actions, associatedActions[-1].action.actionId
+    const lastId =
+      associatedActions[associatedActions.length - 1].action.actionId
+
+    return {
+      actions,
+      lastId
+    }
   }
 }
