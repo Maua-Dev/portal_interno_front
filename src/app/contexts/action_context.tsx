@@ -60,7 +60,7 @@ const getHistoryUsecase = containerAction.get<GetHistoryUsecase>(
 
 export function ActionProvider({ children }: PropsWithChildren) {
   const [createdActions, setCreatedActions] = useState<Action[]>([])
-  const [history, setHistory] = useState<Action[]>([])
+  // const [history, setHistory] = useState<Action[]>([])
 
   async function createAction(action: Action) {
     try {

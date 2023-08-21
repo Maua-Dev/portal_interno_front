@@ -7,19 +7,15 @@ import {
   ContainerActivitiesHistory,
   ContainerMainCards
 } from './components/little_components/Container'
-import { useContext, useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Action } from '../@clean/shared/domain/entities/action'
 import { ACTION_TYPE } from '../@clean/shared/domain/enums/action_type_enum'
 import { STACK } from '../@clean/shared/domain/enums/stack_enum'
-import { ActionContext } from './contexts/action_context'
-
-// import { UserProvider } from '@/contexts/user_provider'
 
 export default function Home() {
   const [on, setOn] = useState(false)
   const [isHistoryOpen, setIsHistoryOpen] = useState(false)
-  const [isClient, setClient] = useState(false)
-  const [history, setHistory] = useState<Action[] | undefined>([])
+  // const [isClient, setClient] = useState(false)
 
   const activities: Action[] = [
     new Action({
@@ -76,9 +72,6 @@ export default function Home() {
     })
   ]
 
-  const { createAction, createAssociatedAction, getHistory } =
-    useContext(ActionContext)
-
   const handleOnClick = () => {
     setOn(!on)
   }
@@ -91,30 +84,14 @@ export default function Home() {
     setOn(false)
   }
 
-  const actionCreated = async () => {
-    const created = await createAction(activities[0])
-    console.log(created)
-    return created
-  }
-
-  const userHistory = async () => {
-    const history = await getHistory('21.00210-0', 10)
-    setHistory(history)
-  }
-
   const handleHistoryClick = () => {
-    userHistory()
     setIsHistoryOpen(!isHistoryOpen)
   }
-
-  useEffect(() => {
-    setClient(true)
-  }, [])
 
   return (
     <>
       <main className="">
-        {isClient ? <NavBar /> : null}
+        <NavBar />
         <section className="mt-20 flex flex-col gap-4 px-10 md:px-40">
           <NameHeader
             name="Lucas Fernandes"
@@ -126,7 +103,7 @@ export default function Home() {
             <ContainerActivitiesHistory>
               <ActivitiesButton onClick={handleOnClick} />
               <HistoryButton
-                activities={history}
+                activities={activities}
                 isOpen={isHistoryOpen}
                 onClick={handleHistoryClick}
               />

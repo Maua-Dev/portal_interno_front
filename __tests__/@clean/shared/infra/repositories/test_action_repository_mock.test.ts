@@ -4,6 +4,7 @@ import { ACTION_TYPE } from '../../../../../src/@clean/shared/domain/enums/actio
 import { STACK } from '../../../../../src/@clean/shared/domain/enums/stack_enum'
 import { NoItemsFoundError } from '../../../../../src/@clean/shared/domain/helpers/errors/domain_error'
 import { ActionRepositoryMock } from '../../../../../src/@clean/shared/infra/repositories/action_repository_mock'
+import '@testing-library/jest-dom'
 
 test('Test create action', async () => {
   const repo = new ActionRepositoryMock()
