@@ -149,7 +149,7 @@ const MobileNavbar = ({
   children: ReactNode
 }) => {
   return (
-    <div className=" absolute flex h-screen w-full">
+    <div className={isOpen ? 'absolute flex h-screen w-full' : ''}>
       <div
         className={
           isOpen

@@ -108,8 +108,8 @@ const DetailsList = () => {
     <FlexCol>
       <MidTitle>Áreas</MidTitle>
       <div className="h-60 w-52 overflow-scroll border-2 border-gray-700 p-0">
-        {areas.map((area) => (
-          <div className="flex justify-between">
+        {areas.map((area, index) => (
+          <div className="flex justify-between" key={index}>
             <p>{area}</p>
             <input type="checkbox" />
           </div>
