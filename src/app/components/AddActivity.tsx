@@ -35,6 +35,8 @@ const DataSelects = () => {
           </select>
         </div>
       </FlexRow>
+      <SmallTitle>Duração</SmallTitle>
+      <input type="time" className="mb-5 border-2 border-gray-700" />
     </>
   )
 }
@@ -44,12 +46,6 @@ const AreaSelects = () => {
     <>
       <MidTitle>ÁREA E AÇÃO</MidTitle>
       <FlexRow className="mb-6">
-        <div className="mr-6">
-          <SmallTitle>Área</SmallTitle>
-          <select className="w-52 border-2 border-gray-700">
-            <option value="1"></option>
-          </select>
-        </div>
         <div>
           <SmallTitle>Tipo da ação</SmallTitle>
           <select className="w-52 border-2 border-gray-700">
@@ -75,10 +71,8 @@ const ProjectSelect = () => {
 const TaskIdSelect = () => {
   return (
     <div className="mt-12">
-      <MidTitle>TASK ID</MidTitle>
-      <select className="w-52 border-2 border-gray-700">
-        <option value="1"></option>
-      </select>
+      <MidTitle>History ID</MidTitle>
+      <input type="number" className="w-52 border-2 border-gray-700" />
     </div>
   )
 }
@@ -93,10 +87,34 @@ const MembersList = () => {
 }
 
 const DetailsList = () => {
+  const areas = [
+    'UX/UI',
+    'Frontend',
+    'Backend',
+    'Mobile',
+    'QA',
+    'DevOps',
+    'PO',
+    'PM',
+    'RH',
+    'Financeiro',
+    'Marketing',
+    'Comercial',
+    'Jurídico',
+    'Outros'
+  ]
+
   return (
     <FlexCol>
-      <MidTitle>ESPECIFICAÇÃO</MidTitle>
-      <div className="h-60 w-52 border-2 border-gray-700"></div>
+      <MidTitle>Áreas</MidTitle>
+      <div className="h-60 w-52 overflow-scroll border-2 border-gray-700 p-0">
+        {areas.map((area) => (
+          <div className="flex justify-between">
+            <p>{area}</p>
+            <input type="checkbox" />
+          </div>
+        ))}
+      </div>
     </FlexCol>
   )
 }

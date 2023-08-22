@@ -75,8 +75,6 @@ export default function Home() {
     })
   ]
 
-  const {  } = useContext(ActionContext)
-
   const handleOnClick = () => {
     setOn(!on)
   }
@@ -92,8 +90,6 @@ export default function Home() {
   const handleHistoryClick = () => {
     setIsHistoryOpen(!isHistoryOpen)
   }
-
-  
 
   useEffect(() => {
     setClient(true)
