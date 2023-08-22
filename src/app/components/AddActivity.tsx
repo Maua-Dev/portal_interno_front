@@ -130,7 +130,6 @@ const InfoToBeFilled = () => {
       <FlexCol>
         <AreaSelects />
         <FlexRow>
-          <MembersList />
           <DetailsList />
         </FlexRow>
       </FlexCol>
