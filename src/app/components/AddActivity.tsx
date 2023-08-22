@@ -11,7 +11,7 @@ import {
 
 const Container = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="flex h-full w-3/4 flex-col rounded-xl border-2 border-gray-400 px-4">
+    <div className="flex h-full w-fit flex-col rounded-xl border-2 border-gray-400 px-4">
       {children}
     </div>
   )
@@ -77,14 +77,14 @@ const TaskIdSelect = () => {
   )
 }
 
-const MembersList = () => {
-  return (
-    <FlexCol className="mr-6">
-      <MidTitle>MEMBROS</MidTitle>
-      <div className="h-60 w-52 border-2 border-gray-700"></div>
-    </FlexCol>
-  )
-}
+// const MembersList = () => {
+//   return (
+//     <FlexCol className="mr-6">
+//       <MidTitle>MEMBROS</MidTitle>
+//       <div className="h-60 w-52 border-2 border-gray-700"></div>
+//     </FlexCol>
+//   )
+// }
 
 const DetailsList = () => {
   const areas = [
@@ -107,7 +107,7 @@ const DetailsList = () => {
   return (
     <FlexCol>
       <MidTitle>Áreas</MidTitle>
-      <div className="h-60 w-52 overflow-scroll border-2 border-gray-700 p-0">
+      <div className="h-60 w-52 overflow-scroll border-2 border-gray-700 py-2 pl-1 pr-4">
         {areas.map((area, index) => (
           <div className="flex justify-between" key={index}>
             <p>{area}</p>
@@ -140,8 +140,11 @@ const InfoToBeFilled = () => {
 const Description = () => {
   return (
     <FlexCol className="mb-5">
-      <p>DESCRIÇÃO</p>
-      <input type="text" className="h-32 w-full border-2 border-gray-700" />
+      <MidTitle>Descrição:</MidTitle>
+      <textarea
+        className="h-32 w-full rounded-md border-2 border-gray-700 p-2"
+        placeholder="Digite sobre a ação realizada..."
+      />
     </FlexCol>
   )
 }
