@@ -106,7 +106,7 @@ const DetailsList = () => {
 
   return (
     <FlexCol>
-      <MidTitle>Áreas</MidTitle>
+      <SmallTitle>Áreas:</SmallTitle>
       <div className="h-60 w-52 overflow-scroll border-2 border-gray-700 py-2 pl-1 pr-4">
         {areas.map((area, index) => (
           <div className="flex justify-between" key={index}>
