@@ -17,7 +17,7 @@ import React from 'react'
 
 const Container = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="flex h-full w-fit flex-col rounded-xl border-2 border-gray-400 px-4">
+    <div className="flex h-full w-full flex-col rounded-xl border-2 border-gray-400 px-4">
       {children}
     </div>
   )
@@ -173,7 +173,7 @@ const InfoToBeFilled = () => {
 
 const Description = () => {
   return (
-    <FlexCol className="mb-5">
+    <FlexCol className="mb-5 mt-8 xl:mt-0">
       <MidTitle>Descrição:</MidTitle>
       <textarea
         className="h-32 w-full rounded-md border-2 border-gray-700 p-2"

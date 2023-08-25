@@ -15,7 +15,7 @@ const Container = ({
     <div
       className={`flex ${
         isOpen ? 'h-auto' : 'h-28'
-      } w-64 transform flex-col items-start justify-between rounded-xl border-2 border-gray-400 px-4 py-3 transition-all duration-500 sm:w-80`}
+      } w-full transform flex-col items-start justify-between rounded-xl border-2 border-gray-400 px-4 py-3 transition-all duration-500 xl:w-80`}
     >
       {children}
     </div>
@@ -105,7 +105,11 @@ export default function HistoryButton({
   return (
     <Container isOpen={isOpen}>
       <Header>
-        <img src={historyIcon} alt="History Icon" className="w-36 sm:w-48" />
+        <img
+          src={historyIcon}
+          alt="History Icon"
+          className="mt-2 w-40 xl:mt-0 xl:w-48"
+        />
         <IconButton onClick={onClick}>
           <ExpandMoreIcon className="place-items-center text-2xl" />
         </IconButton>

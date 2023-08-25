@@ -92,7 +92,7 @@ export default function Home() {
     <>
       <main className="">
         <NavBar />
-        <section className="mt-20 flex flex-col gap-4 px-10 md:px-40">
+        <section className="mt-20 flex flex-col gap-4 px-10 md:px-20">
           <NameHeader
             name="Lucas Fernandes"
             course="Design"
