@@ -16,7 +16,7 @@ export type ActionContextType = {
   ) => Promise<AssociatedAction | undefined>
   getHistory: (
     ra: string,
-    amount: number,
+    amount?: number,
     start?: number,
     end?: number,
     exclusiveStartKey?: string
@@ -34,7 +34,7 @@ const defaultContext: ActionContextType = {
 
   getHistory: async (
     ra: string,
-    amount: number,
+    amount?: number,
     start?: number,
     end?: number,
     exclusiveStartKey?: string
@@ -84,7 +84,7 @@ export function ActionProvider({ children }: PropsWithChildren) {
 
   async function getHistory(
     ra: string,
-    amount: number,
+    amount?: number,
     start?: number,
     end?: number,
     exclusiveStartKey?: string
@@ -92,7 +92,7 @@ export function ActionProvider({ children }: PropsWithChildren) {
     try {
       const { actions, lastId } = await getHistoryUsecase.execute(
         ra,
-        amount,
+        amount as number,
         start,
         end,
         exclusiveStartKey

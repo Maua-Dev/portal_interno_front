@@ -335,56 +335,37 @@ export class ActionRepositoryMock implements IActionRepository {
     return associatedAction
   }
 
-  async getAssociatedActionsByRa(
+  async getHistoryActions(
     ra: string,
-    amount: number,
+    amount?: number,
     start?: number | undefined,
     end?: number | undefined,
     exclusiveStartKey?: string | undefined
-  ): Promise<AssociatedAction[]> {
-    let associatedActions = this.associatedActions.sort((a, b) => {
-      return b.action.startDate - a.action.startDate
+  ): Promise<Action[]> {
+    let actions = this.actions.sort((a, b) => {
+      return b.startDate - a.startDate
     })
 
     if (exclusiveStartKey) {
-      let action0 = associatedActions[0]
-      while (
-        action0 !== undefined &&
-        action0.action.actionId !== exclusiveStartKey
-      ) {
-        associatedActions.shift()
-        if (associatedActions.length > 0) action0 = associatedActions[0]
+      let action0 = actions[0]
+      while (action0 !== undefined && action0.actionId !== exclusiveStartKey) {
+        actions.shift()
+        if (actions.length > 0) action0 = actions[0]
       }
-      associatedActions.shift()
+      actions.shift()
     }
 
     if (start) {
-      associatedActions = associatedActions.filter(
-        (associatedAction) => associatedAction.action.startDate >= start
-      )
+      actions = actions.filter((action) => action.startDate >= start)
     }
 
     if (end) {
-      associatedActions = associatedActions.filter(
-        (associatedAction) => associatedAction.action.endDate <= end
-      )
+      actions = actions.filter((action) => action.endDate <= end)
     }
 
-    associatedActions = associatedActions.filter(
-      (associatedAction) => associatedAction.member_ra === ra
-    )
+    actions = actions.filter((action) => action.ownerRa === ra)
 
-    return associatedActions.slice(0, amount)
-  }
-
-  async batchGetActions(actionIds: string[]): Promise<Action[]> {
-    const actions: Action[] = []
-    this.actions.forEach((action) => {
-      if (actionIds.includes(action.actionId)) {
-        actions.push(action)
-      }
-    })
-    return actions
+    return actions.slice(0, amount)
   }
 }
 

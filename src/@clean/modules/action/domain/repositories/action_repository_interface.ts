@@ -9,15 +9,13 @@ export interface IActionRepository {
   // Retrieves all associated actions of a member, filtered by an optional time range specified by start and end parameters.
   // The method allows for pagination using the exclusive_start_key parameter to determine the starting point of the action list, and the amount parameter to determine the maximum number of actions to be retrieved.
   // If no actions are found, returns []
-  getAssociatedActionsByRa(
+  getHistoryActions(
     ra: string,
-    amount: number,
-    start?: number,
-    end?: number,
-    exclusiveStartKey?: string
-  ): Promise<AssociatedAction[]>
-
-  batchGetActions(actionIds: string[]): Promise<Action[]>
+    amount?: number, // quantidade de actions retornadas
+    start?: number, // milissegundos da data do inicio das actions
+    end?: number, // milissegundos da data de fim da action (vai até essa data contando ela mesma)
+    exclusiveStartKey?: string // id da action que posso colocar daonde quero que inicie as 20 ou mais actions
+  ): Promise<Action[]>
 
   createAssociatedAction(
     associatedAction: AssociatedAction

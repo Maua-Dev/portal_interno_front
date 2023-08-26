@@ -33,9 +33,10 @@ export default function Home() {
   }
 
   const handleHistoryClick = async () => {
-    const activities = await getHistory('21.00210-0', 20)
+    const activities = await getHistory('19017310', 20)
     if (activities) {
       setHistory(activities)
+      console.log(activities)
     }
     setIsHistoryOpen(!isHistoryOpen)
   }

@@ -86,11 +86,11 @@ const Line = ({ children }: { children: ReactNode }) => {
 }
 
 const hoursFormatter = (duration: number): string => {
-  const hours = Math.floor(duration / 3600000)
-  const mins = ((duration / 3600000) % 1) * 60
-  return `${hours.toString.length !== 2 ? `${'0' + hours}` : hours}:${
-    mins.toFixed(0).length !== 2 ? `${'0' + mins.toFixed(0)}` : mins.toFixed(0)
-  }`
+  const date = new Date(duration)
+  const hours = date.getHours()
+  const minutes = date.getMinutes()
+  const timeFormated = `${hours}:${minutes}`
+  return timeFormated
 }
 
 export default function HistoryButton({
@@ -113,9 +113,9 @@ export default function HistoryButton({
       <ActionContainer isOpen={isOpen}>
         {isOpen &&
           activities &&
-          activities.map((activity) => {
+          activities.map((activity, index) => {
             return (
-              <ActionDisplay index={activity.actionId}>
+              <ActionDisplay key={index} index={activity.actionId}>
                 <Line>
                   <p className="w-20 overflow-hidden text-ellipsis whitespace-nowrap text-center text-sm font-bold sm:w-36">
                     {activity.title}

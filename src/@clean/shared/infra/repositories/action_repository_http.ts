@@ -5,19 +5,55 @@ import { decorate, injectable } from 'inversify'
 import { AxiosInstance } from 'axios'
 import { IActionRepository } from '../../../modules/action/domain/repositories/action_repository_interface'
 
+interface getHistoryRawResponse {
+  actions: Action[]
+  last_evaluated_key: string
+  message: string
+}
+
 export class ActionRepositoryHttp implements IActionRepository {
   constructor(private http: AxiosInstance) {}
-  getAssociatedActionsByRa(
+
+  async getHistoryActions(
     ra: string,
-    amount: number,
+    amount?: number | undefined,
     start?: number | undefined,
     end?: number | undefined,
     exclusiveStartKey?: string | undefined
-  ): Promise<AssociatedAction[]> {
-    throw new Error('Method not implemented.')
-  }
-  batchGetActions(actionIds: string[]): Promise<Action[]> {
-    throw new Error('Method not implemented.')
+  ): Promise<Action[]> {
+    let response = undefined
+    try {
+      if (amount && start && end && exclusiveStartKey) {
+        const firstCase = await this.http.get<getHistoryRawResponse>(
+          `/get-history?ra=${ra}&start=${start}&end=${end}&exclusive_start_key=${exclusiveStartKey}&amount=${amount}`
+        )
+        response = firstCase.data
+      } else if (amount && start && end) {
+        const secondCase = await this.http.get<getHistoryRawResponse>(
+          `/get-history?ra=${ra}&start=${start}&end=${end}&amount=${amount}`
+        )
+        response = secondCase.data
+      } else if (amount && exclusiveStartKey) {
+        const thirdCase = await this.http.get<getHistoryRawResponse>(
+          `/get-history?ra=${ra}&exclusive_start_key=${exclusiveStartKey}&amount=${amount}`
+        )
+        response = thirdCase.data
+      } else if (amount) {
+        const fourthCase = await this.http.get<getHistoryRawResponse>(
+          `/get-history?ra=${ra}&amount=${amount}`
+        )
+        response = fourthCase.data
+      } else {
+        const fifthCase = await this.http.get<getHistoryRawResponse>(
+          `/get-history?ra=${ra}`
+        )
+        response = fifthCase.data
+      }
+
+      return response.actions
+    } catch (error: any) {
+      throw new Error(error)
+    }
   }
 
   createAction(action: Action): Promise<Action> {

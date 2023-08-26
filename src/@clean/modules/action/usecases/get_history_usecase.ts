@@ -16,7 +16,7 @@ export class GetHistoryUsecase {
     end?: number,
     exclusiveStartKey?: string
   ): Promise<History> {
-    const associatedActions = await this.actionRepo.getAssociatedActionsByRa(
+    const actions = await this.actionRepo.getHistoryActions(
       ra,
       amount,
       start,
@@ -24,19 +24,11 @@ export class GetHistoryUsecase {
       exclusiveStartKey
     )
 
-    if (associatedActions.length === 0) throw new NoItemsFoundError(ra)
+    if (actions.length === 0) {
+      throw new NoItemsFoundError('No actions found')
+    }
 
-    const actionIds = associatedActions.map(
-      (associatedAction) => associatedAction.action.actionId
-    )
-    const actions = (await this.actionRepo.batchGetActions(actionIds)).sort(
-      (a, b) => {
-        return b.startDate - a.startDate
-      }
-    )
-
-    const lastId =
-      associatedActions[associatedActions.length - 1].action.actionId
+    const lastId = actions[actions.length - 1].actionId
 
     return {
       actions,
