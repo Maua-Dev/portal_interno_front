@@ -7,14 +7,19 @@ import {
   ContainerActivitiesHistory,
   ContainerMainCards
 } from './components/little_components/Container'
-import { useState } from 'react'
+import { ReactNode, useState } from 'react'
 import { Action } from '../@clean/shared/domain/entities/action'
 import { ACTION_TYPE } from '../@clean/shared/domain/enums/action_type_enum'
 import { STACK } from '../@clean/shared/domain/enums/stack_enum'
 
+import HistoricMainCard from './components/HistoricMainCard'
+
 export default function Home() {
   const [on, setOn] = useState(false)
   const [isHistoryOpen, setIsHistoryOpen] = useState(false)
+  const [isOpen, setOpen] = useState(false)
+  const [mainCardId, setMainCardId] = useState<number>()
+  const [mainCard, setMainCard] = useState<ReactNode>(null)
   // const [isClient, setClient] = useState(false)
 
   const activities: Action[] = [
@@ -72,9 +77,15 @@ export default function Home() {
     })
   ]
 
-  const handleOnClick = () => {
-    setOn(!on)
+  // const { createAction } = useContext(ActionContext)
+
+  const handleSideButtonClick = () => {
+    setOpen(!isOpen)
   }
+
+  // const handleOnClick = () => {
+  //   setOn(!on)
+  // }
 
   const saveOnClick = () => {
     return
@@ -88,11 +99,31 @@ export default function Home() {
     setIsHistoryOpen(!isHistoryOpen)
   }
 
+  const closeMainCard = () => {
+    setOpen(false)
+    setMainCard(null)
+  }
+
+  const handleMainCards = (mainCardComponent: ReactNode, id: number) => {
+    if (isOpen) {
+      if (mainCardId === id) {
+        closeMainCard()
+      } else if (mainCardId !== id) {
+        setMainCardId(id)
+        setMainCard(mainCardComponent)
+      }
+    } else if (!isOpen) {
+      setMainCardId(id)
+      setMainCard(mainCardComponent)
+    }
+    handleSideButtonClick()
+  }
+
   return (
     <>
-      <main className="">
+      <main className={isHistoryOpen ? 'pb-11' : ''}>
         <NavBar />
-        <section className="mt-20 flex flex-col gap-4 px-10 md:px-20">
+        <section className="-z-20 mb-12 mt-20 flex flex-col gap-4 px-10 md:px-40">
           <NameHeader
             name="Lucas Fernandes"
             course="Design"
@@ -101,16 +132,43 @@ export default function Home() {
           />
           <ContainerMainCards>
             <ContainerActivitiesHistory>
-              <ActivitiesButton onClick={handleOnClick} />
+              <ActivitiesButton
+                onClick={() => {
+                  handleMainCards(
+                    <AddActivity
+                      cancel={function (): void {
+                        throw new Error('Function not implemented.')
+                      }}
+                      save={function (): void {
+                        throw new Error('Function not implemented.')
+                      }}
+                    />,
+                    1
+                  )
+                }}
+              />
               <HistoryButton
                 activities={activities}
                 isOpen={isHistoryOpen}
-                onClick={handleHistoryClick}
+                onClick={() => {
+                  handleHistoryClick()
+                }}
+                openHistoric={() => {
+                  handleMainCards(
+                    <HistoricMainCard
+                      handleCloseMobilePopUp={() => {
+                        closeMainCard()
+                      }}
+                    />,
+                    2
+                  )
+                }}
               />
             </ContainerActivitiesHistory>
             {on ? (
               <AddActivity cancel={cancelOnClick} save={saveOnClick} />
             ) : null}
+            {mainCard}
           </ContainerMainCards>
         </section>
       </main>

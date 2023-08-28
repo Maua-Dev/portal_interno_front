@@ -65,9 +65,18 @@ const ActionContainer = ({
   )
 }
 
-const ActionButton = ({ text, color }: { text: string; color: string }) => {
+const ActionButton = ({
+  text,
+  color,
+  onClick
+}: {
+  text: string
+  color: string
+  onClick: () => void
+}) => {
   return (
     <button
+      onClick={onClick}
       className={`${
         color === 'blue'
           ? 'h-6 rounded-full border-2 border-blue-600 px-4 text-xs text-blue-600 transition-all duration-500 hover:bg-blue-600 hover:text-white xl:h-8 xl:px-7 xl:text-base'
@@ -96,11 +105,13 @@ const hoursFormatter = (duration: number): string => {
 export default function HistoryButton({
   onClick,
   isOpen,
-  activities
+  activities,
+  openHistoric
 }: {
   onClick: () => void
   isOpen: boolean
   activities: Action[]
+  openHistoric: () => void
 }) {
   return (
     <Container isOpen={isOpen}>
@@ -123,13 +134,17 @@ export default function HistoryButton({
                   <p className="w-20 overflow-hidden text-ellipsis whitespace-nowrap text-center text-sm font-bold sm:w-36">
                     {activity.title}
                   </p>
-                  <ActionButton text="Abrir" color="blue" />
+                  <ActionButton
+                    text="Abrir"
+                    color="blue"
+                    onClick={openHistoric}
+                  />
                 </Line>
                 <Line>
                   <span className="font-bold">
                     {hoursFormatter(activity.duration)}
                   </span>
-                  <ActionButton text="Excluir" color="red" />
+                  <ActionButton text="Excluir" color="red" onClick={() => {}} />
                 </Line>
               </ActionDisplay>
             )
