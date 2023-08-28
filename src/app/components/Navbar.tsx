@@ -150,7 +150,7 @@ const MobileNavbar = ({
   handleSidebar: () => void
 }) => {
   return (
-    <div className={'absolute flex h-screen w-fit'}>
+    <div className={isOpen ? 'absolute flex h-screen w-full' : ''}>
       <div
         className={
           isOpen
