@@ -12,6 +12,10 @@ import { ActionContext } from './contexts/action_context'
 import { Action } from '../@clean/shared/domain/entities/action'
 
 import HistoricMainCard from './components/HistoricMainCard'
+import { ACTION_TYPE } from '../@clean/shared/domain/enums/action_type_enum'
+import { STACK } from '../@clean/shared/domain/enums/stack_enum'
+import { duration } from '@mui/material'
+import { title } from 'process'
 
 export default function Home() {
   const [on, setOn] = useState(false)
@@ -26,6 +30,8 @@ export default function Home() {
     useContext(ActionContext)
 
   // const { createAction } = useContext(ActionContext)
+
+  // const {} = useContext(ActionContent)
 
   const handleSideButtonClick = () => {
     setOpen(!isOpen)
@@ -72,6 +78,26 @@ export default function Home() {
     handleSideButtonClick()
   }
 
+  const actionTest = new Action({
+    ownerRa: '17.03373-0',
+    startDate: 1634526000000,
+    actionId: 'uuid2', // actionId is not on back
+    storyId: 100,
+    title: 'Teste',
+    description: undefined,
+    endDate: 1634533200000,
+    duration: 7200000,
+    projectCode: 'MF',
+    associatedMembersRa: undefined,
+    stackTags: [STACK.BACKEND],
+    actionTypeTag: ACTION_TYPE.CODE
+  })
+
+  const handleCreateAction = async (action: Action) => {
+    const response = await createAction(action)
+    console.log(response)
+  }
+
   return (
     <>
       <main className={isHistoryOpen ? 'pb-11' : ''}>
@@ -92,8 +118,8 @@ export default function Home() {
                       cancel={function (): void {
                         throw new Error('Function not implemented.')
                       }}
-                      save={function (): void {
-                        throw new Error('Function not implemented.')
+                      save={() => {
+                        handleCreateAction(actionTest)
                       }}
                     />,
                     1

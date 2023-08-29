@@ -4,6 +4,11 @@ import { AssociatedAction } from '../../domain/entities/associated_action'
 import { decorate, injectable } from 'inversify'
 import { AxiosInstance } from 'axios'
 import { IActionRepository } from '../../../modules/action/domain/repositories/action_repository_interface'
+import {
+  associatedMembersRaFormatter,
+  raFormatter
+} from '../../../../app/utils/functions/ra_formatter'
+import { Console } from 'console'
 
 interface getHistoryRawResponse {
   actions: Action[]
@@ -62,139 +67,36 @@ export class ActionRepositoryHttp implements IActionRepository {
   }
 
   async createAction(action: Action): Promise<Action> {
+    // console.log(JSON.stringify(action, null, 2))
+
+    const ownerRa = raFormatter(action.ownerRa)
+
+    const description = action.description ? action.description : undefined
+    const storyId = action.storyId ? action.storyId : undefined
+    const associatedMembersRa = action.associatedMembersRa
+      ? associatedMembersRaFormatter(action.associatedMembersRa)
+      : undefined
+
     try {
-      let response = undefined
+      const response = await this.http.post<createActionRawResponse>(
+        '/create-action',
+        {
+          owner_ra: ownerRa,
+          start_date: action.startDate,
+          story_id: storyId,
+          title: action.title,
+          description: description,
+          end_date: action.endDate,
+          duration: action.duration,
+          project_code: action.projectCode,
+          associated_members_ra: associatedMembersRa,
+          stack_tags: action.stackTags,
+          action_type_tag: action.actionTypeTag
+        }
+      )
 
-      if (!action.storyId) {
-        const firstCase = await this.http.post<createActionRawResponse>(
-          'https://mj6hntn98c.execute-api.sa-east-1.amazonaws.com/prod/mss-action/create-action',
-          {
-            owner_ra: action.ownerRa,
-            start_date: action.startDate,
-            // story_id: action.storyId,
-            title: action.title,
-            description: action.description,
-            end_date: action.endDate,
-            duration: action.duration,
-            project_code: action.projectCode,
-            associated_members_ra: action.associatedMembersRa,
-            stack_tags: action.stackTags,
-            action_type_tag: action.actionTypeTag
-          }
-        )
-        response = firstCase.data
-      } else if (!action.description) {
-        const secondCase = await this.http.post<createActionRawResponse>(
-          'https://mj6hntn98c.execute-api.sa-east-1.amazonaws.com/prod/mss-action/create-action',
-          {
-            owner_ra: action.ownerRa,
-            start_date: action.startDate,
-            story_id: action.storyId,
-            title: action.title,
-            // description: action.description,
-            end_date: action.endDate,
-            duration: action.duration,
-            project_code: action.projectCode,
-            associated_members_ra: action.associatedMembersRa,
-            stack_tags: action.stackTags,
-            action_type_tag: action.actionTypeTag
-          }
-        )
-        response = secondCase.data
-      } else if (!action.associatedMembersRa) {
-        const secondCase = await this.http.post<createActionRawResponse>(
-          'https://mj6hntn98c.execute-api.sa-east-1.amazonaws.com/prod/mss-action/create-action',
-          {
-            owner_ra: action.ownerRa,
-            start_date: action.startDate,
-            story_id: action.storyId,
-            title: action.title,
-            description: action.description,
-            end_date: action.endDate,
-            duration: action.duration,
-            project_code: action.projectCode,
-            // associated_members_ra: action.associatedMembersRa,
-            stack_tags: action.stackTags,
-            action_type_tag: action.actionTypeTag
-          }
-        )
-        response = secondCase.data
-      } else if (action.storyId) {
-        const secondCase = await this.http.post<createActionRawResponse>(
-          'https://mj6hntn98c.execute-api.sa-east-1.amazonaws.com/prod/mss-action/create-action',
-          {
-            owner_ra: action.ownerRa,
-            start_date: action.startDate,
-            story_id: action.storyId,
-            title: action.title,
-            // description: action.description,
-            end_date: action.endDate,
-            duration: action.duration,
-            project_code: action.projectCode,
-            // associated_members_ra: action.associatedMembersRa,
-            stack_tags: action.stackTags,
-            action_type_tag: action.actionTypeTag
-          }
-        )
-        response = secondCase.data
-      } else if (action.description) {
-        const secondCase = await this.http.post<createActionRawResponse>(
-          'https://mj6hntn98c.execute-api.sa-east-1.amazonaws.com/prod/mss-action/create-action',
-          {
-            owner_ra: action.ownerRa,
-            start_date: action.startDate,
-            // story_id: action.storyId,
-            title: action.title,
-            description: action.description,
-            end_date: action.endDate,
-            duration: action.duration,
-            project_code: action.projectCode,
-            // associated_members_ra: action.associatedMembersRa,
-            stack_tags: action.stackTags,
-            action_type_tag: action.actionTypeTag
-          }
-        )
-        response = secondCase.data
-      } else if (action.associatedMembersRa) {
-        const secondCase = await this.http.post<createActionRawResponse>(
-          'https://mj6hntn98c.execute-api.sa-east-1.amazonaws.com/prod/mss-action/create-action',
-          {
-            owner_ra: action.ownerRa,
-            start_date: action.startDate,
-            // story_id: action.storyId,
-            title: action.title,
-            // description: action.description,
-            end_date: action.endDate,
-            duration: action.duration,
-            project_code: action.projectCode,
-            associated_members_ra: action.associatedMembersRa,
-            stack_tags: action.stackTags,
-            action_type_tag: action.actionTypeTag
-          }
-        )
-        response = secondCase.data
-      } else {
-        const secondCase = await this.http.post<createActionRawResponse>(
-          'https://mj6hntn98c.execute-api.sa-east-1.amazonaws.com/prod/mss-action/create-action',
-          {
-            owner_ra: action.ownerRa,
-            start_date: action.startDate,
-            story_id: action.storyId,
-            title: action.title,
-            description: action.description,
-            end_date: action.endDate,
-            duration: action.duration,
-            project_code: action.projectCode,
-            associated_members_ra: action.associatedMembersRa,
-            stack_tags: action.stackTags,
-            action_type_tag: action.actionTypeTag
-          }
-        )
-        response = secondCase.data
-      }
-
-      console.log(response.message)
-      return response.action
+      console.log(response.data.message)
+      return response.data.action
     } catch (error: any) {
       throw new Error('Error creating action: ' + error.message)
     }
