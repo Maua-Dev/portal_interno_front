@@ -68,6 +68,33 @@ const NavBarButton = ({
   )
 }
 
+interface DefaultButtonProps {
+  label: string
+  color: string
+}
+
+interface borderColorClasses {
+  [key: string]: string
+}
+
+const DefaultButton = ({ label, color }: DefaultButtonProps) => {
+  const borderColorClasses: borderColorClasses = {
+    blue: 'border-blue-800 text-blue-800 hover:bg-blue-800 hover:text-white',
+    red: 'border-red-600 text-red-600 hover:bg-red-600 hover:text-white'
+  }
+
+  const border =
+    borderColorClasses[color] ||
+    'border-black text-black hover:bg-black hover:text-white'
+  return (
+    <button
+      className={`hidden h-6 rounded-full border-2 px-4 text-xs lg:block xl:h-8 xl:px-7 xl:text-base ${border}`}
+    >
+      {label}
+    </button>
+  )
+}
+
 const CancelAndSaveButtons = ({
   onClickSave,
   onClickCancel
@@ -93,4 +120,4 @@ const CancelAndSaveButtons = ({
   )
 }
 
-export { DefaultIconButton, NavBarButton, CancelAndSaveButtons }
+export { DefaultIconButton, CancelAndSaveButtons, NavBarButton, DefaultButton }
