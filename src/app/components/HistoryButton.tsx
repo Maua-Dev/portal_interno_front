@@ -15,7 +15,7 @@ const Container = ({
     <div
       className={`flex ${
         isOpen ? 'h-auto' : 'h-28'
-      } w-64 transform flex-col items-start justify-between rounded-xl border-2 border-gray-400 px-4 py-3 transition-all duration-500 sm:w-80`}
+      } w-full transform flex-col items-start justify-between rounded-xl border-2 border-gray-400 px-4 py-3 transition-all duration-500 xl:w-80`}
     >
       {children}
     </div>
@@ -65,9 +65,18 @@ const ActionContainer = ({
   )
 }
 
-const ActionButton = ({ text, color }: { text: string; color: string }) => {
+const ActionButton = ({
+  text,
+  color,
+  onClick
+}: {
+  text: string
+  color: string
+  onClick: () => void
+}) => {
   return (
     <button
+      onClick={onClick}
       className={`${
         color === 'blue'
           ? 'h-6 rounded-full border-2 border-blue-600 px-4 text-xs text-blue-600 transition-all duration-500 hover:bg-blue-600 hover:text-white xl:h-8 xl:px-7 xl:text-base'
@@ -96,16 +105,22 @@ const hoursFormatter = (duration: number): string => {
 export default function HistoryButton({
   onClick,
   isOpen,
-  activities
+  activities,
+  openHistoric
 }: {
   onClick: () => void
   isOpen: boolean
-  activities: Action[] | undefined
+  activities: Action[]
+  openHistoric: () => void
 }) {
   return (
     <Container isOpen={isOpen}>
       <Header>
-        <img src={historyIcon} alt="History Icon" className="w-36 sm:w-48" />
+        <img
+          src={historyIcon}
+          alt="History Icon"
+          className="mt-2 w-40 xl:mt-0 xl:w-48"
+        />
         <IconButton onClick={onClick}>
           <ExpandMoreIcon className="place-items-center text-2xl" />
         </IconButton>
@@ -120,13 +135,17 @@ export default function HistoryButton({
                   <p className="w-20 overflow-hidden text-ellipsis whitespace-nowrap text-center text-sm font-bold sm:w-36">
                     {activity.title}
                   </p>
-                  <ActionButton text="Abrir" color="blue" />
+                  <ActionButton
+                    text="Abrir"
+                    color="blue"
+                    onClick={openHistoric}
+                  />
                 </Line>
                 <Line>
                   <span className="font-bold">
                     {hoursFormatter(activity.duration)}
                   </span>
-                  <ActionButton text="Excluir" color="red" />
+                  <ActionButton text="Excluir" color="red" onClick={() => {}} />
                 </Line>
               </ActionDisplay>
             )

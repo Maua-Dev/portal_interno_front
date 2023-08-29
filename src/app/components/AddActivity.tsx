@@ -8,32 +8,65 @@ import {
   FlexColCenter,
   FlexRow
 } from './little_components/FlexDisplay'
+import dayjs, { Dayjs } from 'dayjs'
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker'
+import React from 'react'
 
 const Container = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="flex h-full w-3/4 flex-col rounded-xl border-2 border-gray-400 px-4">
+    <div className="flex h-full w-full flex-col rounded-xl border-2 border-gray-400 px-4">
       {children}
     </div>
   )
 }
 
 const DataSelects = () => {
+  const [startDate, setStartDate] = React.useState<Dayjs | null>(dayjs())
+  const [endDate, setEndDate] = React.useState<Dayjs | null>(dayjs())
+
+  // const days = endDate?.diff(startDate, 'day')
+
   return (
     <>
       <MidTitle>DATA</MidTitle>
       <FlexRow className="mb-6">
-        <div className="mr-6">
-          <SmallTitle>Início</SmallTitle>
-          <select className="w-36 border-2 border-gray-700">
-            <option value="1"></option>
-          </select>
-        </div>
-        <div>
-          <SmallTitle>Conclusão</SmallTitle>
-          <select className="w-36 border-2 border-gray-700">
-            <option value="1"></option>
-          </select>
-        </div>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DemoContainer components={['DatePicker', 'DatePicker']}>
+            <DatePicker
+              sx={{
+                '& .MuiInputLabel-root': { color: 'black' },
+                '& .MuiOutlinedInput-root': {
+                  '& > fieldset': { borderColor: 'black', borderWidth: '2px' }
+                }
+              }}
+              label="Inicio"
+              value={startDate}
+              onChange={(newValue) => {
+                setStartDate(newValue)
+              }}
+              format="DD-MM-YYYY"
+              // disablePast
+            />
+            <DatePicker
+              sx={{
+                '& .MuiInputLabel-root': { color: 'black' },
+                '& .MuiOutlinedInput-root': {
+                  '& > fieldset': { borderColor: 'black', borderWidth: '2px' }
+                }
+              }}
+              label="Fim"
+              value={endDate}
+              onChange={(newValue) => {
+                setEndDate(newValue)
+              }}
+              format="DD-MM-YYYY"
+              // {areValidDates ? }
+            />
+          </DemoContainer>
+        </LocalizationProvider>
       </FlexRow>
     </>
   )
@@ -44,15 +77,9 @@ const AreaSelects = () => {
     <>
       <MidTitle>ÁREA E AÇÃO</MidTitle>
       <FlexRow className="mb-6">
-        <div className="mr-6">
-          <SmallTitle>Área</SmallTitle>
-          <select className="w-52 border-2 border-gray-700">
-            <option value="1"></option>
-          </select>
-        </div>
         <div>
           <SmallTitle>Tipo da ação</SmallTitle>
-          <select className="w-52 border-2 border-gray-700">
+          <select className="w-52 rounded-md border-2 border-gray-700">
             <option value="1"></option>
           </select>
         </div>
@@ -65,7 +92,7 @@ const ProjectSelect = () => {
   return (
     <>
       <MidTitle>PROJETO</MidTitle>
-      <select className="w-52 border-2 border-gray-700">
+      <select className="w-52 rounded-md border-2 border-gray-700">
         <option value="1"></option>
       </select>
     </>
@@ -75,28 +102,53 @@ const ProjectSelect = () => {
 const TaskIdSelect = () => {
   return (
     <div className="mt-12">
-      <MidTitle>TASK ID</MidTitle>
-      <select className="w-52 border-2 border-gray-700">
-        <option value="1"></option>
-      </select>
+      <MidTitle>History ID</MidTitle>
+      <input
+        type="number"
+        className="w-52 rounded-md border-2 border-gray-700"
+      />
     </div>
   )
 }
 
-const MembersList = () => {
-  return (
-    <FlexCol className="mr-6">
-      <MidTitle>MEMBROS</MidTitle>
-      <div className="h-60 w-52 border-2 border-gray-700"></div>
-    </FlexCol>
-  )
-}
+// const MembersList = () => {
+//   return (
+//     <FlexCol className="mr-6">
+//       <MidTitle>MEMBROS</MidTitle>
+//       <div className="h-60 w-52 border-2 border-gray-700"></div>
+//     </FlexCol>
+//   )
+// }
 
 const DetailsList = () => {
+  const areas = [
+    'UX/UI',
+    'Frontend',
+    'Backend',
+    'Mobile',
+    'QA',
+    'DevOps',
+    'PO',
+    'PM',
+    'RH',
+    'Financeiro',
+    'Marketing',
+    'Comercial',
+    'Jurídico',
+    'Outros'
+  ]
+
   return (
     <FlexCol>
-      <MidTitle>ESPECIFICAÇÃO</MidTitle>
-      <div className="h-60 w-52 border-2 border-gray-700"></div>
+      <SmallTitle>Áreas:</SmallTitle>
+      <div className="h-60 w-52 overflow-scroll rounded-md border-2 border-gray-700 py-2 pl-1 pr-4">
+        {areas.map((area, index) => (
+          <div className="flex justify-between" key={index}>
+            <p>{area}</p>
+            <input type="checkbox" />
+          </div>
+        ))}
+      </div>
     </FlexCol>
   )
 }
@@ -112,7 +164,6 @@ const InfoToBeFilled = () => {
       <FlexCol>
         <AreaSelects />
         <FlexRow>
-          <MembersList />
           <DetailsList />
         </FlexRow>
       </FlexCol>
@@ -122,9 +173,12 @@ const InfoToBeFilled = () => {
 
 const Description = () => {
   return (
-    <FlexCol className="mb-5">
-      <p>DESCRIÇÃO</p>
-      <input type="text" className="h-32 w-full border-2 border-gray-700" />
+    <FlexCol className="mb-5 mt-8 xl:mt-0">
+      <MidTitle>Descrição:</MidTitle>
+      <textarea
+        className="h-32 w-full rounded-md border-2 border-gray-700 p-2"
+        placeholder="Digite sobre a ação realizada..."
+      />
     </FlexCol>
   )
 }

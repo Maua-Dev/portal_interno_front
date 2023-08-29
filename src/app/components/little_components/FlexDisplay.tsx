@@ -21,7 +21,11 @@ const FlexRow = ({
   children: ReactNode
   className?: string
 }) => {
-  return <div className={'flex flex-row ' + className}>{children}</div>
+  return (
+    <div className={'flex flex-col gap-8 md:flex-row md:gap-0 ' + className}>
+      {children}
+    </div>
+  )
 }
 
 export { FlexColCenter, FlexCol, FlexRow }
