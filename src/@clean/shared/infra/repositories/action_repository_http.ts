@@ -11,6 +11,11 @@ interface getHistoryRawResponse {
   message: string
 }
 
+interface createActionRawResponse {
+  action: Action
+  message: string
+}
+
 export class ActionRepositoryHttp implements IActionRepository {
   constructor(private http: AxiosInstance) {}
 
@@ -56,10 +61,145 @@ export class ActionRepositoryHttp implements IActionRepository {
     }
   }
 
-  createAction(action: Action): Promise<Action> {
-    console.log(this.http)
-    throw new Error('Method not implemented.' + action)
+  async createAction(action: Action): Promise<Action> {
+    try {
+      let response = undefined
+
+      if (!action.storyId) {
+        const firstCase = await this.http.post<createActionRawResponse>(
+          'https://mj6hntn98c.execute-api.sa-east-1.amazonaws.com/prod/mss-action/create-action',
+          {
+            owner_ra: action.ownerRa,
+            start_date: action.startDate,
+            // story_id: action.storyId,
+            title: action.title,
+            description: action.description,
+            end_date: action.endDate,
+            duration: action.duration,
+            project_code: action.projectCode,
+            associated_members_ra: action.associatedMembersRa,
+            stack_tags: action.stackTags,
+            action_type_tag: action.actionTypeTag
+          }
+        )
+        response = firstCase.data
+      } else if (!action.description) {
+        const secondCase = await this.http.post<createActionRawResponse>(
+          'https://mj6hntn98c.execute-api.sa-east-1.amazonaws.com/prod/mss-action/create-action',
+          {
+            owner_ra: action.ownerRa,
+            start_date: action.startDate,
+            story_id: action.storyId,
+            title: action.title,
+            // description: action.description,
+            end_date: action.endDate,
+            duration: action.duration,
+            project_code: action.projectCode,
+            associated_members_ra: action.associatedMembersRa,
+            stack_tags: action.stackTags,
+            action_type_tag: action.actionTypeTag
+          }
+        )
+        response = secondCase.data
+      } else if (!action.associatedMembersRa) {
+        const secondCase = await this.http.post<createActionRawResponse>(
+          'https://mj6hntn98c.execute-api.sa-east-1.amazonaws.com/prod/mss-action/create-action',
+          {
+            owner_ra: action.ownerRa,
+            start_date: action.startDate,
+            story_id: action.storyId,
+            title: action.title,
+            description: action.description,
+            end_date: action.endDate,
+            duration: action.duration,
+            project_code: action.projectCode,
+            // associated_members_ra: action.associatedMembersRa,
+            stack_tags: action.stackTags,
+            action_type_tag: action.actionTypeTag
+          }
+        )
+        response = secondCase.data
+      } else if (action.storyId) {
+        const secondCase = await this.http.post<createActionRawResponse>(
+          'https://mj6hntn98c.execute-api.sa-east-1.amazonaws.com/prod/mss-action/create-action',
+          {
+            owner_ra: action.ownerRa,
+            start_date: action.startDate,
+            story_id: action.storyId,
+            title: action.title,
+            // description: action.description,
+            end_date: action.endDate,
+            duration: action.duration,
+            project_code: action.projectCode,
+            // associated_members_ra: action.associatedMembersRa,
+            stack_tags: action.stackTags,
+            action_type_tag: action.actionTypeTag
+          }
+        )
+        response = secondCase.data
+      } else if (action.description) {
+        const secondCase = await this.http.post<createActionRawResponse>(
+          'https://mj6hntn98c.execute-api.sa-east-1.amazonaws.com/prod/mss-action/create-action',
+          {
+            owner_ra: action.ownerRa,
+            start_date: action.startDate,
+            // story_id: action.storyId,
+            title: action.title,
+            description: action.description,
+            end_date: action.endDate,
+            duration: action.duration,
+            project_code: action.projectCode,
+            // associated_members_ra: action.associatedMembersRa,
+            stack_tags: action.stackTags,
+            action_type_tag: action.actionTypeTag
+          }
+        )
+        response = secondCase.data
+      } else if (action.associatedMembersRa) {
+        const secondCase = await this.http.post<createActionRawResponse>(
+          'https://mj6hntn98c.execute-api.sa-east-1.amazonaws.com/prod/mss-action/create-action',
+          {
+            owner_ra: action.ownerRa,
+            start_date: action.startDate,
+            // story_id: action.storyId,
+            title: action.title,
+            // description: action.description,
+            end_date: action.endDate,
+            duration: action.duration,
+            project_code: action.projectCode,
+            associated_members_ra: action.associatedMembersRa,
+            stack_tags: action.stackTags,
+            action_type_tag: action.actionTypeTag
+          }
+        )
+        response = secondCase.data
+      } else {
+        const secondCase = await this.http.post<createActionRawResponse>(
+          'https://mj6hntn98c.execute-api.sa-east-1.amazonaws.com/prod/mss-action/create-action',
+          {
+            owner_ra: action.ownerRa,
+            start_date: action.startDate,
+            story_id: action.storyId,
+            title: action.title,
+            description: action.description,
+            end_date: action.endDate,
+            duration: action.duration,
+            project_code: action.projectCode,
+            associated_members_ra: action.associatedMembersRa,
+            stack_tags: action.stackTags,
+            action_type_tag: action.actionTypeTag
+          }
+        )
+        response = secondCase.data
+      }
+
+      console.log(response.message)
+      return response.action
+    } catch (error: any) {
+      throw new Error('Error creating action: ' + error.message)
+    }
   }
+
   getAction(actionId: string): Promise<Action> {
     throw new Error('Method not implemented.' + actionId)
   }
