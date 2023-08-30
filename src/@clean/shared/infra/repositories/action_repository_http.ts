@@ -6,8 +6,10 @@ import { AxiosInstance } from 'axios'
 import { IActionRepository } from '../../../modules/action/domain/repositories/action_repository_interface'
 import {
   associatedMembersRaFormatter,
-  raFormatter
-} from '../../../../app/utils/functions/ra_formatter'
+  raFormatter,
+  stackFormatter
+} from '../../../../app/utils/functions/formatters'
+import { STACK } from '../../domain/enums/stack_enum'
 
 interface getHistoryRawResponse {
   actions: Action[]
@@ -83,14 +85,13 @@ export class ActionRepositoryHttp implements IActionRepository {
     // console.log(JSON.stringify(action, null, 2))
 
     const ownerRa = raFormatter(action.ownerRa)
+    const stackTags = stackFormatter(action.stackTags)
 
     const description = action.description ? action.description : undefined
     const storyId = action.storyId ? action.storyId : undefined
     const associatedMembersRa = action.associatedMembersRa
       ? associatedMembersRaFormatter(action.associatedMembersRa)
       : undefined
-
-    console.log(action.actionTypeTag.toString())
 
     const bodyRequest: createActionBodyResquet = {
       owner_ra: ownerRa,
@@ -102,7 +103,7 @@ export class ActionRepositoryHttp implements IActionRepository {
       duration: action.duration,
       project_code: action.projectCode,
       associated_members_ra: associatedMembersRa,
-      stack_tags: [action.stackTags.toString()],
+      stack_tags: stackTags,
       action_type_tag: action.actionTypeTag.toString()
     }
 

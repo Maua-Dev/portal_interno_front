@@ -200,22 +200,68 @@ const TaskIdSelect = ({ onChange }: { onChange: (e: any) => void }) => {
 //   )
 // }
 
-const DetailsList = () => {
+const DetailsList = ({ onChange }: { onChange: (e: any) => void }) => {
   const areas = [
-    'UX/UI',
-    'Frontend',
-    'Backend',
-    'Mobile',
-    'QA',
-    'DevOps',
-    'PO',
-    'PM',
-    'RH',
-    'Financeiro',
-    'Marketing',
-    'Comercial',
-    'Jurídico',
-    'Outros'
+    {
+      areaName: 'UX/UI',
+      areaValue: STACK.UX_UI
+    },
+    {
+      areaName: 'Frontend',
+      areaValue: STACK.FRONTEND
+    },
+    {
+      areaName: 'Backend',
+      areaValue: STACK.BACKEND
+    },
+    {
+      areaName: 'Infra',
+      areaValue: STACK.INFRA
+    },
+    {
+      areaName: 'Mobile',
+      areaValue: undefined
+    },
+    {
+      areaName: 'QA',
+      areaValue: undefined
+    },
+    {
+      areaName: 'DevOps',
+      areaValue: undefined
+    },
+    {
+      areaName: 'PO',
+      areaValue: STACK.PO
+    },
+    {
+      areaName: 'PM',
+      areaValue: undefined
+    },
+    {
+      areaName: 'RH',
+      areaValue: STACK.INTERNAL
+    },
+    {
+      areaName: 'Financeiro',
+      areaValue: undefined
+    },
+    {
+      areaName: 'Marketing',
+      areaValue: undefined
+    },
+    {
+      areaName: 'Comercial',
+      areaValue: undefined
+    },
+    {
+      areaName: 'Jurídico',
+      areaValue: undefined
+    },
+    {
+      areaName: 'Outros',
+      areaValue: undefined
+    }
   ]
 
   return (
@@ -224,8 +270,14 @@ const DetailsList = () => {
       <div className="h-60 w-52 overflow-scroll rounded-md border-2 border-gray-700 py-2 pl-1 pr-4">
         {areas.map((area, index) => (
           <div className="flex justify-between" key={index}>
-            <p>{area}</p>
-            <input type="checkbox" />
+            <p>{area.areaName}</p>
+            <input
+              key={index}
+              type="checkbox"
+              name="stackTags"
+              value={area.areaValue}
+              onChange={onChange}
+            />
           </div>
         ))}
       </div>
@@ -244,7 +296,7 @@ const InfoToBeFilled = ({ onChange }: { onChange: (e: any) => void }) => {
       <FlexCol>
         <AreaSelects onChange={onChange} />
         <FlexRow>
-          <DetailsList />
+          <DetailsList onChange={onChange} />
         </FlexRow>
       </FlexCol>
     </FlexRow>
@@ -284,9 +336,9 @@ export default function AddActivity({
     actionId: 'uuid2', //nao possui input
     associatedMembersRa: ['19.01731-0'], //nao possui input
     title: 'Teste', //nao possui input
-    actionTypeTag: ACTION_TYPE.CODE,
+    actionTypeTag: ACTION_TYPE.CODEREVIEW, // WORKING
     projectCode: 'MF', // WORKING
-    stackTags: [STACK.BACKEND],
+    stackTags: [] as STACK[], //WORKING
     storyId: 0, // WORKING
     description: '' // WORKING
   })
@@ -303,12 +355,21 @@ export default function AddActivity({
     })
   }
 
+  const assignStackArray = (value: STACK) => {
+    setActionProps((prev) => {
+      return { ...prev, stackTags: [...prev.stackTags, value] }
+    })
+  }
+
   const handleOnChange = (e: { target: { name: string; value: any } }) => {
     const { name, value } = e.target
     console.log(name + ': ' + value)
     switch (name) {
       case 'storyId':
         assignNumber(name, value)
+        break
+      case 'stackTags':
+        assignStackArray(value)
         break
       default:
         assignString(name, value)
@@ -317,6 +378,7 @@ export default function AddActivity({
   }
 
   const handleCreateAction = async (actionProps: ActionProps) => {
+    console.log(actionProps.stackTags)
     if (actionProps) {
       const action = new Action(actionProps)
       const response = await createAction(action)

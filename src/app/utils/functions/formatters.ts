@@ -1,3 +1,5 @@
+import { STACK } from '../../../@clean/shared/domain/enums/stack_enum'
+
 function raFormatter(input: string): string {
   const raFormated = input.replace(/[^\d]/g, '')
   // console.log(raFormated)
@@ -13,4 +15,13 @@ function associatedMembersRaFormatter(raArray: string[]): string[] {
   return associatedMembersRaFormatted
 }
 
-export { raFormatter, associatedMembersRaFormatter }
+function stackFormatter(stackArray: STACK[]): string[] {
+  const stackFormatted: string[] = []
+  stackArray.forEach((stack) => {
+    stackFormatted.push(stack.toString())
+  })
+  console.log(stackFormatted)
+  return stackFormatted
+}
+
+export { raFormatter, associatedMembersRaFormatter, stackFormatter }
