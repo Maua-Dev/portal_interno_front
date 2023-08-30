@@ -93,12 +93,45 @@ const AreaSelects = () => {
   )
 }
 
-const ProjectSelect = () => {
+const ProjectSelect = ({ onChange }: { onChange: (e: any) => void }) => {
+  const projects = [
+    {
+      projectName: 'Portal Interno',
+      projectCode: 'PT'
+    },
+    {
+      projectName: 'Maua Food',
+      projectCode: 'MF'
+    },
+    {
+      projectName: 'Selfie Mauá',
+      projectCode: 'SF'
+    },
+    {
+      projectName: 'SMILE',
+      projectCode: 'SM'
+    },
+    {
+      projectName: 'Gameficação',
+      projectCode: 'GM'
+    }
+  ]
+
   return (
     <>
       <MidTitle>PROJETO</MidTitle>
-      <select className="w-52 rounded-md border-2 border-gray-700">
-        <option value="1"></option>
+      <select
+        className="w-52 rounded-md border-2 border-gray-700"
+        name="projectCode"
+        onChange={onChange}
+      >
+        {projects.map((project, index) => {
+          return (
+            <option key={index} value={project.projectCode}>
+              {project.projectName}
+            </option>
+          )
+        })}
       </select>
     </>
   )
@@ -168,7 +201,7 @@ const InfoToBeFilled = ({ onChange }: { onChange: (e: any) => void }) => {
     <FlexRow>
       <FlexCol className="mr-14">
         <DataSelects />
-        <ProjectSelect />
+        <ProjectSelect onChange={onChange} />
         <TaskIdSelect onChange={onChange} />
       </FlexCol>
       <FlexCol>
@@ -217,29 +250,36 @@ export default function AddActivity({
     actionTypeTag: ACTION_TYPE.CODE,
     projectCode: 'MF',
     stackTags: [STACK.BACKEND],
-    storyId: 0,
-    description: ''
+    storyId: 0, // WORKING
+    description: '' // WORKING
   })
+
+  const assignNumber = (name: string, value: string) => {
+    setActionProps((prev) => {
+      return { ...prev, [name]: Number(value) }
+    })
+  }
+
+  const assignString = (name: string, value: string) => {
+    setActionProps((prev) => {
+      return { ...prev, [name]: value }
+    })
+  }
 
   const handleOnChange = (e: { target: { name: string; value: any } }) => {
     const { name, value } = e.target
     console.log(name + ': ' + value)
     switch (name) {
       case 'storyId':
-        setActionProps((prev) => {
-          return { ...prev, [name]: Number(value) }
-        })
+        assignNumber(name, value)
         break
       default:
-        setActionProps((prev) => {
-          return { ...prev, [name]: value }
-        })
+        assignString(name, value)
         break
     }
   }
 
   const handleCreateAction = async (actionProps: ActionProps) => {
-    console.log(actionProps.description)
     if (actionProps) {
       const action = new Action(actionProps)
       const response = await createAction(action)
