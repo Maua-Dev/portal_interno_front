@@ -12,8 +12,6 @@ import { ActionContext } from './contexts/action_context'
 import { Action } from '../@clean/shared/domain/entities/action'
 
 import HistoricMainCard from './components/HistoricMainCard'
-import { ACTION_TYPE } from '../@clean/shared/domain/enums/action_type_enum'
-import { STACK } from '../@clean/shared/domain/enums/stack_enum'
 
 export default function Home() {
   const [on, setOn] = useState(false)
@@ -25,8 +23,7 @@ export default function Home() {
 
   // const [isClient, setClient] = useState(false)
 
-  const { createAction, createAssociatedAction, getHistory } =
-    useContext(ActionContext)
+  const { getHistory } = useContext(ActionContext)
 
   // const { createAction } = useContext(ActionContext)
 
@@ -39,10 +36,6 @@ export default function Home() {
   // const handleOnClick = () => {
   //   setOn(!on)
   // }
-
-  const saveOnClick = () => {
-    return
-  }
 
   const cancelOnClick = () => {
     setOn(false)
@@ -77,23 +70,6 @@ export default function Home() {
     handleSideButtonClick()
   }
 
-  const actionTest = new Action({
-    ownerRa: '21.01731-0',
-    startDate: 1634526000000, //
-    actionId: 'uuid2',
-    storyId: 100, //
-    title: 'Teste',
-    description: 'Apenas um teste', //
-    endDate: 1634533200000, //
-    duration: 7200000,
-    projectCode: 'MF', //
-    associatedMembersRa: ['19.01731-0'],
-    stackTags: [STACK.BACKEND], //
-    actionTypeTag: ACTION_TYPE.CODE //
-  })
-
-  const [actionCreated, setActionCreated] = useState<Action>(actionTest)
-
   return (
     <>
       <main className={isHistoryOpen ? 'pb-11' : ''}>
@@ -113,13 +89,6 @@ export default function Home() {
                   handleMainCards(
                     <AddActivity
                       cancel={function (): void {
-                        throw new Error('Function not implemented.')
-                      }}
-                      setAction={() => {
-                        setActionCreated
-                      }}
-                      action={actionCreated}
-                      save={function (): void {
                         throw new Error('Function not implemented.')
                       }}
                     />,
@@ -145,16 +114,7 @@ export default function Home() {
                 }}
               />
             </ContainerActivitiesHistory>
-            {on ? (
-              <AddActivity
-                cancel={cancelOnClick}
-                save={saveOnClick}
-                action={actionCreated}
-                setAction={function (): void {
-                  throw new Error('Function not implemented.')
-                }}
-              />
-            ) : null}
+            {on ? <AddActivity cancel={cancelOnClick} /> : null}
             {mainCard}
           </ContainerMainCards>
         </section>

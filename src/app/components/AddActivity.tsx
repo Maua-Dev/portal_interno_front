@@ -36,14 +36,14 @@ const DateSelects = ({
   const [startDate, setStartDate] = React.useState<Dayjs | null>(dayjs())
   const [endDate, setEndDate] = React.useState<Dayjs | null>(dayjs())
 
-  // const days = endDate?.diff(startDate, 'day')
-
   useEffect(() => {
-    if (startDate) {
-      onChange('', startDate?.valueOf())
+    if (startDate && endDate) {
+      onChange('startDate', startDate?.valueOf())
+      onChange('endDate', endDate?.valueOf())
+      onChange('duration', endDate?.diff(startDate))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [startDate])
+  }, [startDate, endDate])
 
   return (
     <>
@@ -62,9 +62,7 @@ const DateSelects = ({
                 label="Inicio"
                 value={startDate}
                 onChange={(newValue) => {
-                  if (newValue) {
-                    setStartDate(newValue)
-                  }
+                  setStartDate(newValue)
                 }}
                 format="DD-MM-YYYY"
                 // disablePast
@@ -335,16 +333,7 @@ const Description = ({ onChange }: { onChange: (e: any) => void }) => {
   )
 }
 
-export default function AddActivity({
-  action,
-  cancel,
-  save
-}: {
-  action: Action
-  setAction: () => void
-  cancel: () => void
-  save: () => void
-}) {
+export default function AddActivity({ cancel }: { cancel: () => void }) {
   const { createAction } = useContext(ActionContext)
   const [actionProps, setActionProps] = useState({
     ownerRa: '21.01731-0', //nao possui input

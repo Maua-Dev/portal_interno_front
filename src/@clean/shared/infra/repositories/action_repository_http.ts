@@ -9,7 +9,6 @@ import {
   raFormatter,
   stackFormatter
 } from '../../../../app/utils/functions/formatters'
-import { STACK } from '../../domain/enums/stack_enum'
 
 interface getHistoryRawResponse {
   actions: Action[]
