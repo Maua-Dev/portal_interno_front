@@ -77,15 +77,52 @@ const DataSelects = () => {
   )
 }
 
-const AreaSelects = () => {
+const AreaSelects = ({ onChange }: { onChange: (e: any) => void }) => {
+  const actionTypes = [
+    {
+      actionType: 'Code Review',
+      actionTypeValue: ACTION_TYPE.CODEREVIEW
+    },
+    {
+      actionType: 'Estudo',
+      actionTypeValue: ACTION_TYPE.LEARN
+    },
+    {
+      actionType: 'Apresentação',
+      actionTypeValue: ACTION_TYPE.PRESENTATION
+    },
+    {
+      actionType: 'Design',
+      actionTypeValue: ACTION_TYPE.DESIGN
+    },
+    {
+      actionType: 'Planejamento',
+      actionTypeValue: ACTION_TYPE.ARCHITECT
+    },
+    {
+      actionType: 'Trabalho',
+      actionTypeValue: ACTION_TYPE.WORK
+    }
+  ]
+
   return (
     <>
       <MidTitle>ÁREA E AÇÃO</MidTitle>
       <FlexRow className="mb-6">
         <div>
           <SmallTitle>Tipo da ação</SmallTitle>
-          <select className="w-52 rounded-md border-2 border-gray-700">
-            <option value="1"></option>
+          <select
+            className="w-52 rounded-md border-2 border-gray-700"
+            name="actionTypeTag"
+            onChange={onChange}
+          >
+            {actionTypes.map((actionType, index) => {
+              return (
+                <option key={index} value={actionType.actionTypeValue}>
+                  {actionType.actionType}
+                </option>
+              )
+            })}
           </select>
         </div>
       </FlexRow>
@@ -205,7 +242,7 @@ const InfoToBeFilled = ({ onChange }: { onChange: (e: any) => void }) => {
         <TaskIdSelect onChange={onChange} />
       </FlexCol>
       <FlexCol>
-        <AreaSelects />
+        <AreaSelects onChange={onChange} />
         <FlexRow>
           <DetailsList />
         </FlexRow>
@@ -248,7 +285,7 @@ export default function AddActivity({
     associatedMembersRa: ['19.01731-0'], //nao possui input
     title: 'Teste', //nao possui input
     actionTypeTag: ACTION_TYPE.CODE,
-    projectCode: 'MF',
+    projectCode: 'MF', // WORKING
     stackTags: [STACK.BACKEND],
     storyId: 0, // WORKING
     description: '' // WORKING
