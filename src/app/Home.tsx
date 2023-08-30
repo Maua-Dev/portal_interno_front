@@ -22,6 +22,7 @@ export default function Home() {
   const [isOpen, setOpen] = useState(false)
   const [mainCardId, setMainCardId] = useState<number>()
   const [mainCard, setMainCard] = useState<ReactNode>(null)
+
   // const [isClient, setClient] = useState(false)
 
   const { createAction, createAssociatedAction, getHistory } =
@@ -78,23 +79,20 @@ export default function Home() {
 
   const actionTest = new Action({
     ownerRa: '21.01731-0',
-    startDate: 1634526000000,
+    startDate: 1634526000000, //
     actionId: 'uuid2',
-    storyId: 100,
+    storyId: 100, //
     title: 'Teste',
-    description: 'Apenas um teste',
-    endDate: 1634533200000,
+    description: 'Apenas um teste', //
+    endDate: 1634533200000, //
     duration: 7200000,
-    projectCode: 'MF',
+    projectCode: 'MF', //
     associatedMembersRa: ['19.01731-0'],
-    stackTags: [STACK.BACKEND],
-    actionTypeTag: ACTION_TYPE.CODE
+    stackTags: [STACK.BACKEND], //
+    actionTypeTag: ACTION_TYPE.CODE //
   })
 
-  const handleCreateAction = async (action: Action) => {
-    const response = await createAction(action)
-    console.log(response)
-  }
+  const [actionCreated, setActionCreated] = useState<Action>(actionTest)
 
   return (
     <>
@@ -109,6 +107,7 @@ export default function Home() {
           />
           <ContainerMainCards>
             <ContainerActivitiesHistory>
+              <h1>TESTE</h1>
               <ActivitiesButton
                 onClick={() => {
                   handleMainCards(
@@ -116,8 +115,12 @@ export default function Home() {
                       cancel={function (): void {
                         throw new Error('Function not implemented.')
                       }}
-                      save={() => {
-                        handleCreateAction(actionTest)
+                      setAction={() => {
+                        setActionCreated
+                      }}
+                      action={actionCreated}
+                      save={function (): void {
+                        throw new Error('Function not implemented.')
                       }}
                     />,
                     1
@@ -143,7 +146,14 @@ export default function Home() {
               />
             </ContainerActivitiesHistory>
             {on ? (
-              <AddActivity cancel={cancelOnClick} save={saveOnClick} />
+              <AddActivity
+                cancel={cancelOnClick}
+                save={saveOnClick}
+                action={actionCreated}
+                setAction={function (): void {
+                  throw new Error('Function not implemented.')
+                }}
+              />
             ) : null}
             {mainCard}
           </ContainerMainCards>
