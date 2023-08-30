@@ -1,4 +1,4 @@
-import { ReactNode, useContext, useState } from 'react'
+import { ReactNode, useContext, useEffect, useState } from 'react'
 import { CancelAndSaveButtons } from './little_components/Buttons'
 import { Border } from './NameHeader'
 import { DisplayHours } from './little_components/DisplayHours'
@@ -28,11 +28,22 @@ const Container = ({ children }: { children: ReactNode }) => {
   )
 }
 
-const DataSelects = () => {
+const DateSelects = ({
+  onChange
+}: {
+  onChange: (name: string, value: number) => void
+}) => {
   const [startDate, setStartDate] = React.useState<Dayjs | null>(dayjs())
   const [endDate, setEndDate] = React.useState<Dayjs | null>(dayjs())
 
   // const days = endDate?.diff(startDate, 'day')
+
+  useEffect(() => {
+    if (startDate) {
+      onChange('', startDate?.valueOf())
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [startDate])
 
   return (
     <>
@@ -40,21 +51,25 @@ const DataSelects = () => {
       <FlexRow className="mb-6">
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DemoContainer components={['DatePicker', 'DatePicker']}>
-            <DatePicker
-              sx={{
-                '& .MuiInputLabel-root': { color: 'black' },
-                '& .MuiOutlinedInput-root': {
-                  '& > fieldset': { borderColor: 'black', borderWidth: '2px' }
-                }
-              }}
-              label="Inicio"
-              value={startDate}
-              onChange={(newValue) => {
-                setStartDate(newValue)
-              }}
-              format="DD-MM-YYYY"
-              // disablePast
-            />
+            <div>
+              <DatePicker
+                sx={{
+                  '& .MuiInputLabel-root': { color: 'black' },
+                  '& .MuiOutlinedInput-root': {
+                    '& > fieldset': { borderColor: 'black', borderWidth: '2px' }
+                  }
+                }}
+                label="Inicio"
+                value={startDate}
+                onChange={(newValue) => {
+                  if (newValue) {
+                    setStartDate(newValue)
+                  }
+                }}
+                format="DD-MM-YYYY"
+                // disablePast
+              />
+            </div>
             <DatePicker
               sx={{
                 '& .MuiInputLabel-root': { color: 'black' },
@@ -182,10 +197,7 @@ const TaskIdSelect = ({ onChange }: { onChange: (e: any) => void }) => {
         type="number"
         className="w-52 rounded-md border-2 border-gray-700"
         name="storyId"
-        onChange={(e) => {
-          console.log(e.target.type)
-          onChange(e)
-        }}
+        onChange={onChange}
       />
     </div>
   )
@@ -285,11 +297,17 @@ const DetailsList = ({ onChange }: { onChange: (e: any) => void }) => {
   )
 }
 
-const InfoToBeFilled = ({ onChange }: { onChange: (e: any) => void }) => {
+const InfoToBeFilled = ({
+  onChange,
+  onDateChange
+}: {
+  onChange: (e: any) => void
+  onDateChange: (name: string, value: number) => void
+}) => {
   return (
     <FlexRow>
       <FlexCol className="mr-14">
-        <DataSelects />
+        <DateSelects onChange={onDateChange} />
         <ProjectSelect onChange={onChange} />
         <TaskIdSelect onChange={onChange} />
       </FlexCol>
@@ -330,7 +348,7 @@ export default function AddActivity({
   const { createAction } = useContext(ActionContext)
   const [actionProps, setActionProps] = useState({
     ownerRa: '21.01731-0', //nao possui input
-    startDate: 1634526000000,
+    startDate: 1634526000000, // WORKING
     endDate: 1634533200000,
     duration: 7200000,
     actionId: 'uuid2', //nao possui input
@@ -358,6 +376,13 @@ export default function AddActivity({
   const assignStackArray = (value: STACK) => {
     setActionProps((prev) => {
       return { ...prev, stackTags: [...prev.stackTags, value] }
+    })
+  }
+
+  const assingDates = (name: string, value: number) => {
+    setActionProps((prev) => {
+      console.log(name + ': ' + value)
+      return { ...prev, [name]: value }
     })
   }
 
@@ -403,7 +428,7 @@ export default function AddActivity({
         </FlexColCenter>
       </Border>
       <FlexCol className="ml-8 mr-8">
-        <InfoToBeFilled onChange={handleOnChange} />
+        <InfoToBeFilled onChange={handleOnChange} onDateChange={assingDates} />
         <Description onChange={handleOnChange} />
       </FlexCol>
     </Container>
