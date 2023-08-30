@@ -76,21 +76,6 @@ export default function Home() {
     handleSideButtonClick()
   }
 
-  // {
-  //   ownerRa: '17.03373-0',
-  //   startDate: 1634526000000,
-  //   actionId: 'uuid2', // actionId is not on back
-  //   storyId: 100,
-  //   title: 'Teste',
-  //   description: '',
-  //   endDate: 1634533200000,
-  //   duration: 7200000,
-  //   projectCode: 'MF',
-  //   associatedMembersRa: undefined,
-  //   stackTags: [STACK.BACKEND],
-  //   actionTypeTag: ACTION_TYPE.CODE
-  // }
-
   const actionTest = new Action({
     ownerRa: '21.01731-0',
     startDate: 1634526000000,
