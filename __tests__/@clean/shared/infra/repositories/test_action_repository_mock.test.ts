@@ -62,7 +62,8 @@ test('Test get action', () => {
   expect(action1ActionId).resolves.toBe('uuid1')
   expect(action1AssociatedMembersRa).resolves.toStrictEqual([
     '22.00680-0',
-    '22.22222-2'
+    '22.22222-2',
+    '21.00210-0'
   ])
   expect(action1Title).resolves.toBe('**Reunião**')
   expect(action1actionTypeTag).resolves.toStrictEqual(ACTION_TYPE.MEETING)
@@ -75,10 +76,10 @@ test('Test get action', () => {
 test('Test get action error', () => {
   const repo = new ActionRepositoryMock()
 
-  const action = repo.getAction('uuid6')
+  const action = repo.getAction('uuid10')
 
   expect(action).rejects.toThrow(NoItemsFoundError)
-  expect(action).rejects.toThrow('actionId: uuid6')
+  expect(action).rejects.toThrow('actionId: uuid10')
 })
 
 test('Test create associated action', async () => {

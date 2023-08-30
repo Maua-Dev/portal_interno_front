@@ -83,7 +83,7 @@ export class ActionRepositoryMock implements IActionRepository {
     new Member({
       name: 'Enzo sakas',
       email: 'esakas.devmaua@gmail.com',
-      ra: '19.01731-1',
+      ra: '21.00210-0',
       role: ROLE.DEV,
       stack: STACK.FRONTEND,
       year: 3,
@@ -109,7 +109,7 @@ export class ActionRepositoryMock implements IActionRepository {
     new Member({
       name: 'MAGIC WHITE HANDS',
       email: 'jbranco.devmaua@gmail.com',
-      ra: '21.00210-1',
+      ra: '21.00833-1',
       role: ROLE.DEV,
       stack: STACK.BACKEND,
       year: 3,
@@ -127,7 +127,11 @@ export class ActionRepositoryMock implements IActionRepository {
       endDate: 1612141200000,
       duration: 3600000,
       actionId: 'uuid1',
-      associatedMembersRa: [this.members[0].ra, this.members[1].ra],
+      associatedMembersRa: [
+        this.members[0].ra,
+        this.members[1].ra,
+        this.members[3].ra
+      ],
       title: '**Reunião**',
       actionTypeTag: ACTION_TYPE.MEETING,
       projectCode: this.projects[1].code,
@@ -137,8 +141,8 @@ export class ActionRepositoryMock implements IActionRepository {
     }),
     new Action({
       ownerRa: this.members[0].ra,
-      startDate: 1612137600000,
-      endDate: 1612141200000,
+      startDate: 1612141200000,
+      endDate: 1612144800000,
       duration: 3600000,
       actionId: 'uuid2',
       associatedMembersRa: [
@@ -180,6 +184,58 @@ export class ActionRepositoryMock implements IActionRepository {
       stackTags: [STACK.BACKEND],
       storyId: 150,
       description: 'Reunião do back codando o repo'
+    }),
+    new Action({
+      ownerRa: '21.00210-0',
+      startDate: 1689948000000,
+      endDate: 1689955200000,
+      duration: 7200000,
+      actionId: 'uuid5',
+      title: 'Reunião do Front',
+      actionTypeTag: ACTION_TYPE.MEETING,
+      projectCode: 'PT',
+      stackTags: [STACK.FRONTEND],
+      storyId: 150,
+      description: 'Reunião do front'
+    }),
+    new Action({
+      ownerRa: '21.00210-0',
+      startDate: 1689955200000,
+      endDate: 1689964020000,
+      duration: 8820000,
+      actionId: 'uuid6',
+      title: 'Imp. Navbar',
+      actionTypeTag: ACTION_TYPE.CODE,
+      projectCode: 'PT',
+      stackTags: [STACK.FRONTEND],
+      storyId: 150,
+      description: 'Navbar codada'
+    }),
+    new Action({
+      ownerRa: '21.00210-0',
+      startDate: 1689966000000,
+      endDate: 1689966420000,
+      duration: 420000,
+      actionId: 'uuid7',
+      title: 'Daily',
+      actionTypeTag: ACTION_TYPE.MEETING,
+      projectCode: 'PT',
+      stackTags: [STACK.FRONTEND],
+      storyId: 150,
+      description: 'Reunião Daily'
+    }),
+    new Action({
+      ownerRa: '21.00210-0',
+      startDate: 1689969600000,
+      endDate: 1689976380000,
+      duration: 6780000,
+      actionId: 'uuid8',
+      title: 'Componente Histórico e Atividades',
+      actionTypeTag: ACTION_TYPE.MEETING,
+      projectCode: 'PT',
+      stackTags: [STACK.FRONTEND],
+      storyId: 150,
+      description: 'Reunião Daily'
     })
   ]
   private associatedActions: AssociatedAction[] = [
@@ -206,6 +262,22 @@ export class ActionRepositoryMock implements IActionRepository {
     new AssociatedAction({
       member_ra: this.members[3].ra,
       action: this.actions[1]
+    }),
+    new AssociatedAction({
+      member_ra: this.members[3].ra,
+      action: this.actions[4]
+    }),
+    new AssociatedAction({
+      member_ra: this.members[3].ra,
+      action: this.actions[5]
+    }),
+    new AssociatedAction({
+      member_ra: this.members[3].ra,
+      action: this.actions[6]
+    }),
+    new AssociatedAction({
+      member_ra: this.members[3].ra,
+      action: this.actions[7]
     }),
     new AssociatedAction({
       member_ra: this.members[2].ra,
@@ -261,6 +333,39 @@ export class ActionRepositoryMock implements IActionRepository {
   ): Promise<AssociatedAction> {
     this.associatedActions.push(associatedAction)
     return associatedAction
+  }
+
+  async getHistoryActions(
+    ra: string,
+    amount?: number,
+    start?: number | undefined,
+    end?: number | undefined,
+    exclusiveStartKey?: string | undefined
+  ): Promise<Action[]> {
+    let actions = this.actions.sort((a, b) => {
+      return b.startDate - a.startDate
+    })
+
+    if (exclusiveStartKey) {
+      let action0 = actions[0]
+      while (action0 !== undefined && action0.actionId !== exclusiveStartKey) {
+        actions.shift()
+        if (actions.length > 0) action0 = actions[0]
+      }
+      actions.shift()
+    }
+
+    if (start) {
+      actions = actions.filter((action) => action.startDate >= start)
+    }
+
+    if (end) {
+      actions = actions.filter((action) => action.endDate <= end)
+    }
+
+    actions = actions.filter((action) => action.ownerRa === ra)
+
+    return actions.slice(0, amount)
   }
 }
 

@@ -4,5 +4,6 @@ export const http = axios.create({
   headers: {
     'Content-Type': 'application/json'
   },
-  baseURL: 'http://localhost:3001'
+  baseURL:
+    'https://mj6hntn98c.execute-api.sa-east-1.amazonaws.com/prod/mss-action'
 })

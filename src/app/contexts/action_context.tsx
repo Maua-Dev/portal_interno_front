@@ -7,12 +7,20 @@ import {
 } from '../../@clean/shared/infra/containers/container_action'
 import { CreateActionUsecase } from '../../@clean/modules/action/usecases/create_action_usecase'
 import { CreateAssociatedActionUsecase } from '../../@clean/modules/action/usecases/create_associated_action_usecase'
+import { GetHistoryUsecase } from '../../@clean/modules/action/usecases/get_history_usecase'
 
 export type ActionContextType = {
   createAction: (action: Action) => Promise<Action | undefined>
   createAssociatedAction: (
     associatedAction: AssociatedAction
   ) => Promise<AssociatedAction | undefined>
+  getHistory: (
+    ra: string,
+    amount?: number,
+    start?: number,
+    end?: number,
+    exclusiveStartKey?: string
+  ) => Promise<Action[] | undefined>
 }
 
 const defaultContext: ActionContextType = {
@@ -22,6 +30,16 @@ const defaultContext: ActionContextType = {
 
   createAssociatedAction: async (associatedAction: AssociatedAction) => {
     return associatedAction
+  },
+
+  getHistory: async (
+    ra: string,
+    amount?: number,
+    start?: number,
+    end?: number,
+    exclusiveStartKey?: string
+  ) => {
+    return []
   }
 }
 
@@ -36,9 +54,13 @@ const createAssociatedActionUsecase =
     RegistryAction.CreateAssociatedActionUsecase
   )
 
+const getHistoryUsecase = containerAction.get<GetHistoryUsecase>(
+  RegistryAction.GetHistoryUsecase
+)
+
 export function ActionProvider({ children }: PropsWithChildren) {
   const [createdActions, setCreatedActions] = useState<Action[]>([])
-  // const [history, setHistory] = useState<Action[]>([])
+  const [history, setHistory] = useState<Action[]>([])
 
   async function createAction(action: Action) {
     try {
@@ -60,11 +82,36 @@ export function ActionProvider({ children }: PropsWithChildren) {
     }
   }
 
+  async function getHistory(
+    ra: string,
+    amount?: number,
+    start?: number,
+    end?: number,
+    exclusiveStartKey?: string
+  ) {
+    try {
+      const { actions, lastId } = await getHistoryUsecase.execute(
+        ra,
+        amount as number,
+        start,
+        end,
+        exclusiveStartKey
+      )
+      console.log('lastId: ', lastId)
+      setHistory(actions)
+      console.log(history)
+      return actions
+    } catch (error: any) {
+      console.error('Something went wrong on get history: ', error)
+    }
+  }
+
   return (
     <ActionContext.Provider
       value={{
         createAction,
-        createAssociatedAction
+        createAssociatedAction,
+        getHistory
       }}
     >
       {children}
