@@ -104,13 +104,18 @@ const ProjectSelect = () => {
   )
 }
 
-const TaskIdSelect = () => {
+const TaskIdSelect = ({ onChange }: { onChange: (e: any) => void }) => {
   return (
     <div className="mt-12">
       <MidTitle>History ID</MidTitle>
       <input
         type="number"
         className="w-52 rounded-md border-2 border-gray-700"
+        name="storyId"
+        onChange={(e) => {
+          console.log(e.target.type)
+          onChange(e)
+        }}
       />
     </div>
   )
@@ -158,13 +163,13 @@ const DetailsList = () => {
   )
 }
 
-const InfoToBeFilled = () => {
+const InfoToBeFilled = ({ onChange }: { onChange: (e: any) => void }) => {
   return (
     <FlexRow>
       <FlexCol className="mr-14">
         <DataSelects />
         <ProjectSelect />
-        <TaskIdSelect />
+        <TaskIdSelect onChange={onChange} />
       </FlexCol>
       <FlexCol>
         <AreaSelects />
@@ -212,16 +217,25 @@ export default function AddActivity({
     actionTypeTag: ACTION_TYPE.CODE,
     projectCode: 'MF',
     stackTags: [STACK.BACKEND],
-    storyId: 100,
+    storyId: 0,
     description: ''
   })
 
   const handleOnChange = (e: { target: { name: string; value: any } }) => {
     const { name, value } = e.target
-    console.log(name + value)
-    setActionProps((prev) => {
-      return { ...prev, [name]: value }
-    })
+    console.log(name + ': ' + value)
+    switch (name) {
+      case 'storyId':
+        setActionProps((prev) => {
+          return { ...prev, [name]: Number(value) }
+        })
+        break
+      default:
+        setActionProps((prev) => {
+          return { ...prev, [name]: value }
+        })
+        break
+    }
   }
 
   const handleCreateAction = async (actionProps: ActionProps) => {
@@ -250,7 +264,7 @@ export default function AddActivity({
         </FlexColCenter>
       </Border>
       <FlexCol className="ml-8 mr-8">
-        <InfoToBeFilled />
+        <InfoToBeFilled onChange={handleOnChange} />
         <Description onChange={handleOnChange} />
       </FlexCol>
     </Container>
