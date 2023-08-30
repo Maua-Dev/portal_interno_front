@@ -8,12 +8,25 @@ import {
   associatedMembersRaFormatter,
   raFormatter
 } from '../../../../app/utils/functions/ra_formatter'
-import { Console } from 'console'
 
 interface getHistoryRawResponse {
   actions: Action[]
   last_evaluated_key: string
   message: string
+}
+
+interface createActionBodyResquet {
+  owner_ra: string
+  start_date: number
+  story_id: number | undefined
+  title: string
+  description: string | undefined
+  end_date: number
+  duration: number
+  project_code: string
+  associated_members_ra: string[] | undefined
+  stack_tags: string[]
+  action_type_tag: string
 }
 
 interface createActionRawResponse {
@@ -77,22 +90,26 @@ export class ActionRepositoryHttp implements IActionRepository {
       ? associatedMembersRaFormatter(action.associatedMembersRa)
       : undefined
 
+    console.log(action.actionTypeTag.toString())
+
+    const bodyRequest: createActionBodyResquet = {
+      owner_ra: ownerRa,
+      start_date: action.startDate,
+      story_id: storyId,
+      title: action.title,
+      description: description,
+      end_date: action.endDate,
+      duration: action.duration,
+      project_code: action.projectCode,
+      associated_members_ra: associatedMembersRa,
+      stack_tags: [action.stackTags.toString()],
+      action_type_tag: action.actionTypeTag.toString()
+    }
+
     try {
       const response = await this.http.post<createActionRawResponse>(
         '/create-action',
-        {
-          owner_ra: ownerRa,
-          start_date: action.startDate,
-          story_id: storyId,
-          title: action.title,
-          description: description,
-          end_date: action.endDate,
-          duration: action.duration,
-          project_code: action.projectCode,
-          associated_members_ra: associatedMembersRa,
-          stack_tags: action.stackTags,
-          action_type_tag: action.actionTypeTag
-        }
+        bodyRequest
       )
 
       console.log(response.data.message)

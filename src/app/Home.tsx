@@ -14,8 +14,6 @@ import { Action } from '../@clean/shared/domain/entities/action'
 import HistoricMainCard from './components/HistoricMainCard'
 import { ACTION_TYPE } from '../@clean/shared/domain/enums/action_type_enum'
 import { STACK } from '../@clean/shared/domain/enums/stack_enum'
-import { duration } from '@mui/material'
-import { title } from 'process'
 
 export default function Home() {
   const [on, setOn] = useState(false)
@@ -78,17 +76,32 @@ export default function Home() {
     handleSideButtonClick()
   }
 
+  // {
+  //   ownerRa: '17.03373-0',
+  //   startDate: 1634526000000,
+  //   actionId: 'uuid2', // actionId is not on back
+  //   storyId: 100,
+  //   title: 'Teste',
+  //   description: '',
+  //   endDate: 1634533200000,
+  //   duration: 7200000,
+  //   projectCode: 'MF',
+  //   associatedMembersRa: undefined,
+  //   stackTags: [STACK.BACKEND],
+  //   actionTypeTag: ACTION_TYPE.CODE
+  // }
+
   const actionTest = new Action({
-    ownerRa: '17.03373-0',
+    ownerRa: '21.01731-0',
     startDate: 1634526000000,
-    actionId: 'uuid2', // actionId is not on back
+    actionId: 'uuid2',
     storyId: 100,
     title: 'Teste',
-    description: undefined,
+    description: 'Apenas um teste',
     endDate: 1634533200000,
     duration: 7200000,
     projectCode: 'MF',
-    associatedMembersRa: undefined,
+    associatedMembersRa: ['19.01731-0'],
     stackTags: [STACK.BACKEND],
     actionTypeTag: ACTION_TYPE.CODE
   })

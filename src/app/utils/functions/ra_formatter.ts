@@ -1,5 +1,7 @@
 function raFormatter(input: string): string {
-  return input.replace(/[^\d]/g, '')
+  const raFormated = input.replace(/[^\d]/g, '')
+  // console.log(raFormated)
+  return raFormated
 }
 
 function associatedMembersRaFormatter(raArray: string[]): string[] {
@@ -7,7 +9,7 @@ function associatedMembersRaFormatter(raArray: string[]): string[] {
   raArray.forEach((raMember) => {
     associatedMembersRaFormatted.push(raFormatter(raMember))
   })
-  console.log(associatedMembersRaFormatted)
+  // console.log(associatedMembersRaFormatted)
   return associatedMembersRaFormatted
 }
 
