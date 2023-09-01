@@ -382,8 +382,9 @@ export class ActionRepositoryMock implements IActionRepository {
     newStackTags?: STACK[],
     newActionTypeTag?: ACTION_TYPE
   ): Promise<Action> {
+    let newAction = null
     this.actions.forEach((action) => {
-      if (action.actionId === actionId) {
+      if (action.actionId.includes(actionId)) {
         if (newOwnerRa) {
           action.ownerRa = newOwnerRa
         }
@@ -417,10 +418,11 @@ export class ActionRepositoryMock implements IActionRepository {
         if (newActionTypeTag) {
           action.actionTypeTag = newActionTypeTag
         }
-
-        return action
+        newAction = action
       }
     })
+
+    if (newAction) return newAction
     throw new NoItemsFoundError(`actionId: ${actionId}`)
   }
 
