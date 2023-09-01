@@ -367,6 +367,85 @@ export class ActionRepositoryMock implements IActionRepository {
 
     return actions.slice(0, amount)
   }
+
+  async updateAction(
+    actionId: string,
+    newOwnerRa?: string,
+    newStartDate?: number,
+    newEndDate?: number,
+    newDuration?: number,
+    newStoryId?: number | -1,
+    newTitle?: string,
+    newDescription?: string | '',
+    newProjectCode?: string,
+    newAssociatedMembersRa?: string[],
+    newStackTags?: STACK[],
+    newActionTypeTag?: ACTION_TYPE
+  ): Promise<Action> {
+    this.actions.forEach((action) => {
+      if (action.actionId === actionId) {
+        if (newOwnerRa) {
+          action.ownerRa = newOwnerRa
+        }
+        if (newStartDate) {
+          action.startDate = newStartDate
+        }
+        if (newEndDate) {
+          action.endDate = newEndDate
+        }
+        if (newDuration) {
+          action.duration = newDuration
+        }
+        if (newStoryId) {
+          action.storyId = newStoryId
+        }
+        if (newTitle) {
+          action.title = newTitle
+        }
+        if (newDescription) {
+          action.description = newDescription
+        }
+        if (newProjectCode) {
+          action.projectCode = newProjectCode
+        }
+        if (newAssociatedMembersRa) {
+          action.associatedMembersRa = newAssociatedMembersRa
+        }
+        if (newStackTags) {
+          action.stackTags = newStackTags
+        }
+        if (newActionTypeTag) {
+          action.actionTypeTag = newActionTypeTag
+        }
+
+        return action
+      }
+    })
+    throw new NoItemsFoundError(`actionId: ${actionId}`)
+  }
+
+  async batchUpdateAssociatedActionMembers(
+    actionId: string,
+    members: string[]
+  ): Promise<void> {
+    this.associatedActions.forEach((associatedAction) => {
+      if (associatedAction.action.actionId === actionId) {
+        this.associatedActions.splice(
+          this.associatedActions.indexOf(associatedAction),
+          1
+        )
+      }
+    })
+
+    members.forEach((member) => {
+      this.associatedActions.push(
+        new AssociatedAction({
+          member_ra: member,
+          action: this.actions.find((action) => action.actionId === actionId)!
+        })
+      )
+    })
+  }
 }
 
 decorate(injectable(), ActionRepositoryMock)
