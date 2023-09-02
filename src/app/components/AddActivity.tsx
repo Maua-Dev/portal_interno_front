@@ -338,8 +338,8 @@ export default function AddActivity({ cancel }: { cancel: () => void }) {
   const [actionProps, setActionProps] = useState({
     ownerRa: '21.01731-0', //nao possui input
     startDate: 1634526000000, // WORKING
-    endDate: 1634533200000,
-    duration: 7200000,
+    endDate: 1634533200000, // WORKING
+    duration: 7200000, // WORKING
     actionId: 'uuid2', //nao possui input
     associatedMembersRa: ['19.01731-0'], //nao possui input
     title: 'Teste', //nao possui input
