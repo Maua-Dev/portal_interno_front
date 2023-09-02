@@ -12,6 +12,7 @@ import { ActionContext } from './contexts/action_context'
 import { Action } from '../@clean/shared/domain/entities/action'
 
 import HistoricMainCard from './components/HistoricMainCard'
+import { EditActionPopUp } from './components/little_components/EditActionPopUp'
 
 export default function Home() {
   const [on, setOn] = useState(false)
@@ -73,6 +74,7 @@ export default function Home() {
   return (
     <>
       <main className={isHistoryOpen ? 'pb-11' : ''}>
+        <EditActionPopUp open={true} />
         <NavBar />
         <section className="-z-20 mb-12 mt-20 flex flex-col gap-4 px-10 md:px-40">
           <NameHeader
@@ -83,7 +85,6 @@ export default function Home() {
           />
           <ContainerMainCards>
             <ContainerActivitiesHistory>
-              <h1>TESTE</h1>
               <ActivitiesButton
                 onClick={() => {
                   handleMainCards(
