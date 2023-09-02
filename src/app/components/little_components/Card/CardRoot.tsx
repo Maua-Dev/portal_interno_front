@@ -20,7 +20,8 @@ export function CardRoot({
   const cardSizeClasses: { [key: string]: string } = {
     xs: 'w-96 h-fit',
     base: 'w-1/2 h-fit',
-    lg: 'w-2/3 h-fit'
+    lg: 'w-2/3 h-fit',
+    full: 'w-full h-full'
   }
 
   return (
@@ -28,7 +29,7 @@ export function CardRoot({
       {...rest}
       onClick={isPopUp ? handleCardClick : () => {}}
       className={twMerge(
-        `h- text absolute z-20 rounded-3xl border border-neutral-600 bg-white px-6 py-4 ${cardSizeClasses[size]}`,
+        `z-20 rounded-3xl border border-neutral-600 bg-white px-6 py-4 ${cardSizeClasses[size]}`,
         rest.className
       )}
     >

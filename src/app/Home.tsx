@@ -13,6 +13,7 @@ import { Action } from '../@clean/shared/domain/entities/action'
 
 import HistoricMainCard from './components/HistoricMainCard'
 import { EditActionPopUp } from './components/little_components/EditActionPopUp'
+import Teste from './components/little_components/Teste'
 
 export default function Home() {
   const [on, setOn] = useState(false)
@@ -87,14 +88,7 @@ export default function Home() {
             <ContainerActivitiesHistory>
               <ActivitiesButton
                 onClick={() => {
-                  handleMainCards(
-                    <AddActivity
-                      cancel={function (): void {
-                        throw new Error('Function not implemented.')
-                      }}
-                    />,
-                    1
-                  )
+                  handleMainCards(<Teste />, 1)
                 }}
               />
               <HistoryButton

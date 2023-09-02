@@ -1,19 +1,10 @@
-// import { Action } from '../../../@clean/shared/domain/entities/action'
-import { ACTION_TYPE } from '../../../@clean/shared/domain/enums/action_type_enum'
-import { CancelAndSaveButtons } from './Buttons'
 import { Card } from './Card'
+import { CancelAndSaveButtons } from './Buttons'
 import { DisplayHours } from './DisplayHours'
 import { Form } from './Form'
-import { PopUp } from './PopUp'
+import { ACTION_TYPE } from '../../../@clean/shared/domain/enums/action_type_enum'
 
-interface EditActionPopUpProps {
-  //   action: Action
-  open: boolean
-}
-
-export function EditActionPopUp({ open }: EditActionPopUpProps) {
-  if (!open) return null
-
+export default function Teste() {
   const actionTypes = [
     {
       name: 'Code Review',
@@ -40,10 +31,9 @@ export function EditActionPopUp({ open }: EditActionPopUpProps) {
       value: ACTION_TYPE.WORK
     }
   ]
-
   return (
-    <PopUp>
-      <Card.Root isPopUp={true} size="lg">
+    <div>
+      <Card.Root isPopUp={true} size="sm">
         <Card.Header columns="double">
           <div>
             <Card.Title textStyle="regular">TÍTULO DA ATIVIDADE</Card.Title>
@@ -107,6 +97,6 @@ export function EditActionPopUp({ open }: EditActionPopUpProps) {
           </Form.Root>
         </Card.Body>
       </Card.Root>
-    </PopUp>
+    </div>
   )
 }

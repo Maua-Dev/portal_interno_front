@@ -1,3 +1,4 @@
+import FormDatePiker from './FormDatePiker'
 import { FormListField } from './FormListField'
 import { FormRoot } from './FormRoot'
 import { FormSelectField } from './FormSelectField'
@@ -11,5 +12,6 @@ export const Form = {
   TextField: FormTextField,
   SelectField: FormSelectField,
   ListField: FormListField,
-  TextArea: FormTextArea
+  TextArea: FormTextArea,
+  DatePiker: FormDatePiker
 }
