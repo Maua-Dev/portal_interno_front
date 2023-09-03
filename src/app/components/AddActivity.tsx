@@ -7,6 +7,7 @@ import { ACTION_TYPE } from '../../@clean/shared/domain/enums/action_type_enum'
 import { STACK } from '../../@clean/shared/domain/enums/stack_enum'
 import { ActionContext } from '../contexts/action_context'
 import { ActionProps, Action } from '../../@clean/shared/domain/entities/action'
+import { Form } from './little_components/Form'
 
 export default function AddActivity() {
   const { createAction } = useContext(ActionContext)
@@ -80,7 +81,11 @@ export default function AddActivity() {
       <Card.Root isPopUp={true} size="sm">
         <Card.Header columns="double">
           <div>
-            <Card.Title textStyle="regular">TÍTULO DA ATIVIDADE</Card.Title>
+            <Form.TitleField
+              text="TITULO DA ATIVIDADE"
+              name="title"
+              onChange={handleOnChange}
+            />
             <Card.Text textStyle="regular">Aberto dia 28/10/2022</Card.Text>
           </div>
           <div className="flex flex-col items-center">
