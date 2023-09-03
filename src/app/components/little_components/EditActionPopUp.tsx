@@ -62,8 +62,8 @@ export function EditActionPopUp({ open }: EditActionPopUpProps) {
             <div className="flex flex-row gap-7">
               <div className="flex w-9/12 flex-col gap-7">
                 <Form.SubjectContainer label="DATA">
-                  <Form.DatePiker label="Inicio" />
-                  <Form.DatePiker label="Fim" />
+                  <Form.DatePiker label="Inicio" onChange={() => {}} />
+                  <Form.DatePiker label="Fim" onChange={() => {}} />
                 </Form.SubjectContainer>
                 <Form.SelectField
                   label="PROJETO"
@@ -90,15 +90,11 @@ export function EditActionPopUp({ open }: EditActionPopUpProps) {
                   />
                 </Form.SubjectContainer>
                 <div className="grid grid-cols-2 gap-7">
+                  <Form.ListField label="MEMBROS" options={actionTypes} />
                   <Form.ListField
-                    isForCreateAction={true}
-                    label="MEMBROS"
-                    options={actionTypes}
-                  />
-                  <Form.ListField
-                    isForCreateAction={true}
                     label="ÁREAS"
                     options={actionTypes}
+                    name="stackTags"
                   />
                 </div>
               </div>

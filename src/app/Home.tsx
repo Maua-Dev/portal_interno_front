@@ -2,7 +2,6 @@ import NameHeader from './components/NameHeader'
 import NavBar from './components/Navbar'
 import ActivitiesButton from './components/ActivitiesButton'
 import HistoryButton from './components/HistoryButton'
-import AddActivity from './components/AddActivity'
 import {
   ContainerActivitiesHistory,
   ContainerMainCards
@@ -13,10 +12,9 @@ import { Action } from '../@clean/shared/domain/entities/action'
 
 import HistoricMainCard from './components/HistoricMainCard'
 import { EditActionPopUp } from './components/little_components/EditActionPopUp'
-import Teste from './components/little_components/Teste'
+import AddActivity from './components/AddActivity'
 
 export default function Home() {
-  const [on, setOn] = useState(false)
   const [isHistoryOpen, setIsHistoryOpen] = useState(false)
   const [history, setHistory] = useState<Action[]>([])
   const [isOpen, setOpen] = useState(false)
@@ -38,10 +36,6 @@ export default function Home() {
   // const handleOnClick = () => {
   //   setOn(!on)
   // }
-
-  const cancelOnClick = () => {
-    setOn(false)
-  }
 
   const handleHistoryClick = async () => {
     const activities = await getHistory('19017310', 20)
@@ -88,7 +82,7 @@ export default function Home() {
             <ContainerActivitiesHistory>
               <ActivitiesButton
                 onClick={() => {
-                  handleMainCards(<Teste />, 1)
+                  handleMainCards(<AddActivity />, 1)
                 }}
               />
               <HistoryButton
@@ -109,7 +103,7 @@ export default function Home() {
                 }}
               />
             </ContainerActivitiesHistory>
-            {on ? <AddActivity cancel={cancelOnClick} /> : null}
+
             {mainCard}
           </ContainerMainCards>
         </section>

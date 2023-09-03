@@ -1,7 +1,7 @@
-import { HTMLAttributes } from 'react'
+import { SelectHTMLAttributes } from 'react'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 
-interface FormSelectFieldProps extends HTMLAttributes<HTMLSelectElement> {
+interface FormSelectFieldProps extends SelectHTMLAttributes<HTMLSelectElement> {
   label: string
   type: string
   options: {
@@ -17,8 +17,8 @@ export function FormSelectField({
   ...rest
 }: FormSelectFieldProps) {
   const textInputClasses: { [key: string]: string } = {
-    single: 'text-xl font-bold mb-3',
-    child: 'mb-1 text-sm text-zinc-500'
+    single: 'text:lg sm:text-xl font-bold mb-3',
+    child: 'mb-1 text-xs sm:text-base text-zinc-500'
   }
 
   return (
@@ -26,7 +26,7 @@ export function FormSelectField({
       <h1 className={textInputClasses[type]}>{label}</h1>
       <select
         {...rest}
-        className="relative w-full border border-zinc-700 p-2 text-zinc-500"
+        className="relative h-14 w-full border border-zinc-700 p-2 text-sm text-zinc-500 sm:text-base"
       >
         <KeyboardArrowDownIcon className="absolute left-2" />
         {options.map((option, index) => {

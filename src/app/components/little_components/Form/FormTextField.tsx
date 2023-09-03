@@ -1,6 +1,6 @@
-import { HTMLAttributes } from 'react'
+import { InputHTMLAttributes } from 'react'
 
-interface FormTextFieldProps extends HTMLAttributes<HTMLInputElement> {
+interface FormTextFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string
   type: string
   dataType?: string
@@ -23,7 +23,7 @@ export function FormTextField({
       <input
         {...rest}
         type={dataType ? dataType : 'text'}
-        className="w-full border border-zinc-700 p-2"
+        className="h-14 w-full border border-zinc-700 p-2"
       />
     </div>
   )
