@@ -6,6 +6,7 @@ import { ActionRepositoryHttp } from '../repositories/action_repository_http'
 import { CreateActionUsecase } from '../../../modules/action/usecases/create_action_usecase'
 import { CreateAssociatedActionUsecase } from '../../../modules/action/usecases/create_associated_action_usecase'
 import { GetHistoryUsecase } from '../../../modules/action/usecases/get_history_usecase'
+import { UpdateActionUsecase } from '../../../modules/action/usecases/update_action_usecase'
 
 export const RegistryAction = {
   // Axios Adapter
@@ -18,7 +19,8 @@ export const RegistryAction = {
   // Usecases
   CreateActionUsecase: Symbol.for('CreateActionUsecase'),
   CreateAssociatedActionUsecase: Symbol.for('CreateAssociatedActionUsecase'),
-  GetHistoryUsecase: Symbol.for('GetHistoryUsecase')
+  GetHistoryUsecase: Symbol.for('GetHistoryUsecase'),
+  UpdateActionUsecase: Symbol.for('UpdateActionUsecase')
 }
 
 export const containerAction = new Container()
@@ -94,6 +96,27 @@ containerAction
       )
     } else {
       return new GetHistoryUsecase(
+        context.container.get(RegistryAction.ActionRepositoryMock)
+      )
+    }
+  })
+
+containerAction
+  .bind(RegistryAction.UpdateActionUsecase)
+  .toDynamicValue((context) => {
+    if (import.meta.env.VITE_STAGE === 'TEST') {
+      return new UpdateActionUsecase(
+        context.container.get(RegistryAction.ActionRepositoryMock)
+      )
+    } else if (
+      import.meta.env.VITE_STAGE === 'DEV' ||
+      import.meta.env.VITE_STAGE === 'PROD'
+    ) {
+      return new UpdateActionUsecase(
+        context.container.get(RegistryAction.ActionRepositoryHttp)
+      )
+    } else {
+      return new UpdateActionUsecase(
         context.container.get(RegistryAction.ActionRepositoryMock)
       )
     }

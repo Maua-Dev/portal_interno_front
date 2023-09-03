@@ -9,6 +9,8 @@ import {
   raFormatter,
   stackFormatter
 } from '../../../../app/utils/functions/formatters'
+import { ACTION_TYPE } from '../../domain/enums/action_type_enum'
+import { STACK } from '../../domain/enums/stack_enum'
 
 interface getHistoryRawResponse {
   actions: Action[]
@@ -37,6 +39,28 @@ interface createActionRawResponse {
 
 export class ActionRepositoryHttp implements IActionRepository {
   constructor(private http: AxiosInstance) {}
+  updateAction(
+    actionId: string,
+    newOwnerRa?: string | undefined,
+    newStartDate?: number | undefined,
+    newEndDate?: number | undefined,
+    newDuration?: number | undefined,
+    newStoryId?: number | undefined,
+    newTitle?: string | undefined,
+    newDescription?: string | undefined,
+    newProjectCode?: string | undefined,
+    newAssociatedMembersRa?: string[] | undefined,
+    newStackTags?: STACK[] | undefined,
+    newActionTypeTag?: ACTION_TYPE | undefined
+  ): Promise<Action> {
+    throw new Error('Method not implemented.')
+  }
+  batchUpdateAssociatedActionMembers(
+    actionId: string,
+    members: string[]
+  ): Promise<void> {
+    throw new Error('Method not implemented.')
+  }
 
   async getHistoryActions(
     ra: string,

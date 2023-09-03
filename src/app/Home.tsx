@@ -7,7 +7,7 @@ import {
   ContainerActivitiesHistory,
   ContainerMainCards
 } from './components/little_components/Container'
-import { useContext, useState, ReactNode } from 'react'
+import { useContext, useState, ReactNode, useEffect } from 'react'
 import { ActionContext } from './contexts/action_context'
 import { Action } from '../@clean/shared/domain/entities/action'
 
@@ -23,7 +23,7 @@ export default function Home() {
 
   // const [isClient, setClient] = useState(false)
 
-  const { getHistory } = useContext(ActionContext)
+  const { getHistory, updateAction } = useContext(ActionContext)
 
   // const { createAction } = useContext(ActionContext)
 
@@ -41,8 +41,25 @@ export default function Home() {
     setOn(false)
   }
 
+  const testUpdate = async () => {
+    const updatedAction = await updateAction(
+      'uuid8',
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      'TESTE UPDATE'
+    )
+
+    if (updatedAction) {
+      console.log(updatedAction)
+    }
+  }
+
   const handleHistoryClick = async () => {
-    const activities = await getHistory('19017310', 20)
+    testUpdate()
+    const activities = await getHistory('21.00210-0', 20)
     if (activities) {
       setHistory(activities)
       console.log(activities)
