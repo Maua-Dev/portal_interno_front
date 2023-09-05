@@ -111,7 +111,7 @@ export default function HistoryButton({
   onClick: () => void
   isOpen: boolean
   activities: Action[]
-  openHistoric: () => void
+  openHistoric: (activity: Action) => void
 }) {
   return (
     <Container isOpen={isOpen}>
@@ -138,7 +138,9 @@ export default function HistoryButton({
                   <ActionButton
                     text="Abrir"
                     color="blue"
-                    onClick={openHistoric}
+                    onClick={() => {
+                      openHistoric(activity)
+                    }}
                   />
                 </Line>
                 <Line>

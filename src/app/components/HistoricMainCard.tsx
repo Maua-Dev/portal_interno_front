@@ -7,6 +7,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import { IconButton } from '@mui/material'
 import { UnfocusedBG } from './little_components/UnfocusedBG'
 import { EditActionPopUp } from './little_components/EditActionPopUp'
+import { Action } from '../../@clean/shared/domain/entities/action'
 
 const LeftSideHeader = () => {
   return (
@@ -177,9 +178,11 @@ const MobileHistoric = ({ handleLeave }: { handleLeave: () => void }) => {
 }
 
 export default function HistoricMainCard({
-  handleCloseMobilePopUp
+  handleCloseMobilePopUp,
+  action
 }: {
   handleCloseMobilePopUp: () => void
+  action: Action
 }) {
   return (
     <div>

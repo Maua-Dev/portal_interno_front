@@ -1,5 +1,8 @@
 import { Card } from './little_components/Card'
-import { CancelAndSaveButtons } from './little_components/Buttons'
+import {
+  CancelAndSaveButtons,
+  DefaultButton
+} from './little_components/Buttons'
 import { DisplayHours } from './little_components/DisplayHours'
 import ActivityForm from './little_components/ActivityForm'
 import { useContext, useState } from 'react'
@@ -78,7 +81,7 @@ export default function AddActivity() {
 
   return (
     <div>
-      <Card.Root isPopUp={true} size="sm">
+      <Card.Root isPopUp={true} size="full">
         <Card.Header columns="double">
           <div>
             <Form.TitleField
@@ -88,7 +91,7 @@ export default function AddActivity() {
             />
             <Card.Text textStyle="regular">Aberto dia 28/10/2022</Card.Text>
           </div>
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center max-[900px]:hidden">
             <CancelAndSaveButtons
               onClickSave={() => {
                 handleCreateAction(actionProps)
@@ -101,6 +104,13 @@ export default function AddActivity() {
         <Card.Body>
           <ActivityForm onChange={handleOnChange} onDateChange={assingDates} />
         </Card.Body>
+        <Card.Footer className="min-[900px]:hidden">
+          <CancelAndSaveButtons
+            className="justify-between"
+            onClickSave={() => {}}
+            onClickCancel={() => {}}
+          ></CancelAndSaveButtons>
+        </Card.Footer>
       </Card.Root>
     </div>
   )

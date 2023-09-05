@@ -21,7 +21,7 @@ export function CardRoot({
     xs: 'w-96 h-fit',
     base: 'w-1/2 h-fit',
     lg: 'w-2/3 h-fit',
-    full: 'w-full h-full'
+    full: 'w-full h-fit'
   }
 
   return (
@@ -29,7 +29,7 @@ export function CardRoot({
       {...rest}
       onClick={isPopUp ? handleCardClick : () => {}}
       className={twMerge(
-        `z-20 rounded-3xl border border-neutral-600 bg-white px-6 py-4 ${cardSizeClasses[size]}`,
+        `z-20 flex flex-col gap-9 rounded-3xl border border-neutral-600 bg-white px-6 py-4 ${cardSizeClasses[size]}`,
         rest.className
       )}
     >

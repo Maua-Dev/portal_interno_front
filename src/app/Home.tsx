@@ -69,7 +69,7 @@ export default function Home() {
   return (
     <>
       <main className={isHistoryOpen ? 'pb-11' : ''}>
-        <EditActionPopUp open={true} />
+        {/* <EditActionPopUp open={true} /> */}
         <NavBar />
         <section className="-z-20 mb-12 mt-20 flex flex-col gap-4 px-10 md:px-40">
           <NameHeader
@@ -91,9 +91,10 @@ export default function Home() {
                 onClick={() => {
                   handleHistoryClick()
                 }}
-                openHistoric={() => {
-                  handleMainCards(
+                openHistoric={(activity: Action) => {
+                  return handleMainCards(
                     <HistoricMainCard
+                      action={activity}
                       handleCloseMobilePopUp={() => {
                         closeMainCard()
                       }}

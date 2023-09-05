@@ -7,7 +7,7 @@ interface CardBodyProps extends HTMLAttributes<HTMLDivElement> {
 
 export function CardBody({ children, ...rest }: CardBodyProps) {
   return (
-    <div {...rest} className={twMerge('h-fit px-3 pt-9', rest.className)}>
+    <div {...rest} className={twMerge('h-fit px-3', rest.className)}>
       {children}
     </div>
   )
