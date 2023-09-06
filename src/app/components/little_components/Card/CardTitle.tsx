@@ -10,8 +10,8 @@ export function CardTitle({ children, textStyle, ...rest }: CardTitleProps) {
   const tilteClasses: { [key: string]: string } = {
     regular: 'text-2xl',
     bold: 'text-2xl font-bold',
-    blue: 'text-xl font-extrabold text-blue-700',
-    input: 'placeholder:text-black'
+    blue: 'text-2xl font-extrabold text-blue-700',
+    input: 'placeholder:text-black placeholder:text-2xl'
   }
   return (
     <h1 {...rest} className={twMerge(tilteClasses[textStyle], rest.className)}>

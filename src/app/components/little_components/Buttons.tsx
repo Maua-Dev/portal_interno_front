@@ -1,6 +1,11 @@
 import { IconButton } from '@mui/material'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import { HTMLAttributes, ReactNode, useState } from 'react'
+import {
+  ButtonHTMLAttributes,
+  HTMLAttributes,
+  ReactNode,
+  useState
+} from 'react'
 import { twMerge } from 'tailwind-merge'
 
 interface DefaultIconButtonProps {
@@ -69,7 +74,7 @@ const NavBarButton = ({
   )
 }
 
-interface DefaultButtonProps extends HTMLAttributes<HTMLButtonElement> {
+interface DefaultButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   label: string
   color: string
 }
@@ -81,17 +86,15 @@ interface borderColorClasses {
 const DefaultButton = ({ label, color, ...rest }: DefaultButtonProps) => {
   const borderColorClasses: borderColorClasses = {
     blue: 'border-blue-800 text-blue-800 hover:bg-blue-800 hover:text-white',
-    red: 'border-red-600 text-red-600 hover:bg-red-600 hover:text-white'
+    red: 'border-red-600 text-red-600 hover:bg-red-600 hover:text-white',
+    black: 'border-black text-black hover:bg-black hover:text-white'
   }
 
-  const border =
-    borderColorClasses[color] ||
-    'border-black text-black hover:bg-black hover:text-white'
   return (
     <button
       {...rest}
       className={twMerge(
-        `hidden h-6 rounded-full border-2 px-4 text-xs lg:block xl:h-8 xl:px-7 xl:text-base ${border}`,
+        `hidden h-6 rounded-full border-2 px-4 text-xs lg:block xl:h-8 xl:px-7 xl:text-base ${borderColorClasses[color]}`,
         rest.className
       )}
     >

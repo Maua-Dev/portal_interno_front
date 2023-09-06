@@ -1,8 +1,5 @@
 import { Card } from './little_components/Card'
-import {
-  CancelAndSaveButtons,
-  DefaultButton
-} from './little_components/Buttons'
+import { CancelAndSaveButtons } from './little_components/Buttons'
 import { DisplayHours } from './little_components/DisplayHours'
 import ActivityForm from './little_components/ActivityForm'
 import { useContext, useState } from 'react'
@@ -21,7 +18,7 @@ export default function AddActivity() {
     duration: 7200000, // WORKING
     actionId: 'uuid2', //nao possui input
     associatedMembersRa: ['19.01731-0'], //nao possui input
-    title: 'Teste', //nao possui input
+    title: 'Teste', //WORKING
     actionTypeTag: ACTION_TYPE.CODEREVIEW, // WORKING
     projectCode: 'MF', // WORKING
     stackTags: [] as STACK[], //WORKING
@@ -81,7 +78,7 @@ export default function AddActivity() {
 
   return (
     <div>
-      <Card.Root isPopUp={true} size="full">
+      <Card.Root size="full">
         <Card.Header columns="double">
           <div>
             <Form.TitleField
@@ -109,7 +106,7 @@ export default function AddActivity() {
             className="justify-between"
             onClickSave={() => {}}
             onClickCancel={() => {}}
-          ></CancelAndSaveButtons>
+          />
         </Card.Footer>
       </Card.Root>
     </div>

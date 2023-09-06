@@ -10,16 +10,18 @@ import { useContext, useState, ReactNode } from 'react'
 import { ActionContext } from './contexts/action_context'
 import { Action } from '../@clean/shared/domain/entities/action'
 
-import HistoricMainCard from './components/HistoricMainCard'
 import { EditActionPopUp } from './components/little_components/EditActionPopUp'
 import AddActivity from './components/AddActivity'
+import NewHistoricCard from './components/NewHistoricCard'
 
 export default function Home() {
   const [isHistoryOpen, setIsHistoryOpen] = useState(false)
   const [history, setHistory] = useState<Action[]>([])
   const [isOpen, setOpen] = useState(false)
+  const [openEditPopUp, setEditPopUp] = useState(false)
   const [mainCardId, setMainCardId] = useState<number>()
   const [mainCard, setMainCard] = useState<ReactNode>(null)
+  const [selectedAction, setSelectedAction] = useState<Action>()
 
   // const [isClient, setClient] = useState(false)
 
@@ -36,6 +38,10 @@ export default function Home() {
   // const handleOnClick = () => {
   //   setOn(!on)
   // }
+
+  const handleEditPopup = () => {
+    setEditPopUp((prev) => !prev)
+  }
 
   const handleHistoryClick = async () => {
     const activities = await getHistory('19017310', 20)
@@ -69,7 +75,9 @@ export default function Home() {
   return (
     <>
       <main className={isHistoryOpen ? 'pb-11' : ''}>
-        {/* <EditActionPopUp open={true} /> */}
+        {openEditPopUp ? (
+          <EditActionPopUp action={selectedAction} onClose={handleEditPopup} />
+        ) : null}
         <NavBar />
         <section className="-z-20 mb-12 mt-20 flex flex-col gap-4 px-10 md:px-40">
           <NameHeader
@@ -93,23 +101,24 @@ export default function Home() {
                 }}
                 openHistoric={(activity: Action) => {
                   return handleMainCards(
-                    <HistoricMainCard
+                    <NewHistoricCard
                       action={activity}
-                      handleCloseMobilePopUp={() => {
-                        closeMainCard()
-                      }}
+                      editAction={() => {
+                        setSelectedAction(activity)
+                        handleEditPopup()
+                      }} // handleCloseMobilePopUp={() => {
+                      //   closeMainCard()
+                      // }}
                     />,
                     2
                   )
                 }}
               />
             </ContainerActivitiesHistory>
-
             {mainCard}
           </ContainerMainCards>
         </section>
       </main>
-      <footer className=""></footer>
     </>
   )
 }

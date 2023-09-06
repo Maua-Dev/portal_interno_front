@@ -1,4 +1,5 @@
 // import { Action } from '../../../@clean/shared/domain/entities/action'
+import { Action } from '../../../@clean/shared/domain/entities/action'
 import { ACTION_TYPE } from '../../../@clean/shared/domain/enums/action_type_enum'
 import { CancelAndSaveButtons } from './Buttons'
 import { Card } from './Card'
@@ -7,13 +8,11 @@ import { Form } from './Form'
 import { PopUp } from './PopUp'
 
 interface EditActionPopUpProps {
-  //   action: Action
-  open: boolean
+  action?: Action
+  onClose: () => void
 }
 
-export function EditActionPopUp({ open }: EditActionPopUpProps) {
-  if (!open) return null
-
+export function EditActionPopUp({ action, onClose }: EditActionPopUpProps) {
   const actionTypes = [
     {
       name: 'Code Review',
@@ -42,7 +41,7 @@ export function EditActionPopUp({ open }: EditActionPopUpProps) {
   ]
 
   return (
-    <PopUp>
+    <PopUp onClick={onClose}>
       <Card.Root isPopUp={true} size="lg">
         <Card.Header columns="double">
           <div>
