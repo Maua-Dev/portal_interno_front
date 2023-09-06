@@ -43,7 +43,7 @@ export default function Home() {
 
   const testUpdate = async () => {
     const updatedAction = await updateAction(
-      'uuid8',
+      '5f4f13df-e7d3-4a10-9219-197ceae9e3f0',
       undefined,
       undefined,
       undefined,
@@ -58,8 +58,12 @@ export default function Home() {
   }
 
   const handleHistoryClick = async () => {
-    testUpdate()
-    const activities = await getHistory('21.00210-0', 20)
+    try {
+      testUpdate()
+    } catch (error) {
+      console.log(error)
+    }
+    const activities = await getHistory('23017310', 20)
     if (activities) {
       setHistory(activities)
       console.log(activities)

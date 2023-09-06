@@ -18,7 +18,7 @@ interface getHistoryRawResponse {
   message: string
 }
 
-interface createActionBodyResquet {
+interface createActionBodyRequest {
   owner_ra: string
   start_date: number
   story_id: number | undefined
@@ -32,14 +32,34 @@ interface createActionBodyResquet {
   action_type_tag: string
 }
 
+interface updateActionBodyRequest {
+  action_id: string
+  new_owner_ra: string | undefined
+  new_start_date: number | undefined
+  new_end_date: number | undefined
+  new_duration: number | undefined
+  new_story_id: number | undefined
+  new_associated_members_ra: string[] | undefined
+  new_title: string | undefined
+  new_description: string | undefined
+  new_project_code: string | undefined
+  new_stack_tags: string[] | undefined
+  new_action_type_tag: string | undefined
+}
+
 interface createActionRawResponse {
+  action: Action
+  message: string
+}
+
+interface updateActionRawResponse {
   action: Action
   message: string
 }
 
 export class ActionRepositoryHttp implements IActionRepository {
   constructor(private http: AxiosInstance) {}
-  updateAction(
+  async updateAction(
     actionId: string,
     newOwnerRa?: string | undefined,
     newStartDate?: number | undefined,
@@ -53,13 +73,36 @@ export class ActionRepositoryHttp implements IActionRepository {
     newStackTags?: STACK[] | undefined,
     newActionTypeTag?: ACTION_TYPE | undefined
   ): Promise<Action> {
-    throw new Error('Method not implemented.')
-  }
-  batchUpdateAssociatedActionMembers(
-    actionId: string,
-    members: string[]
-  ): Promise<void> {
-    throw new Error('Method not implemented.')
+    try {
+      const body: updateActionBodyRequest = {
+        action_id: actionId,
+        new_owner_ra: newOwnerRa ? raFormatter(newOwnerRa) : undefined,
+        new_start_date: newStartDate ? newStartDate : undefined,
+        new_end_date: newEndDate ? newEndDate : undefined,
+        new_duration: newDuration ? newDuration : undefined,
+        new_story_id: newStoryId ? newStoryId : undefined,
+        new_associated_members_ra: newAssociatedMembersRa
+          ? associatedMembersRaFormatter(newAssociatedMembersRa)
+          : undefined,
+        new_title: newTitle ? newTitle : undefined,
+        new_description: newDescription ? newDescription : undefined,
+        new_project_code: newProjectCode ? newProjectCode : undefined,
+        new_stack_tags: newStackTags ? stackFormatter(newStackTags) : undefined,
+        new_action_type_tag: newActionTypeTag
+          ? newActionTypeTag.toString()
+          : undefined
+      }
+      const response = await this.http.put<updateActionRawResponse>(
+        '/update-action',
+        body
+      )
+      console.log(response.data)
+      console.log(response.data.action)
+      console.log(response.data.message)
+      return response.data.action
+    } catch (error: any) {
+      throw new Error('Error updating action: ' + error.message)
+    }
   }
 
   async getHistoryActions(
@@ -116,7 +159,7 @@ export class ActionRepositoryHttp implements IActionRepository {
       ? associatedMembersRaFormatter(action.associatedMembersRa)
       : undefined
 
-    const bodyRequest: createActionBodyResquet = {
+    const bodyRequest: createActionBodyRequest = {
       owner_ra: ownerRa,
       start_date: action.startDate,
       story_id: storyId,

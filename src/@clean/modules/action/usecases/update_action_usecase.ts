@@ -36,13 +36,13 @@ export class UpdateActionUsecase {
     else if (newOwnerRa) members = [newOwnerRa, ...action.associatedMembersRa]
     else members = [...action.associatedMembersRa, action.ownerRa]
 
-    if (
-      members !== null &&
-      new Set(members) !==
-        new Set([action.ownerRa, ...action.associatedMembersRa])
-    ) {
-      this.actionRepo.batchUpdateAssociatedActionMembers(actionId, members)
-    }
+    // if (
+    //   members !== null &&
+    //   new Set(members) !==
+    //     new Set([action.ownerRa, ...action.associatedMembersRa])
+    // ) {
+    // this.actionRepo.batchUpdateAssociatedActionMembers(actionId, members)
+    // }
 
     const description = newDescription ? newDescription : action.description
     const storyId = newStoryId !== -1 ? newStoryId : action.storyId

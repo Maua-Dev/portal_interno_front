@@ -37,9 +37,4 @@ export interface IActionRepository {
     newStackTags?: STACK[],
     newActionTypeTag?: ACTION_TYPE
   ): Promise<Action>
-
-  batchUpdateAssociatedActionMembers(
-    actionId: string,
-    members: string[]
-  ): Promise<void>
 }
