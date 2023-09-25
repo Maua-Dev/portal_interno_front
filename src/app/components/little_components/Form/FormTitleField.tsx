@@ -5,7 +5,7 @@ interface FormTitleFiledProps extends InputHTMLAttributes<HTMLInputElement> {
   text: string
 }
 
-export default function FormTitleFiled({ text, ...rest }: FormTitleFiledProps) {
+export function FormTitleFiled({ text, ...rest }: FormTitleFiledProps) {
   return (
     <div>
       <input

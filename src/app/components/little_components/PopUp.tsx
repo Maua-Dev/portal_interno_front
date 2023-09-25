@@ -16,7 +16,7 @@ export function PopUp({ children, ...rest }: PopUpProps) {
     <div
       {...rest}
       className={
-        'absolute z-30 flex h-screen w-screen items-center justify-center bg-black/30 '
+        'fixed z-30 flex h-screen w-screen items-center justify-center bg-black/30 '
       }
       onClick={handleClick}
     >

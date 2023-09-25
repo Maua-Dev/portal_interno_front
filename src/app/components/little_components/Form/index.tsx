@@ -4,13 +4,14 @@ import { FormRoot } from './FormRoot'
 import { FormSelectField } from './FormSelectField'
 import { FormSubjectContainer } from './FormSubjectContainer'
 import { FormTextArea } from './FormTextArea'
-import { FormTextField } from './FormTextField'
-import FormTitleFiled from './FormTitleField'
+import { FormIconTextField, FormTextField } from './FormTextField'
+import { FormTitleFiled } from './FormTitleField'
 
 export const Form = {
   Root: FormRoot,
   SubjectContainer: FormSubjectContainer,
   TextField: FormTextField,
+  IconTextField: FormIconTextField,
   TitleField: FormTitleFiled,
   SelectField: FormSelectField,
   ListField: FormListField,

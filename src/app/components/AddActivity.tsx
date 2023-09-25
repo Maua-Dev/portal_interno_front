@@ -9,7 +9,13 @@ import { ActionContext } from '../contexts/action_context'
 import { ActionProps, Action } from '../../@clean/shared/domain/entities/action'
 import { Form } from './little_components/Form'
 
-export default function AddActivity() {
+interface AddActivityProps {
+  handleMemberPopupClick: () => void
+}
+
+export default function AddActivity({
+  handleMemberPopupClick
+}: AddActivityProps) {
   const { createAction } = useContext(ActionContext)
   const [actionProps, setActionProps] = useState({
     ownerRa: '21.01731-0', //nao possui input
@@ -99,7 +105,11 @@ export default function AddActivity() {
           </div>
         </Card.Header>
         <Card.Body>
-          <ActivityForm onChange={handleOnChange} onDateChange={assingDates} />
+          <ActivityForm
+            onMemberPopupClick={handleMemberPopupClick}
+            onChange={handleOnChange}
+            onDateChange={assingDates}
+          />
         </Card.Body>
         <Card.Footer className="min-[900px]:hidden">
           <CancelAndSaveButtons

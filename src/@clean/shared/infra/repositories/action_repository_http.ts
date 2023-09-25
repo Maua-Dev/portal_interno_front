@@ -16,7 +16,7 @@ interface getHistoryRawResponse {
   message: string
 }
 
-interface createActionBodyResquet {
+export interface createActionBodyResquet {
   owner_ra: string
   start_date: number
   story_id: number | undefined

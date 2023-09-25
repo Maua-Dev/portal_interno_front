@@ -4,7 +4,8 @@ import { CardTitle } from './CardTitle'
 import { CardText } from './CardText'
 import { CardBody } from './CardBody'
 import CardFooter from './CardFooter'
-import CardDropDown from './CardDropDown'
+import CardDropDown from './CardDropdown'
+import { CardListCell } from './CardListCell'
 
 export const Card = {
   Root: CardRoot,
@@ -13,5 +14,6 @@ export const Card = {
   Footer: CardFooter,
   Title: CardTitle,
   Text: CardText,
-  Dropdown: CardDropDown
+  Dropdown: CardDropDown,
+  ListCell: CardListCell
 }

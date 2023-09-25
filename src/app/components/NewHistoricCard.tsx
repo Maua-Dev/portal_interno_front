@@ -1,9 +1,10 @@
 import { Action } from '../../@clean/shared/domain/entities/action'
+import { createActionBodyResquet } from '../../@clean/shared/infra/repositories/action_repository_http'
 import { DefaultButton } from './little_components/Buttons'
 import { Card } from './little_components/Card'
 
 interface NewHistoricCardProps {
-  action: Action
+  action: createActionBodyResquet
   editAction: () => void
 }
 
@@ -12,6 +13,7 @@ export default function NewHistoricCard({
   editAction
 }: NewHistoricCardProps) {
   // const durationInHours = hoursFormatter(action.duration).toString()
+
   const title = action.title + ' ( 00:00 )'
 
   return (

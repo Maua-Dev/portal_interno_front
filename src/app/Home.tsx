@@ -13,15 +13,17 @@ import { Action } from '../@clean/shared/domain/entities/action'
 import { EditActionPopUp } from './components/little_components/EditActionPopUp'
 import AddActivity from './components/AddActivity'
 import NewHistoricCard from './components/NewHistoricCard'
+import { MemberPopup } from './components/MemberPopup'
 
 export default function Home() {
   const [isHistoryOpen, setIsHistoryOpen] = useState(false)
   const [history, setHistory] = useState<Action[]>([])
   const [isOpen, setOpen] = useState(false)
   const [openEditPopUp, setEditPopUp] = useState(false)
-  const [mainCardId, setMainCardId] = useState<number>()
+  const [mainCardName, setMainCardName] = useState<string>()
   const [mainCard, setMainCard] = useState<ReactNode>(null)
   const [selectedAction, setSelectedAction] = useState<Action>()
+  const [openMemberPopup, setOpenMemberPopup] = useState(false)
 
   // const [isClient, setClient] = useState(false)
 
@@ -57,16 +59,25 @@ export default function Home() {
     setMainCard(null)
   }
 
-  const handleMainCards = (mainCardComponent: ReactNode, id: number) => {
+  const handleMemberPopupClick = () => {
+    setOpenMemberPopup((prev) => !prev)
+    console.log(openMemberPopup)
+  }
+
+  const handleMainCards = (
+    mainCardComponent: ReactNode,
+    name: string,
+    activity?: Action
+  ) => {
     if (isOpen) {
-      if (mainCardId === id) {
+      if (mainCardName === name) {
         closeMainCard()
-      } else if (mainCardId !== id) {
-        setMainCardId(id)
+      } else if (mainCardName !== name) {
+        setMainCardName(name)
         setMainCard(mainCardComponent)
       }
     } else if (!isOpen) {
-      setMainCardId(id)
+      setMainCardName(name)
       setMainCard(mainCardComponent)
     }
     handleSideButtonClick()
@@ -78,6 +89,7 @@ export default function Home() {
         {openEditPopUp ? (
           <EditActionPopUp action={selectedAction} onClose={handleEditPopup} />
         ) : null}
+        <MemberPopup isOpen={openMemberPopup} />
         <NavBar />
         <section className="-z-20 mb-12 mt-20 flex flex-col gap-4 px-10 md:px-40">
           <NameHeader
@@ -90,7 +102,12 @@ export default function Home() {
             <ContainerActivitiesHistory>
               <ActivitiesButton
                 onClick={() => {
-                  handleMainCards(<AddActivity />, 1)
+                  handleMainCards(
+                    <AddActivity
+                      handleMemberPopupClick={handleMemberPopupClick}
+                    />,
+                    'create'
+                  )
                 }}
               />
               <HistoryButton
@@ -110,7 +127,8 @@ export default function Home() {
                       //   closeMainCard()
                       // }}
                     />,
-                    2
+                    'edit',
+                    activity
                   )
                 }}
               />

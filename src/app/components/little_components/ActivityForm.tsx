@@ -7,11 +7,13 @@ import dayjs, { Dayjs } from 'dayjs'
 interface ActivityFormProps {
   onChange: (e: any) => void
   onDateChange: (name: string, value: number) => void
+  onMemberPopupClick: () => void
 }
 
 export default function ActivityForm({
   onChange,
-  onDateChange
+  onDateChange,
+  onMemberPopupClick
 }: ActivityFormProps) {
   const [startDate, setStartDate] = React.useState<Dayjs | null>(dayjs())
   const [endDate, setEndDate] = React.useState<Dayjs | null>(dayjs())
@@ -65,7 +67,11 @@ export default function ActivityForm({
             />
           </div>
           <div className="grid w-full grid-cols-2 gap-7">
-            <Form.ListField label="MEMBROS" options={members} />
+            <Form.ListField
+              label="MEMBROS"
+              options={members}
+              onIconButtonClick={onMemberPopupClick}
+            />
             <Form.ListField
               label="ÁREAS"
               options={areas}
