@@ -61,7 +61,6 @@ export default function Home() {
 
   const handleMemberPopupClick = () => {
     setOpenMemberPopup((prev) => !prev)
-    console.log(openMemberPopup)
   }
 
   const handleMainCards = (
