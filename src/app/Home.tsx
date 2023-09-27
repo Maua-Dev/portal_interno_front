@@ -108,6 +108,7 @@ export default function Home() {
                 openHistoric={() => {
                   handleMainCards(
                     <HistoricMainCard
+                      activities={history}
                       handleCloseMobilePopUp={() => {
                         closeMainCard()
                       }}

@@ -1,6 +1,6 @@
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import IconButton from '@mui/material/IconButton'
-import { ReactNode } from 'react'
+import { ReactNode, useState } from 'react'
 import historyIcon from '../assets/history_image_button.png'
 import { Action } from '../../@clean/shared/domain/entities/action'
 
@@ -113,6 +113,15 @@ export default function HistoryButton({
   activities: Action[]
   openHistoric: () => void
 }) {
+  const [open, setOpen] = useState(false)
+
+  const handleOpenFilter = () => {
+    setOpen(!open)
+  }
+  const handleCloseFilter = () => {
+    setOpen(false)
+  }
+
   return (
     <Container isOpen={isOpen}>
       <Header>
@@ -126,6 +135,14 @@ export default function HistoryButton({
         </IconButton>
       </Header>
       <ActionContainer isOpen={isOpen}>
+        <div className="mb-3 mt-6 flex flex-row items-center justify-between px-5">
+          <button className="mr-2 h-8 w-1/2 rounded-lg border-2 border-gray-500 text-xs text-gray-500 ease-in-out hover:border-gray-800 hover:text-gray-800 hover:duration-500">
+            Adicionar filto +
+          </button>
+          <button className="ml-2 h-8 w-1/2 rounded-lg border-2 border-gray-500 text-xs text-gray-500">
+            Limpar filtro
+          </button>
+        </div>
         {isOpen &&
           activities &&
           activities.map((activity, index) => {
