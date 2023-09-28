@@ -370,9 +370,11 @@ export class ActionRepositoryMock implements IActionRepository {
 
   async getAllMembers(): Promise<Member[]> {
     const members = await this.members
+
     if (!members) {
       throw new NoItemsFoundError('No members found')
     }
+
     return members
   }
 }

@@ -1,11 +1,11 @@
 import '@testing-library/jest-dom'
 import { ActionRepositoryMock } from '../../../../../src/@clean/shared/infra/repositories/action_repository_mock'
-import { GetAllMembers } from '../../../../../src/@clean/modules/action/usecases/get_all_members_usecase'
+import { GetAllMembersUsecase } from '../../../../../src/@clean/modules/action/usecases/get_all_members_usecase'
 import { Member } from '../../../../../src/@clean/shared/domain/entities/member'
 
 test('Test Get All Members Usecase', async () => {
   const repo = new ActionRepositoryMock()
-  const getAllMembers = new GetAllMembers(repo)
+  const getAllMembers = new GetAllMembersUsecase(repo)
 
   const { members } = await getAllMembers.execute()
 

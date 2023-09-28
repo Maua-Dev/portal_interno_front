@@ -6,16 +6,16 @@ interface AllMembersProps {
   members: Member[]
 }
 
-export class GetAllMembers {
+export class GetAllMembersUsecase {
   constructor(private actionRepo: IActionRepository) {}
 
   async execute(): Promise<AllMembersProps> {
-    const members: Member[] = await this.actionRepo.getAllMembers()
+    const members = await this.actionRepo.getAllMembers()
 
     if (!members || members.length === 0) {
       throw new NoItemsFoundError('No members found')
     }
 
-    return { members }
+    return { members: members }
   }
 }

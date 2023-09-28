@@ -8,6 +8,8 @@ import {
 import { CreateActionUsecase } from '../../@clean/modules/action/usecases/create_action_usecase'
 import { CreateAssociatedActionUsecase } from '../../@clean/modules/action/usecases/create_associated_action_usecase'
 import { GetHistoryUsecase } from '../../@clean/modules/action/usecases/get_history_usecase'
+import { Member } from '../../@clean/shared/domain/entities/member'
+import { GetAllMembersUsecase } from '../../@clean/modules/action/usecases/get_all_members_usecase'
 
 export type ActionContextType = {
   createAction: (action: Action) => Promise<Action | undefined>
@@ -21,6 +23,7 @@ export type ActionContextType = {
     end?: number,
     exclusiveStartKey?: string
   ) => Promise<Action[] | undefined>
+  getAllMembers: () => Promise<Member[] | undefined>
 }
 
 const defaultContext: ActionContextType = {
@@ -40,6 +43,10 @@ const defaultContext: ActionContextType = {
     exclusiveStartKey?: string
   ) => {
     return []
+  },
+
+  getAllMembers: async () => {
+    return []
   }
 }
 
@@ -56,6 +63,10 @@ const createAssociatedActionUsecase =
 
 const getHistoryUsecase = containerAction.get<GetHistoryUsecase>(
   RegistryAction.GetHistoryUsecase
+)
+
+const getAllMembersUsecase = containerAction.get<GetAllMembersUsecase>(
+  RegistryAction.GetAllMembersUsecase
 )
 
 export function ActionProvider({ children }: PropsWithChildren) {
@@ -106,12 +117,23 @@ export function ActionProvider({ children }: PropsWithChildren) {
     }
   }
 
+  async function getAllMembers(): Promise<Member[] | undefined> {
+    try {
+      const members = await getAllMembersUsecase.execute()
+
+      return members.members
+    } catch (error: any) {
+      console.log('Something went wrong on get all members: ', error)
+    }
+  }
+
   return (
     <ActionContext.Provider
       value={{
         createAction,
         createAssociatedAction,
-        getHistory
+        getHistory,
+        getAllMembers
       }}
     >
       {children}
