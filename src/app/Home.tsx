@@ -6,7 +6,7 @@ import {
   ContainerActivitiesHistory,
   ContainerMainCards
 } from './components/little_components/Container'
-import { useContext, useState, ReactNode } from 'react'
+import { useContext, useState, ReactNode, useEffect } from 'react'
 import { ActionContext } from './contexts/action_context'
 import { Action } from '../@clean/shared/domain/entities/action'
 
@@ -24,6 +24,9 @@ export default function Home() {
   const [mainCard, setMainCard] = useState<ReactNode>(null)
   const [selectedAction, setSelectedAction] = useState<Action>()
   const [openMemberPopup, setOpenMemberPopup] = useState(false)
+  const [raMembersSelected, setRAMembersSelected] = useState<
+    string[] | undefined
+  >(undefined)
 
   // const [isClient, setClient] = useState(false)
 
@@ -80,13 +83,21 @@ export default function Home() {
     handleSideButtonClick()
   }
 
+  useEffect(() => {}, [raMembersSelected])
+
   return (
     <>
       <main className={isHistoryOpen ? 'pb-11' : ''}>
-        {openEditPopUp ? (
-          <EditActionPopUp action={selectedAction} onClose={handleEditPopup} />
-        ) : null}
-        <MemberPopup isOpen={openMemberPopup} />
+        <EditActionPopUp
+          isOpen={openEditPopUp}
+          action={selectedAction}
+          onClose={handleEditPopup}
+        />
+        <MemberPopup
+          closePopUp={handleMemberPopupClick}
+          isOpen={openMemberPopup}
+          setMembers={setRAMembersSelected}
+        />
         <NavBar />
         <section className="-z-20 mb-12 mt-20 flex flex-col gap-4 px-10 md:px-40">
           <NameHeader

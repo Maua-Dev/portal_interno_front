@@ -1,4 +1,10 @@
-import { PropsWithChildren, createContext, useState } from 'react'
+import {
+  Dispatch,
+  PropsWithChildren,
+  SetStateAction,
+  createContext,
+  useState
+} from 'react'
 import { Action } from '../../@clean/shared/domain/entities/action'
 import { AssociatedAction } from '../../@clean/shared/domain/entities/associated_action'
 import {
@@ -27,6 +33,10 @@ export type ActionContextType = {
   ) => Promise<Action[] | undefined>
 
   getAllMembers: () => Promise<Member[] | undefined>
+
+  raMembersSelected: string[] | undefined
+
+  setRaMembersSelected: Dispatch<SetStateAction<string[] | undefined>>
 }
 
 const defaultContext: ActionContextType = {
@@ -49,6 +59,12 @@ const defaultContext: ActionContextType = {
   },
 
   getAllMembers: async () => {
+    return []
+  },
+
+  raMembersSelected: [],
+
+  setRaMembersSelected: (_memberRa: SetStateAction<string[] | undefined>) => {
     return []
   }
 }
@@ -75,6 +91,9 @@ const getAllMembersUsecase = containerAction.get<GetAllMembersUsecase>(
 export function ActionProvider({ children }: PropsWithChildren) {
   const [createdActions, setCreatedActions] = useState<Action[]>([])
   const [history, setHistory] = useState<Action[]>([])
+  const [raMembersSelected, setRaMembersSelected] = useState<
+    string[] | undefined
+  >(undefined)
 
   async function createAction(action: Action) {
     try {
@@ -136,7 +155,9 @@ export function ActionProvider({ children }: PropsWithChildren) {
         createAction,
         createAssociatedAction,
         getHistory,
-        getAllMembers
+        getAllMembers,
+        raMembersSelected,
+        setRaMembersSelected
       }}
     >
       {children}

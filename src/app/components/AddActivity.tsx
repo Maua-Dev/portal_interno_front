@@ -2,7 +2,7 @@ import { Card } from './little_components/Card'
 import { CancelAndSaveButtons } from './little_components/Buttons'
 import { DisplayHours } from './little_components/DisplayHours'
 import ActivityForm from './little_components/ActivityForm'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { ACTION_TYPE } from '../../@clean/shared/domain/enums/action_type_enum'
 import { STACK } from '../../@clean/shared/domain/enums/stack_enum'
 import { ActionContext } from '../contexts/action_context'
@@ -16,15 +16,15 @@ interface AddActivityProps {
 export default function AddActivity({
   handleMemberPopupClick
 }: AddActivityProps) {
-  const { createAction } = useContext(ActionContext)
+  const { createAction, raMembersSelected } = useContext(ActionContext)
   const [actionProps, setActionProps] = useState({
     ownerRa: '21.01731-0', //nao possui input
     startDate: 1634526000000, // WORKING
     endDate: 1634533200000, // WORKING
     duration: 7200000, // WORKING
     actionId: 'uuid2', //nao possui input
-    associatedMembersRa: ['19.01731-0'], //nao possui input
-    title: 'Teste', //WORKING
+    associatedMembersRa: [] as string[], // WORKING
+    title: '', //WORKING
     actionTypeTag: ACTION_TYPE.CODEREVIEW, // WORKING
     projectCode: 'MF', // WORKING
     stackTags: [] as STACK[], //WORKING
@@ -48,6 +48,17 @@ export default function AddActivity({
     setActionProps((prev) => {
       return { ...prev, stackTags: [...prev.stackTags, value] }
     })
+  }
+
+  const assignAssociatedMembersRa = (value: string[] | undefined) => {
+    if (value) {
+      setActionProps((prev) => {
+        return {
+          ...prev,
+          associatedMembersRa: value
+        }
+      })
+    }
   }
 
   const assingDates = (name: string, value: number) => {
@@ -74,13 +85,18 @@ export default function AddActivity({
   }
 
   const handleCreateAction = async (actionProps: ActionProps) => {
-    console.log(actionProps.stackTags)
-    if (actionProps) {
+    console.log(actionProps)
+
+    if (actionProps && raMembersSelected) {
       const action = new Action(actionProps)
       const response = await createAction(action)
       console.log(response)
     }
   }
+
+  useEffect(() => {
+    assignAssociatedMembersRa(raMembersSelected)
+  }, [raMembersSelected])
 
   return (
     <div>
@@ -106,6 +122,7 @@ export default function AddActivity({
         </Card.Header>
         <Card.Body>
           <ActivityForm
+            raMembersSelected={raMembersSelected}
             onMemberPopupClick={handleMemberPopupClick}
             onChange={handleOnChange}
             onDateChange={assingDates}

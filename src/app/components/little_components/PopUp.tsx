@@ -1,10 +1,11 @@
 import { HTMLAttributes, ReactNode, useState } from 'react'
 
 interface PopUpProps extends HTMLAttributes<HTMLDivElement> {
+  closePopUp: () => void
   children: ReactNode
 }
 
-export function PopUp({ children, ...rest }: PopUpProps) {
+export function PopUp({ children, closePopUp, ...rest }: PopUpProps) {
   const [open, setOpen] = useState(true)
 
   const handleClick = () => {
@@ -18,7 +19,7 @@ export function PopUp({ children, ...rest }: PopUpProps) {
       className={
         'fixed z-30 flex h-screen w-screen items-center justify-center bg-black/30 '
       }
-      onClick={handleClick}
+      onClick={closePopUp}
     >
       {children}
     </div>

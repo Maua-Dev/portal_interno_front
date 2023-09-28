@@ -4,6 +4,7 @@ import { InputHTMLAttributes } from 'react'
 
 interface FormListFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string
+  input?: boolean
   // isForCreateAction: boolean
   onIconButtonClick?: () => void
   options: {
@@ -14,6 +15,7 @@ interface FormListFieldProps extends InputHTMLAttributes<HTMLInputElement> {
 
 export function FormListField({
   label,
+  input = true,
   options,
   onIconButtonClick,
   ...rest
@@ -30,13 +32,15 @@ export function FormListField({
         {options.map((option, index) => (
           <div className="flex justify-between" key={index}>
             <p>{option.name}</p>
-            <input
-              {...rest}
-              key={index}
-              type="checkbox"
-              value={option.value}
-              className={option.name === '' ? 'hidden' : ''}
-            />
+            {input ? (
+              <input
+                {...rest}
+                key={index}
+                type="checkbox"
+                value={option.value}
+                className={option.name === '' ? 'hidden' : ''}
+              />
+            ) : null}
           </div>
         ))}
       </div>

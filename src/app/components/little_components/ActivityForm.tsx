@@ -1,22 +1,41 @@
 import { Form } from './Form'
 import { ACTION_TYPE } from '../../../@clean/shared/domain/enums/action_type_enum'
 import { STACK } from '../../../@clean/shared/domain/enums/stack_enum'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import dayjs, { Dayjs } from 'dayjs'
 
+interface OptionsProps {
+  name: string
+  value: string
+}
+
 interface ActivityFormProps {
+  raMembersSelected: string[] | undefined
   onChange: (e: any) => void
   onDateChange: (name: string, value: number) => void
   onMemberPopupClick: () => void
 }
 
 export default function ActivityForm({
+  raMembersSelected,
   onChange,
   onDateChange,
   onMemberPopupClick
 }: ActivityFormProps) {
   const [startDate, setStartDate] = React.useState<Dayjs | null>(dayjs())
   const [endDate, setEndDate] = React.useState<Dayjs | null>(dayjs())
+  const [raMembers, setRaMembers] = useState<OptionsProps[]>([])
+
+  useEffect(() => {
+    const tempRaArray: OptionsProps[] = []
+    raMembersSelected?.map((raMember) => {
+      tempRaArray.push({
+        name: raMember,
+        value: raMember
+      })
+    })
+    setRaMembers(tempRaArray)
+  }, [raMembersSelected])
 
   useEffect(() => {
     if (startDate && endDate) {
@@ -69,8 +88,11 @@ export default function ActivityForm({
           <div className="grid w-full grid-cols-2 gap-7">
             <Form.ListField
               label="MEMBROS"
-              options={members}
+              name="associatedMembersRa"
+              options={raMembers}
               onIconButtonClick={onMemberPopupClick}
+              // onChange={onChange}
+              input={false}
             />
             <Form.ListField
               label="ÁREAS"

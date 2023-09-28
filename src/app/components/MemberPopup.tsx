@@ -1,4 +1,10 @@
-import { useContext, useEffect, useState } from 'react'
+import {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState
+} from 'react'
 import { DefaultButton } from './little_components/Buttons'
 import { Card } from './little_components/Card'
 import { Form } from './little_components/Form'
@@ -9,18 +15,35 @@ import { ActionContext } from '../contexts/action_context'
 
 interface MemberPopupProps {
   isOpen: boolean
+  closePopUp: () => void
+  setMembers: Dispatch<SetStateAction<string[] | undefined>>
 }
 
-export function MemberPopup({ isOpen }: MemberPopupProps) {
+export function MemberPopup({
+  isOpen,
+  closePopUp,
+  setMembers
+}: MemberPopupProps) {
   const [allMembers, setAllMembers] = useState<Member[] | undefined>()
 
-  const { getAllMembers } = useContext(ActionContext)
+  const { getAllMembers, setRaMembersSelected } = useContext(ActionContext)
+
+  const raSelectedArray: string[] = []
+
+  const handleMembersChange = (e: any) => {
+    raSelectedArray.push(e.target.value)
+  }
+
+  const handleSumbitMembers = () => {
+    console.log(raSelectedArray)
+    setRaMembersSelected(raSelectedArray)
+    closePopUp()
+  }
 
   async function fetchData() {
     try {
       const response = await getAllMembers()
       if (response) {
-        console.log(response)
         setAllMembers(response)
       }
     } catch (error: any) {
@@ -36,14 +59,14 @@ export function MemberPopup({ isOpen }: MemberPopupProps) {
   return (
     <div>
       {isOpen ? (
-        <PopUp>
+        <PopUp closePopUp={closePopUp}>
           <Card.Root size="base" isPopUp>
             <Card.Header columns="single" className="space-y-3 border-none">
               <DefaultButton
                 label="SALVAR"
                 color="blue"
                 className="ml-auto px-5"
-                onClick={fetchData}
+                onClick={handleSumbitMembers}
               />
               <div className="flex flex-row justify-between gap-3">
                 <Card.Title textStyle="blue">MEMBROS</Card.Title>
@@ -61,6 +84,8 @@ export function MemberPopup({ isOpen }: MemberPopupProps) {
                     title={member.name}
                     subTitle={member.ra}
                     value={member.ra}
+                    onChange={handleMembersChange}
+                    // checked={raMembersSelected?.includes(member.ra)}
                   />
                 )
               })}
