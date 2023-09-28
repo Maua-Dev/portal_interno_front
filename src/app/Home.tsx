@@ -30,7 +30,7 @@ export default function Home() {
 
   // const [isClient, setClient] = useState(false)
 
-  const { getHistory } = useContext(ActionContext)
+  const { getHistory, getMember } = useContext(ActionContext)
   // const { createAction } = useContext(ActionContext)
 
   // const {} = useContext(ActionContent)
@@ -65,7 +65,7 @@ export default function Home() {
   }
 
   const handleMainCards = (
-    mainCardComponent: ReactNode,
+    mainCardComponent: ReactNode | undefined,
     name: string,
     activity?: Action
   ) => {
@@ -82,8 +82,6 @@ export default function Home() {
     }
     handleSideButtonClick()
   }
-
-  useEffect(() => {}, [raMembersSelected])
 
   return (
     <>

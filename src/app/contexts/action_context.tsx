@@ -16,6 +16,7 @@ import { CreateAssociatedActionUsecase } from '../../@clean/modules/action/useca
 import { GetHistoryUsecase } from '../../@clean/modules/action/usecases/get_history_usecase'
 import { GetAllMembersUsecase } from '../../@clean/modules/action/usecases/get_all_members_usecase'
 import { Member } from '../../@clean/shared/domain/entities/member'
+import { GetMember } from '../../@clean/modules/action/usecases/get_member_usecase'
 
 export type ActionContextType = {
   createAction: (action: Action) => Promise<Action | undefined>
@@ -31,6 +32,8 @@ export type ActionContextType = {
     end?: number,
     exclusiveStartKey?: string
   ) => Promise<Action[] | undefined>
+
+  getMember: (ra: string) => Promise<Member | undefined>
 
   getAllMembers: () => Promise<Member[] | undefined>
 
@@ -58,6 +61,10 @@ const defaultContext: ActionContextType = {
     return []
   },
 
+  getMember: async (_ra: string) => {
+    return undefined
+  },
+
   getAllMembers: async () => {
     return []
   },
@@ -82,6 +89,10 @@ const createAssociatedActionUsecase =
 
 const getHistoryUsecase = containerAction.get<GetHistoryUsecase>(
   RegistryAction.GetHistoryUsecase
+)
+
+const getMembersUsecase = containerAction.get<GetMember>(
+  RegistryAction.GetMembersUsecase
 )
 
 const getAllMembersUsecase = containerAction.get<GetAllMembersUsecase>(
@@ -139,6 +150,16 @@ export function ActionProvider({ children }: PropsWithChildren) {
     return history
   }
 
+  async function getMember(ra: string) {
+    try {
+      const member = await getMembersUsecase.execute(ra)
+
+      return member
+    } catch (error: any) {
+      console.log('Something went wrong on get member: ', error)
+    }
+  }
+
   async function getAllMembers(): Promise<Member[] | undefined> {
     try {
       const members = await getAllMembersUsecase.execute()
@@ -155,6 +176,7 @@ export function ActionProvider({ children }: PropsWithChildren) {
         createAction,
         createAssociatedAction,
         getHistory,
+        getMember,
         getAllMembers,
         raMembersSelected,
         setRaMembersSelected

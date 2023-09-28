@@ -223,6 +223,47 @@ export class ActionRepositoryHttp implements IActionRepository {
     }
   }
 
+  async getMember(ra: string): Promise<Member> {
+    try {
+      const response = await this.http.get<memberRawResponse>(
+        `/get-member/?ra=${ra}`
+      )
+
+      const memberRawResponse = response.data.member
+
+      const projectsArray: Project[] = []
+
+      if (memberRawResponse.projects) {
+        memberRawResponse.projects.map((project) => {
+          return projectsArray.push(
+            new Project({
+              code: project.code,
+              name: project.name,
+              description: project.description
+            })
+          )
+        })
+      }
+
+      return new Member({
+        name: memberRawResponse.name,
+        email: memberRawResponse.email,
+        ra: memberRawResponse.ra,
+        role: roleToEnum(memberRawResponse.role),
+        stack: stackToEnum(memberRawResponse.stack),
+        year: memberRawResponse.year,
+        cellphone: memberRawResponse.cellphone,
+        course: courseToEnum(memberRawResponse.course),
+        hiredDate: memberRawResponse.hired_date,
+        deactivatedDate: memberRawResponse.deactivated_date,
+        active: activeToEnum(memberRawResponse.active),
+        projects: projectsArray
+      })
+    } catch (error: any) {
+      throw new Error('Error Getting All Members: ' + error.message)
+    }
+  }
+
   async getAllMembers(): Promise<Member[]> {
     try {
       const response = await this.http.get<getAllMembersRawResponse>(

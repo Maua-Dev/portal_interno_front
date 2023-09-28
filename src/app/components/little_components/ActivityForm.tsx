@@ -13,7 +13,7 @@ interface ActivityFormProps {
   raMembersSelected: string[] | undefined
   onChange: (e: any) => void
   onDateChange: (name: string, value: number) => void
-  onMemberPopupClick: () => void
+  onMemberPopupClick?: () => void
 }
 
 export default function ActivityForm({
