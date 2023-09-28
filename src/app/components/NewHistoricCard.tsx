@@ -1,8 +1,8 @@
-import { useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Action } from '../../@clean/shared/domain/entities/action'
-import { createActionBodyResquet } from '../../@clean/shared/infra/repositories/action_repository_http'
 import { DefaultButton } from './little_components/Buttons'
 import { Card } from './little_components/Card'
+import { ActionContext } from '../contexts/action_context'
 
 interface NewHistoricCardProps {
   action: Action
@@ -14,8 +14,31 @@ export default function NewHistoricCard({
   editAction
 }: NewHistoricCardProps) {
   // const durationInHours = hoursFormatter(action.duration).toString()
+  const [MembersName, setMembersName] = useState<string[] | undefined>(
+    undefined
+  )
+  const { getMember } = useContext(ActionContext)
 
   const title = action.title + ' ( 00:00 )'
+
+  const fetchMembers = async (membersRa: string[]) => {
+    const namesArray: string[] = []
+    membersRa.map(async (ra) => {
+      const member = await getMember(ra)
+      if (member) {
+        namesArray.push(member.name)
+      }
+    })
+    setMembersName(namesArray)
+  }
+
+  useEffect(() => {
+    const membersRa = action.associatedMembersRa
+
+    if (membersRa) {
+      fetchMembers(membersRa)
+    }
+  }, [action])
 
   return (
     <Card.Root size="full">
@@ -35,10 +58,7 @@ export default function NewHistoricCard({
         </div>
       </Card.Header>
       <Card.Body className="px-0">
-        <Card.Dropdown
-          label="MEMBROS"
-          listDropdown={action.associatedMembersRa}
-        />
+        <Card.Dropdown label="MEMBROS" listDropdown={MembersName} />
         <Card.Dropdown label="ÁREAS" listDropdown={action.stackTags} />
         <div>
           <Card.Text textStyle="bold" className="mb-3 pl-2 text-black">
