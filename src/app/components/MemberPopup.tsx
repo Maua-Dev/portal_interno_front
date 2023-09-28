@@ -11,20 +11,6 @@ interface MemberPopupProps {
   isOpen: boolean
 }
 
-interface MemberResponse {
-  name: string
-  email: string
-  ra: string
-  role: string
-  stack: string
-  year: number
-  cellphone: string
-  course: string
-  hiredDate: number
-  deactivatedDate: number | null
-  active: string
-}
-
 export function MemberPopup({ isOpen }: MemberPopupProps) {
   const [allMembers, setAllMembers] = useState<Member[] | undefined>()
 
@@ -34,6 +20,7 @@ export function MemberPopup({ isOpen }: MemberPopupProps) {
     try {
       const response = await getAllMembers()
       if (response) {
+        console.log(response)
         setAllMembers(response)
       }
     } catch (error: any) {

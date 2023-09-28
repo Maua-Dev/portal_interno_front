@@ -11,9 +11,14 @@ import {
 import { Member } from '../../domain/entities/member'
 import {
   stackFormatter,
-  stackFormatterFromJSON
+  stackFormatterFromJSON,
+  stackToEnum
 } from '../../domain/enums/stack_enum'
 import { actionTypeToEnum } from '../../domain/enums/action_type_enum'
+import { roleToEnum } from '../../domain/enums/role_enum'
+import { courseToEnum } from '../../domain/enums/course_enum'
+import { activeToEnum } from '../../domain/enums/active_enum'
+import { Project } from '../../domain/entities/project'
 
 interface actionRawResponse {
   owner_ra: string
@@ -55,8 +60,33 @@ interface createActionRawResponse {
   message: string
 }
 
+interface projectRawResponse {
+  code: string
+  name: string
+  description: string
+  po_RA: string
+  scrum_RA: string
+  start_date: number
+  members: number[]
+  photos: string[]
+}
+
 interface memberRawResponse {
-  member: Member
+  member: {
+    name: string
+    email_dev: string
+    email: string
+    ra: string
+    role: string
+    stack: string
+    year: number
+    cellphone: string
+    course: string
+    hired_date: number
+    deactivated_date?: number
+    active: string
+    projects: projectRawResponse[] // Project
+  }
 }
 
 export interface getAllMembersRawResponse {
@@ -202,9 +232,40 @@ export class ActionRepositoryHttp implements IActionRepository {
       const membersArray: Member[] = []
 
       response.data.members.map((member) => {
-        return membersArray.push(member.member)
+        const memberUnit: memberRawResponse = member
+        const projectsArray: Project[] = []
+
+        if (memberUnit.member.projects) {
+          memberUnit.member.projects.map((project) => {
+            projectsArray.push(
+              new Project({
+                code: project.code,
+                name: project.name,
+                description: project.description
+              })
+            )
+          })
+        }
+
+        return membersArray.push(
+          new Member({
+            name: memberUnit.member.name,
+            email: memberUnit.member.email,
+            ra: memberUnit.member.ra,
+            role: roleToEnum(memberUnit.member.role),
+            stack: stackToEnum(memberUnit.member.stack),
+            year: memberUnit.member.year,
+            cellphone: memberUnit.member.cellphone,
+            course: courseToEnum(memberUnit.member.course),
+            hiredDate: memberUnit.member.hired_date,
+            deactivatedDate: memberUnit.member.deactivated_date,
+            active: activeToEnum(memberUnit.member.active),
+            projects: projectsArray
+          })
+        )
       })
 
+      console.log(membersArray)
       return membersArray
     } catch (error: any) {
       throw new Error('Error Getting All Members: ' + error.message)
