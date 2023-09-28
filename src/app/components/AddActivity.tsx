@@ -16,7 +16,10 @@ interface AddActivityProps {
 export default function AddActivity({
   handleMemberPopupClick
 }: AddActivityProps) {
-  const { createAction, raMembersSelected } = useContext(ActionContext)
+  const [membersSelectedName, setMembersSelectedName] = useState<
+    string[] | undefined
+  >(undefined)
+  const { createAction, membersSelected } = useContext(ActionContext)
   const [actionProps, setActionProps] = useState({
     ownerRa: '21.01731-0', //nao possui input
     startDate: 1634526000000, // WORKING
@@ -87,7 +90,7 @@ export default function AddActivity({
   const handleCreateAction = async (actionProps: ActionProps) => {
     console.log(actionProps)
 
-    if (actionProps && raMembersSelected) {
+    if (actionProps && membersSelected) {
       const action = new Action(actionProps)
       const response = await createAction(action)
       console.log(response)
@@ -95,8 +98,22 @@ export default function AddActivity({
   }
 
   useEffect(() => {
-    assignAssociatedMembersRa(raMembersSelected)
-  }, [raMembersSelected])
+    if (membersSelected) {
+      const tempRaArray: string[] = []
+      const tempNameArray: string[] = []
+
+      membersSelected.map((member) => {
+        tempRaArray.push(member.ra)
+
+        const name = member.name.split(' ')
+        const firstAndLastnames = name[0] + ' ' + name[name.length - 1]
+
+        tempNameArray.push(firstAndLastnames)
+      })
+      setMembersSelectedName(tempNameArray)
+      assignAssociatedMembersRa(tempRaArray)
+    }
+  }, [membersSelected])
 
   return (
     <div>
@@ -122,7 +139,7 @@ export default function AddActivity({
         </Card.Header>
         <Card.Body>
           <ActivityForm
-            raMembersSelected={raMembersSelected}
+            raMembersSelected={membersSelectedName}
             onMemberPopupClick={handleMemberPopupClick}
             onChange={handleOnChange}
             onDateChange={assingDates}

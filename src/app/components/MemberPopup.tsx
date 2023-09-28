@@ -26,17 +26,23 @@ export function MemberPopup({
 }: MemberPopupProps) {
   const [allMembers, setAllMembers] = useState<Member[] | undefined>()
 
-  const { getAllMembers, setRaMembersSelected } = useContext(ActionContext)
+  const { getMember, getAllMembers, setMembersSelected } =
+    useContext(ActionContext)
 
-  const raSelectedArray: string[] = []
+  const raSelectedArray: Member[] = []
 
-  const handleMembersChange = (e: any) => {
-    raSelectedArray.push(e.target.value)
+  const handleMembersChange = async (e: any) => {
+    const member = await getMember(e.target.value)
+    if (member) {
+      raSelectedArray.push(member)
+    } else {
+      console.log('member not found')
+    }
   }
 
   const handleSumbitMembers = () => {
     console.log(raSelectedArray)
-    setRaMembersSelected(raSelectedArray)
+    setMembersSelected(raSelectedArray)
     closePopUp()
   }
 

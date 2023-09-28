@@ -6,7 +6,7 @@ import {
   ContainerActivitiesHistory,
   ContainerMainCards
 } from './components/little_components/Container'
-import { useContext, useState, ReactNode, useEffect } from 'react'
+import { useContext, useState, ReactNode } from 'react'
 import { ActionContext } from './contexts/action_context'
 import { Action } from '../@clean/shared/domain/entities/action'
 

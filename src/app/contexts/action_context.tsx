@@ -37,9 +37,9 @@ export type ActionContextType = {
 
   getAllMembers: () => Promise<Member[] | undefined>
 
-  raMembersSelected: string[] | undefined
+  membersSelected: Member[] | undefined
 
-  setRaMembersSelected: Dispatch<SetStateAction<string[] | undefined>>
+  setMembersSelected: Dispatch<SetStateAction<Member[] | undefined>>
 }
 
 const defaultContext: ActionContextType = {
@@ -69,9 +69,9 @@ const defaultContext: ActionContextType = {
     return []
   },
 
-  raMembersSelected: [],
+  membersSelected: [],
 
-  setRaMembersSelected: (_memberRa: SetStateAction<string[] | undefined>) => {
+  setMembersSelected: (_memberRa: SetStateAction<Member[] | undefined>) => {
     return []
   }
 }
@@ -102,9 +102,9 @@ const getAllMembersUsecase = containerAction.get<GetAllMembersUsecase>(
 export function ActionProvider({ children }: PropsWithChildren) {
   const [createdActions, setCreatedActions] = useState<Action[]>([])
   const [history, setHistory] = useState<Action[]>([])
-  const [raMembersSelected, setRaMembersSelected] = useState<
-    string[] | undefined
-  >(undefined)
+  const [membersSelected, setMembersSelected] = useState<Member[] | undefined>(
+    undefined
+  )
 
   async function createAction(action: Action) {
     try {
@@ -178,8 +178,8 @@ export function ActionProvider({ children }: PropsWithChildren) {
         getHistory,
         getMember,
         getAllMembers,
-        raMembersSelected,
-        setRaMembersSelected
+        membersSelected,
+        setMembersSelected
       }}
     >
       {children}
