@@ -15,13 +15,4 @@ function associatedMembersRaFormatter(raArray: string[]): string[] {
   return associatedMembersRaFormatted
 }
 
-function stackFormatter(stackArray: STACK[]): string[] {
-  const stackFormatted: string[] = []
-  stackArray.forEach((stack) => {
-    stackFormatted.push(stack.toString())
-  })
-  console.log(stackFormatted)
-  return stackFormatted
-}
-
-export { raFormatter, associatedMembersRaFormatter, stackFormatter }
+export { raFormatter, associatedMembersRaFormatter }

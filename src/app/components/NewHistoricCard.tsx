@@ -1,10 +1,11 @@
+import { useEffect } from 'react'
 import { Action } from '../../@clean/shared/domain/entities/action'
 import { createActionBodyResquet } from '../../@clean/shared/infra/repositories/action_repository_http'
 import { DefaultButton } from './little_components/Buttons'
 import { Card } from './little_components/Card'
 
 interface NewHistoricCardProps {
-  action: createActionBodyResquet
+  action: Action
   editAction: () => void
 }
 
@@ -36,9 +37,9 @@ export default function NewHistoricCard({
       <Card.Body className="px-0">
         <Card.Dropdown
           label="MEMBROS"
-          listDropdown={action.associated_members_ra}
+          listDropdown={action.associatedMembersRa}
         />
-        <Card.Dropdown label="ÁREAS" listDropdown={action.stack_tags} />
+        <Card.Dropdown label="ÁREAS" listDropdown={action.stackTags} />
         <div>
           <Card.Text textStyle="bold" className="mb-3 pl-2 text-black">
             DESCRIÇÃO

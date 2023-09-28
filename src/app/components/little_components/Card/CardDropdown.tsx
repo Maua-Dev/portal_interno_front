@@ -26,7 +26,7 @@ export default function CardDropDown({
         </h1>
       ))
     } else {
-      return 'Loading'
+      return 'Loading...'
     }
   }
 

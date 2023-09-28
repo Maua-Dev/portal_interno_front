@@ -6,13 +6,32 @@ import { AxiosInstance } from 'axios'
 import { IActionRepository } from '../../../modules/action/domain/repositories/action_repository_interface'
 import {
   associatedMembersRaFormatter,
-  raFormatter,
-  stackFormatter
+  raFormatter
 } from '../../../../app/utils/functions/formatters'
 import { Member } from '../../domain/entities/member'
+import {
+  stackFormatter,
+  stackFormatterFromJSON
+} from '../../domain/enums/stack_enum'
+import { actionTypeToEnum } from '../../domain/enums/action_type_enum'
+
+interface actionRawResponse {
+  owner_ra: string
+  start_date: number
+  story_id: number | undefined
+  title: string
+  description: string | undefined
+  end_date: number
+  duration: number
+  project_code: string
+  associated_members_ra: string[] | undefined
+  stack_tags: string[]
+  action_type_tag: string
+  action_id: string
+}
 
 interface getHistoryRawResponse {
-  actions: Action[]
+  actions: actionRawResponse[]
   last_evaluated_key: string
   message: string
 }
@@ -108,7 +127,28 @@ export class ActionRepositoryHttp implements IActionRepository {
         response = fifthCase.data
       }
 
-      return response.actions
+      const actionsArray: Action[] = []
+
+      response.actions.map((actionUnit) => {
+        return actionsArray.push(
+          new Action({
+            ownerRa: actionUnit.owner_ra.toString(),
+            startDate: actionUnit.start_date,
+            endDate: actionUnit.end_date,
+            duration: actionUnit.duration,
+            storyId: actionUnit.story_id,
+            actionId: actionUnit.action_id,
+            title: actionUnit.title,
+            description: actionUnit.description,
+            projectCode: actionUnit.project_code,
+            associatedMembersRa: actionUnit.associated_members_ra,
+            stackTags: stackFormatterFromJSON(actionUnit.stack_tags),
+            actionTypeTag: actionTypeToEnum(actionUnit.action_type_tag)
+          })
+        )
+      })
+
+      return actionsArray
     } catch (error: any) {
       throw new Error(error)
     }

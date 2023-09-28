@@ -8,14 +8,16 @@ import {
 import { CreateActionUsecase } from '../../@clean/modules/action/usecases/create_action_usecase'
 import { CreateAssociatedActionUsecase } from '../../@clean/modules/action/usecases/create_associated_action_usecase'
 import { GetHistoryUsecase } from '../../@clean/modules/action/usecases/get_history_usecase'
-import { Member } from '../../@clean/shared/domain/entities/member'
 import { GetAllMembersUsecase } from '../../@clean/modules/action/usecases/get_all_members_usecase'
+import { Member } from '../../@clean/shared/domain/entities/member'
 
 export type ActionContextType = {
   createAction: (action: Action) => Promise<Action | undefined>
+
   createAssociatedAction: (
     associatedAction: AssociatedAction
   ) => Promise<AssociatedAction | undefined>
+
   getHistory: (
     ra: string,
     amount?: number,
@@ -23,6 +25,7 @@ export type ActionContextType = {
     end?: number,
     exclusiveStartKey?: string
   ) => Promise<Action[] | undefined>
+
   getAllMembers: () => Promise<Member[] | undefined>
 }
 
@@ -36,11 +39,11 @@ const defaultContext: ActionContextType = {
   },
 
   getHistory: async (
-    ra: string,
-    amount?: number,
-    start?: number,
-    end?: number,
-    exclusiveStartKey?: string
+    _ra: string,
+    _amount?: number,
+    _start?: number,
+    _end?: number,
+    _exclusiveStartKey?: string
   ) => {
     return []
   },
@@ -99,7 +102,7 @@ export function ActionProvider({ children }: PropsWithChildren) {
     start?: number,
     end?: number,
     exclusiveStartKey?: string
-  ) {
+  ): Promise<Action[]> {
     try {
       const { actions, lastId } = await getHistoryUsecase.execute(
         ra,
@@ -111,10 +114,10 @@ export function ActionProvider({ children }: PropsWithChildren) {
       console.log('lastId: ', lastId)
       setHistory(actions)
       console.log(history)
-      return actions
     } catch (error: any) {
       console.error('Something went wrong on get history: ', error)
     }
+    return history
   }
 
   async function getAllMembers(): Promise<Member[] | undefined> {

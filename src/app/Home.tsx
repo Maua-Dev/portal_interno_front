@@ -28,7 +28,6 @@ export default function Home() {
   // const [isClient, setClient] = useState(false)
 
   const { getHistory } = useContext(ActionContext)
-
   // const { createAction } = useContext(ActionContext)
 
   // const {} = useContext(ActionContent)
@@ -49,7 +48,6 @@ export default function Home() {
     const activities = await getHistory('19017310', 20)
     if (activities) {
       setHistory(activities)
-      console.log(activities)
     }
     setIsHistoryOpen(!isHistoryOpen)
   }
