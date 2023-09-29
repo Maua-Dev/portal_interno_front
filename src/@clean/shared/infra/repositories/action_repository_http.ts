@@ -92,12 +92,13 @@ export class ActionRepositoryHttp implements IActionRepository {
           ? newActionTypeTag.toString()
           : undefined
       }
+
       const response = await this.http.put<updateActionRawResponse>(
         '/update-action',
         body
       )
+
       console.log(response.data)
-      console.log(response.data.action)
       console.log(response.data.message)
       return response.data.action
     } catch (error: any) {
@@ -115,28 +116,53 @@ export class ActionRepositoryHttp implements IActionRepository {
     let response = undefined
     try {
       if (amount && start && end && exclusiveStartKey) {
-        const firstCase = await this.http.get<getHistoryRawResponse>(
-          `/get-history?ra=${ra}&start=${start}&end=${end}&exclusive_start_key=${exclusiveStartKey}&amount=${amount}`
+        const firstCase = await this.http.post<getHistoryRawResponse>(
+          '/get-history',
+          {
+            ra,
+            start,
+            end,
+            amount,
+            exclusiveStartKey
+          }
         )
         response = firstCase.data
       } else if (amount && start && end) {
-        const secondCase = await this.http.get<getHistoryRawResponse>(
-          `/get-history?ra=${ra}&start=${start}&end=${end}&amount=${amount}`
+        const secondCase = await this.http.post<getHistoryRawResponse>(
+          '/get-history',
+          {
+            ra,
+            start,
+            end,
+            amount
+          }
         )
         response = secondCase.data
       } else if (amount && exclusiveStartKey) {
-        const thirdCase = await this.http.get<getHistoryRawResponse>(
-          `/get-history?ra=${ra}&exclusive_start_key=${exclusiveStartKey}&amount=${amount}`
+        const thirdCase = await this.http.post<getHistoryRawResponse>(
+          '/get-history',
+          {
+            ra,
+            amount,
+            exclusiveStartKey
+          }
         )
         response = thirdCase.data
       } else if (amount) {
-        const fourthCase = await this.http.get<getHistoryRawResponse>(
-          `/get-history?ra=${ra}&amount=${amount}`
+        const fourthCase = await this.http.post<getHistoryRawResponse>(
+          '/get-history',
+          {
+            ra,
+            amount
+          }
         )
         response = fourthCase.data
       } else {
-        const fifthCase = await this.http.get<getHistoryRawResponse>(
-          `/get-history?ra=${ra}`
+        const fifthCase = await this.http.post<getHistoryRawResponse>(
+          '/get-history',
+          {
+            ra
+          }
         )
         response = fifthCase.data
       }

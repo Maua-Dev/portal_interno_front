@@ -1,7 +1,7 @@
 import { Action } from '../../../shared/domain/entities/action'
 import { ACTION_TYPE } from '../../../shared/domain/enums/action_type_enum'
 import { STACK } from '../../../shared/domain/enums/stack_enum'
-import { NoItemsFoundError } from '../../../shared/domain/helpers/errors/domain_error'
+import { EntityError } from '../../../shared/domain/helpers/errors/domain_error'
 import { IActionRepository } from '../domain/repositories/action_repository_interface'
 
 export class UpdateActionUsecase {
@@ -21,31 +21,62 @@ export class UpdateActionUsecase {
     newStackTags?: STACK[],
     newActionTypeTag?: ACTION_TYPE
   ): Promise<Action> {
-    const action = await this.actionRepo.getAction(actionId)
-
-    if (!action) {
-      throw new NoItemsFoundError('action')
+    if (!Action.validateActionId(actionId)) {
+      throw new EntityError('actionId')
     }
 
-    let members = null
+    if (newOwnerRa && !Action.validateOwnerRa(newOwnerRa)) {
+      throw new EntityError('ownerRa')
+    }
 
-    if (newAssociatedMembersRa && newOwnerRa)
-      members = [newOwnerRa, ...newAssociatedMembersRa]
-    else if (newAssociatedMembersRa)
-      members = [...newAssociatedMembersRa, action.ownerRa]
-    else if (newOwnerRa) members = [newOwnerRa, ...action.associatedMembersRa]
-    else members = [...action.associatedMembersRa, action.ownerRa]
+    if (newStartDate && !Action.validateStartDate(newStartDate)) {
+      throw new EntityError('startDate')
+    }
 
-    // if (
-    //   members !== null &&
-    //   new Set(members) !==
-    //     new Set([action.ownerRa, ...action.associatedMembersRa])
-    // ) {
-    // this.actionRepo.batchUpdateAssociatedActionMembers(actionId, members)
-    // }
+    if (newEndDate && newStartDate) {
+      if (!Action.validateEndDate(newEndDate, newStartDate))
+        throw new EntityError('endDate')
+    }
 
-    const description = newDescription ? newDescription : action.description
-    const storyId = newStoryId !== -1 ? newStoryId : action.storyId
+    if (
+      newEndDate &&
+      newStartDate &&
+      newDuration &&
+      !Action.validateDuration(newDuration, newStartDate, newEndDate)
+    ) {
+      throw new EntityError('duration')
+    }
+
+    if (newStoryId && !Action.validateStoryId(newStoryId)) {
+      throw new EntityError('storyId')
+    }
+
+    if (newTitle && !Action.validateTitle(newTitle)) {
+      throw new EntityError('title')
+    }
+
+    if (newDescription && !Action.validateDescription(newDescription)) {
+      throw new EntityError('description')
+    }
+
+    if (newProjectCode && !Action.validateProjectCode(newProjectCode)) {
+      throw new EntityError('projectCode')
+    }
+
+    if (
+      newAssociatedMembersRa &&
+      !Action.validateAssociatedMembersRa(newAssociatedMembersRa)
+    ) {
+      throw new EntityError('associatedMembersRa')
+    }
+
+    if (newStackTags && !Action.validateStackTags(newStackTags)) {
+      throw new EntityError('stackTags')
+    }
+
+    if (newActionTypeTag && !Action.validateActionTypeTag(newActionTypeTag)) {
+      throw new EntityError('actionTypeTag')
+    }
 
     return this.actionRepo.updateAction(
       actionId,
@@ -53,9 +84,9 @@ export class UpdateActionUsecase {
       newStartDate,
       newEndDate,
       newDuration,
-      storyId,
+      newStoryId,
       newTitle,
-      description,
+      newDescription,
       newProjectCode,
       newAssociatedMembersRa,
       newStackTags,
