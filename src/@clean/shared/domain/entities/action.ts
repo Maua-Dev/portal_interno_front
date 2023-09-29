@@ -39,12 +39,12 @@ export class Action {
     }
     this.props.ownerRa = props.ownerRa
 
-    if (!Action.validatestartDate(props.startDate)) {
+    if (!Action.validateStartDate(props.startDate)) {
       throw new EntityError('props.startDate')
     }
     this.props.startDate = props.startDate
 
-    if (!Action.validateendDate(props.endDate, props.startDate)) {
+    if (!Action.validateEndDate(props.endDate, props.startDate)) {
       throw new EntityError('props.endDate')
     }
     this.props.endDate = props.endDate
@@ -127,7 +127,7 @@ export class Action {
   }
 
   set startDate(startDate: number) {
-    if (!Action.validatestartDate(startDate)) {
+    if (!Action.validateStartDate(startDate)) {
       throw new EntityError('props.startDate')
     }
     this.props.startDate = startDate
@@ -138,7 +138,7 @@ export class Action {
   }
 
   set endDate(endDate: number) {
-    if (!Action.validateendDate(endDate, this.startDate)) {
+    if (!Action.validateEndDate(endDate, this.startDate)) {
       throw new EntityError('props.endDate')
     }
     this.props.endDate = endDate
@@ -301,7 +301,7 @@ export class Action {
     return true
   }
 
-  static validatestartDate(startDate: number) {
+  static validateStartDate(startDate: number) {
     if (startDate == null) {
       return false
     } else if (typeof startDate !== 'number') {
@@ -310,7 +310,7 @@ export class Action {
     return true
   }
 
-  static validateendDate(endDate: number, startDate: number) {
+  static validateEndDate(endDate: number, startDate: number) {
     if (endDate == null) {
       return false
     } else if (typeof endDate !== 'number') {
