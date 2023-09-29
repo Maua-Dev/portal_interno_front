@@ -43,13 +43,13 @@ export default function Home() {
 
   const testUpdate = async () => {
     const updatedAction = await updateAction(
-      '5f4f13df-e7d3-4a10-9219-197ceae9e3f0',
+      '46b35022-1a68-4cc8-a2e5-ae449e43e867',
       undefined,
       undefined,
       undefined,
       undefined,
       undefined,
-      'TESTE UPDATE'
+      'HAHAHAHA FUNCIONOU'
     )
 
     if (updatedAction) {
