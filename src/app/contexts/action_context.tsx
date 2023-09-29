@@ -38,9 +38,11 @@ export type ActionContextType = {
     newStackTags?: STACK[],
     newActionTypeTag?: ACTION_TYPE
   ) => Promise<Action | undefined>
+  history: Action[]
 }
 
 const defaultContext: ActionContextType = {
+  history: [],
   createAction: async (action: Action) => {
     return action
   },
@@ -186,6 +188,7 @@ export function ActionProvider({ children }: PropsWithChildren) {
         createAction,
         createAssociatedAction,
         getHistory,
+        history,
         updateAction
       }}
     >
