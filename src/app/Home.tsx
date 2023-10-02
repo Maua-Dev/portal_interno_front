@@ -86,11 +86,7 @@ export default function Home() {
   return (
     <>
       <main className={isHistoryOpen ? 'pb-11' : ''}>
-        <EditActionPopUp
-          isOpen={openEditPopUp}
-          action={selectedAction}
-          onClose={handleEditPopup}
-        />
+        <EditActionPopUp isOpen={openEditPopUp} onClose={handleEditPopup} />
         <MemberPopup
           closePopUp={handleMemberPopupClick}
           isOpen={openMemberPopup}

@@ -214,7 +214,7 @@ test('Test Action with invalid storyId', async () => {
         actionTypeTag: ACTION_TYPE.MEETING,
         projectCode: 'PT',
         stackTags: [STACK.FRONTEND],
-        storyId: 99,
+        storyId: -99,
         description: 'Reunião de como instalar o yarn'
       })
     )
@@ -232,7 +232,7 @@ test('Test Action with invalid storyId', async () => {
         actionTypeTag: ACTION_TYPE.MEETING,
         projectCode: 'PT',
         stackTags: [STACK.FRONTEND],
-        storyId: 99,
+        storyId: 1000000,
         description: 'Reunião de como instalar o yarn'
       })
     )

@@ -1,4 +1,5 @@
 // import { Action } from '../../../@clean/shared/domain/entities/action'
+import { useContext, useEffect } from 'react'
 import { Action } from '../../../@clean/shared/domain/entities/action'
 import { ACTION_TYPE } from '../../../@clean/shared/domain/enums/action_type_enum'
 import { CancelAndSaveButtons } from './Buttons'
@@ -6,18 +7,16 @@ import { Card } from './Card'
 import { DisplayHours } from './DisplayHours'
 import { Form } from './Form'
 import { PopUp } from './PopUp'
+import { ActionContext } from '../../contexts/action_context'
 
 interface EditActionPopUpProps {
   isOpen: boolean
-  action?: Action
   onClose: () => void
 }
 
-export function EditActionPopUp({
-  isOpen,
-  action,
-  onClose
-}: EditActionPopUpProps) {
+export function EditActionPopUp({ isOpen, onClose }: EditActionPopUpProps) {
+  const { action } = useContext(ActionContext)
+
   const actionTypes = [
     {
       name: 'Code Review',
@@ -45,6 +44,17 @@ export function EditActionPopUp({
     }
   ]
 
+  const vazio = [
+    {
+      name: '',
+      value: 'teste'
+    }
+  ]
+
+  useEffect(() => {
+    console.log(action?.title)
+  }, [])
+
   return (
     <div>
       {isOpen ? (
@@ -52,7 +62,11 @@ export function EditActionPopUp({
           <Card.Root isPopUp={isOpen} size="lg">
             <Card.Header columns="double">
               <div>
-                <Card.Title textStyle="regular">TÍTULO DA ATIVIDADE</Card.Title>
+                <Form.TitleField
+                  text={action ? action.title : 'Loading...'}
+                  name="title"
+                  // onChange={handleOnChange}
+                />
                 <Card.Text textStyle="regular">Aberto dia 28/10/2022</Card.Text>
               </div>
               <div className="flex flex-col items-center">
@@ -79,6 +93,7 @@ export function EditActionPopUp({
                     <Form.TextField
                       label="TASK ID"
                       type="single"
+                      value={action ? action.storyId : undefined}
                       dataType="number"
                     />
                   </div>
@@ -96,7 +111,7 @@ export function EditActionPopUp({
                       />
                     </Form.SubjectContainer>
                     <div className="grid grid-cols-2 gap-7">
-                      <Form.ListField label="MEMBROS" options={actionTypes} />
+                      <Form.ListField label="MEMBROS" options={vazio} />
                       <Form.ListField
                         label="ÁREAS"
                         options={actionTypes}

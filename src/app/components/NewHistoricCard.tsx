@@ -17,7 +17,7 @@ export default function NewHistoricCard({
   const [MembersName, setMembersName] = useState<string[] | undefined>(
     undefined
   )
-  const { getMember } = useContext(ActionContext)
+  const { getMember, setAction } = useContext(ActionContext)
 
   const title = action.title + ' ( 00:00 )'
 
@@ -49,7 +49,10 @@ export default function NewHistoricCard({
             label={'Editar'}
             color={'blue'}
             className="xl:h-10 xl:px-10 xl:text-lg"
-            onClick={editAction}
+            onClick={() => {
+              setAction(action)
+              editAction()
+            }}
           />
         </div>
         <div>

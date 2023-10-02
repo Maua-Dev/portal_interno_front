@@ -281,15 +281,14 @@ export class Action {
 
   // Validate functions
   static validateOwnerRa(ra: string) {
-    // const regexRa = /^\d{2}\.\d{5}-\d$/
+    const regexRa = /^\d{2}\.\d{5}-\d$/
     if (ra == null) {
       return false
     } else if (typeof ra !== 'string') {
       return false
+    } else if (!ra.match(regexRa)) {
+      return false
     }
-    // else if (!ra.match(regexRa)) {
-    //   return false
-    // }
     return true
   }
 

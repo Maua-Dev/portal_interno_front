@@ -6,7 +6,8 @@ import { AxiosInstance } from 'axios'
 import { IActionRepository } from '../../../modules/action/domain/repositories/action_repository_interface'
 import {
   associatedMembersRaFormatter,
-  raFormatter
+  raFormatterFromJson,
+  raFormatterToJson
 } from '../../../../app/utils/functions/formatters'
 import { Member } from '../../domain/entities/member'
 import {
@@ -162,7 +163,7 @@ export class ActionRepositoryHttp implements IActionRepository {
       response.actions.map((actionUnit) => {
         return actionsArray.push(
           new Action({
-            ownerRa: actionUnit.owner_ra.toString(),
+            ownerRa: raFormatterFromJson(actionUnit.owner_ra),
             startDate: actionUnit.start_date,
             endDate: actionUnit.end_date,
             duration: actionUnit.duration,
@@ -171,7 +172,9 @@ export class ActionRepositoryHttp implements IActionRepository {
             title: actionUnit.title,
             description: actionUnit.description,
             projectCode: actionUnit.project_code,
-            associatedMembersRa: actionUnit.associated_members_ra,
+            associatedMembersRa: actionUnit.associated_members_ra?.map(
+              (memberRa) => raFormatterFromJson(memberRa)
+            ),
             stackTags: stackFormatterFromJSON(actionUnit.stack_tags),
             actionTypeTag: actionTypeToEnum(actionUnit.action_type_tag)
           })
@@ -187,7 +190,7 @@ export class ActionRepositoryHttp implements IActionRepository {
   async createAction(action: Action): Promise<Action> {
     // console.log(JSON.stringify(action, null, 2))
 
-    const ownerRa = raFormatter(action.ownerRa)
+    const ownerRa = raFormatterToJson(action.ownerRa)
     const stackTags = stackFormatter(action.stackTags)
 
     const description = action.description ? action.description : undefined
@@ -225,8 +228,10 @@ export class ActionRepositoryHttp implements IActionRepository {
 
   async getMember(ra: string): Promise<Member> {
     try {
+      const formatedRa = raFormatterToJson(ra)
+
       const response = await this.http.get<memberRawResponse>(
-        `/get-member/?ra=${ra}`
+        `/get-member/?ra=${formatedRa}`
       )
 
       const memberRawResponse = response.data.member
@@ -248,7 +253,7 @@ export class ActionRepositoryHttp implements IActionRepository {
       return new Member({
         name: memberRawResponse.name,
         email: memberRawResponse.email,
-        ra: memberRawResponse.ra,
+        ra: raFormatterFromJson(memberRawResponse.ra),
         role: roleToEnum(memberRawResponse.role),
         stack: stackToEnum(memberRawResponse.stack),
         year: memberRawResponse.year,
@@ -292,7 +297,7 @@ export class ActionRepositoryHttp implements IActionRepository {
           new Member({
             name: memberUnit.member.name,
             email: memberUnit.member.email,
-            ra: memberUnit.member.ra,
+            ra: raFormatterFromJson(memberUnit.member.ra),
             role: roleToEnum(memberUnit.member.role),
             stack: stackToEnum(memberUnit.member.stack),
             year: memberUnit.member.year,
@@ -306,7 +311,7 @@ export class ActionRepositoryHttp implements IActionRepository {
         )
       })
 
-      console.log(membersArray)
+      console.log(membersArray[0].ra)
       return membersArray
     } catch (error: any) {
       throw new Error('Error Getting All Members: ' + error.message)

@@ -25,6 +25,10 @@ export type ActionContextType = {
     associatedAction: AssociatedAction
   ) => Promise<AssociatedAction | undefined>
 
+  action: Action | undefined
+
+  setAction: Dispatch<SetStateAction<Action | undefined>>
+
   getHistory: (
     ra: string,
     amount?: number,
@@ -49,6 +53,12 @@ const defaultContext: ActionContextType = {
 
   createAssociatedAction: async (associatedAction: AssociatedAction) => {
     return associatedAction
+  },
+
+  action: undefined,
+
+  setAction: (_action: SetStateAction<Action | undefined>) => {
+    return undefined
   },
 
   getHistory: async (
@@ -101,6 +111,7 @@ const getAllMembersUsecase = containerAction.get<GetAllMembersUsecase>(
 
 export function ActionProvider({ children }: PropsWithChildren) {
   const [createdActions, setCreatedActions] = useState<Action[]>([])
+  const [action, setAction] = useState<Action | undefined>(undefined)
   const [history, setHistory] = useState<Action[]>([])
   const [membersSelected, setMembersSelected] = useState<Member[] | undefined>(
     undefined
@@ -174,6 +185,8 @@ export function ActionProvider({ children }: PropsWithChildren) {
     <ActionContext.Provider
       value={{
         createAction,
+        action,
+        setAction,
         createAssociatedAction,
         getHistory,
         getMember,
