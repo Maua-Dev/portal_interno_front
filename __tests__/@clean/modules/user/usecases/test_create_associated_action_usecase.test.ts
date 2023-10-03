@@ -7,11 +7,11 @@ import { EntityError } from '../../../../../src/@clean/shared/domain/helpers/err
 import { ActionRepositoryMock } from '../../../../../src/@clean/shared/infra/repositories/action_repository_mock'
 import '@testing-library/jest-dom'
 
-test('Test usecase', async () => {
+test('Test create associated action usecase', async () => {
   const repo = new ActionRepositoryMock()
   const useCase = new CreateAssociatedActionUsecase(repo)
   const action = new Action({
-    ownerRa: '21.00210-0',
+    ownerRa: '21002100',
     startDate: 1000,
     endDate: 2000,
     duration: 1000,
@@ -20,13 +20,13 @@ test('Test usecase', async () => {
     title: 'Test Usecase',
     description: 'Testing',
     projectCode: '76',
-    associatedMembersRa: ['21.00833-7'],
+    associatedMembersRa: ['21008337'],
     stackTags: [STACK.FRONTEND, STACK.BACKEND],
     actionTypeTag: ACTION_TYPE.CODE
   })
 
   const associatedAction = new AssociatedAction({
-    member_ra: '21.00833-7',
+    memberRa: '21008337',
     action: action
   })
   const associatedActionCreated = await useCase.execute(associatedAction)
@@ -35,11 +35,11 @@ test('Test usecase', async () => {
   expect(associatedActionCreated).toBeInstanceOf(AssociatedAction)
 })
 
-test('Test usecase with invalid member Ra', async () => {
+test('Test create associated action usecase with invalid member Ra', async () => {
   const repo = new ActionRepositoryMock()
   const useCase = new CreateAssociatedActionUsecase(repo)
   const action = new Action({
-    ownerRa: '21.00210-0',
+    ownerRa: '21002100',
     startDate: 1000,
     endDate: 2000,
     duration: 1000,
@@ -48,7 +48,7 @@ test('Test usecase with invalid member Ra', async () => {
     title: 'Test Usecase',
     description: 'Testing',
     projectCode: '76',
-    associatedMembersRa: ['21.00833-7'],
+    associatedMembersRa: ['21008337'],
     stackTags: [STACK.FRONTEND, STACK.BACKEND],
     actionTypeTag: ACTION_TYPE.CODE
   })
@@ -57,7 +57,7 @@ test('Test usecase with invalid member Ra', async () => {
   expect(() => {
     useCase.execute(
       new AssociatedAction({
-        member_ra: '21.00833.7',
+        memberRa: '21.00833.7',
         action: action
       })
     )
@@ -65,9 +65,9 @@ test('Test usecase with invalid member Ra', async () => {
   expect(() => {
     useCase.execute(
       new AssociatedAction({
-        member_ra: '21.00833.7',
+        memberRa: '21.00833.7',
         action: action
       })
     )
-  }).toThrowError('Field props.member_ra is not valid')
+  }).toThrowError('Field props.memberRa is not valid')
 })

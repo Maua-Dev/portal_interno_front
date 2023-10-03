@@ -53,7 +53,7 @@ test('Test Get History Usecase with exclusiveStartKey', async () => {
   const getHistoryUsecase = new GetHistoryUsecase(repo)
 
   const { actions } = await getHistoryUsecase.execute(
-    '21.00210-0',
+    '21002100',
     10,
     undefined,
     undefined,

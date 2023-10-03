@@ -9,7 +9,7 @@ import '@testing-library/jest-dom'
 
 test('Test Associated Action entity', () => {
   const action = new Action({
-    ownerRa: '21.00210-0',
+    ownerRa: '21002100',
     startDate: 1000,
     endDate: 2000,
     duration: 1000,
@@ -18,12 +18,12 @@ test('Test Associated Action entity', () => {
     title: 'Test Action Entity',
     description: 'Testing',
     projectCode: '76',
-    associatedMembersRa: ['21.00833-7'],
+    associatedMembersRa: ['21008337'],
     stackTags: [STACK.FRONTEND, STACK.BACKEND],
     actionTypeTag: ACTION_TYPE.CODE
   })
   const associatedAction = new AssociatedAction({
-    member_ra: '20.02194-0',
+    memberRa: '20021940',
     action: action
   })
 
@@ -32,9 +32,9 @@ test('Test Associated Action entity', () => {
 
 // Properties Tests
 
-test('Test Associated Action entity member_ra', () => {
+test('Test Associated Action entity memberRa', () => {
   const action = new Action({
-    ownerRa: '21.00210-0',
+    ownerRa: '21002100',
     startDate: 1000,
     endDate: 2000,
     duration: 1000,
@@ -43,21 +43,21 @@ test('Test Associated Action entity member_ra', () => {
     title: 'Test Action Entity',
     description: 'Testing',
     projectCode: '76',
-    associatedMembersRa: ['21.00833-7'],
+    associatedMembersRa: ['21008337'],
     stackTags: [STACK.FRONTEND, STACK.BACKEND],
     actionTypeTag: ACTION_TYPE.CODE
   })
   const associatedAction = new AssociatedAction({
-    member_ra: '20.02194-0',
+    memberRa: '20021940',
     action: action
   })
 
-  expect(associatedAction.member_ra).toBe('20.02194-0')
+  expect(associatedAction.memberRa).toBe('20021940')
 })
 
 test('Test Associated Action entity action', () => {
   const action = new Action({
-    ownerRa: '21.00210-0',
+    ownerRa: '21002100',
     startDate: 1000,
     endDate: 2000,
     duration: 1000,
@@ -66,18 +66,18 @@ test('Test Associated Action entity action', () => {
     title: 'Test Action Entity',
     description: 'Testing',
     projectCode: '76',
-    associatedMembersRa: ['21.00833-7'],
+    associatedMembersRa: ['21008337'],
     stackTags: [STACK.FRONTEND, STACK.BACKEND],
     actionTypeTag: ACTION_TYPE.CODE
   })
   const associatedAction = new AssociatedAction({
-    member_ra: '20.02194-0',
+    memberRa: '20021940',
     action: action
   })
 
   expect(associatedAction.action).toEqual(
     new Action({
-      ownerRa: '21.00210-0',
+      ownerRa: '21002100',
       startDate: 1000,
       endDate: 2000,
       duration: 1000,
@@ -86,7 +86,7 @@ test('Test Associated Action entity action', () => {
       title: 'Test Action Entity',
       description: 'Testing',
       projectCode: '76',
-      associatedMembersRa: ['21.00833-7'],
+      associatedMembersRa: ['21008337'],
       stackTags: [STACK.FRONTEND, STACK.BACKEND],
       actionTypeTag: ACTION_TYPE.CODE
     })
@@ -97,7 +97,7 @@ test('Test Associated Action entity action', () => {
 
 test('Test Associated Action entity to JSON', () => {
   const action = new Action({
-    ownerRa: '21.00210-0',
+    ownerRa: '21002100',
     startDate: 1000,
     endDate: 2000,
     duration: 1000,
@@ -106,37 +106,55 @@ test('Test Associated Action entity to JSON', () => {
     title: 'Test Action Entity',
     description: 'Testing',
     projectCode: '76',
-    associatedMembersRa: ['21.00833-7'],
+    associatedMembersRa: ['21008337'],
     stackTags: [STACK.FRONTEND, STACK.BACKEND],
     actionTypeTag: ACTION_TYPE.CODE
   })
   const associatedAction = new AssociatedAction({
-    member_ra: '20.02194-0',
+    memberRa: '20021940',
     action: action
+  })
+
+  expect(associatedAction.toJSON()).toEqual({
+    member_ra: '20021940',
+    action: {
+      owner_ra: '21002100',
+      start_date: 1000,
+      end_date: 2000,
+      duration: 1000,
+      action_id: '4000',
+      story_id: 1000,
+      title: 'Test Action Entity',
+      description: 'Testing',
+      project_code: '76',
+      associated_members_ra: ['21008337'],
+      stack_tags: ['FRONTEND', 'BACKEND'],
+      action_type_tag: 'CODE'
+    }
   })
 
   expect(associatedAction.toJSON()).toBeInstanceOf(Object)
 })
 
 test('Test Associated Action entity from JSON', () => {
-  const action = new Action({
-    ownerRa: '21.00210-0',
-    startDate: 1000,
-    endDate: 2000,
+  const action = {
+    owner_ra: '21002100',
+    start_date: 1000,
+    end_date: 2000,
     duration: 1000,
-    actionId: '4000',
-    storyId: 1000,
+    action_id: '4000',
+    story_id: 1,
     title: 'Test Action Entity',
     description: 'Testing',
-    projectCode: '76',
-    associatedMembersRa: ['21.00833-7'],
-    stackTags: [STACK.FRONTEND, STACK.BACKEND],
-    actionTypeTag: ACTION_TYPE.CODE
-  })
-  const associatedAction = new AssociatedAction({
-    member_ra: '20.02194-0',
+    project_code: '76',
+    associated_members_ra: ['21008337', '21008338'],
+    stack_tags: ['FRONTEND', 'BACKEND'],
+    action_type_tag: 'CODE'
+  }
+  const associatedAction = {
+    member_ra: '20021940',
     action: action
-  })
+  }
 
   expect(AssociatedAction.fromJSON(associatedAction)).toBeInstanceOf(
     AssociatedAction
@@ -145,9 +163,9 @@ test('Test Associated Action entity from JSON', () => {
 
 // Invalid attributes tests
 
-test('Test Associated Action entity error member_ra', () => {
+test('Test Associated Action entity error memberRa', () => {
   const action = new Action({
-    ownerRa: '21.00210-0',
+    ownerRa: '21002100',
     startDate: 1000,
     endDate: 2000,
     duration: 1000,
@@ -156,22 +174,22 @@ test('Test Associated Action entity error member_ra', () => {
     title: 'Test Action Entity',
     description: 'Testing',
     projectCode: '76',
-    associatedMembersRa: ['21.00833-7'],
+    associatedMembersRa: ['21008337'],
     stackTags: [STACK.FRONTEND, STACK.BACKEND],
     actionTypeTag: ACTION_TYPE.CODE
   })
 
   expect(() => {
     new AssociatedAction({
-      member_ra: '20021940',
+      memberRa: '20.02194-0',
       action: action
     })
   }).toThrowError(EntityError)
 
   expect(() => {
     new AssociatedAction({
-      member_ra: '20021940',
+      memberRa: '20.02194-0',
       action: action
     })
-  }).toThrowError('Field props.member_ra is not valid')
+  }).toThrowError('Field props.memberRa is not valid')
 })

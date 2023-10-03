@@ -36,7 +36,7 @@ test('Test Action with invalid ownerRa', async () => {
   expect(() => {
     actionUsecase.execute(
       new Action({
-        ownerRa: '22406800',
+        ownerRa: '22.40680-0',
         startDate: 1612137600000,
         endDate: 1612141200000,
         duration: 3600000,
@@ -54,12 +54,12 @@ test('Test Action with invalid ownerRa', async () => {
   expect(() => {
     actionUsecase.execute(
       new Action({
-        ownerRa: '22406800',
+        ownerRa: '22.40680-0',
         startDate: 1612137600000,
         endDate: 1612141200000,
         duration: 3600000,
         actionId: 'uuid6',
-        associatedMembersRa: ['22.00680-0', '22.22222-2'],
+        associatedMembersRa: ['22006800', '22222222'],
         title: '**Reunião**',
         actionTypeTag: ACTION_TYPE.MEETING,
         projectCode: 'PT',
@@ -78,12 +78,12 @@ test('Test Action with invalid endDate', async () => {
   expect(() => {
     actionUsecase.execute(
       new Action({
-        ownerRa: '22.40680-0',
+        ownerRa: '22406800',
         startDate: 1612137600000,
         endDate: 161214120000,
         duration: 3600000,
         actionId: 'uuid6',
-        associatedMembersRa: ['22.00680-0', '22.22222-2'],
+        associatedMembersRa: ['22006800', '22222222'],
         title: '**Reunião**',
         actionTypeTag: ACTION_TYPE.MEETING,
         projectCode: 'PT',
@@ -96,12 +96,12 @@ test('Test Action with invalid endDate', async () => {
   expect(() => {
     actionUsecase.execute(
       new Action({
-        ownerRa: '22.40680-0',
+        ownerRa: '22406800',
         startDate: 1612137600000,
         endDate: 161214120000,
         duration: 3600000,
         actionId: 'uuid6',
-        associatedMembersRa: ['22.00680-0', '22.22222-2'],
+        associatedMembersRa: ['22006800', '22222222'],
         title: '**Reunião**',
         actionTypeTag: ACTION_TYPE.MEETING,
         projectCode: 'PT',
@@ -120,12 +120,12 @@ test('Test Action with invalid duration', async () => {
   expect(() => {
     actionUsecase.execute(
       new Action({
-        ownerRa: '22.40680-0',
+        ownerRa: '22406800',
         startDate: 1612137600000,
         endDate: 1612141200000,
         duration: -3600000,
         actionId: 'uuid6',
-        associatedMembersRa: ['22.00680-0', '22.22222-2'],
+        associatedMembersRa: ['22006800', '22222222'],
         title: '**Reunião**',
         actionTypeTag: ACTION_TYPE.MEETING,
         projectCode: 'PT',
@@ -138,12 +138,12 @@ test('Test Action with invalid duration', async () => {
   expect(() => {
     actionUsecase.execute(
       new Action({
-        ownerRa: '22.40680-0',
+        ownerRa: '22406800',
         startDate: 1612137600000,
         endDate: 1612141200000,
         duration: 36000000,
         actionId: 'uuid6',
-        associatedMembersRa: ['22.00680-0', '22.22222-2'],
+        associatedMembersRa: ['22006800', '22222222'],
         title: '**Reunião**',
         actionTypeTag: ACTION_TYPE.MEETING,
         projectCode: 'PT',
@@ -162,12 +162,12 @@ test('Test Action with invalid actionId', async () => {
   expect(() => {
     actionUsecase.execute(
       new Action({
-        ownerRa: '22.40680-0',
+        ownerRa: '22406800',
         startDate: 1612137600000,
         endDate: 1612141200000,
         duration: 3600000,
         actionId: 'uui',
-        associatedMembersRa: ['22.00680-0', '22.22222-2'],
+        associatedMembersRa: ['22006800', '22222222'],
         title: '**Reunião**',
         actionTypeTag: ACTION_TYPE.MEETING,
         projectCode: 'PT',
@@ -180,12 +180,12 @@ test('Test Action with invalid actionId', async () => {
   expect(() => {
     actionUsecase.execute(
       new Action({
-        ownerRa: '22.40680-0',
+        ownerRa: '22406800',
         startDate: 1612137600000,
         endDate: 1612141200000,
         duration: 3600000,
         actionId: 'uui',
-        associatedMembersRa: ['22.00680-0', '22.22222-2'],
+        associatedMembersRa: ['22006800', '22222222'],
         title: '**Reunião**',
         actionTypeTag: ACTION_TYPE.MEETING,
         projectCode: 'PT',
@@ -204,17 +204,17 @@ test('Test Action with invalid storyId', async () => {
   expect(() => {
     actionUsecase.execute(
       new Action({
-        ownerRa: '22.40680-0',
+        ownerRa: '22406800',
         startDate: 1612137600000,
         endDate: 1612141200000,
         duration: 3600000,
         actionId: 'uuid6',
-        associatedMembersRa: ['22.00680-0', '22.22222-2'],
+        associatedMembersRa: ['22006800', '22222222'],
         title: '**Reunião**',
         actionTypeTag: ACTION_TYPE.MEETING,
         projectCode: 'PT',
         stackTags: [STACK.FRONTEND],
-        storyId: 99,
+        storyId: -100,
         description: 'Reunião de como instalar o yarn'
       })
     )
@@ -222,17 +222,17 @@ test('Test Action with invalid storyId', async () => {
   expect(() => {
     actionUsecase.execute(
       new Action({
-        ownerRa: '22.40680-0',
+        ownerRa: '22406800',
         startDate: 1612137600000,
         endDate: 1612141200000,
         duration: 3600000,
         actionId: 'uuid6',
-        associatedMembersRa: ['22.00680-0', '22.22222-2'],
+        associatedMembersRa: ['22006800', '22222222'],
         title: '**Reunião**',
         actionTypeTag: ACTION_TYPE.MEETING,
         projectCode: 'PT',
         stackTags: [STACK.FRONTEND],
-        storyId: 99,
+        storyId: -100,
         description: 'Reunião de como instalar o yarn'
       })
     )
@@ -246,12 +246,12 @@ test('Test Action with invalid title', async () => {
   expect(() => {
     actionUsecase.execute(
       new Action({
-        ownerRa: '22.40680-0',
+        ownerRa: '22406800',
         startDate: 1612137600000,
         endDate: 1612141200000,
         duration: 3600000,
         actionId: 'uuid6',
-        associatedMembersRa: ['22.00680-0', '22.22222-2'],
+        associatedMembersRa: ['22006800', '22222222'],
         title: 'aaa',
         actionTypeTag: ACTION_TYPE.MEETING,
         projectCode: 'PT',
@@ -264,12 +264,12 @@ test('Test Action with invalid title', async () => {
   expect(() => {
     actionUsecase.execute(
       new Action({
-        ownerRa: '22.40680-0',
+        ownerRa: '22406800',
         startDate: 1612137600000,
         endDate: 1612141200000,
         duration: 3600000,
         actionId: 'uuid6',
-        associatedMembersRa: ['22.00680-0', '22.22222-2'],
+        associatedMembersRa: ['22006800', '22222222'],
         title: 'aaa',
         actionTypeTag: ACTION_TYPE.MEETING,
         projectCode: 'PT',
@@ -288,12 +288,12 @@ test('Test Action with invalid description', async () => {
   expect(() => {
     actionUsecase.execute(
       new Action({
-        ownerRa: '22.40680-0',
+        ownerRa: '22406800',
         startDate: 1612137600000,
         endDate: 1612141200000,
         duration: 3600000,
         actionId: 'uuid6',
-        associatedMembersRa: ['22.00680-0', '22.22222-2'],
+        associatedMembersRa: ['22006800', '22222222'],
         title: '**Reunião**',
         actionTypeTag: ACTION_TYPE.MEETING,
         projectCode: 'PT',
@@ -306,12 +306,12 @@ test('Test Action with invalid description', async () => {
   expect(() => {
     actionUsecase.execute(
       new Action({
-        ownerRa: '22.40680-0',
+        ownerRa: '22406800',
         startDate: 1612137600000,
         endDate: 1612141200000,
         duration: 3600000,
         actionId: 'uuid6',
-        associatedMembersRa: ['22.00680-0', '22.22222-2'],
+        associatedMembersRa: ['22006800', '22222222'],
         title: '**Reunião**',
         actionTypeTag: ACTION_TYPE.MEETING,
         projectCode: 'PT',
@@ -330,12 +330,12 @@ test('Test Action with invalid projectCode', async () => {
   expect(() => {
     actionUsecase.execute(
       new Action({
-        ownerRa: '22.40680-0',
+        ownerRa: '22406800',
         startDate: 1612137600000,
         endDate: 1612141200000,
         duration: 3600000,
         actionId: 'uuid6',
-        associatedMembersRa: ['22.00680-0', '22.22222-2'],
+        associatedMembersRa: ['22006800', '22222222'],
         title: '**Reunião**',
         actionTypeTag: ACTION_TYPE.MEETING,
         projectCode: 'PTA',
@@ -348,12 +348,12 @@ test('Test Action with invalid projectCode', async () => {
   expect(() => {
     actionUsecase.execute(
       new Action({
-        ownerRa: '22.40680-0',
+        ownerRa: '22406800',
         startDate: 1612137600000,
         endDate: 1612141200000,
         duration: 3600000,
         actionId: 'uuid6',
-        associatedMembersRa: ['22.00680-0', '22.22222-2'],
+        associatedMembersRa: ['22006800', '22222222'],
         title: '**Reunião**',
         actionTypeTag: ACTION_TYPE.MEETING,
         projectCode: 'PTA',
@@ -372,7 +372,7 @@ test('Test Action with invalid associatedMembersRa', async () => {
   expect(() => {
     actionUsecase.execute(
       new Action({
-        ownerRa: '22.40680-0',
+        ownerRa: '22406800',
         startDate: 1612137600000,
         endDate: 1612141200000,
         duration: 3600000,
@@ -390,7 +390,7 @@ test('Test Action with invalid associatedMembersRa', async () => {
   expect(() => {
     actionUsecase.execute(
       new Action({
-        ownerRa: '22.40680-0',
+        ownerRa: '22406800',
         startDate: 1612137600000,
         endDate: 1612141200000,
         duration: 3600000,
@@ -414,12 +414,12 @@ test('Test Action with invalid stackTags', async () => {
   expect(() => {
     actionUsecase.execute(
       new Action({
-        ownerRa: '22.40680-0',
+        ownerRa: '22406800',
         startDate: 1612137600000,
         endDate: 1612141200000,
         duration: 3600000,
         actionId: 'uuid6',
-        associatedMembersRa: ['22.00680-0', '22.22222-2'],
+        associatedMembersRa: ['22006800', '22222222'],
         title: '**Reunião**',
         actionTypeTag: ACTION_TYPE.MEETING,
         projectCode: 'PT',
@@ -432,12 +432,12 @@ test('Test Action with invalid stackTags', async () => {
   expect(() => {
     actionUsecase.execute(
       new Action({
-        ownerRa: '22.40680-0',
+        ownerRa: '22406800',
         startDate: 1612137600000,
         endDate: 1612141200000,
         duration: 3600000,
         actionId: 'uuid6',
-        associatedMembersRa: ['22.00680-0', '22.22222-2'],
+        associatedMembersRa: ['22006800', '22222222'],
         title: '**Reunião**',
         actionTypeTag: ACTION_TYPE.MEETING,
         projectCode: 'PT',
