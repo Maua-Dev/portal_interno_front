@@ -310,7 +310,7 @@ export class Member {
   }
 
   static validateRa(ra: string) {
-    const regexRa = /^\d{2}\.\d{5}-\d$/
+    const regexRa = /^\d{8}$/
     if (ra == null) {
       return false
     } else if (typeof ra !== 'string') {

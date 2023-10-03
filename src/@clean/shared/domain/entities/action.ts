@@ -287,6 +287,8 @@ export class Action {
       return false
     } else if (ra.length !== 8) {
       return false
+    } else if (!ra.match(/^\d{8}$/)) {
+      return false
     }
     return true
   }
