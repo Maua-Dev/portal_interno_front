@@ -8,10 +8,10 @@ import {
   ContainerMainCards
 } from './components/little_components/Container'
 import { ReactNode, useState, useContext } from 'react'
-import { Action } from '../@clean/shared/domain/entities/action'
 
 import HistoricMainCard from './components/HistoricMainCard'
 import { ActionContext } from './contexts/action_context'
+import { FilterDialog } from './components/mui_components/Dialog'
 
 export default function Home() {
   const [on, setOn] = useState(false)
@@ -19,20 +19,31 @@ export default function Home() {
   const [isOpen, setOpen] = useState(false)
   const [mainCardId, setMainCardId] = useState<number>()
   const [mainCard, setMainCard] = useState<ReactNode>(null)
-  const [history, setHistory] = useState<Action[]>([])
   // const [isClient, setClient] = useState(false)
 
-  const { getHistory } = useContext(ActionContext)
+  const {
+    getHistory,
+    history,
+    setActivitiesPaginationCounter,
+    activitiesPaginationCounter,
+    lastEvaluatedKey,
+    firstEvaluatedKey
+  } = useContext(ActionContext)
 
-  // const { createAction } = useContext(ActionContext)
+  // filter logic
+
+  const [openDialog, setOpenDialog] = useState(false)
+
+  const handleOpenFilter = () => {
+    setOpenDialog(!openDialog)
+  }
+  const handleCloseFilter = () => {
+    setOpenDialog(false)
+  }
 
   const handleSideButtonClick = () => {
     setOpen(!isOpen)
   }
-
-  // const handleOnClick = () => {
-  //   setOn(!on)
-  // }
 
   const saveOnClick = () => {
     return
@@ -43,11 +54,7 @@ export default function Home() {
   }
 
   const handleHistoryClick = async () => {
-    const activities = await getHistory('19017310', 20)
-    if (activities) {
-      setHistory(activities)
-      console.log(activities)
-    }
+    await getHistory('19017310', 20)
     setIsHistoryOpen(!isHistoryOpen)
   }
 
@@ -69,6 +76,19 @@ export default function Home() {
       setMainCard(mainCardComponent)
     }
     handleSideButtonClick()
+  }
+
+  const handleNextPage = async () => {
+    console.log('lastEvaluatedKey', lastEvaluatedKey)
+    await getHistory(
+      '19017310',
+      20,
+      undefined,
+      undefined,
+      history[history.length - 1].actionId
+    )
+
+    setActivitiesPaginationCounter(activitiesPaginationCounter + 1)
   }
 
   return (
@@ -100,6 +120,8 @@ export default function Home() {
                 }}
               />
               <HistoryButton
+                onClickFilterAdd={handleOpenFilter}
+                onClickFilterRemove={() => null}
                 activities={history}
                 isOpen={isHistoryOpen}
                 onClick={() => {
@@ -116,6 +138,8 @@ export default function Home() {
                     2
                   )
                 }}
+                handleNextPageHistory={handleNextPage}
+                handleBackPageHistory={() => null}
               />
             </ContainerActivitiesHistory>
             {on ? (
@@ -126,6 +150,7 @@ export default function Home() {
         </section>
       </main>
       <footer className=""></footer>
+      <FilterDialog open={openDialog} onClose={handleCloseFilter} />
     </>
   )
 }

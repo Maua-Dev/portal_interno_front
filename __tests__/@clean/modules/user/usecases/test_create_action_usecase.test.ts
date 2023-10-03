@@ -11,12 +11,12 @@ test('Test Action usecase', async () => {
   const actionUsecase = new CreateActionUsecase(repo)
 
   const action = new Action({
-    ownerRa: '22.00680-0',
+    ownerRa: '22006800',
     startDate: 1612137600000,
     endDate: 1612141200000,
     duration: 3600000,
     actionId: 'uuid1',
-    associatedMembersRa: ['22.00680-0', '22.22222-2'],
+    associatedMembersRa: ['22006800', '22222222'],
     title: '**Reunião**',
     actionTypeTag: ACTION_TYPE.MEETING,
     projectCode: 'PT',
@@ -41,7 +41,7 @@ test('Test Action with invalid ownerRa', async () => {
         endDate: 1612141200000,
         duration: 3600000,
         actionId: 'uuid6',
-        associatedMembersRa: ['22.00680-0', '22.22222-2'],
+        associatedMembersRa: ['22006800', '22222222'],
         title: '**Reunião**',
         actionTypeTag: ACTION_TYPE.MEETING,
         projectCode: 'PT',

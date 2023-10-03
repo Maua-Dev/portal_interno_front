@@ -6,7 +6,22 @@ import { AxiosInstance } from 'axios'
 import { IActionRepository } from '../../../modules/action/domain/repositories/action_repository_interface'
 
 interface getHistoryRawResponse {
-  actions: Action[]
+  actions: [
+    {
+      owner_ra: string
+      start_date: number
+      end_date: number
+      duration: number
+      action_id: string
+      story_id?: number
+      title: string
+      description?: string
+      project_code: string
+      associated_members_ra?: string[]
+      stack_tags: string[]
+      action_type_tag: string
+    }
+  ]
   last_evaluated_key: string
   message: string
 }
@@ -21,7 +36,7 @@ export class ActionRepositoryHttp implements IActionRepository {
     end?: number | undefined,
     exclusiveStartKey?: string | undefined
   ): Promise<Action[]> {
-    let response = undefined
+    const response: Action[] = []
     try {
       if (amount && start && end && exclusiveStartKey) {
         const firstCase = await this.http.post<getHistoryRawResponse>(
@@ -34,7 +49,9 @@ export class ActionRepositoryHttp implements IActionRepository {
             exclusiveStartKey
           }
         )
-        response = firstCase.data
+        for (let i = 0; i < firstCase.data.actions.length; i++) {
+          response.push(Action.fromJSON(firstCase.data.actions[i]))
+        }
       } else if (amount && start && end) {
         const secondCase = await this.http.post<getHistoryRawResponse>(
           '/get-history',
@@ -45,7 +62,9 @@ export class ActionRepositoryHttp implements IActionRepository {
             amount
           }
         )
-        response = secondCase.data
+        for (let i = 0; i < secondCase.data.actions.length; i++) {
+          response.push(Action.fromJSON(secondCase.data.actions[i]))
+        }
       } else if (amount && exclusiveStartKey) {
         const thirdCase = await this.http.post<getHistoryRawResponse>(
           '/get-history',
@@ -55,7 +74,9 @@ export class ActionRepositoryHttp implements IActionRepository {
             exclusiveStartKey
           }
         )
-        response = thirdCase.data
+        for (let i = 0; i < thirdCase.data.actions.length; i++) {
+          response.push(Action.fromJSON(thirdCase.data.actions[i]))
+        }
       } else if (amount) {
         const fourthCase = await this.http.post<getHistoryRawResponse>(
           '/get-history',
@@ -64,7 +85,9 @@ export class ActionRepositoryHttp implements IActionRepository {
             amount
           }
         )
-        response = fourthCase.data
+        for (let i = 0; i < fourthCase.data.actions.length; i++) {
+          response.push(Action.fromJSON(fourthCase.data.actions[i]))
+        }
       } else {
         const fifthCase = await this.http.post<getHistoryRawResponse>(
           '/get-history',
@@ -72,10 +95,13 @@ export class ActionRepositoryHttp implements IActionRepository {
             ra
           }
         )
-        response = fifthCase.data
+        for (let i = 0; i < fifthCase.data.actions.length; i++) {
+          response.push(Action.fromJSON(fifthCase.data.actions[i]))
+        }
       }
+      console.log('response', response)
 
-      return response.actions
+      return response
     } catch (error: any) {
       throw new Error(error)
     }

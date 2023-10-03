@@ -3,18 +3,18 @@ import { STACK, stackToEnum } from '../enums/stack_enum'
 import { EntityError } from '../helpers/errors/domain_error'
 
 export type JsonProps = {
-  ownerRa: string
-  startDate: number
-  endDate: number
+  owner_ra: string
+  start_date: number
+  end_date: number
   duration: number
-  actionId: string
-  storyId?: number
+  action_id: string
+  story_id?: number
   title: string
   description?: string
-  projectCode: string
-  associatedMembersRa?: string[]
-  stackTags: string[]
-  actionTypeTag: string
+  project_code: string
+  associated_members_ra?: string[]
+  stack_tags: string[]
+  action_type_tag: string
 }
 
 export type ActionProps = {
@@ -39,12 +39,12 @@ export class Action {
     }
     this.props.ownerRa = props.ownerRa
 
-    if (!Action.validatestartDate(props.startDate)) {
+    if (!Action.validateStartDate(props.startDate)) {
       throw new EntityError('props.startDate')
     }
     this.props.startDate = props.startDate
 
-    if (!Action.validateendDate(props.endDate, props.startDate)) {
+    if (!Action.validateEndDate(props.endDate, props.startDate)) {
       throw new EntityError('props.endDate')
     }
     this.props.endDate = props.endDate
@@ -127,7 +127,7 @@ export class Action {
   }
 
   set setstartDate(startDate: number) {
-    if (!Action.validatestartDate(startDate)) {
+    if (!Action.validateStartDate(startDate)) {
       throw new EntityError('props.startDate')
     }
     this.props.startDate = startDate
@@ -138,7 +138,7 @@ export class Action {
   }
 
   set setendDate(endDate: number) {
-    if (!Action.validateendDate(endDate, this.startDate)) {
+    if (!Action.validateEndDate(endDate, this.startDate)) {
       throw new EntityError('props.endDate')
     }
     this.props.endDate = endDate
@@ -247,52 +247,51 @@ export class Action {
 
   toJSON() {
     return {
-      ownerRa: this.ownerRa,
-      startDate: this.startDate,
-      endDate: this.endDate,
+      owner_ra: this.ownerRa,
+      start_date: this.startDate,
+      end_date: this.endDate,
       duration: this.duration,
-      actionId: this.actionId,
-      storyId: this.storyId,
+      action_id: this.actionId,
+      story_id: this.storyId,
       title: this.title,
       description: this.description,
-      projectCode: this.projectCode,
-      associatedMembersRa: this.associatedMembersRa,
-      stackTags: this.stackTags,
-      actionTypeTag: this.actionTypeTag
+      project_code: this.projectCode,
+      associated_members_ra: this.associatedMembersRa,
+      stack_tags: this.stackTags,
+      action_type_tag: this.actionTypeTag
     }
   }
 
   static fromJSON(json: JsonProps) {
     return new Action({
-      ownerRa: json.ownerRa,
-      startDate: json.startDate,
-      endDate: json.endDate,
+      ownerRa: json.owner_ra,
+      startDate: json.start_date,
+      endDate: json.end_date,
       duration: json.duration,
-      actionId: json.actionId,
-      storyId: json.storyId,
+      actionId: json.action_id,
+      storyId: json.story_id,
       title: json.title,
       description: json.description,
-      projectCode: json.projectCode,
-      associatedMembersRa: json.associatedMembersRa,
-      stackTags: json.stackTags.map((stackTag) => stackToEnum(stackTag)),
-      actionTypeTag: actionTypeToEnum(json.actionTypeTag)
+      projectCode: json.project_code,
+      associatedMembersRa: json.associated_members_ra,
+      stackTags: json.stack_tags.map((stackTag) => stackToEnum(stackTag)),
+      actionTypeTag: actionTypeToEnum(json.action_type_tag)
     })
   }
 
   // Validate functions
   static validateOwnerRa(ra: string) {
-    const regexRa = /^\d{2}\.\d{5}-\d$/
     if (ra == null) {
       return false
     } else if (typeof ra !== 'string') {
       return false
-    } else if (!ra.match(regexRa)) {
+    } else if (ra.length !== 8) {
       return false
     }
     return true
   }
 
-  static validatestartDate(startDate: number) {
+  static validateStartDate(startDate: number) {
     if (startDate == null) {
       return false
     } else if (typeof startDate !== 'number') {
@@ -301,7 +300,7 @@ export class Action {
     return true
   }
 
-  static validateendDate(endDate: number, startDate: number) {
+  static validateEndDate(endDate: number, startDate: number) {
     if (endDate == null) {
       return false
     } else if (typeof endDate !== 'number') {
@@ -342,7 +341,7 @@ export class Action {
     if (storyId !== null) {
       if (typeof storyId !== 'number') {
         return false
-      } else if (storyId < 100 || storyId > 9999) {
+      } else if (storyId < 1 || storyId > 999999) {
         return false
       }
     }

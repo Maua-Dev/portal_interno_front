@@ -8,6 +8,7 @@ import {
 import { CreateActionUsecase } from '../../@clean/modules/action/usecases/create_action_usecase'
 import { CreateAssociatedActionUsecase } from '../../@clean/modules/action/usecases/create_associated_action_usecase'
 import { GetHistoryUsecase } from '../../@clean/modules/action/usecases/get_history_usecase'
+import { activities } from '../components/actions'
 
 export type ActionContextType = {
   createAction: (action: Action) => Promise<Action | undefined>
@@ -21,6 +22,11 @@ export type ActionContextType = {
     end?: number,
     exclusiveStartKey?: string
   ) => Promise<Action[] | undefined>
+  history: Action[]
+  activitiesPaginationCounter: number
+  setActivitiesPaginationCounter: (counter: number) => void
+  lastEvaluatedKey?: string
+  firstEvaluatedKey?: string
 }
 
 const defaultContext: ActionContextType = {
@@ -40,7 +46,13 @@ const defaultContext: ActionContextType = {
     exclusiveStartKey?: string
   ) => {
     return []
-  }
+  },
+
+  history: [],
+  activitiesPaginationCounter: 1,
+  setActivitiesPaginationCounter: () => {},
+  lastEvaluatedKey: undefined,
+  firstEvaluatedKey: undefined
 }
 
 export const ActionContext = createContext(defaultContext)
@@ -61,6 +73,10 @@ const getHistoryUsecase = containerAction.get<GetHistoryUsecase>(
 export function ActionProvider({ children }: PropsWithChildren) {
   const [createdActions, setCreatedActions] = useState<Action[]>([])
   const [history, setHistory] = useState<Action[]>([])
+  const [activitiesPaginationCounter, setActivitiesPaginationCounter] =
+    useState<number>(1)
+  const [lastEvaluatedKey, setLastEvaluatedKey] = useState<string>()
+  const [firstEvaluatedKey, setFirstEvaluatedKey] = useState<string>()
 
   async function createAction(action: Action) {
     try {
@@ -90,16 +106,18 @@ export function ActionProvider({ children }: PropsWithChildren) {
     exclusiveStartKey?: string
   ) {
     try {
-      const { actions, lastId } = await getHistoryUsecase.execute(
+      const { actions } = await getHistoryUsecase.execute(
         ra,
         amount as number,
         start,
         end,
         exclusiveStartKey
       )
-      console.log('lastId: ', lastId)
       setHistory(actions)
-      console.log(history)
+      setFirstEvaluatedKey(
+        actions[(activitiesPaginationCounter - 1) * 20].actionId
+      )
+      setLastEvaluatedKey(actions[actions.length - 1].actionId)
       return actions
     } catch (error: any) {
       console.error('Something went wrong on get history: ', error)
@@ -111,7 +129,12 @@ export function ActionProvider({ children }: PropsWithChildren) {
       value={{
         createAction,
         createAssociatedAction,
-        getHistory
+        getHistory,
+        history,
+        activitiesPaginationCounter,
+        setActivitiesPaginationCounter,
+        firstEvaluatedKey,
+        lastEvaluatedKey
       }}
     >
       {children}

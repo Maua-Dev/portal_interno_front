@@ -1,8 +1,14 @@
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import IconButton from '@mui/material/IconButton'
-import { ReactNode, useState } from 'react'
+import { ReactNode } from 'react'
 import historyIcon from '../assets/history_image_button.png'
 import { Action } from '../../@clean/shared/domain/entities/action'
+import { FilterButtons } from './little_components/Buttons'
+import { Pagination } from '@mui/material'
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
+import React from 'react'
+import { ActionContext } from '../contexts/action_context'
 
 const Container = ({
   children,
@@ -56,7 +62,7 @@ const ActionContainer = ({
 }) => {
   return (
     <div
-      className={`w-full transform flex-col transition-all delay-500 duration-500 ${
+      className={`flex w-full transform flex-col items-center justify-center transition-all delay-500 duration-500 ${
         isOpen ? 'opacity-100' : 'opacity-0'
       }`}
     >
@@ -106,21 +112,23 @@ export default function HistoryButton({
   onClick,
   isOpen,
   activities,
-  openHistoric
+  openHistoric,
+  onClickFilterAdd,
+  onClickFilterRemove,
+  handleNextPageHistory,
+  handleBackPageHistory
 }: {
   onClick: () => void
   isOpen: boolean
   activities: Action[]
   openHistoric: () => void
+  onClickFilterAdd: () => void
+  onClickFilterRemove: () => void
+  handleNextPageHistory: () => void
+  handleBackPageHistory: () => void
 }) {
-  const [open, setOpen] = useState(false)
-
-  const handleOpenFilter = () => {
-    setOpen(!open)
-  }
-  const handleCloseFilter = () => {
-    setOpen(false)
-  }
+  const { activitiesPaginationCounter, setActivitiesPaginationCounter } =
+    React.useContext(ActionContext)
 
   return (
     <Container isOpen={isOpen}>
@@ -135,14 +143,16 @@ export default function HistoryButton({
         </IconButton>
       </Header>
       <ActionContainer isOpen={isOpen}>
-        <div className="mb-3 mt-6 flex flex-row items-center justify-between px-5">
-          <button className="mr-2 h-8 w-1/2 rounded-lg border-2 border-gray-500 text-xs text-gray-500 ease-in-out hover:border-gray-800 hover:text-gray-800 hover:duration-500">
-            Adicionar filto +
-          </button>
-          <button className="ml-2 h-8 w-1/2 rounded-lg border-2 border-gray-500 text-xs text-gray-500">
-            Limpar filtro
-          </button>
-        </div>
+        {isOpen && (
+          <div className="mb-3 mt-6 flex flex-row">
+            <FilterButtons onClick={onClickFilterAdd}>
+              Adicionar filtro
+            </FilterButtons>
+            <FilterButtons onClick={onClickFilterRemove}>
+              Limpar filtro
+            </FilterButtons>
+          </div>
+        )}
         {isOpen &&
           activities &&
           activities.map((activity, index) => {
@@ -167,6 +177,22 @@ export default function HistoryButton({
               </ActionDisplay>
             )
           })}
+        {isOpen && (
+          <div
+            className={activitiesPaginationCounter === 1 ? 'ml-9 flex' : 'flex'}
+          >
+            <IconButton
+              className={activitiesPaginationCounter === 1 ? 'hidden' : ''}
+              onClick={handleBackPageHistory}
+            >
+              <ArrowBackIosNewIcon />
+            </IconButton>
+            <h3 className="mt-2">{activitiesPaginationCounter}</h3>
+            <IconButton onClick={handleNextPageHistory}>
+              <ArrowForwardIosIcon />
+            </IconButton>
+          </div>
+        )}
       </ActionContainer>
     </Container>
   )

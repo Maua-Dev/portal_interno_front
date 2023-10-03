@@ -4,7 +4,6 @@ import { IActionRepository } from '../domain/repositories/action_repository_inte
 
 interface History {
   actions: Action[]
-  lastId: string
 }
 export class GetHistoryUsecase {
   constructor(private actionRepo: IActionRepository) {}
@@ -28,11 +27,8 @@ export class GetHistoryUsecase {
       throw new NoItemsFoundError('No actions found')
     }
 
-    const lastId = actions[actions.length - 1].actionId
-
     return {
-      actions,
-      lastId
+      actions
     }
   }
 }
