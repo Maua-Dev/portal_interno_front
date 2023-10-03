@@ -2,7 +2,7 @@ import { ACTION_TYPE, actionTypeToEnum } from '../enums/action_type_enum'
 import { STACK, stackToEnum } from '../enums/stack_enum'
 import { EntityError } from '../helpers/errors/domain_error'
 
-export type JsonProps = {
+export type ActionJsonProps = {
   owner_ra: string
   start_date: number
   end_date: number
@@ -262,7 +262,7 @@ export class Action {
     }
   }
 
-  static fromJSON(json: JsonProps) {
+  static fromJSON(json: ActionJsonProps) {
     return new Action({
       ownerRa: json.owner_ra,
       startDate: json.start_date,

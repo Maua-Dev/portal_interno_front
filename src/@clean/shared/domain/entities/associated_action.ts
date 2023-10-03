@@ -1,27 +1,14 @@
 import { EntityError } from '../helpers/errors/domain_error'
-import { Action, ActionProps } from './action'
+import { Action, ActionJsonProps, ActionProps } from './action'
 
 export type AssociatedActionProps = {
   member_ra: string
   action: ActionProps
 }
 
-export type JsonProps = {
+export type AssociatedActionJsonProps = {
   member_ra: string
-  action: {
-    ownerRa: string
-    startDate: number
-    endDate: number
-    duration: number
-    actionId: string
-    storyId?: number
-    title: string
-    description?: string
-    projectCode: string
-    associatedMembersRa?: string[]
-    stackTags: string[]
-    actionTypeTag: string
-  }
+  action: ActionJsonProps
 }
 
 export class AssociatedAction {
@@ -63,7 +50,7 @@ export class AssociatedAction {
 
   // JSON Conversion
 
-  static fromJSON(json: JsonProps): AssociatedAction {
+  static fromJSON(json: AssociatedActionJsonProps): AssociatedAction {
     return new AssociatedAction({
       member_ra: json.member_ra,
       action: Action.fromJSON(json.action)
