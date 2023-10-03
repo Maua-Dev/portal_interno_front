@@ -225,7 +225,7 @@ test('Test Action Entity to JSON', () => {
     title: 'Test Action Entity',
     description: 'Testing',
     projectCode: '76',
-    associatedMembersRa: ['21.00833-7', '21.00833-8'],
+    associatedMembersRa: ['21008337', '21008338'],
     stackTags: [STACK.FRONTEND, STACK.BACKEND],
     actionTypeTag: ACTION_TYPE.CODE
   })
@@ -346,7 +346,7 @@ test('Test Action Entity with invalid storyId', () => {
       endDate: 2000,
       duration: 1000,
       actionId: '4000',
-      storyId: 10,
+      storyId: -100,
       title: 'Test Action Entity',
       description: 'Testing',
       projectCode: '76',
@@ -362,7 +362,7 @@ test('Test Action Entity with invalid storyId', () => {
       endDate: 2000,
       duration: 1000,
       actionId: '4000',
-      storyId: 10,
+      storyId: -100,
       title: 'Test Action Entity',
       description: 'Testing',
       projectCode: '76',
@@ -646,7 +646,7 @@ test('Test Action Entity with invalid stackTags', () => {
       title: 'Test Action Entity',
       description: 'Testing',
       projectCode: '76',
-      associatedMembersRa: ['21.00833-7'],
+      associatedMembersRa: ['21008337'],
       stackTags: [],
       actionTypeTag: ACTION_TYPE.CODE
     })
@@ -698,7 +698,7 @@ test('Test Action Entity without storyId prop', () => {
     title: 'Test Action Entity',
     description: 'Testing',
     projectCode: '76',
-    associatedMembersRa: ['21.00833-7'],
+    associatedMembersRa: ['21008337'],
     stackTags: [STACK.FRONTEND, STACK.BACKEND],
     actionTypeTag: ACTION_TYPE.CODE
   })
@@ -715,7 +715,7 @@ test('Test Action Entity without description prop', () => {
     storyId: 1,
     title: 'Test Action Entity',
     projectCode: '76',
-    associatedMembersRa: ['21.00833-7'],
+    associatedMembersRa: ['21008337'],
     stackTags: [STACK.FRONTEND, STACK.BACKEND],
     actionTypeTag: ACTION_TYPE.CODE
   })
