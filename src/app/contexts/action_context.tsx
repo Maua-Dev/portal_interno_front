@@ -152,13 +152,13 @@ export function ActionProvider({ children }: PropsWithChildren) {
         end,
         exclusiveStartKey
       )
-      console.log('lastId: ', lastId)
+      // console.log('lastId: ', lastId)
+      // console.log(actions)
       setHistory(actions)
-      console.log(history)
     } catch (error: any) {
       console.error('Something went wrong on get history: ', error)
     }
-    return history
+    return await history
   }
 
   async function getMember(ra: string) {

@@ -6,8 +6,7 @@ import {
   ContainerActivitiesHistory,
   ContainerMainCards
 } from './components/little_components/Container'
-import { useContext, useState, ReactNode } from 'react'
-import { ActionContext } from './contexts/action_context'
+import { useState, ReactNode } from 'react'
 import { Action } from '../@clean/shared/domain/entities/action'
 
 import { EditActionPopUp } from './components/little_components/EditActionPopUp'
@@ -16,8 +15,6 @@ import NewHistoricCard from './components/NewHistoricCard'
 import { MemberPopup } from './components/MemberPopup'
 
 export default function Home() {
-  const [isHistoryOpen, setIsHistoryOpen] = useState(false)
-  const [history, setHistory] = useState<Action[]>([])
   const [isOpen, setOpen] = useState(false)
   const [openEditPopUp, setEditPopUp] = useState(false)
   const [mainCardName, setMainCardName] = useState<string>()
@@ -28,31 +25,12 @@ export default function Home() {
     string[] | undefined
   >(undefined)
 
-  // const [isClient, setClient] = useState(false)
-
-  const { getHistory, getMember } = useContext(ActionContext)
-  // const { createAction } = useContext(ActionContext)
-
-  // const {} = useContext(ActionContent)
-
   const handleSideButtonClick = () => {
     setOpen(!isOpen)
   }
 
-  // const handleOnClick = () => {
-  //   setOn(!on)
-  // }
-
   const handleEditPopup = () => {
     setEditPopUp((prev) => !prev)
-  }
-
-  const handleHistoryClick = async () => {
-    const activities = await getHistory('19017310', 20)
-    if (activities) {
-      setHistory(activities)
-    }
-    setIsHistoryOpen(!isHistoryOpen)
   }
 
   const closeMainCard = () => {
@@ -85,7 +63,7 @@ export default function Home() {
 
   return (
     <>
-      <main className={isHistoryOpen ? 'pb-11' : ''}>
+      <main>
         <EditActionPopUp isOpen={openEditPopUp} onClose={handleEditPopup} />
         <MemberPopup
           closePopUp={handleMemberPopupClick}
@@ -113,11 +91,6 @@ export default function Home() {
                 }}
               />
               <HistoryButton
-                activities={history}
-                isOpen={isHistoryOpen}
-                onClick={() => {
-                  handleHistoryClick()
-                }}
                 openHistoric={(activity: Action) => {
                   return handleMainCards(
                     <NewHistoricCard
@@ -125,9 +98,7 @@ export default function Home() {
                       editAction={() => {
                         setSelectedAction(activity)
                         handleEditPopup()
-                      }} // handleCloseMobilePopUp={() => {
-                      //   closeMainCard()
-                      // }}
+                      }}
                     />,
                     'edit',
                     activity

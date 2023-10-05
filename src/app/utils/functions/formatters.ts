@@ -22,8 +22,6 @@ function raFormatterFromJson(input: string): string {
     raParts.slice(2, 7).join('') +
     '-' +
     raParts[7]
-
-  console.log(finalRa)
   return finalRa
 }
 
