@@ -6,17 +6,43 @@ import { AxiosInstance } from 'axios'
 import { IActionRepository } from '../../../modules/action/domain/repositories/action_repository_interface'
 import {
   associatedMembersRaFormatter,
-  raFormatter,
-  stackFormatter
+  raFormatterFromJson,
+  raFormatterToJson
 } from '../../../../app/utils/functions/formatters'
+import { Member } from '../../domain/entities/member'
+import {
+  stackFormatter,
+  stackFormatterFromJSON,
+  stackToEnum
+} from '../../domain/enums/stack_enum'
+import { actionTypeToEnum } from '../../domain/enums/action_type_enum'
+import { roleToEnum } from '../../domain/enums/role_enum'
+import { courseToEnum } from '../../domain/enums/course_enum'
+import { activeToEnum } from '../../domain/enums/active_enum'
+import { Project } from '../../domain/entities/project'
+
+interface actionRawResponse {
+  owner_ra: string
+  start_date: number
+  story_id: number | undefined
+  title: string
+  description: string | undefined
+  end_date: number
+  duration: number
+  project_code: string
+  associated_members_ra: string[] | undefined
+  stack_tags: string[]
+  action_type_tag: string
+  action_id: string
+}
 
 interface getHistoryRawResponse {
-  actions: Action[]
+  actions: actionRawResponse[]
   last_evaluated_key: string
   message: string
 }
 
-interface createActionBodyResquet {
+export interface createActionBodyResquet {
   owner_ra: string
   start_date: number
   story_id: number | undefined
@@ -35,6 +61,39 @@ interface createActionRawResponse {
   message: string
 }
 
+interface projectRawResponse {
+  code: string
+  name: string
+  description: string
+  po_RA: string
+  scrum_RA: string
+  start_date: number
+  members: number[]
+  photos: string[]
+}
+
+interface memberRawResponse {
+  member: {
+    name: string
+    email_dev: string
+    email: string
+    ra: string
+    role: string
+    stack: string
+    year: number
+    cellphone: string
+    course: string
+    hired_date: number
+    deactivated_date?: number
+    active: string
+    projects: projectRawResponse[] // Project
+  }
+}
+
+export interface getAllMembersRawResponse {
+  members: memberRawResponse[]
+}
+
 export class ActionRepositoryHttp implements IActionRepository {
   constructor(private http: AxiosInstance) {}
 
@@ -48,33 +107,81 @@ export class ActionRepositoryHttp implements IActionRepository {
     let response = undefined
     try {
       if (amount && start && end && exclusiveStartKey) {
-        const firstCase = await this.http.get<getHistoryRawResponse>(
-          `/get-history?ra=${ra}&start=${start}&end=${end}&exclusive_start_key=${exclusiveStartKey}&amount=${amount}`
+        const firstCase = await this.http.post<getHistoryRawResponse>(
+          '/get-history',
+          {
+            ra,
+            start,
+            end,
+            amount,
+            exclusiveStartKey
+          }
         )
         response = firstCase.data
       } else if (amount && start && end) {
-        const secondCase = await this.http.get<getHistoryRawResponse>(
-          `/get-history?ra=${ra}&start=${start}&end=${end}&amount=${amount}`
+        const secondCase = await this.http.post<getHistoryRawResponse>(
+          '/get-history',
+          {
+            ra,
+            start,
+            end,
+            amount
+          }
         )
         response = secondCase.data
       } else if (amount && exclusiveStartKey) {
-        const thirdCase = await this.http.get<getHistoryRawResponse>(
-          `/get-history?ra=${ra}&exclusive_start_key=${exclusiveStartKey}&amount=${amount}`
+        const thirdCase = await this.http.post<getHistoryRawResponse>(
+          '/get-history',
+          {
+            ra,
+            amount,
+            exclusiveStartKey
+          }
         )
         response = thirdCase.data
       } else if (amount) {
-        const fourthCase = await this.http.get<getHistoryRawResponse>(
-          `/get-history?ra=${ra}&amount=${amount}`
+        const fourthCase = await this.http.post<getHistoryRawResponse>(
+          '/get-history',
+          {
+            ra,
+            amount
+          }
         )
         response = fourthCase.data
       } else {
-        const fifthCase = await this.http.get<getHistoryRawResponse>(
-          `/get-history?ra=${ra}`
+        const fifthCase = await this.http.post<getHistoryRawResponse>(
+          '/get-history',
+          {
+            ra
+          }
         )
         response = fifthCase.data
       }
 
-      return response.actions
+      const actionsArray: Action[] = []
+
+      response.actions.map((actionUnit) => {
+        return actionsArray.push(
+          new Action({
+            ownerRa: raFormatterFromJson(actionUnit.owner_ra),
+            startDate: actionUnit.start_date,
+            endDate: actionUnit.end_date,
+            duration: actionUnit.duration,
+            storyId: actionUnit.story_id,
+            actionId: actionUnit.action_id,
+            title: actionUnit.title,
+            description: actionUnit.description,
+            projectCode: actionUnit.project_code,
+            associatedMembersRa: actionUnit.associated_members_ra?.map(
+              (memberRa) => raFormatterFromJson(memberRa)
+            ),
+            stackTags: stackFormatterFromJSON(actionUnit.stack_tags),
+            actionTypeTag: actionTypeToEnum(actionUnit.action_type_tag)
+          })
+        )
+      })
+
+      return actionsArray
     } catch (error: any) {
       throw new Error(error)
     }
@@ -83,7 +190,7 @@ export class ActionRepositoryHttp implements IActionRepository {
   async createAction(action: Action): Promise<Action> {
     // console.log(JSON.stringify(action, null, 2))
 
-    const ownerRa = raFormatter(action.ownerRa)
+    const ownerRa = raFormatterToJson(action.ownerRa)
     const stackTags = stackFormatter(action.stackTags)
 
     const description = action.description ? action.description : undefined
@@ -116,6 +223,98 @@ export class ActionRepositoryHttp implements IActionRepository {
       return response.data.action
     } catch (error: any) {
       throw new Error('Error creating action: ' + error.message)
+    }
+  }
+
+  async getMember(ra: string): Promise<Member> {
+    try {
+      const formatedRa = raFormatterToJson(ra)
+
+      const response = await this.http.get<memberRawResponse>(
+        `/get-member/?ra=${formatedRa}`
+      )
+
+      const memberRawResponse = response.data.member
+
+      const projectsArray: Project[] = []
+
+      if (memberRawResponse.projects) {
+        memberRawResponse.projects.map((project) => {
+          return projectsArray.push(
+            new Project({
+              code: project.code,
+              name: project.name,
+              description: project.description
+            })
+          )
+        })
+      }
+
+      return new Member({
+        name: memberRawResponse.name,
+        email: memberRawResponse.email,
+        ra: raFormatterFromJson(memberRawResponse.ra),
+        role: roleToEnum(memberRawResponse.role),
+        stack: stackToEnum(memberRawResponse.stack),
+        year: memberRawResponse.year,
+        cellphone: memberRawResponse.cellphone,
+        course: courseToEnum(memberRawResponse.course),
+        hiredDate: memberRawResponse.hired_date,
+        deactivatedDate: memberRawResponse.deactivated_date,
+        active: activeToEnum(memberRawResponse.active),
+        projects: projectsArray
+      })
+    } catch (error: any) {
+      throw new Error('Error Getting All Members: ' + error.message)
+    }
+  }
+
+  async getAllMembers(): Promise<Member[]> {
+    try {
+      const response = await this.http.get<getAllMembersRawResponse>(
+        '/get-all-members'
+      )
+
+      const membersArray: Member[] = []
+
+      response.data.members.map((member) => {
+        const memberUnit: memberRawResponse = member
+        const projectsArray: Project[] = []
+
+        if (memberUnit.member.projects) {
+          memberUnit.member.projects.map((project) => {
+            projectsArray.push(
+              new Project({
+                code: project.code,
+                name: project.name,
+                description: project.description
+              })
+            )
+          })
+        }
+
+        return membersArray.push(
+          new Member({
+            name: memberUnit.member.name,
+            email: memberUnit.member.email,
+            ra: raFormatterFromJson(memberUnit.member.ra),
+            role: roleToEnum(memberUnit.member.role),
+            stack: stackToEnum(memberUnit.member.stack),
+            year: memberUnit.member.year,
+            cellphone: memberUnit.member.cellphone,
+            course: courseToEnum(memberUnit.member.course),
+            hiredDate: memberUnit.member.hired_date,
+            deactivatedDate: memberUnit.member.deactivated_date,
+            active: activeToEnum(memberUnit.member.active),
+            projects: projectsArray
+          })
+        )
+      })
+
+      console.log(membersArray[0].ra)
+      return membersArray
+    } catch (error: any) {
+      throw new Error('Error Getting All Members: ' + error.message)
     }
   }
 

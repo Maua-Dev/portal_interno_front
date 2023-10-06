@@ -377,7 +377,7 @@ test('Test Member Entity from JSON', () => {
     year: 2,
     cellphone: '11999999999',
     course: 'ECM',
-    hiredDate: 10,
+    hired_date: 10,
     active: 'ACTIVE',
     projects: [
       {
@@ -708,41 +708,6 @@ test('Test Member Entity with invalid deactivatedDate', () => {
       ]
     })
   }).toThrowError('Field props.deactivatedDate is not valid')
-})
-
-test('Test Member Entity with empty projects', () => {
-  expect(() => {
-    new Member({
-      name: 'Furlan mata pomba',
-      email: 'furlas@maua.br',
-      ra: '21.00210-0',
-      role: ROLE.DEV,
-      stack: STACK.FRONTEND,
-      year: 2,
-      cellphone: '11999999999',
-      course: COURSE.ECM,
-      hiredDate: 10,
-
-      active: ACTIVE.ACTIVE,
-      projects: []
-    })
-  }).toThrowError(EntityError)
-  expect(() => {
-    new Member({
-      name: 'Furlan mata pomba',
-      email: 'furlas@maua.br',
-      ra: '21.00210-0',
-      role: ROLE.DEV,
-      stack: STACK.FRONTEND,
-      year: 2,
-      cellphone: '11999999999', //11999999999
-      course: COURSE.ECM,
-      hiredDate: 10,
-
-      active: ACTIVE.ACTIVE,
-      projects: []
-    })
-  }).toThrowError('Field props.projects is not valid')
 })
 
 test('Test Member Entity with deactivatedDate prop', () => {

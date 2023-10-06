@@ -3,18 +3,18 @@ import { STACK, stackToEnum } from '../enums/stack_enum'
 import { EntityError } from '../helpers/errors/domain_error'
 
 export type JsonProps = {
-  ownerRa: string
-  startDate: number
-  endDate: number
-  duration: number
-  actionId: string
-  storyId?: number
+  owner_ra: string
+  start_date: number
+  story_id: number | undefined
   title: string
-  description?: string
-  projectCode: string
-  associatedMembersRa?: string[]
-  stackTags: string[]
-  actionTypeTag: string
+  description: string | undefined
+  end_date: number
+  duration: number
+  project_code: string
+  associated_members_ra: string[] | undefined
+  stack_tags: string[]
+  action_type_tag: string
+  action_id: string
 }
 
 export type ActionProps = {
@@ -264,18 +264,18 @@ export class Action {
 
   static fromJSON(json: JsonProps) {
     return new Action({
-      ownerRa: json.ownerRa,
-      startDate: json.startDate,
-      endDate: json.endDate,
+      ownerRa: json.owner_ra,
+      startDate: json.start_date,
+      endDate: json.end_date,
       duration: json.duration,
-      actionId: json.actionId,
-      storyId: json.storyId,
+      actionId: json.action_id,
+      storyId: json.story_id,
       title: json.title,
       description: json.description,
-      projectCode: json.projectCode,
-      associatedMembersRa: json.associatedMembersRa,
-      stackTags: json.stackTags.map((stackTag) => stackToEnum(stackTag)),
-      actionTypeTag: actionTypeToEnum(json.actionTypeTag)
+      projectCode: json.project_code,
+      associatedMembersRa: json.associated_members_ra,
+      stackTags: json.stack_tags.map((stackTag) => stackToEnum(stackTag)),
+      actionTypeTag: actionTypeToEnum(json.action_type_tag)
     })
   }
 
@@ -342,7 +342,7 @@ export class Action {
     if (storyId !== null) {
       if (typeof storyId !== 'number') {
         return false
-      } else if (storyId < 100 || storyId > 9999) {
+      } else if (storyId < 1 || storyId > 999999) {
         return false
       }
     }

@@ -367,6 +367,26 @@ export class ActionRepositoryMock implements IActionRepository {
 
     return actions.slice(0, amount)
   }
+
+  async getMember(ra: string): Promise<Member> {
+    const member = await this.members.find((member) => member.ra === ra)
+
+    if (!member) {
+      throw new NoItemsFoundError('memberRa' + ra)
+    }
+
+    return member
+  }
+
+  async getAllMembers(): Promise<Member[]> {
+    const members = await this.members
+
+    if (!members) {
+      throw new NoItemsFoundError('No members found')
+    }
+
+    return members
+  }
 }
 
 decorate(injectable(), ActionRepositoryMock)

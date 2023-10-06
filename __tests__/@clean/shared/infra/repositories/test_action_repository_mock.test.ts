@@ -1,6 +1,21 @@
 import { Action } from '../../../../../src/@clean/shared/domain/entities/action'
 import { AssociatedAction } from '../../../../../src/@clean/shared/domain/entities/associated_action'
+import { Member } from '../../../../../src/@clean/shared/domain/entities/member'
+import { Project } from '../../../../../src/@clean/shared/domain/entities/project'
 import { ACTION_TYPE } from '../../../../../src/@clean/shared/domain/enums/action_type_enum'
+import {
+  ACTIVE,
+  activeToEnum
+} from '../../../../../src/@clean/shared/domain/enums/active_enum'
+import {
+  COURSE,
+  courseToEnum
+} from '../../../../../src/@clean/shared/domain/enums/course_enum'
+import {
+  ROLE,
+  roleToEnum
+} from '../../../../../src/@clean/shared/domain/enums/role_enum'
+import { stackToEnum } from '../../../../../src/@clean/shared/domain/enums/stack_enum'
 import { STACK } from '../../../../../src/@clean/shared/domain/enums/stack_enum'
 import { NoItemsFoundError } from '../../../../../src/@clean/shared/domain/helpers/errors/domain_error'
 import { ActionRepositoryMock } from '../../../../../src/@clean/shared/infra/repositories/action_repository_mock'
@@ -110,4 +125,51 @@ test('Test create associated action', async () => {
   )
   expect(createdAssociatedAction).toBe(associated_action)
   expect(repo['associatedActions']).toContainEqual(createdAssociatedAction)
+})
+
+test('Test get all members', async () => {
+  const repo = new ActionRepositoryMock()
+  const members = await repo.getAllMembers()
+
+  const portifolio = new Project({
+    code: 'PT',
+    name: 'Portifólio',
+    description: 'É o portifólio da nossa entidade'
+  })
+
+  const portaInterno = new Project({
+    code: 'PI',
+    name: 'Portal Interno',
+    description: 'Portal interno da nossa entidade'
+  })
+
+  const member1 = members[0]
+  const member1Name = member1.name
+  const member1Email = member1.email
+  const member1RA = member1.ra
+  const member1Role = roleToEnum(member1.role)
+  const member1Stack = stackToEnum(member1.stack)
+  const member1Year = member1.year
+  const member1Cellphone = member1.cellphone
+  const member1Course = courseToEnum(member1.course)
+  const member1HiredDate = member1.hiredDate
+  const member1Active = activeToEnum(member1.active)
+  const member1Projects = member1.projects
+
+  expect(
+    Array.isArray(members) &&
+      members.every((member) => member instanceof Member)
+  ).toBe(true)
+  expect(member1).toBeInstanceOf(Member)
+  expect(member1Name).toBe('Digao Siqueira')
+  expect(member1Email).toBe('dsiqueira.devmaua@gmail.com')
+  expect(member1RA).toBe('22.00680-0')
+  expect(member1Role).toStrictEqual(ROLE.DEV)
+  expect(member1Stack).toStrictEqual(STACK.FRONTEND)
+  expect(member1Year).toBe(3)
+  expect(member1Cellphone).toBe('11999999999')
+  expect(member1Course).toStrictEqual(COURSE.CIC)
+  expect(member1HiredDate).toBe(1612137600000)
+  expect(member1Active).toStrictEqual(ACTIVE.ACTIVE)
+  expect(member1Projects).toStrictEqual([portifolio, portaInterno])
 })

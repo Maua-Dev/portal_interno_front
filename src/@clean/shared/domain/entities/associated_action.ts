@@ -9,18 +9,18 @@ export type AssociatedActionProps = {
 export type JsonProps = {
   member_ra: string
   action: {
-    ownerRa: string
-    startDate: number
-    endDate: number
+    owner_ra: string
+    start_date: number
+    end_date: number
     duration: number
-    actionId: string
-    storyId?: number
+    action_id: string
+    story_id: number | undefined
     title: string
-    description?: string
-    projectCode: string
-    associatedMembersRa?: string[]
-    stackTags: string[]
-    actionTypeTag: string
+    description: string | undefined
+    project_code: string
+    associated_members_ra: string[] | undefined
+    stack_tags: string[]
+    action_type_tag: string
   }
 }
 
