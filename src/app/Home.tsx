@@ -26,8 +26,9 @@ export default function Home() {
     history,
     setActivitiesPaginationCounter,
     activitiesPaginationCounter,
-    lastEvaluatedKey,
-    firstEvaluatedKey
+    lastEvaluatedKeyResponse,
+    firstEvaluatedKey,
+    startDate
   } = useContext(ActionContext)
 
   // filter logic
@@ -54,7 +55,7 @@ export default function Home() {
   }
 
   const handleHistoryClick = async () => {
-    await getHistory('19017310', 20)
+    await getHistory('21010757', 20)
     setIsHistoryOpen(!isHistoryOpen)
   }
 
@@ -79,13 +80,13 @@ export default function Home() {
   }
 
   const handleNextPage = async () => {
-    console.log('lastEvaluatedKey', lastEvaluatedKey)
+    console.log('lastEvaluatedKey', lastEvaluatedKeyResponse)
     await getHistory(
-      '19017310',
+      '21010757',
       20,
       undefined,
       undefined,
-      history[history.length - 1].actionId
+      lastEvaluatedKeyResponse
     )
 
     setActivitiesPaginationCounter(activitiesPaginationCounter + 1)
