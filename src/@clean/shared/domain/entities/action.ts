@@ -387,8 +387,6 @@ export class Action {
     if (associatedMembersRa != null) {
       if (Array.isArray(associatedMembersRa) === false) {
         return false
-      } else if (associatedMembersRa.length === 0) {
-        return false
       } else if (
         associatedMembersRa.every((ra) => this.validateOwnerRa(ra)) === false
       ) {
