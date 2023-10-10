@@ -514,38 +514,22 @@ test('Test Action Entity with invalid actionId', () => {
 })
 
 test('Test Action Entity with empty associatedMembersRa', () => {
-  expect(() => {
-    new Action({
-      ownerRa: '21002100',
-      startDate: 1000,
-      endDate: 2000,
-      duration: 1000,
-      actionId: '4000',
-      storyId: 1,
-      title: 'Test Action Entity',
-      description: 'Testing',
-      projectCode: '76',
-      associatedMembersRa: [],
-      stackTags: [STACK.FRONTEND, STACK.BACKEND],
-      actionTypeTag: ACTION_TYPE.CODE
-    })
-  }).toThrowError(EntityError)
-  expect(() => {
-    new Action({
-      ownerRa: '21002100',
-      startDate: 1000,
-      endDate: 2000,
-      duration: 1000,
-      actionId: '4000',
-      storyId: 1,
-      title: 'Test Action Entity',
-      description: 'Testing',
-      projectCode: '76',
-      associatedMembersRa: [],
-      stackTags: [STACK.FRONTEND, STACK.BACKEND],
-      actionTypeTag: ACTION_TYPE.CODE
-    })
-  }).toThrowError('Field props.associatedMembersRa is not valid')
+  const action = new Action({
+    ownerRa: '21002100',
+    startDate: 1000,
+    endDate: 2000,
+    duration: 1000,
+    actionId: '4000',
+    storyId: 1,
+    title: 'Test Action Entity',
+    description: 'Testing',
+    projectCode: '76',
+    associatedMembersRa: [],
+    stackTags: [STACK.FRONTEND, STACK.BACKEND],
+    actionTypeTag: ACTION_TYPE.CODE
+  })
+  expect(action).toBeInstanceOf(Action)
+  expect(action.associatedMembersRa).toStrictEqual([])
 })
 
 test('Test Action Entity with invalid associatedMembersRa', () => {

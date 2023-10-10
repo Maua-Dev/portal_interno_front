@@ -57,7 +57,10 @@ test('Test Get History Usecase with exclusiveStartKey', async () => {
     10,
     undefined,
     undefined,
-    'uuid7'
+    {
+      action_id: 'uuid7',
+      start_date: 1689966000000
+    }
   )
 
   expect(actions.length).toBe(2)
