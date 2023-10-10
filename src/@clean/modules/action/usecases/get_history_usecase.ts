@@ -1,10 +1,7 @@
-import { Action } from '../../../shared/domain/entities/action'
 import { NoItemsFoundError } from '../../../shared/domain/helpers/errors/domain_error'
+import { historyResponse } from '../../../shared/infra/repositories/action_repository_http'
 import { IActionRepository } from '../domain/repositories/action_repository_interface'
 
-interface History {
-  actions: Action[]
-}
 export class GetHistoryUsecase {
   constructor(private actionRepo: IActionRepository) {}
 
@@ -13,9 +10,12 @@ export class GetHistoryUsecase {
     amount: number,
     start?: number,
     end?: number,
-    exclusiveStartKey?: string
-  ): Promise<History> {
-    const actions = await this.actionRepo.getHistoryActions(
+    exclusiveStartKey?: {
+      action_id: string
+      start_date: number
+    }
+  ): Promise<historyResponse> {
+    const response = await this.actionRepo.getHistoryActions(
       ra,
       amount,
       start,
@@ -23,12 +23,10 @@ export class GetHistoryUsecase {
       exclusiveStartKey
     )
 
-    if (actions.length === 0) {
+    if (response.actions.length === 0) {
       throw new NoItemsFoundError('No actions found')
     }
 
-    return {
-      actions
-    }
+    return response
   }
 }
