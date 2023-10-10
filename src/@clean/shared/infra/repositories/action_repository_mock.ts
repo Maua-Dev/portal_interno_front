@@ -11,6 +11,7 @@ import { ACTIVE } from '../../domain/enums/active_enum'
 import { ACTION_TYPE } from '../../domain/enums/action_type_enum'
 import { NoItemsFoundError } from '../../domain/helpers/errors/domain_error'
 import { IActionRepository } from '../../../modules/action/domain/repositories/action_repository_interface'
+import { historyResponse } from './action_repository_http'
 
 export class ActionRepositoryMock implements IActionRepository {
   private projects: Project[] = [
@@ -340,15 +341,23 @@ export class ActionRepositoryMock implements IActionRepository {
     amount?: number,
     start?: number | undefined,
     end?: number | undefined,
-    exclusiveStartKey?: string | undefined
-  ): Promise<Action[]> {
+    exclusiveStartKey?:
+      | {
+          action_id: string
+          start_date: number
+        }
+      | undefined
+  ): Promise<historyResponse> {
     let actions = this.actions.sort((a, b) => {
       return b.startDate - a.startDate
     })
 
     if (exclusiveStartKey) {
       let action0 = actions[0]
-      while (action0 !== undefined && action0.actionId !== exclusiveStartKey) {
+      while (
+        action0 !== undefined &&
+        action0.actionId !== exclusiveStartKey.action_id
+      ) {
         actions.shift()
         if (actions.length > 0) action0 = actions[0]
       }
@@ -365,7 +374,13 @@ export class ActionRepositoryMock implements IActionRepository {
 
     actions = actions.filter((action) => action.ownerRa === ra)
 
-    return actions.slice(0, amount)
+    return {
+      actions: actions.slice(0, amount),
+      lastEvaluatedKey: {
+        action_id: actions[actions.length - 1].actionId,
+        start_date: actions[actions.length - 1].startDate
+      }
+    }
   }
 }
 
