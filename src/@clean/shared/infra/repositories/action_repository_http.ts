@@ -22,8 +22,19 @@ interface getHistoryRawResponse {
       action_type_tag: string
     }
   ]
-  last_evaluated_key: string
+  last_evaluated_key: {
+    action_id: string
+    start_date: number
+  }
   message: string
+}
+
+export interface historyResponse {
+  actions: Action[]
+  lastEvaluatedKey: {
+    action_id: string
+    start_date: number
+  }
 }
 
 export class ActionRepositoryHttp implements IActionRepository {
@@ -34,9 +45,20 @@ export class ActionRepositoryHttp implements IActionRepository {
     amount?: number | undefined,
     start?: number | undefined,
     end?: number | undefined,
-    exclusiveStartKey?: string | undefined
-  ): Promise<Action[]> {
-    const response: Action[] = []
+    exclusiveStartKey?:
+      | {
+          action_id: string
+          start_date: number
+        }
+      | undefined
+  ): Promise<historyResponse> {
+    const response: historyResponse = {
+      actions: [],
+      lastEvaluatedKey: {
+        action_id: '',
+        start_date: 0
+      }
+    }
     try {
       if (amount && start && end && exclusiveStartKey) {
         const firstCase = await this.http.post<getHistoryRawResponse>(
@@ -50,7 +72,11 @@ export class ActionRepositoryHttp implements IActionRepository {
           }
         )
         for (let i = 0; i < firstCase.data.actions.length; i++) {
-          response.push(Action.fromJSON(firstCase.data.actions[i]))
+          response.actions.push(Action.fromJSON(firstCase.data.actions[i]))
+        }
+        response.lastEvaluatedKey = {
+          action_id: firstCase.data.last_evaluated_key.action_id,
+          start_date: firstCase.data.last_evaluated_key.start_date
         }
       } else if (amount && start && end) {
         const secondCase = await this.http.post<getHistoryRawResponse>(
@@ -63,21 +89,37 @@ export class ActionRepositoryHttp implements IActionRepository {
           }
         )
         for (let i = 0; i < secondCase.data.actions.length; i++) {
-          response.push(Action.fromJSON(secondCase.data.actions[i]))
+          response.actions.push(Action.fromJSON(secondCase.data.actions[i]))
+        }
+        response.lastEvaluatedKey = {
+          action_id: secondCase.data.last_evaluated_key.action_id,
+          start_date: secondCase.data.last_evaluated_key.start_date
         }
       } else if (amount && exclusiveStartKey) {
+        console.log({
+          ra,
+          amount,
+          exclusiveStartKey
+        })
         const thirdCase = await this.http.post<getHistoryRawResponse>(
           '/get-history',
           {
             ra,
             amount,
-            exclusiveStartKey
+            exclusive_start_key: exclusiveStartKey
           }
         )
+        console.log('thirdCase', thirdCase)
         for (let i = 0; i < thirdCase.data.actions.length; i++) {
-          response.push(Action.fromJSON(thirdCase.data.actions[i]))
+          response.actions.push(Action.fromJSON(thirdCase.data.actions[i]))
         }
+        response.lastEvaluatedKey = {
+          action_id: thirdCase.data.last_evaluated_key.action_id,
+          start_date: thirdCase.data.last_evaluated_key.start_date
+        }
+        console.log(thirdCase)
       } else if (amount) {
+        console.log('aqui')
         const fourthCase = await this.http.post<getHistoryRawResponse>(
           '/get-history',
           {
@@ -85,8 +127,14 @@ export class ActionRepositoryHttp implements IActionRepository {
             amount
           }
         )
+        console.log(fourthCase)
         for (let i = 0; i < fourthCase.data.actions.length; i++) {
-          response.push(Action.fromJSON(fourthCase.data.actions[i]))
+          console.log(Action.fromJSON(fourthCase.data.actions[i]))
+          response.actions.push(Action.fromJSON(fourthCase.data.actions[i]))
+        }
+        response.lastEvaluatedKey = {
+          action_id: fourthCase.data.last_evaluated_key.action_id,
+          start_date: fourthCase.data.last_evaluated_key.start_date
         }
       } else {
         const fifthCase = await this.http.post<getHistoryRawResponse>(
@@ -96,10 +144,13 @@ export class ActionRepositoryHttp implements IActionRepository {
           }
         )
         for (let i = 0; i < fifthCase.data.actions.length; i++) {
-          response.push(Action.fromJSON(fifthCase.data.actions[i]))
+          response.actions.push(Action.fromJSON(fifthCase.data.actions[i]))
+        }
+        response.lastEvaluatedKey = {
+          action_id: fifthCase.data.last_evaluated_key.action_id,
+          start_date: fifthCase.data.last_evaluated_key.start_date
         }
       }
-      console.log('response', response)
 
       return response
     } catch (error: any) {
