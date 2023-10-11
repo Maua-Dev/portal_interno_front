@@ -45,12 +45,10 @@ export class ActionRepositoryHttp implements IActionRepository {
     amount?: number | undefined,
     start?: number | undefined,
     end?: number | undefined,
-    exclusiveStartKey?:
-      | {
-          action_id: string
-          start_date: number
-        }
-      | undefined
+    exclusiveStartKey?: {
+      action_id: string
+      start_date: number
+    }
   ): Promise<historyResponse> {
     const response: historyResponse = {
       actions: [],
