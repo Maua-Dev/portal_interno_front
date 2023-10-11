@@ -372,7 +372,14 @@ export class ActionRepositoryMock implements IActionRepository {
       actions = actions.filter((action) => action.endDate <= end)
     }
 
-    actions = actions.filter((action) => action.ownerRa === ra)
+    actions = actions.filter((action) => {
+      if (
+        action.ownerRa === ra ||
+        (action.associatedMembersRa && action.associatedMembersRa.includes(ra))
+      ) {
+        return true
+      }
+    })
 
     return {
       actions: actions.slice(0, amount),
