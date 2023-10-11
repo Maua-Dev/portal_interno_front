@@ -55,7 +55,7 @@ export default function Home() {
   }
 
   const handleHistoryClick = async () => {
-    await getHistory('21010757', 20)
+    await getHistory('21002100', 20) // DEV -> 21010757
     setIsHistoryOpen(!isHistoryOpen)
   }
 
