@@ -55,7 +55,13 @@ export default function Home() {
   }
 
   const handleHistoryClick = async () => {
-    await getHistory('21002100', 20) // DEV -> 21010757
+    if (import.meta.env.VITE_STAGE === 'DEV') {
+      await getHistory('21010757', 20)
+    } else if (import.meta.env.VITE_STAGE === 'TEST') {
+      await getHistory('21002100', 20)
+    } else {
+      await getHistory('21002100', 20)
+    }
     setIsHistoryOpen(!isHistoryOpen)
   }
 

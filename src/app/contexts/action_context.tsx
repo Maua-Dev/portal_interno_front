@@ -135,7 +135,6 @@ export function ActionProvider({ children }: PropsWithChildren) {
         actions[(activitiesPaginationCounter - 1) * 20].actionId
       )
       setLastEvaluatedKeyResponse(lastEvaluatedKey)
-      console.log('aajsdijasid', lastEvaluatedKey)
       setStartDate(lastEvaluatedKey.start_date)
       return actions
     } catch (error: any) {
