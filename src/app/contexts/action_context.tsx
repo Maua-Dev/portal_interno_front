@@ -163,7 +163,7 @@ const updateActionUsecase = containerAction.get<UpdateActionUsecase>(
   RegistryAction.UpdateActionUsecase
 )
 const getMembersUsecase = containerAction.get<GetMember>(
-  RegistryAction.GetMembersUsecase
+  RegistryAction.GetMemberUsecase
 )
 
 const getAllMembersUsecase = containerAction.get<GetAllMembersUsecase>(

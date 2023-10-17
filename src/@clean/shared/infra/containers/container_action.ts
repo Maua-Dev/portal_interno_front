@@ -22,8 +22,8 @@ export const RegistryAction = {
   CreateActionUsecase: Symbol.for('CreateActionUsecase'),
   CreateAssociatedActionUsecase: Symbol.for('CreateAssociatedActionUsecase'),
   GetHistoryUsecase: Symbol.for('GetHistoryUsecase'),
-  UpdateActionUsecase: Symbol.for('UpdateActionUsecase')
-  GetMembersUsecase: Symbol.for('GetMemberUsecase'),
+  UpdateActionUsecase: Symbol.for('UpdateActionUsecase'),
+  GetMemberUsecase: Symbol.for('GetMemberUsecase'),
   GetAllMembersUsecase: Symbol.for('GetAllMembersUsecase')
 }
 
@@ -110,10 +110,6 @@ containerAction
   .toDynamicValue((context) => {
     if (import.meta.env.VITE_STAGE === 'TEST') {
       return new UpdateActionUsecase(
-  .bind(RegistryAction.GetMembersUsecase)
-  .toDynamicValue((context) => {
-    if (import.meta.env.VITE_STAGE === 'TEST') {
-      return new GetMember(
         context.container.get(RegistryAction.ActionRepositoryMock)
       )
     } else if (
@@ -125,6 +121,22 @@ containerAction
       )
     } else {
       return new UpdateActionUsecase(
+        context.container.get(RegistryAction.ActionRepositoryMock)
+      )
+    }
+  })
+
+containerAction
+  .bind(RegistryAction.GetMemberUsecase)
+  .toDynamicValue((context) => {
+    if (import.meta.env.VITE_STAGE === 'TEST') {
+      return new GetMember(
+        context.container.get(RegistryAction.ActionRepositoryMock)
+      )
+    } else if (
+      import.meta.env.VITE_STAGE === 'DEV' ||
+      import.meta.env.VITE_STAGE === 'PROD'
+    ) {
       return new GetMember(
         context.container.get(RegistryAction.ActionRepositoryHttp)
       )

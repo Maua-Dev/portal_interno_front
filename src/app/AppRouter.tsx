@@ -1,10 +1,9 @@
 import { Route, Routes } from 'react-router-dom'
-import Home from './Home'
 
 function AppRouter() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={<h1>Portal Interno 1.0.0</h1>} />
     </Routes>
   )
 }
