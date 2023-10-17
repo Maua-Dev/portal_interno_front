@@ -265,7 +265,7 @@ test('Test Action Entity from JSON', () => {
   }
 
   const actionFromJSON = Action.fromJSON(action)
-  expect(action).toBeInstanceOf(Action)
+  expect(actionFromJSON).toBeInstanceOf(Action)
 })
 
 test('Test Action Entity with invalid ownerRa', () => {

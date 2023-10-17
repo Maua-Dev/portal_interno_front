@@ -7,10 +7,10 @@ test('Test Get Member Usecase', async () => {
   const repo = new ActionRepositoryMock()
   const getMember = new GetMember(repo)
 
-  const member = await getMember.execute('22.00680-0')
+  const member = await getMember.execute('22006800')
 
   expect(member).toBeInstanceOf(Member)
   expect(member.name).toBe('Digao Siqueira')
   expect(member.email).toBe('dsiqueira.devmaua@gmail.com')
-  expect(member.ra).toBe('22.00680-0')
+  expect(member.ra).toBe('22006800')
 })

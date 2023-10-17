@@ -464,14 +464,15 @@ export class ActionRepositoryMock implements IActionRepository {
     members.forEach((member) => {
       this.associatedActions.push(
         new AssociatedAction({
-          member_ra: member,
+          memberRa: member,
           action: this.actions.find((action) => action.actionId === actionId)!
         })
       )
     })
+  }
 
   async getMember(ra: string): Promise<Member> {
-    const member = await this.members.find((member) => member.ra === ra)
+    const member = this.members.find((member) => member.ra === ra)
 
     if (!member) {
       throw new NoItemsFoundError('memberRa' + ra)
@@ -481,7 +482,7 @@ export class ActionRepositoryMock implements IActionRepository {
   }
 
   async getAllMembers(): Promise<Member[]> {
-    const members = await this.members
+    const members = this.members
 
     if (!members) {
       throw new NoItemsFoundError('No members found')

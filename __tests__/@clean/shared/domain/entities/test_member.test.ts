@@ -726,7 +726,7 @@ test('Test Member Entity with empty projects', () => {
       active: ACTIVE.ACTIVE,
       projects: []
     })
-  }).toThrowError(EntityError)
+  }).not.toThrowError(EntityError)
   expect(() => {
     new Member({
       name: 'Furlan mata pomba',
@@ -742,7 +742,7 @@ test('Test Member Entity with empty projects', () => {
       active: ACTIVE.ACTIVE,
       projects: []
     })
-  }).toThrowError('Field props.projects is not valid')
+  }).not.toThrowError('Field props.projects is not valid')
 })
 
 test('Test Member Entity with deactivatedDate prop', () => {

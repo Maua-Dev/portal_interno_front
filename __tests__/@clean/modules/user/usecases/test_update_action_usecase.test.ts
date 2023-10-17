@@ -11,11 +11,11 @@ test('Update Action Usecase - update ownerRa', async () => {
 
   const actionWithOwnerRaUpdated = await actionUsecase.execute(
     'uuid1',
-    '21.00210-0'
+    '21002100'
   )
 
   expect(actionWithOwnerRaUpdated).toBeInstanceOf(Action)
-  expect(actionWithOwnerRaUpdated.ownerRa).toBe('21.00210-0')
+  expect(actionWithOwnerRaUpdated.ownerRa).toBe('21002100')
 })
 
 test('Update Action Usecase - update startDate', async () => {
@@ -138,13 +138,13 @@ test('Update Action Usecase - update associatedMembers', async () => {
     undefined,
     undefined,
     undefined,
-    ['21.00210-0']
+    ['21002100']
   )
 
   expect(actionWithAssociatedMembersUpdated).toBeInstanceOf(Action)
   expect(actionWithAssociatedMembersUpdated.associatedMembersRa.length).toBe(1)
   expect(actionWithAssociatedMembersUpdated.associatedMembersRa[0]).toBe(
-    '21.00210-0'
+    '21002100'
   )
 })
 
@@ -198,7 +198,7 @@ test('Update Action Usecase with invalid uuid', async () => {
   const repo = new ActionRepositoryMock()
   const actionUsecase = new UpdateActionUsecase(repo)
 
-  await expect(actionUsecase.execute('uuid10', '21.00210-0')).rejects.toThrow(
+  await expect(actionUsecase.execute('uuid10', '21002100')).rejects.toThrow(
     'No items found for this actionId: uuid10'
   )
 })

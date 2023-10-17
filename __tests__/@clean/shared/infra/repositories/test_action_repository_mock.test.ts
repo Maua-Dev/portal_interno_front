@@ -163,7 +163,7 @@ test('Test get all members', async () => {
   expect(member1).toBeInstanceOf(Member)
   expect(member1Name).toBe('Digao Siqueira')
   expect(member1Email).toBe('dsiqueira.devmaua@gmail.com')
-  expect(member1RA).toBe('22.00680-0')
+  expect(member1RA).toBe('22006800')
   expect(member1Role).toStrictEqual(ROLE.DEV)
   expect(member1Stack).toStrictEqual(STACK.FRONTEND)
   expect(member1Year).toBe(3)
