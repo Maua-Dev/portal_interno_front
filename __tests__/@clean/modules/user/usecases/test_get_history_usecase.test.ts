@@ -8,7 +8,7 @@ test('Test Get History Usecase', async () => {
 
   const { actions } = await getHistoryUsecase.execute('21002100', 10)
 
-  expect(actions.length).toBe(4)
+  expect(actions.length).toBe(6)
   expect(actions[0].title).toBe('Componente Histórico e Atividades')
   expect(actions[0].description).toBe('Reunião Daily')
 
@@ -63,7 +63,7 @@ test('Test Get History Usecase with exclusiveStartKey', async () => {
     }
   )
 
-  expect(actions.length).toBe(2)
+  expect(actions.length).toBe(4)
   expect(actions[1].title).toBe('Reunião do Front')
   expect(actions[1].description).toBe('Reunião do front')
 })
