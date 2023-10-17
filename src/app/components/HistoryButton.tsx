@@ -122,10 +122,13 @@ export default function HistoryButton({
   isOpen: boolean
   activities: Action[]
   openHistoric: () => void
+<<<<<<< HEAD
   onClickFilterAdd: () => void
   onClickFilterRemove: () => void
   handleNextPageHistory: () => void
   handleBackPageHistory: () => void
+=======
+>>>>>>> dev
 }) {
   const { activitiesPaginationCounter, setActivitiesPaginationCounter } =
     React.useContext(ActionContext)

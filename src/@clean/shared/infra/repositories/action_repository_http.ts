@@ -4,6 +4,11 @@ import { AssociatedAction } from '../../domain/entities/associated_action'
 import { decorate, injectable } from 'inversify'
 import { AxiosInstance } from 'axios'
 import { IActionRepository } from '../../../modules/action/domain/repositories/action_repository_interface'
+import {
+  associatedMembersRaFormatter,
+  raFormatter,
+  stackFormatter
+} from '../../../../app/utils/functions/formatters'
 
 interface getHistoryRawResponse {
   actions: [
@@ -35,6 +40,24 @@ export interface historyResponse {
     action_id: string
     start_date: number
   }
+}
+interface createActionBodyRequest {
+  owner_ra: string
+  start_date: number
+  story_id: number | undefined
+  title: string
+  description: string | undefined
+  end_date: number
+  duration: number
+  project_code: string
+  associated_members_ra: string[] | undefined
+  stack_tags: string[]
+  action_type_tag: string
+}
+
+interface createActionRawResponse {
+  action: Action
+  message: string
 }
 
 export class ActionRepositoryHttp implements IActionRepository {
@@ -156,10 +179,45 @@ export class ActionRepositoryHttp implements IActionRepository {
     }
   }
 
-  createAction(action: Action): Promise<Action> {
-    console.log(this.http)
-    throw new Error('Method not implemented.' + action)
+  async createAction(action: Action): Promise<Action> {
+    // console.log(JSON.stringify(action, null, 2))
+
+    const ownerRa = raFormatter(action.ownerRa)
+    const stackTags = stackFormatter(action.stackTags)
+
+    const description = action.description ? action.description : undefined
+    const storyId = action.storyId ? action.storyId : undefined
+    const associatedMembersRa = action.associatedMembersRa
+      ? associatedMembersRaFormatter(action.associatedMembersRa)
+      : undefined
+
+    const bodyRequest: createActionBodyRequest = {
+      owner_ra: ownerRa,
+      start_date: action.startDate,
+      story_id: storyId,
+      title: action.title,
+      description: description,
+      end_date: action.endDate,
+      duration: action.duration,
+      project_code: action.projectCode,
+      associated_members_ra: associatedMembersRa,
+      stack_tags: stackTags,
+      action_type_tag: action.actionTypeTag.toString()
+    }
+
+    try {
+      const response = await this.http.post<createActionRawResponse>(
+        '/create-action',
+        bodyRequest
+      )
+
+      console.log(response.data.message)
+      return response.data.action
+    } catch (error: any) {
+      throw new Error('Error creating action: ' + error.message)
+    }
   }
+
   getAction(actionId: string): Promise<Action> {
     throw new Error('Method not implemented.' + actionId)
   }

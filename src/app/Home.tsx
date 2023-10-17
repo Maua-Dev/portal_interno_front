@@ -7,7 +7,13 @@ import {
   ContainerActivitiesHistory,
   ContainerMainCards
 } from './components/little_components/Container'
+<<<<<<< HEAD
 import { ReactNode, useState, useContext } from 'react'
+=======
+import { useContext, useState, ReactNode } from 'react'
+import { ActionContext } from './contexts/action_context'
+import { Action } from '../@clean/shared/domain/entities/action'
+>>>>>>> dev
 
 import HistoricMainCard from './components/HistoricMainCard'
 import { ActionContext } from './contexts/action_context'
@@ -16,6 +22,7 @@ import { FilterDialog } from './components/mui_components/Dialog'
 export default function Home() {
   const [on, setOn] = useState(false)
   const [isHistoryOpen, setIsHistoryOpen] = useState(false)
+<<<<<<< HEAD
   const [isOpen, setOpen] = useState(false)
   const [mainCardId, setMainCardId] = useState<number>()
   const [mainCard, setMainCard] = useState<ReactNode>(null)
@@ -30,6 +37,16 @@ export default function Home() {
     firstEvaluatedKey,
     startDate
   } = useContext(ActionContext)
+=======
+  const [history, setHistory] = useState<Action[]>([])
+  const [isOpen, setOpen] = useState(false)
+  const [mainCardId, setMainCardId] = useState<number>()
+  const [mainCard, setMainCard] = useState<ReactNode>(null)
+
+  // const [isClient, setClient] = useState(false)
+
+  const { getHistory } = useContext(ActionContext)
+>>>>>>> dev
 
   // filter logic
 
@@ -42,13 +59,21 @@ export default function Home() {
     setOpenDialog(false)
   }
 
+  // const {} = useContext(ActionContent)
+
   const handleSideButtonClick = () => {
     setOpen(!isOpen)
   }
 
+<<<<<<< HEAD
   const saveOnClick = () => {
     return
   }
+=======
+  // const handleOnClick = () => {
+  //   setOn(!on)
+  // }
+>>>>>>> dev
 
   const cancelOnClick = () => {
     setOn(false)
@@ -111,14 +136,12 @@ export default function Home() {
           />
           <ContainerMainCards>
             <ContainerActivitiesHistory>
+              <h1>TESTE</h1>
               <ActivitiesButton
                 onClick={() => {
                   handleMainCards(
                     <AddActivity
                       cancel={function (): void {
-                        throw new Error('Function not implemented.')
-                      }}
-                      save={function (): void {
                         throw new Error('Function not implemented.')
                       }}
                     />,
@@ -149,9 +172,7 @@ export default function Home() {
                 handleBackPageHistory={() => null}
               />
             </ContainerActivitiesHistory>
-            {on ? (
-              <AddActivity cancel={cancelOnClick} save={saveOnClick} />
-            ) : null}
+            {on ? <AddActivity cancel={cancelOnClick} /> : null}
             {mainCard}
           </ContainerMainCards>
         </section>
