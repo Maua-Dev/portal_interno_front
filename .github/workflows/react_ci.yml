@@ -1,7 +1,16 @@
 name: React.js CI / Next.js CI
 
 on:
-  workflow_call:
+  push:
+    branches:
+      - dev
+      - homolog
+      - prod
+  pull_request:
+    branches:
+      - dev
+      - homolog
+      - prod
 jobs:
   next_js_ci:
     name: Run Next.js / React.js CI
