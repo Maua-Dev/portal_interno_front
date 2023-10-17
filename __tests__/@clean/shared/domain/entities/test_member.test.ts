@@ -11,7 +11,7 @@ test('Test Member Entity', () => {
   const member = new Member({
     name: 'Furlan mata pomba',
     email: 'furlas@maua.br',
-    ra: '21.00210-0',
+    ra: '21002100',
     role: ROLE.DEV,
     stack: STACK.FRONTEND,
     year: 2,
@@ -34,7 +34,7 @@ test('Test Member Entity RA', () => {
   const member = new Member({
     name: 'Furlan mata pomba',
     email: 'furlas@maua.br',
-    ra: '21.00210-0',
+    ra: '21002100',
     role: ROLE.DEV,
     stack: STACK.FRONTEND,
     year: 2,
@@ -50,14 +50,14 @@ test('Test Member Entity RA', () => {
       })
     ]
   })
-  expect(member.ra).toBe('21.00210-0')
+  expect(member.ra).toBe('21002100')
 })
 
 test('Test Member Entity Name', () => {
   const member = new Member({
     name: 'Furlan mata pomba',
     email: 'furlas@maua.br',
-    ra: '21.00210-0',
+    ra: '21002100',
     role: ROLE.DEV,
     stack: STACK.FRONTEND,
     year: 2,
@@ -80,7 +80,7 @@ test('Test Member Entity email', () => {
   const member = new Member({
     name: 'Furlan mata pomba',
     email: 'furlas@maua.br',
-    ra: '21.00210-0',
+    ra: '21002100',
     role: ROLE.DEV,
     stack: STACK.FRONTEND,
     year: 2,
@@ -103,7 +103,7 @@ test('Test Member Entity role', () => {
   const member = new Member({
     name: 'Furlan mata pomba',
     email: 'furlas@maua.br',
-    ra: '21.00210-0',
+    ra: '21002100',
     role: ROLE.DEV,
     stack: STACK.FRONTEND,
     year: 2,
@@ -127,7 +127,7 @@ test('Test Member Entity stack', () => {
   const member = new Member({
     name: 'Furlan mata pomba',
     email: 'furlas@maua.br',
-    ra: '21.00210-0',
+    ra: '21002100',
     role: ROLE.DEV,
     stack: STACK.FRONTEND,
     year: 2,
@@ -151,7 +151,7 @@ test('Test Member Entity year', () => {
   const member = new Member({
     name: 'Furlan mata pomba',
     email: 'furlas@maua.br',
-    ra: '21.00210-0',
+    ra: '21002100',
     role: ROLE.DEV,
     stack: STACK.FRONTEND,
     year: 2,
@@ -174,7 +174,7 @@ test('Test Member Entity cellphone', () => {
   const member = new Member({
     name: 'Furlan mata pomba',
     email: 'furlas@maua.br',
-    ra: '21.00210-0',
+    ra: '21002100',
     role: ROLE.DEV,
     stack: STACK.FRONTEND,
     year: 2,
@@ -197,7 +197,7 @@ test('Test Member Entity course', () => {
   const member = new Member({
     name: 'Furlan mata pomba',
     email: 'furlas@maua.br',
-    ra: '21.00210-0',
+    ra: '21002100',
     role: ROLE.DEV,
     stack: STACK.FRONTEND,
     year: 2,
@@ -221,7 +221,7 @@ test('Test Member Entity hiredDate', () => {
   const member = new Member({
     name: 'Furlan mata pomba',
     email: 'furlas@maua.br',
-    ra: '21.00210-0',
+    ra: '21002100',
     role: ROLE.DEV,
     stack: STACK.FRONTEND,
     year: 2,
@@ -244,7 +244,7 @@ test('Test Member Entity deactivatedDate', () => {
   const member = new Member({
     name: 'Furlan mata pomba',
     email: 'furlas@maua.br',
-    ra: '21.00210-0',
+    ra: '21002100',
     role: ROLE.DEV,
     stack: STACK.FRONTEND,
     year: 2,
@@ -267,7 +267,7 @@ test('Test Member Entity active', () => {
   const member = new Member({
     name: 'Furlan mata pomba',
     email: 'furlas@maua.br',
-    ra: '21.00210-0',
+    ra: '21002100',
     role: ROLE.DEV,
     stack: STACK.FRONTEND,
     year: 2,
@@ -291,7 +291,7 @@ test('Test Member Entity projects', () => {
   const member = new Member({
     name: 'Furlan mata pomba',
     email: 'furlas@maua.br',
-    ra: '21.00210-0',
+    ra: '21002100',
     role: ROLE.DEV,
     stack: STACK.FRONTEND,
     year: 2,
@@ -326,7 +326,7 @@ test('Test Member Entity to JSON', () => {
   const member = new Member({
     name: 'Furlan mata pomba',
     email: 'furlas@maua.br',
-    ra: '21.00210-0',
+    ra: '21002100',
     role: ROLE.DEV,
     stack: STACK.FRONTEND,
     year: 2,
@@ -346,7 +346,7 @@ test('Test Member Entity to JSON', () => {
   expect(member.toJSON()).toEqual({
     name: 'Furlan mata pomba',
     email: 'furlas@maua.br',
-    ra: '21.00210-0',
+    ra: '21002100',
     role: ROLE.DEV,
     stack: STACK.FRONTEND,
     year: 2,
@@ -371,7 +371,7 @@ test('Test Member Entity from JSON', () => {
   const member = {
     name: 'Furlan mata pomba',
     email: 'furlas@maua.br',
-    ra: '21.00210-0',
+    ra: '21002100',
     role: 'DEV',
     stack: 'FRONTEND',
     year: 2,
@@ -398,7 +398,7 @@ test('Test Member Entity with invalid name', () => {
     new Member({
       name: 'F',
       email: 'furlas@maua.br',
-      ra: '21.00210-0',
+      ra: '21002100',
       role: ROLE.DEV,
       stack: STACK.FRONTEND,
       year: 2,
@@ -419,7 +419,7 @@ test('Test Member Entity with invalid name', () => {
     new Member({
       name: 'F',
       email: 'furlas@maua.br',
-      ra: '21.00210-0',
+      ra: '21002100',
       role: ROLE.DEV,
       stack: STACK.FRONTEND,
       year: 2,
@@ -443,7 +443,7 @@ test('Test Member Entity with invalid email', () => {
     new Member({
       name: 'Furlan mata pomba',
       email: '123', //furlas@maua.br
-      ra: '21.00210-0',
+      ra: '21002100',
       role: ROLE.DEV,
       stack: STACK.FRONTEND,
       year: 2,
@@ -464,7 +464,7 @@ test('Test Member Entity with invalid email', () => {
     new Member({
       name: 'Furlan mata pomba',
       email: '123', //furlas@maua.br
-      ra: '21.00210-0',
+      ra: '21002100',
       role: ROLE.DEV,
       stack: STACK.FRONTEND,
       year: 2,
@@ -533,7 +533,7 @@ test('Test Member Entity with invalid year', () => {
     new Member({
       name: 'Furlan mata pomba',
       email: 'furlas@maua.br',
-      ra: '21.00210-0',
+      ra: '21002100',
       role: ROLE.DEV,
       stack: STACK.FRONTEND,
       year: -1,
@@ -554,7 +554,7 @@ test('Test Member Entity with invalid year', () => {
     new Member({
       name: 'Furlan mata pomba',
       email: 'furlas@maua.br',
-      ra: '21.00210-0',
+      ra: '21002100',
       role: ROLE.DEV,
       stack: STACK.FRONTEND,
       year: -1,
@@ -578,7 +578,7 @@ test('Test Member Entity with invalid cellphone', () => {
     new Member({
       name: 'Furlan mata pomba',
       email: 'furlas@maua.br',
-      ra: '21.00210-0',
+      ra: '21002100',
       role: ROLE.DEV,
       stack: STACK.FRONTEND,
       year: 2,
@@ -599,7 +599,7 @@ test('Test Member Entity with invalid cellphone', () => {
     new Member({
       name: 'Furlan mata pomba',
       email: 'furlas@maua.br',
-      ra: '21.00210-0',
+      ra: '21002100',
       role: ROLE.DEV,
       stack: STACK.FRONTEND,
       year: 2,
@@ -623,7 +623,7 @@ test('Test Member Entity with invalid hiredDate', () => {
     new Member({
       name: 'Furlan mata pomba',
       email: 'furlas@maua.br',
-      ra: '21.00210-0',
+      ra: '21002100',
       role: ROLE.DEV,
       stack: STACK.FRONTEND,
       year: 2,
@@ -644,7 +644,7 @@ test('Test Member Entity with invalid hiredDate', () => {
     new Member({
       name: 'Furlan mata pomba',
       email: 'furlas@maua.br',
-      ra: '21.00210-0',
+      ra: '21002100',
       role: ROLE.DEV,
       stack: STACK.FRONTEND,
       year: 2,
@@ -668,7 +668,7 @@ test('Test Member Entity with invalid deactivatedDate', () => {
     new Member({
       name: 'Furlan mata pomba',
       email: 'furlas@maua.br',
-      ra: '21.00210-0',
+      ra: '21002100',
       role: ROLE.DEV,
       stack: STACK.FRONTEND,
       year: 2,
@@ -690,7 +690,7 @@ test('Test Member Entity with invalid deactivatedDate', () => {
     new Member({
       name: 'Furlan mata pomba',
       email: 'furlas@maua.br',
-      ra: '21.00210-0',
+      ra: '21002100',
       role: ROLE.DEV,
       stack: STACK.FRONTEND,
       year: 2,
@@ -710,11 +710,46 @@ test('Test Member Entity with invalid deactivatedDate', () => {
   }).toThrowError('Field props.deactivatedDate is not valid')
 })
 
+test('Test Member Entity with empty projects', () => {
+  expect(() => {
+    new Member({
+      name: 'Furlan mata pomba',
+      email: 'furlas@maua.br',
+      ra: '21002100',
+      role: ROLE.DEV,
+      stack: STACK.FRONTEND,
+      year: 2,
+      cellphone: '11999999999',
+      course: COURSE.ECM,
+      hiredDate: 10,
+
+      active: ACTIVE.ACTIVE,
+      projects: []
+    })
+  }).not.toThrowError(EntityError)
+  expect(() => {
+    new Member({
+      name: 'Furlan mata pomba',
+      email: 'furlas@maua.br',
+      ra: '21002100',
+      role: ROLE.DEV,
+      stack: STACK.FRONTEND,
+      year: 2,
+      cellphone: '11999999999', //11999999999
+      course: COURSE.ECM,
+      hiredDate: 10,
+
+      active: ACTIVE.ACTIVE,
+      projects: []
+    })
+  }).not.toThrowError('Field props.projects is not valid')
+})
+
 test('Test Member Entity with deactivatedDate prop', () => {
   const member = new Member({
     name: 'Furlan mata pomba',
     email: 'furlas@maua.br',
-    ra: '21.00210-0',
+    ra: '21002100',
     role: ROLE.DEV,
     stack: STACK.FRONTEND,
     year: 2,

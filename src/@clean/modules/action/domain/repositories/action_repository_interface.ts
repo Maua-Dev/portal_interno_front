@@ -1,9 +1,9 @@
 import { AssociatedAction } from '../../../../shared/domain/entities/associated_action'
 import { Action } from '../../../../shared/domain/entities/action'
+import { historyResponse } from '../../../../shared/infra/repositories/action_repository_http'
 import { ACTION_TYPE } from '../../../../shared/domain/enums/action_type_enum'
 import { STACK } from '../../../../shared/domain/enums/stack_enum'
 import { Member } from '../../../../shared/domain/entities/member'
-
 
 export interface IActionRepository {
   // creates action and associatedActions for each associatedMember and the owner
@@ -20,8 +20,11 @@ export interface IActionRepository {
     amount?: number, // quantidade de actions retornadas
     start?: number, // milissegundos da data do inicio das actions
     end?: number, // milissegundos da data de fim da action (vai até essa data contando ela mesma)
-    exclusiveStartKey?: string // id da action que posso colocar daonde quero que inicie as 20 ou mais actions
-  ): Promise<Action[]>
+    exclusiveStartKey?: {
+      action_id: string
+      start_date: number
+    }
+  ): Promise<historyResponse>
 
   createAssociatedAction(
     associatedAction: AssociatedAction

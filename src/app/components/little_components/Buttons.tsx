@@ -134,4 +134,27 @@ const CancelAndSaveButtons = ({
   )
 }
 
-export { DefaultIconButton, CancelAndSaveButtons, NavBarButton, DefaultButton }
+const FilterButtons = ({
+  children,
+  onClick
+}: {
+  children: ReactNode
+  onClick: () => void
+}) => {
+  return (
+    <button
+      onClick={onClick}
+      className="mr-2 h-8 w-28 rounded-lg border-2 border-gray-500  text-xs text-gray-500 transition-all duration-500 hover:border-gray-800 hover:text-gray-800 hover:duration-500"
+    >
+      {children}
+    </button>
+  )
+}
+
+export {
+  DefaultIconButton,
+  CancelAndSaveButtons,
+  NavBarButton,
+  DefaultButton,
+  FilterButtons
+}

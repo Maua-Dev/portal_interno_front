@@ -25,12 +25,12 @@ test('Test create action', async () => {
   const repo = new ActionRepositoryMock()
 
   const action = new Action({
-    ownerRa: '20.02194-0',
+    ownerRa: '20021940',
     startDate: 1612137600000,
     endDate: 1612141200000,
     duration: 3600000,
     actionId: 'uuid5',
-    associatedMembersRa: ['22.00680-0', '22.22222-2'],
+    associatedMembersRa: ['22006800', '22222222'],
     title: '**Reunião**',
     actionTypeTag: ACTION_TYPE.MEETING,
     projectCode: 'PT',
@@ -44,7 +44,7 @@ test('Test create action', async () => {
   expect(repo['actions']).toContain(action)
   expect(repo['associatedActions']).toContainEqual(
     new AssociatedAction({
-      member_ra: '22.00680-0',
+      memberRa: '22006800',
       action: action
     })
   )
@@ -70,15 +70,15 @@ test('Test get action', () => {
   const action1Description = action1.then((action) => action.description)
 
   expect(action1).toBeInstanceOf(Promise<Action>)
-  expect(action1OwnerRa).resolves.toBe('22.00680-0')
+  expect(action1OwnerRa).resolves.toBe('22006800')
   expect(action1StartDate).resolves.toBe(1612137600000)
   expect(action1EndDate).resolves.toBe(1612141200000)
   expect(action1Duration).resolves.toBe(3600000)
   expect(action1ActionId).resolves.toBe('uuid1')
   expect(action1AssociatedMembersRa).resolves.toStrictEqual([
-    '22.00680-0',
-    '22.22222-2',
-    '21.00210-0'
+    '22006800',
+    '22222222',
+    '21002100'
   ])
   expect(action1Title).resolves.toBe('**Reunião**')
   expect(action1actionTypeTag).resolves.toStrictEqual(ACTION_TYPE.MEETING)
@@ -101,12 +101,12 @@ test('Test create associated action', async () => {
   const repo = new ActionRepositoryMock()
 
   const action = new Action({
-    ownerRa: '20.02194-0',
+    ownerRa: '20021940',
     startDate: 1612137600000,
     endDate: 1612141200000,
     duration: 3600000,
     actionId: 'uuid5',
-    associatedMembersRa: ['22.00680-0', '22.22222-2'],
+    associatedMembersRa: ['22006800', '22222222'],
     title: '**Reunião**',
     actionTypeTag: ACTION_TYPE.MEETING,
     projectCode: 'PT',
@@ -116,7 +116,7 @@ test('Test create associated action', async () => {
   })
 
   const associated_action = new AssociatedAction({
-    member_ra: '20.02194-0',
+    memberRa: '20021940',
     action: action
   })
 
@@ -163,7 +163,7 @@ test('Test get all members', async () => {
   expect(member1).toBeInstanceOf(Member)
   expect(member1Name).toBe('Digao Siqueira')
   expect(member1Email).toBe('dsiqueira.devmaua@gmail.com')
-  expect(member1RA).toBe('22.00680-0')
+  expect(member1RA).toBe('22006800')
   expect(member1Role).toStrictEqual(ROLE.DEV)
   expect(member1Stack).toStrictEqual(STACK.FRONTEND)
   expect(member1Year).toBe(3)

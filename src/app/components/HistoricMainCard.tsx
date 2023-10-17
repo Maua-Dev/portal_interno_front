@@ -46,8 +46,9 @@ const TopSection = () => {
   )
 }
 
-const MembrosList = () => {
+const MembrosList = ({ activities }: { activities: Action[] }) => {
   const mock_users = ['Bruno', 'Sakas', 'Rods', 'Furlas']
+
   return (
     <ListComponent label={'MEMBROS'}>
       {mock_users.map((user, index) => {
@@ -82,10 +83,10 @@ const TasksList = () => {
   )
 }
 
-const MiddleSection = () => {
+const MiddleSection = ({ activities }: { activities: Action[] }) => {
   return (
     <div className="flex gap-2">
-      <MembrosList />
+      <MembrosList activities={activities} />
       <TasksList />
     </div>
   )
@@ -110,7 +111,7 @@ const BodySection = ({ children }: { children: ReactNode }) => {
   return <div className="flex flex-col gap-4 py-3">{children}</div>
 }
 
-const WebHistoricMainCard = () => {
+const WebHistoricMainCard = ({ activities }: { activities: Action[] }) => {
   return (
     <MainCard width="max-[1050px]:hidden">
       <CardHeader>
@@ -119,7 +120,7 @@ const WebHistoricMainCard = () => {
       </CardHeader>
       <BodySection>
         <TopSection />
-        <MiddleSection />
+        <MiddleSection activities={activities} />
         <DescriptionField />
       </BodySection>
     </MainCard>
@@ -150,7 +151,13 @@ const PopUpTitle = () => {
   )
 }
 
-const MobilePopUp = ({ handleClose }: { handleClose: () => void }) => {
+const MobilePopUp = ({
+  handleClose,
+  activities
+}: {
+  handleClose: () => void
+  activities: Action[]
+}) => {
   return (
     <div
       className={
@@ -160,7 +167,7 @@ const MobilePopUp = ({ handleClose }: { handleClose: () => void }) => {
       <PopUpHeader handleIconClose={handleClose} />
       <div className="flex flex-col gap-4">
         <PopUpTitle />
-        <MembrosList />
+        <MembrosList activities={activities} />
         <TasksList />
         <DescriptionField />
       </div>
@@ -168,10 +175,16 @@ const MobilePopUp = ({ handleClose }: { handleClose: () => void }) => {
   )
 }
 
-const MobileHistoric = ({ handleLeave }: { handleLeave: () => void }) => {
+const MobileHistoric = ({
+  handleLeave,
+  activities
+}: {
+  handleLeave: () => void
+  activities: Action[]
+}) => {
   return (
     <div>
-      <MobilePopUp handleClose={handleLeave} />
+      <MobilePopUp handleClose={handleLeave} activities={activities} />
       <UnfocusedBG handleLeave={handleLeave} z_number="z-10" />
     </div>
   )
@@ -179,15 +192,19 @@ const MobileHistoric = ({ handleLeave }: { handleLeave: () => void }) => {
 
 export default function HistoricMainCard({
   handleCloseMobilePopUp,
-  action
+  activities
 }: {
   handleCloseMobilePopUp: () => void
-  action: Action
+  activities: Action[]
+
 }) {
   return (
     <div>
-      <WebHistoricMainCard />
-      <MobileHistoric handleLeave={handleCloseMobilePopUp} />
+      <WebHistoricMainCard activities={activities} />
+      <MobileHistoric
+        handleLeave={handleCloseMobilePopUp}
+        activities={activities}
+      />
     </div>
   )
 }

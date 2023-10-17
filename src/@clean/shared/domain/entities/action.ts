@@ -2,19 +2,19 @@ import { ACTION_TYPE, actionTypeToEnum } from '../enums/action_type_enum'
 import { STACK, stackToEnum } from '../enums/stack_enum'
 import { EntityError } from '../helpers/errors/domain_error'
 
-export type JsonProps = {
+export type ActionJsonProps = {
   owner_ra: string
   start_date: number
-  story_id: number | undefined
-  title: string
-  description: string | undefined
   end_date: number
   duration: number
+  action_id: string
+  story_id?: number
+  title: string
+  description?: string
   project_code: string
-  associated_members_ra: string[] | undefined
+  associated_members_ra?: string[]
   stack_tags: string[]
   action_type_tag: string
-  action_id: string
 }
 
 export type ActionProps = {
@@ -256,22 +256,22 @@ export class Action {
 
   toJSON() {
     return {
-      ownerRa: this.ownerRa,
-      startDate: this.startDate,
-      endDate: this.endDate,
+      owner_ra: this.ownerRa,
+      start_date: this.startDate,
+      end_date: this.endDate,
       duration: this.duration,
-      actionId: this.actionId,
-      storyId: this.storyId,
+      action_id: this.actionId,
+      story_id: this.storyId,
       title: this.title,
       description: this.description,
-      projectCode: this.projectCode,
-      associatedMembersRa: this.associatedMembersRa,
-      stackTags: this.stackTags,
-      actionTypeTag: this.actionTypeTag
+      project_code: this.projectCode,
+      associated_members_ra: this.associatedMembersRa,
+      stack_tags: this.stackTags,
+      action_type_tag: this.actionTypeTag
     }
   }
 
-  static fromJSON(json: JsonProps) {
+  static fromJSON(json: ActionJsonProps) {
     return new Action({
       ownerRa: json.owner_ra,
       startDate: json.start_date,
@@ -290,12 +290,13 @@ export class Action {
 
   // Validate functions
   static validateOwnerRa(ra: string) {
-    const regexRa = /^\d{2}\.\d{5}-\d$/
     if (ra == null) {
       return false
     } else if (typeof ra !== 'string') {
       return false
-    } else if (!ra.match(regexRa)) {
+    } else if (ra.length !== 8) {
+      return false
+    } else if (!ra.match(/^\d{8}$/)) {
       return false
     }
     return true
@@ -394,8 +395,6 @@ export class Action {
   static validateAssociatedMembersRa(associatedMembersRa: string[]) {
     if (associatedMembersRa != null) {
       if (Array.isArray(associatedMembersRa) === false) {
-        return false
-      } else if (associatedMembersRa.length === 0) {
         return false
       } else if (
         associatedMembersRa.every((ra) => this.validateOwnerRa(ra)) === false

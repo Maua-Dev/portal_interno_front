@@ -4,6 +4,11 @@ import IconButton from '@mui/material/IconButton'
 import { ReactNode, useContext, useEffect, useState } from 'react'
 import historyIcon from '../assets/history_image_button.png'
 import { Action } from '../../@clean/shared/domain/entities/action'
+import { FilterButtons } from './little_components/Buttons'
+import { Pagination } from '@mui/material'
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
+import React from 'react'
 import { ActionContext } from '../contexts/action_context'
 
 const Container = ({ children }: { children: ReactNode }) => {
@@ -52,7 +57,7 @@ const ActionContainer = ({
 }) => {
   return (
     <div
-      className={`w-full transform flex-col transition-all delay-500 duration-500 ${
+      className={`flex w-full transform flex-col items-center justify-center transition-all delay-500 duration-500 ${
         isOpen ? 'opacity-100' : 'opacity-0'
       }`}
     >
@@ -127,34 +132,23 @@ const HistoricListUnit = ({ action, openHistoric }: HistoricListUnitProps) => {
 }
 
 export default function HistoryButton({
-  openHistoric
+  onClick,
+  isOpen,
+  activities,
+  openHistoric,
+  onClickFilterAdd,
+  onClickFilterRemove,
+  handleNextPageHistory,
+  handleBackPageHistory
 }: {
-  openHistoric: (activity: Action) => void
+  onClick: () => void
+  isOpen: boolean
+  activities: Action[]
+  openHistoric: () => void
 }) {
-  const [isOpen, setOpen] = useState<boolean>(false)
-  const [history, setHistory] = useState<Action[] | undefined>(undefined)
+  const { activitiesPaginationCounter, setActivitiesPaginationCounter } =
+    React.useContext(ActionContext)
 
-  const { getHistory } = useContext(ActionContext)
-
-  const loadHistoricData = async () => {
-    try {
-      const response = await getHistory('19017310', 20)
-      setHistory(response)
-    } catch (error) {
-      console.error('Error loading historic data:', error)
-    }
-  }
-  const handleIconClick = () => {
-    loadHistoricData()
-    if (history) {
-      setOpen((prev) => !prev)
-    }
-  }
-
-  useEffect(() => {
-    loadHistoricData()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
   return (
     <Container>
       <Header>
@@ -168,17 +162,56 @@ export default function HistoryButton({
         </IconButton>
       </Header>
       <ActionContainer isOpen={isOpen}>
-        {isOpen && history
-          ? history.map((activity, index) => {
-              return (
-                <HistoricListUnit
-                  key={index}
-                  action={activity}
-                  openHistoric={openHistoric}
-                />
-              )
-            })
-          : null}
+        {isOpen && (
+          <div className="mb-3 mt-6 flex flex-row">
+            <FilterButtons onClick={onClickFilterAdd}>
+              Adicionar filtro
+            </FilterButtons>
+            <FilterButtons onClick={onClickFilterRemove}>
+              Limpar filtro
+            </FilterButtons>
+          </div>
+        )}
+        {isOpen &&
+          activities &&
+          activities.map((activity, index) => {
+            return (
+              <ActionDisplay key={index} index={activity.actionId}>
+                <Line>
+                  <p className="w-20 overflow-hidden text-ellipsis whitespace-nowrap text-center text-sm font-bold sm:w-36">
+                    {activity.title}
+                  </p>
+                  <ActionButton
+                    text="Abrir"
+                    color="blue"
+                    onClick={openHistoric}
+                  />
+                </Line>
+                <Line>
+                  <span className="font-bold">
+                    {hoursFormatter(activity.duration)}
+                  </span>
+                  <ActionButton text="Excluir" color="red" onClick={() => {}} />
+                </Line>
+              </ActionDisplay>
+            )
+          })}
+        {isOpen && (
+          <div
+            className={activitiesPaginationCounter === 1 ? 'ml-9 flex' : 'flex'}
+          >
+            <IconButton
+              className={activitiesPaginationCounter === 1 ? 'hidden' : ''}
+              onClick={handleBackPageHistory}
+            >
+              <ArrowBackIosNewIcon />
+            </IconButton>
+            <h3 className="mt-2">{activitiesPaginationCounter}</h3>
+            <IconButton onClick={handleNextPageHistory}>
+              <ArrowForwardIosIcon />
+            </IconButton>
+          </div>
+        )}
       </ActionContainer>
     </Container>
   )

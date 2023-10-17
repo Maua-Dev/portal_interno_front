@@ -11,6 +11,27 @@ import { ActionContext } from './contexts/action_context'
 import { useState, ReactNode } from 'react'
 import { Action } from '../@clean/shared/domain/entities/action'
 
+import HistoricMainCard from './components/HistoricMainCard'
+import { ActionContext } from './contexts/action_context'
+import { FilterDialog } from './components/mui_components/Dialog'
+
+export default function Home() {
+  const [on, setOn] = useState(false)
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false)
+  const [isOpen, setOpen] = useState(false)
+  const [mainCardId, setMainCardId] = useState<number>()
+  const [mainCard, setMainCard] = useState<ReactNode>(null)
+  // const [isClient, setClient] = useState(false)
+
+  const {
+    getHistory,
+    history,
+    setActivitiesPaginationCounter,
+    activitiesPaginationCounter,
+    lastEvaluatedKeyResponse,
+    firstEvaluatedKey,
+    startDate
+  } = useContext(ActionContext)
 import { EditActionPopUp } from './components/little_components/EditActionPopUp'
 import AddActivity from './components/AddActivity'
 import NewHistoricCard from './components/NewHistoricCard'
@@ -26,7 +47,14 @@ export default function Home() {
 
   const { getHistory, updateAction } = useContext(ActionContext)
 
-  // const { createAction } = useContext(ActionContext)
+  const [openDialog, setOpenDialog] = useState(false)
+
+  const handleOpenFilter = () => {
+    setOpenDialog(!openDialog)
+  }
+  const handleCloseFilter = () => {
+    setOpenDialog(false)
+  }
 
   // const {} = useContext(ActionContent)
   const [selectedAction, setSelectedAction] = useState<Action>()
@@ -39,6 +67,9 @@ export default function Home() {
     setOpen(!isOpen)
   }
 
+  const saveOnClick = () => {
+    return
+  }
   // const handleOnClick = () => {
   //   setOn(!on)
   // }
@@ -64,15 +95,12 @@ export default function Home() {
   }
 
   const handleHistoryClick = async () => {
-    try {
-      testUpdate()
-    } catch (error) {
-      console.log(error)
-    }
-    const activities = await getHistory('23017310', 20)
-    if (activities) {
-      setHistory(activities)
-      console.log(activities)
+    if (import.meta.env.VITE_STAGE === 'DEV') {
+      await getHistory('21010757', 20)
+    } else if (import.meta.env.VITE_STAGE === 'TEST') {
+      await getHistory('21002100', 20)
+    } else {
+      await getHistory('21002100', 20)
     }
     setIsHistoryOpen(!isHistoryOpen)
   const handleEditPopup = () => {
@@ -107,6 +135,19 @@ export default function Home() {
     handleSideButtonClick()
   }
 
+  const handleNextPage = async () => {
+    console.log('lastEvaluatedKey', lastEvaluatedKeyResponse)
+    await getHistory(
+      '21010757',
+      20,
+      undefined,
+      undefined,
+      lastEvaluatedKeyResponse
+    )
+
+    setActivitiesPaginationCounter(activitiesPaginationCounter + 1)
+  }
+
   return (
     <>
       <main>
@@ -137,25 +178,35 @@ export default function Home() {
                 }}
               />
               <HistoryButton
-                openHistoric={(activity: Action) => {
-                  return handleMainCards(
-                    <NewHistoricCard
-                      action={activity}
-                      editAction={() => {
-                        setSelectedAction(activity)
-                        handleEditPopup()
+                onClickFilterAdd={handleOpenFilter}
+                onClickFilterRemove={() => null}
+                activities={history}
+                isOpen={isHistoryOpen}
+                onClick={() => {
+                  handleHistoryClick()
+                }}
+                openHistoric={() => {
+                  handleMainCards(
+                    <HistoricMainCard
+                      activities={history}
+                      handleCloseMobilePopUp={() => {
+                        closeMainCard()
                       }}
                     />,
                     'edit',
                     activity
                   )
                 }}
+                handleNextPageHistory={handleNextPage}
+                handleBackPageHistory={() => null}
               />
             </ContainerActivitiesHistory>
             {mainCard}
           </ContainerMainCards>
         </section>
       </main>
+      <footer className=""></footer>
+      <FilterDialog open={openDialog} onClose={handleCloseFilter} />
     </>
   )
 }
