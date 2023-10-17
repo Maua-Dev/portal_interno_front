@@ -1,6 +1,7 @@
+/* eslint-disable indent */
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import IconButton from '@mui/material/IconButton'
-import { ReactNode } from 'react'
+import { ReactNode, useContext, useEffect, useState } from 'react'
 import historyIcon from '../assets/history_image_button.png'
 import { Action } from '../../@clean/shared/domain/entities/action'
 import { FilterButtons } from './little_components/Buttons'
@@ -10,18 +11,12 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import React from 'react'
 import { ActionContext } from '../contexts/action_context'
 
-const Container = ({
-  children,
-  isOpen
-}: {
-  children: ReactNode
-  isOpen: boolean
-}) => {
+const Container = ({ children }: { children: ReactNode }) => {
   return (
     <div
-      className={`flex ${
-        isOpen ? 'h-auto' : 'h-28'
-      } w-full transform flex-col items-start justify-between rounded-xl border-2 border-gray-400 px-4 py-3 transition-all duration-500 xl:w-80`}
+      className={
+        'flex h-fit w-full transform flex-col items-start justify-between rounded-xl border-2 border-gray-400 px-4 py-3 transition-all duration-500 xl:w-80'
+      }
     >
       {children}
     </div>
@@ -108,6 +103,34 @@ const hoursFormatter = (duration: number): string => {
   return timeFormated
 }
 
+interface HistoricListUnitProps {
+  action: Action
+  openHistoric: (activity: Action) => void
+}
+
+const HistoricListUnit = ({ action, openHistoric }: HistoricListUnitProps) => {
+  return (
+    <ActionDisplay index={action.actionId}>
+      <Line>
+        <p className="w-20 overflow-hidden text-ellipsis whitespace-nowrap text-center text-sm font-bold sm:w-36">
+          {action.title}
+        </p>
+        <ActionButton
+          text="Abrir"
+          color="blue"
+          onClick={() => {
+            openHistoric(action)
+          }}
+        />
+      </Line>
+      <Line>
+        <span className="font-bold">{hoursFormatter(action.duration)}</span>
+        <ActionButton text="Excluir" color="red" onClick={() => {}} />
+      </Line>
+    </ActionDisplay>
+  )
+}
+
 export default function HistoryButton({
   onClick,
   isOpen,
@@ -122,26 +145,19 @@ export default function HistoryButton({
   isOpen: boolean
   activities: Action[]
   openHistoric: () => void
-<<<<<<< HEAD
-  onClickFilterAdd: () => void
-  onClickFilterRemove: () => void
-  handleNextPageHistory: () => void
-  handleBackPageHistory: () => void
-=======
->>>>>>> dev
 }) {
   const { activitiesPaginationCounter, setActivitiesPaginationCounter } =
     React.useContext(ActionContext)
 
   return (
-    <Container isOpen={isOpen}>
+    <Container>
       <Header>
         <img
           src={historyIcon}
           alt="History Icon"
           className="mt-2 w-40 xl:mt-0 xl:w-48"
         />
-        <IconButton onClick={onClick}>
+        <IconButton onClick={handleIconClick}>
           <ExpandMoreIcon className="place-items-center text-2xl" />
         </IconButton>
       </Header>

@@ -1,6 +1,12 @@
 import { IconButton } from '@mui/material'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import { ReactNode, useState } from 'react'
+import {
+  ButtonHTMLAttributes,
+  HTMLAttributes,
+  ReactNode,
+  useState
+} from 'react'
+import { twMerge } from 'tailwind-merge'
 
 interface DefaultIconButtonProps {
   children: ReactNode
@@ -68,7 +74,7 @@ const NavBarButton = ({
   )
 }
 
-interface DefaultButtonProps {
+interface DefaultButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   label: string
   color: string
 }
@@ -77,33 +83,41 @@ interface borderColorClasses {
   [key: string]: string
 }
 
-const DefaultButton = ({ label, color }: DefaultButtonProps) => {
+const DefaultButton = ({ label, color, ...rest }: DefaultButtonProps) => {
   const borderColorClasses: borderColorClasses = {
     blue: 'border-blue-800 text-blue-800 hover:bg-blue-800 hover:text-white',
-    red: 'border-red-600 text-red-600 hover:bg-red-600 hover:text-white'
+    red: 'border-red-600 text-red-600 hover:bg-red-600 hover:text-white',
+    black: 'border-black text-black hover:bg-black hover:text-white'
   }
 
-  const border =
-    borderColorClasses[color] ||
-    'border-black text-black hover:bg-black hover:text-white'
   return (
     <button
-      className={`hidden h-6 rounded-full border-2 px-4 text-xs lg:block xl:h-8 xl:px-7 xl:text-base ${border}`}
+      {...rest}
+      className={twMerge(
+        `hidden h-6 rounded-full border-2 px-4 text-xs lg:block xl:h-8 xl:px-7 xl:text-base ${borderColorClasses[color]}`,
+        rest.className
+      )}
     >
       {label}
     </button>
   )
 }
 
-const CancelAndSaveButtons = ({
-  onClickSave,
-  onClickCancel
-}: {
+interface CancelAndSaveButtonsProps extends HTMLAttributes<HTMLDivElement> {
   onClickSave: () => void
   onClickCancel: () => void
-}) => {
+}
+
+const CancelAndSaveButtons = ({
+  onClickSave,
+  onClickCancel,
+  ...rest
+}: CancelAndSaveButtonsProps) => {
   return (
-    <div className={'mb-3 flex flex-row gap-4'}>
+    <div
+      {...rest}
+      className={twMerge('mb-3 flex flex-row gap-4', rest.className)}
+    >
       <button
         onClick={onClickCancel}
         className="mr-2 rounded-md border-2 border-red-600 p-1 font-bold text-red-600"

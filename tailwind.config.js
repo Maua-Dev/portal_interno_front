@@ -8,14 +8,32 @@ module.exports = {
   ],
   important: '#root',
   theme: {
-    // colors: {
-    //   'navbar-gradient-blue-bottom': '#003399',
-    //   'navbar-gradient-blue-top': '#3D65E0',
-    //   white: '#FFFFFF'
-
-    //  PASTE IN NAVBAR ClassNames =====> from-navbar-gradient-blue-bottom to-navbar-gradient-blue-top
-    // },
-    extend: {}
+    extend: {
+      textColor: {
+        skin: {
+          base: 'var(--color-text-base)',
+          muted: 'var(--color-text-muted)',
+          hover: 'var(--color-text-hover)',
+          inverted: 'var(--color-background)'
+        }
+      },
+      backgroundColor: {
+        skin: {
+          fill: 'var(--color-background)',
+          secundary: 'var(--color-secundary)',
+          'base-foreground': 'var(--color-text-base)',
+          'button-blue-accent': '--color-button-accent-blue',
+          'button-blue-accent-hover': '--color-button-accent-blue-hover',
+          'button-red-accent': '--color-button-accent-red',
+          'button-red-accent-hover': '--color-button-accent-red-hover'
+        }
+      },
+      borderColor: {
+        skin: {
+          muted: 'var(--color-text-muted)'
+        }
+      }
+    }
   },
   plugins: []
 }

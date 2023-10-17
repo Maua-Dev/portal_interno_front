@@ -265,7 +265,7 @@ test('Test Action Entity from JSON', () => {
   }
 
   const actionFromJSON = Action.fromJSON(action)
-  expect(actionFromJSON).toBeInstanceOf(Action)
+  expect(action).toBeInstanceOf(Action)
 })
 
 test('Test Action Entity with invalid ownerRa', () => {
@@ -285,6 +285,7 @@ test('Test Action Entity with invalid ownerRa', () => {
       actionTypeTag: ACTION_TYPE.CODE
     })
   }).toThrowError(EntityError)
+
   expect(() => {
     new Action({
       ownerRa: '21.00210.0',

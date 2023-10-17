@@ -2,18 +2,14 @@ import NameHeader from './components/NameHeader'
 import NavBar from './components/Navbar'
 import ActivitiesButton from './components/ActivitiesButton'
 import HistoryButton from './components/HistoryButton'
-import AddActivity from './components/AddActivity'
 import {
   ContainerActivitiesHistory,
   ContainerMainCards
 } from './components/little_components/Container'
-<<<<<<< HEAD
-import { ReactNode, useState, useContext } from 'react'
-=======
-import { useContext, useState, ReactNode } from 'react'
+import { useContext, useState, ReactNode, useEffect } from 'react'
 import { ActionContext } from './contexts/action_context'
+import { useState, ReactNode } from 'react'
 import { Action } from '../@clean/shared/domain/entities/action'
->>>>>>> dev
 
 import HistoricMainCard from './components/HistoricMainCard'
 import { ActionContext } from './contexts/action_context'
@@ -22,7 +18,6 @@ import { FilterDialog } from './components/mui_components/Dialog'
 export default function Home() {
   const [on, setOn] = useState(false)
   const [isHistoryOpen, setIsHistoryOpen] = useState(false)
-<<<<<<< HEAD
   const [isOpen, setOpen] = useState(false)
   const [mainCardId, setMainCardId] = useState<number>()
   const [mainCard, setMainCard] = useState<ReactNode>(null)
@@ -37,18 +32,20 @@ export default function Home() {
     firstEvaluatedKey,
     startDate
   } = useContext(ActionContext)
-=======
-  const [history, setHistory] = useState<Action[]>([])
+import { EditActionPopUp } from './components/little_components/EditActionPopUp'
+import AddActivity from './components/AddActivity'
+import NewHistoricCard from './components/NewHistoricCard'
+import { MemberPopup } from './components/MemberPopup'
+
+export default function Home() {
   const [isOpen, setOpen] = useState(false)
-  const [mainCardId, setMainCardId] = useState<number>()
+  const [openEditPopUp, setEditPopUp] = useState(false)
+  const [mainCardName, setMainCardName] = useState<string>()
   const [mainCard, setMainCard] = useState<ReactNode>(null)
 
   // const [isClient, setClient] = useState(false)
 
-  const { getHistory } = useContext(ActionContext)
->>>>>>> dev
-
-  // filter logic
+  const { getHistory, updateAction } = useContext(ActionContext)
 
   const [openDialog, setOpenDialog] = useState(false)
 
@@ -60,23 +57,41 @@ export default function Home() {
   }
 
   // const {} = useContext(ActionContent)
+  const [selectedAction, setSelectedAction] = useState<Action>()
+  const [openMemberPopup, setOpenMemberPopup] = useState(false)
+  const [raMembersSelected, setRAMembersSelected] = useState<
+    string[] | undefined
+  >(undefined)
 
   const handleSideButtonClick = () => {
     setOpen(!isOpen)
   }
 
-<<<<<<< HEAD
   const saveOnClick = () => {
     return
   }
-=======
   // const handleOnClick = () => {
   //   setOn(!on)
   // }
->>>>>>> dev
 
   const cancelOnClick = () => {
     setOn(false)
+  }
+
+  const testUpdate = async () => {
+    const updatedAction = await updateAction(
+      '46b35022-1a68-4cc8-a2e5-ae449e43e867',
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      'HAHAHAHA FUNCIONOU'
+    )
+
+    if (updatedAction) {
+      console.log(updatedAction)
+    }
   }
 
   const handleHistoryClick = async () => {
@@ -88,6 +103,8 @@ export default function Home() {
       await getHistory('21002100', 20)
     }
     setIsHistoryOpen(!isHistoryOpen)
+  const handleEditPopup = () => {
+    setEditPopUp((prev) => !prev)
   }
 
   const closeMainCard = () => {
@@ -95,16 +112,24 @@ export default function Home() {
     setMainCard(null)
   }
 
-  const handleMainCards = (mainCardComponent: ReactNode, id: number) => {
+  const handleMemberPopupClick = () => {
+    setOpenMemberPopup((prev) => !prev)
+  }
+
+  const handleMainCards = (
+    mainCardComponent: ReactNode | undefined,
+    name: string,
+    activity?: Action
+  ) => {
     if (isOpen) {
-      if (mainCardId === id) {
+      if (mainCardName === name) {
         closeMainCard()
-      } else if (mainCardId !== id) {
-        setMainCardId(id)
+      } else if (mainCardName !== name) {
+        setMainCardName(name)
         setMainCard(mainCardComponent)
       }
     } else if (!isOpen) {
-      setMainCardId(id)
+      setMainCardName(name)
       setMainCard(mainCardComponent)
     }
     handleSideButtonClick()
@@ -125,7 +150,13 @@ export default function Home() {
 
   return (
     <>
-      <main className={isHistoryOpen ? 'pb-11' : ''}>
+      <main>
+        <EditActionPopUp isOpen={openEditPopUp} onClose={handleEditPopup} />
+        <MemberPopup
+          closePopUp={handleMemberPopupClick}
+          isOpen={openMemberPopup}
+          setMembers={setRAMembersSelected}
+        />
         <NavBar />
         <section className="-z-20 mb-12 mt-20 flex flex-col gap-4 px-10 md:px-40">
           <NameHeader
@@ -136,16 +167,13 @@ export default function Home() {
           />
           <ContainerMainCards>
             <ContainerActivitiesHistory>
-              <h1>TESTE</h1>
               <ActivitiesButton
                 onClick={() => {
                   handleMainCards(
                     <AddActivity
-                      cancel={function (): void {
-                        throw new Error('Function not implemented.')
-                      }}
+                      handleMemberPopupClick={handleMemberPopupClick}
                     />,
-                    1
+                    'create'
                   )
                 }}
               />
@@ -165,14 +193,14 @@ export default function Home() {
                         closeMainCard()
                       }}
                     />,
-                    2
+                    'edit',
+                    activity
                   )
                 }}
                 handleNextPageHistory={handleNextPage}
                 handleBackPageHistory={() => null}
               />
             </ContainerActivitiesHistory>
-            {on ? <AddActivity cancel={cancelOnClick} /> : null}
             {mainCard}
           </ContainerMainCards>
         </section>

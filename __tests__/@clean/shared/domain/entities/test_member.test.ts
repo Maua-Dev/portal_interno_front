@@ -377,7 +377,7 @@ test('Test Member Entity from JSON', () => {
     year: 2,
     cellphone: '11999999999',
     course: 'ECM',
-    hiredDate: 10,
+    hired_date: 10,
     active: 'ACTIVE',
     projects: [
       {

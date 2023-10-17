@@ -6,6 +6,7 @@ import historyIcon from '../assets/history_image_button.png'
 import CloseIcon from '@mui/icons-material/Close'
 import { IconButton } from '@mui/material'
 import { UnfocusedBG } from './little_components/UnfocusedBG'
+import { EditActionPopUp } from './little_components/EditActionPopUp'
 import { Action } from '../../@clean/shared/domain/entities/action'
 
 const LeftSideHeader = () => {
@@ -23,6 +24,7 @@ const RightSideHeader = () => {
     <div className="flex flex-col items-start justify-evenly">
       <h1 className="text-xl text-blue-800">(Task ID#)</h1>
       <DefaultButton label={'Editar'} color={'blue'}></DefaultButton>
+      {/* <EditActionPopUp isVisible={editVisibility} action={}></EditActionPopUp> */}
     </div>
   )
 }
@@ -194,6 +196,7 @@ export default function HistoricMainCard({
 }: {
   handleCloseMobilePopUp: () => void
   activities: Action[]
+
 }) {
   return (
     <div>
