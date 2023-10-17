@@ -119,24 +119,24 @@ test('Test Associated Action entity to JSON', () => {
 })
 
 test('Test Associated Action entity from JSON', () => {
-  const action = new Action({
-    ownerRa: '21.00210-0',
-    startDate: 1000,
-    endDate: 2000,
+  const action = {
+    owner_ra: '21.00210-0',
+    start_date: 1000,
+    end_date: 2000,
     duration: 1000,
-    actionId: '4000',
-    storyId: 1000,
+    action_id: '4000',
+    story_id: 1000,
     title: 'Test Action Entity',
     description: 'Testing',
-    projectCode: '76',
-    associatedMembersRa: ['21.00833-7'],
-    stackTags: [STACK.FRONTEND, STACK.BACKEND],
-    actionTypeTag: ACTION_TYPE.CODE
-  })
-  const associatedAction = new AssociatedAction({
+    project_code: '76',
+    associated_members_ra: ['21.00833-7'],
+    stack_tags: [STACK.FRONTEND, STACK.BACKEND],
+    action_type_tag: ACTION_TYPE.CODE
+  }
+  const associatedAction = {
     member_ra: '20.02194-0',
     action: action
-  })
+  }
 
   expect(AssociatedAction.fromJSON(associatedAction)).toBeInstanceOf(
     AssociatedAction

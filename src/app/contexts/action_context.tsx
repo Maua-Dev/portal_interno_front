@@ -1,4 +1,10 @@
-import { PropsWithChildren, createContext, useState } from 'react'
+import {
+  Dispatch,
+  PropsWithChildren,
+  SetStateAction,
+  createContext,
+  useState
+} from 'react'
 import { Action } from '../../@clean/shared/domain/entities/action'
 import { AssociatedAction } from '../../@clean/shared/domain/entities/associated_action'
 import {
@@ -11,12 +17,21 @@ import { GetHistoryUsecase } from '../../@clean/modules/action/usecases/get_hist
 import { STACK } from '../../@clean/shared/domain/enums/stack_enum'
 import { ACTION_TYPE } from '../../@clean/shared/domain/enums/action_type_enum'
 import { UpdateActionUsecase } from '../../@clean/modules/action/usecases/update_action_usecase'
+import { GetAllMembersUsecase } from '../../@clean/modules/action/usecases/get_all_members_usecase'
+import { Member } from '../../@clean/shared/domain/entities/member'
+import { GetMember } from '../../@clean/modules/action/usecases/get_member_usecase'
 
 export type ActionContextType = {
   createAction: (action: Action) => Promise<Action | undefined>
+
   createAssociatedAction: (
     associatedAction: AssociatedAction
   ) => Promise<AssociatedAction | undefined>
+
+  action: Action | undefined
+
+  setAction: Dispatch<SetStateAction<Action | undefined>>
+
   getHistory: (
     ra: string,
     amount?: number,
@@ -39,6 +54,14 @@ export type ActionContextType = {
     newActionTypeTag?: ACTION_TYPE
   ) => Promise<Action | undefined>
   history: Action[]
+
+  getMember: (ra: string) => Promise<Member | undefined>
+
+  getAllMembers: () => Promise<Member[] | undefined>
+
+  membersSelected: Member[] | undefined
+
+  setMembersSelected: Dispatch<SetStateAction<Member[] | undefined>>
 }
 
 const defaultContext: ActionContextType = {
@@ -51,12 +74,18 @@ const defaultContext: ActionContextType = {
     return associatedAction
   },
 
+  action: undefined,
+
+  setAction: (_action: SetStateAction<Action | undefined>) => {
+    return undefined
+  },
+
   getHistory: async (
-    ra: string,
-    amount?: number,
-    start?: number,
-    end?: number,
-    exclusiveStartKey?: string
+    _ra: string,
+    _amount?: number,
+    _start?: number,
+    _end?: number,
+    _exclusiveStartKey?: string
   ) => {
     return []
   },
@@ -76,6 +105,18 @@ const defaultContext: ActionContextType = {
     newActionTypeTag?: ACTION_TYPE
   ) => {
     return undefined
+  getMember: async (_ra: string) => {
+    return undefined
+  },
+
+  getAllMembers: async () => {
+    return []
+  },
+
+  membersSelected: [],
+
+  setMembersSelected: (_memberRa: SetStateAction<Member[] | undefined>) => {
+    return []
   }
 }
 
@@ -96,11 +137,21 @@ const getHistoryUsecase = containerAction.get<GetHistoryUsecase>(
 
 const updateActionUsecase = containerAction.get<UpdateActionUsecase>(
   RegistryAction.UpdateActionUsecase
+const getMembersUsecase = containerAction.get<GetMember>(
+  RegistryAction.GetMembersUsecase
+)
+
+const getAllMembersUsecase = containerAction.get<GetAllMembersUsecase>(
+  RegistryAction.GetAllMembersUsecase
 )
 
 export function ActionProvider({ children }: PropsWithChildren) {
   const [createdActions, setCreatedActions] = useState<Action[]>([])
+  const [action, setAction] = useState<Action | undefined>(undefined)
   const [history, setHistory] = useState<Action[]>([])
+  const [membersSelected, setMembersSelected] = useState<Member[] | undefined>(
+    undefined
+  )
 
   async function createAction(action: Action) {
     try {
@@ -128,7 +179,7 @@ export function ActionProvider({ children }: PropsWithChildren) {
     start?: number,
     end?: number,
     exclusiveStartKey?: string
-  ) {
+  ): Promise<Action[]> {
     try {
       const { actions, lastId } = await getHistoryUsecase.execute(
         ra,
@@ -137,12 +188,32 @@ export function ActionProvider({ children }: PropsWithChildren) {
         end,
         exclusiveStartKey
       )
-      console.log('lastId: ', lastId)
+      // console.log('lastId: ', lastId)
+      // console.log(actions)
       setHistory(actions)
-      console.log(history)
-      return actions
     } catch (error: any) {
       console.error('Something went wrong on get history: ', error)
+    }
+    return await history
+  }
+
+  async function getMember(ra: string) {
+    try {
+      const member = await getMembersUsecase.execute(ra)
+
+      return member
+    } catch (error: any) {
+      console.log('Something went wrong on get member: ', error)
+    }
+  }
+
+  async function getAllMembers(): Promise<Member[] | undefined> {
+    try {
+      const members = await getAllMembersUsecase.execute()
+
+      return members.members
+    } catch (error: any) {
+      console.log('Something went wrong on get all members: ', error)
     }
   }
 
@@ -186,10 +257,16 @@ export function ActionProvider({ children }: PropsWithChildren) {
     <ActionContext.Provider
       value={{
         createAction,
+        action,
+        setAction,
         createAssociatedAction,
         getHistory,
         history,
         updateAction
+        getMember,
+        getAllMembers,
+        membersSelected,
+        setMembersSelected
       }}
     >
       {children}

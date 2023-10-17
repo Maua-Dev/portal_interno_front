@@ -2,23 +2,24 @@ import NameHeader from './components/NameHeader'
 import NavBar from './components/Navbar'
 import ActivitiesButton from './components/ActivitiesButton'
 import HistoryButton from './components/HistoryButton'
-import AddActivity from './components/AddActivity'
 import {
   ContainerActivitiesHistory,
   ContainerMainCards
 } from './components/little_components/Container'
 import { useContext, useState, ReactNode, useEffect } from 'react'
 import { ActionContext } from './contexts/action_context'
+import { useState, ReactNode } from 'react'
 import { Action } from '../@clean/shared/domain/entities/action'
 
-import HistoricMainCard from './components/HistoricMainCard'
+import { EditActionPopUp } from './components/little_components/EditActionPopUp'
+import AddActivity from './components/AddActivity'
+import NewHistoricCard from './components/NewHistoricCard'
+import { MemberPopup } from './components/MemberPopup'
 
 export default function Home() {
-  const [on, setOn] = useState(false)
-  const [isHistoryOpen, setIsHistoryOpen] = useState(false)
-  const [history, setHistory] = useState<Action[]>([])
   const [isOpen, setOpen] = useState(false)
-  const [mainCardId, setMainCardId] = useState<number>()
+  const [openEditPopUp, setEditPopUp] = useState(false)
+  const [mainCardName, setMainCardName] = useState<string>()
   const [mainCard, setMainCard] = useState<ReactNode>(null)
 
   // const [isClient, setClient] = useState(false)
@@ -28,6 +29,11 @@ export default function Home() {
   // const { createAction } = useContext(ActionContext)
 
   // const {} = useContext(ActionContent)
+  const [selectedAction, setSelectedAction] = useState<Action>()
+  const [openMemberPopup, setOpenMemberPopup] = useState(false)
+  const [raMembersSelected, setRAMembersSelected] = useState<
+    string[] | undefined
+  >(undefined)
 
   const handleSideButtonClick = () => {
     setOpen(!isOpen)
@@ -69,6 +75,8 @@ export default function Home() {
       console.log(activities)
     }
     setIsHistoryOpen(!isHistoryOpen)
+  const handleEditPopup = () => {
+    setEditPopUp((prev) => !prev)
   }
 
   const closeMainCard = () => {
@@ -76,16 +84,24 @@ export default function Home() {
     setMainCard(null)
   }
 
-  const handleMainCards = (mainCardComponent: ReactNode, id: number) => {
+  const handleMemberPopupClick = () => {
+    setOpenMemberPopup((prev) => !prev)
+  }
+
+  const handleMainCards = (
+    mainCardComponent: ReactNode | undefined,
+    name: string,
+    activity?: Action
+  ) => {
     if (isOpen) {
-      if (mainCardId === id) {
+      if (mainCardName === name) {
         closeMainCard()
-      } else if (mainCardId !== id) {
-        setMainCardId(id)
+      } else if (mainCardName !== name) {
+        setMainCardName(name)
         setMainCard(mainCardComponent)
       }
     } else if (!isOpen) {
-      setMainCardId(id)
+      setMainCardName(name)
       setMainCard(mainCardComponent)
     }
     handleSideButtonClick()
@@ -93,7 +109,13 @@ export default function Home() {
 
   return (
     <>
-      <main className={isHistoryOpen ? 'pb-11' : ''}>
+      <main>
+        <EditActionPopUp isOpen={openEditPopUp} onClose={handleEditPopup} />
+        <MemberPopup
+          closePopUp={handleMemberPopupClick}
+          isOpen={openMemberPopup}
+          setMembers={setRAMembersSelected}
+        />
         <NavBar />
         <section className="-z-20 mb-12 mt-20 flex flex-col gap-4 px-10 md:px-40">
           <NameHeader
@@ -104,43 +126,36 @@ export default function Home() {
           />
           <ContainerMainCards>
             <ContainerActivitiesHistory>
-              <h1>TESTE</h1>
               <ActivitiesButton
                 onClick={() => {
                   handleMainCards(
                     <AddActivity
-                      cancel={function (): void {
-                        throw new Error('Function not implemented.')
-                      }}
+                      handleMemberPopupClick={handleMemberPopupClick}
                     />,
-                    1
+                    'create'
                   )
                 }}
               />
               <HistoryButton
-                activities={history}
-                isOpen={isHistoryOpen}
-                onClick={() => {
-                  handleHistoryClick()
-                }}
-                openHistoric={() => {
-                  handleMainCards(
-                    <HistoricMainCard
-                      handleCloseMobilePopUp={() => {
-                        closeMainCard()
+                openHistoric={(activity: Action) => {
+                  return handleMainCards(
+                    <NewHistoricCard
+                      action={activity}
+                      editAction={() => {
+                        setSelectedAction(activity)
+                        handleEditPopup()
                       }}
                     />,
-                    2
+                    'edit',
+                    activity
                   )
                 }}
               />
             </ContainerActivitiesHistory>
-            {on ? <AddActivity cancel={cancelOnClick} /> : null}
             {mainCard}
           </ContainerMainCards>
         </section>
       </main>
-      <footer className=""></footer>
     </>
   )
 }

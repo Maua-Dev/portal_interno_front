@@ -249,22 +249,22 @@ test('Test Action Entity to JSON', () => {
 })
 
 test('Test Action Entity from JSON', () => {
-  const action = {
-    ownerRa: '21.00210-0',
-    startDate: 1000,
-    endDate: 2000,
+  const actionJson = {
+    owner_ra: '21.00210-0',
+    start_date: 1000,
+    end_date: 2000,
     duration: 1000,
-    actionId: '4000',
-    storyId: 1000,
+    action_id: '4000',
+    story_id: 1000,
     title: 'Test Action Entity',
     description: 'Testing',
-    projectCode: '76',
-    associatedMembersRa: ['21.00833-7', '21.00833-8'],
-    stackTags: ['FRONTEND', 'BACKEND'],
-    actionTypeTag: 'CODE'
+    project_code: '76',
+    associated_members_ra: ['21.00833-7', '21.00833-8'],
+    stack_tags: ['FRONTEND', 'BACKEND'],
+    action_type_tag: 'CODE'
   }
 
-  const actionFromJSON = Action.fromJSON(action)
+  const actionFromJSON = Action.fromJSON(actionJson)
   expect(actionFromJSON).toBeInstanceOf(Action)
 })
 
@@ -285,6 +285,7 @@ test('Test Action Entity with invalid ownerRa', () => {
       actionTypeTag: ACTION_TYPE.CODE
     })
   }).toThrowError(EntityError)
+
   expect(() => {
     new Action({
       ownerRa: '21.00210.0',
@@ -346,7 +347,7 @@ test('Test Action Entity with invalid storyId', () => {
       endDate: 2000,
       duration: 1000,
       actionId: '4000',
-      storyId: 10,
+      storyId: -10,
       title: 'Test Action Entity',
       description: 'Testing',
       projectCode: '76',
@@ -362,7 +363,7 @@ test('Test Action Entity with invalid storyId', () => {
       endDate: 2000,
       duration: 1000,
       actionId: '4000',
-      storyId: 10,
+      storyId: 1000000,
       title: 'Test Action Entity',
       description: 'Testing',
       projectCode: '76',
