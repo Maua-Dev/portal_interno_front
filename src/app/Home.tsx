@@ -6,6 +6,8 @@ import {
   ContainerActivitiesHistory,
   ContainerMainCards
 } from './components/little_components/Container'
+import { useContext, useState, ReactNode, useEffect } from 'react'
+import { ActionContext } from './contexts/action_context'
 import { useState, ReactNode } from 'react'
 import { Action } from '../@clean/shared/domain/entities/action'
 
@@ -19,6 +21,14 @@ export default function Home() {
   const [openEditPopUp, setEditPopUp] = useState(false)
   const [mainCardName, setMainCardName] = useState<string>()
   const [mainCard, setMainCard] = useState<ReactNode>(null)
+
+  // const [isClient, setClient] = useState(false)
+
+  const { getHistory, updateAction } = useContext(ActionContext)
+
+  // const { createAction } = useContext(ActionContext)
+
+  // const {} = useContext(ActionContent)
   const [selectedAction, setSelectedAction] = useState<Action>()
   const [openMemberPopup, setOpenMemberPopup] = useState(false)
   const [raMembersSelected, setRAMembersSelected] = useState<
@@ -29,6 +39,42 @@ export default function Home() {
     setOpen(!isOpen)
   }
 
+  // const handleOnClick = () => {
+  //   setOn(!on)
+  // }
+
+  const cancelOnClick = () => {
+    setOn(false)
+  }
+
+  const testUpdate = async () => {
+    const updatedAction = await updateAction(
+      '46b35022-1a68-4cc8-a2e5-ae449e43e867',
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      'HAHAHAHA FUNCIONOU'
+    )
+
+    if (updatedAction) {
+      console.log(updatedAction)
+    }
+  }
+
+  const handleHistoryClick = async () => {
+    try {
+      testUpdate()
+    } catch (error) {
+      console.log(error)
+    }
+    const activities = await getHistory('23017310', 20)
+    if (activities) {
+      setHistory(activities)
+      console.log(activities)
+    }
+    setIsHistoryOpen(!isHistoryOpen)
   const handleEditPopup = () => {
     setEditPopUp((prev) => !prev)
   }

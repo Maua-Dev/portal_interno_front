@@ -1,6 +1,9 @@
 import { AssociatedAction } from '../../../../shared/domain/entities/associated_action'
 import { Action } from '../../../../shared/domain/entities/action'
+import { ACTION_TYPE } from '../../../../shared/domain/enums/action_type_enum'
+import { STACK } from '../../../../shared/domain/enums/stack_enum'
 import { Member } from '../../../../shared/domain/entities/member'
+
 
 export interface IActionRepository {
   // creates action and associatedActions for each associatedMember and the owner
@@ -23,4 +26,19 @@ export interface IActionRepository {
   createAssociatedAction(
     associatedAction: AssociatedAction
   ): Promise<AssociatedAction>
+
+  updateAction(
+    actionId: string,
+    newOwnerRa?: string,
+    newStartDate?: number,
+    newEndDate?: number,
+    newDuration?: number,
+    newStoryId?: number | -1,
+    newTitle?: string,
+    newDescription?: string | '',
+    newProjectCode?: string,
+    newAssociatedMembersRa?: string[],
+    newStackTags?: STACK[],
+    newActionTypeTag?: ACTION_TYPE
+  ): Promise<Action>
 }

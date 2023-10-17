@@ -6,6 +6,7 @@ import { ActionRepositoryHttp } from '../repositories/action_repository_http'
 import { CreateActionUsecase } from '../../../modules/action/usecases/create_action_usecase'
 import { CreateAssociatedActionUsecase } from '../../../modules/action/usecases/create_associated_action_usecase'
 import { GetHistoryUsecase } from '../../../modules/action/usecases/get_history_usecase'
+import { UpdateActionUsecase } from '../../../modules/action/usecases/update_action_usecase'
 import { GetAllMembersUsecase } from '../../../modules/action/usecases/get_all_members_usecase'
 import { GetMember } from '../../../modules/action/usecases/get_member_usecase'
 
@@ -21,6 +22,7 @@ export const RegistryAction = {
   CreateActionUsecase: Symbol.for('CreateActionUsecase'),
   CreateAssociatedActionUsecase: Symbol.for('CreateAssociatedActionUsecase'),
   GetHistoryUsecase: Symbol.for('GetHistoryUsecase'),
+  UpdateActionUsecase: Symbol.for('UpdateActionUsecase')
   GetMembersUsecase: Symbol.for('GetMemberUsecase'),
   GetAllMembersUsecase: Symbol.for('GetAllMembersUsecase')
 }
@@ -104,6 +106,10 @@ containerAction
   })
 
 containerAction
+  .bind(RegistryAction.UpdateActionUsecase)
+  .toDynamicValue((context) => {
+    if (import.meta.env.VITE_STAGE === 'TEST') {
+      return new UpdateActionUsecase(
   .bind(RegistryAction.GetMembersUsecase)
   .toDynamicValue((context) => {
     if (import.meta.env.VITE_STAGE === 'TEST') {
@@ -114,6 +120,11 @@ containerAction
       import.meta.env.VITE_STAGE === 'DEV' ||
       import.meta.env.VITE_STAGE === 'PROD'
     ) {
+      return new UpdateActionUsecase(
+        context.container.get(RegistryAction.ActionRepositoryHttp)
+      )
+    } else {
+      return new UpdateActionUsecase(
       return new GetMember(
         context.container.get(RegistryAction.ActionRepositoryHttp)
       )
