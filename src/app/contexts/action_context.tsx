@@ -69,7 +69,6 @@ export type ActionContextType = {
     newStackTags?: STACK[],
     newActionTypeTag?: ACTION_TYPE
   ) => Promise<Action | undefined>
-  history: Action[]
 
   getMember: (ra: string) => Promise<Member | undefined>
 
@@ -109,11 +108,10 @@ const defaultContext: ActionContextType = {
     return []
   },
 
-  history: [],
   activitiesPaginationCounter: 1,
   setActivitiesPaginationCounter: () => {},
   lastEvaluatedKeyResponse: undefined,
-  firstEvaluatedKey: undefined
+  firstEvaluatedKey: undefined,
 
   updateAction: async (
     actionId: string,
@@ -130,6 +128,7 @@ const defaultContext: ActionContextType = {
     newActionTypeTag?: ACTION_TYPE
   ) => {
     return undefined
+  },
   getMember: async (_ra: string) => {
     return undefined
   },
@@ -162,6 +161,7 @@ const getHistoryUsecase = containerAction.get<GetHistoryUsecase>(
 
 const updateActionUsecase = containerAction.get<UpdateActionUsecase>(
   RegistryAction.UpdateActionUsecase
+)
 const getMembersUsecase = containerAction.get<GetMember>(
   RegistryAction.GetMembersUsecase
 )
@@ -214,7 +214,6 @@ export function ActionProvider({ children }: PropsWithChildren) {
       start_date: number
     }
   ) {
-
     try {
       const { actions, lastEvaluatedKey } = await getHistoryUsecase.execute(
         ra,
@@ -231,7 +230,6 @@ export function ActionProvider({ children }: PropsWithChildren) {
       setLastEvaluatedKeyResponse(lastEvaluatedKey)
       setStartDate(lastEvaluatedKey.start_date)
       return actions
-
     } catch (error: any) {
       console.error('Something went wrong on get history: ', error)
     }
@@ -307,8 +305,8 @@ export function ActionProvider({ children }: PropsWithChildren) {
         setActivitiesPaginationCounter,
         firstEvaluatedKey,
         lastEvaluatedKeyResponse,
-        startDate
-        updateAction
+        startDate,
+        updateAction,
         getMember,
         getAllMembers,
         membersSelected,
