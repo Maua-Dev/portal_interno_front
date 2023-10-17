@@ -1,0 +1,31 @@
+name: React.js CI / Next.js CI
+
+on:
+  workflow_call:
+jobs:
+  next_js_ci:
+    name: Run Next.js / React.js CI
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: Install dependencies
+        run:
+          yarn install
+      - name: Run tests
+        run: yarn test --coverage --watchAll=false
+
+      - name: Lint with ESLint and Prettier
+        run: yarn lint
+      
+      - name: Build Next.js app
+        run: yarn build
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
