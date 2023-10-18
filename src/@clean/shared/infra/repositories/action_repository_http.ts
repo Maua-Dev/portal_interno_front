@@ -12,31 +12,11 @@ import {
 import { ACTION_TYPE } from '../../domain/enums/action_type_enum'
 import { STACK } from '../../domain/enums/stack_enum'
 import { Member } from '../../domain/entities/member'
-import {
-  stackFormatter,
-  stackFormatterFromJSON,
-  stackToEnum
-} from '../../domain/enums/stack_enum'
-import { actionTypeToEnum } from '../../domain/enums/action_type_enum'
+import { stackFormatter, stackToEnum } from '../../domain/enums/stack_enum'
 import { roleToEnum } from '../../domain/enums/role_enum'
 import { courseToEnum } from '../../domain/enums/course_enum'
 import { activeToEnum } from '../../domain/enums/active_enum'
 import { Project } from '../../domain/entities/project'
-
-interface actionRawResponse {
-  owner_ra: string
-  start_date: number
-  story_id: number | undefined
-  title: string
-  description: string | undefined
-  end_date: number
-  duration: number
-  project_code: string
-  associated_members_ra: string[] | undefined
-  stack_tags: string[]
-  action_type_tag: string
-  action_id: string
-}
 
 interface getHistoryRawResponse {
   actions: [
@@ -160,7 +140,7 @@ export class ActionRepositoryHttp implements IActionRepository {
     try {
       const body: updateActionBodyRequest = {
         action_id: actionId,
-        new_owner_ra: newOwnerRa ? raFormatter(newOwnerRa) : undefined,
+        new_owner_ra: newOwnerRa ? raFormatterToJson(newOwnerRa) : undefined,
         new_start_date: newStartDate ? newStartDate : undefined,
         new_end_date: newEndDate ? newEndDate : undefined,
         new_duration: newDuration ? newDuration : undefined,

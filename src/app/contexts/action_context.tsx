@@ -96,11 +96,11 @@ const defaultContext: ActionContextType = {
   },
 
   getHistory: async (
-    ra: string,
-    amount?: number,
-    start?: number,
-    end?: number,
-    exclusiveStartKey?: {
+    _ra: string,
+    _amount?: number,
+    _start?: number,
+    _end?: number,
+    _exclusiveStartKey?: {
       action_id: string
       start_date: number
     }
@@ -114,18 +114,18 @@ const defaultContext: ActionContextType = {
   firstEvaluatedKey: undefined,
 
   updateAction: async (
-    actionId: string,
-    newOwnerRa?: string,
-    newStartDate?: number,
-    newEndDate?: number,
-    newDuration?: number,
-    newStoryId?: number | -1,
-    newTitle?: string,
-    newDescription?: string | '',
-    newProjectCode?: string,
-    newAssociatedMembersRa?: string[],
-    newStackTags?: STACK[],
-    newActionTypeTag?: ACTION_TYPE
+    _actionId: string,
+    _newOwnerRa?: string,
+    _newStartDate?: number,
+    _newEndDate?: number,
+    _newDuration?: number,
+    _newStoryId?: number | -1,
+    _newTitle?: string,
+    _newDescription?: string | '',
+    _newProjectCode?: string,
+    _newAssociatedMembersRa?: string[],
+    _newStackTags?: STACK[],
+    _newActionTypeTag?: ACTION_TYPE
   ) => {
     return undefined
   },
