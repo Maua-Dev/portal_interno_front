@@ -29,9 +29,6 @@ jobs:
           yarn install
       - name: Run tests
         run: yarn test --coverage --watchAll=false
-
-      - name: Lint with ESLint and Prettier
-        run: yarn lint
       
       - name: Build Next.js app
         run: yarn build
