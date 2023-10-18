@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { ThemeContext } from '../app/contexts/theme_context'
+import { ThemeContext } from '../contexts/theme_context'
 
 export default function Home() {
   const { theme, handleThemeChange } = useContext(ThemeContext)
