@@ -4,6 +4,7 @@
   "bin": {
     "iac": "bin/iac.js"
   },
+  "type": "module",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
