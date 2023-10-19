@@ -1,16 +1,40 @@
 import Card from './little_components/Card'
 import Switch from './little_components/Switch'
 import Text from './little_components/Text'
-import { Filter, ChevronDown } from 'lucide-react'
-import * as Select from '@radix-ui/react-select'
+import { Filter } from 'lucide-react'
+import { useContext } from 'react'
+import { ThemeContext } from '../contexts/theme_context'
+import * as Select from './little_components/Select'
+
+interface ProjectProp {
+  name: string
+  code: string
+}
+
+const projectsMock: ProjectProp[] = [
+  {
+    name: 'Portal Interno',
+    code: 'PI'
+  },
+  {
+    name: 'Maua Food',
+    code: 'MF'
+  },
+  {
+    name: 'Selfie Maua',
+    code: 'SF'
+  }
+]
 
 export default function HistoricCard() {
+  const theme = useContext(ThemeContext)
+
   return (
     <Card
       variant="lg"
       className="flex h-fit flex-row items-center justify-between opacity-80 shadow-sm shadow-gray-500 duration-150 ease-in hover:opacity-100"
     >
-      <div className="flex flex-row items-center gap-3">
+      <div className="flex flex-row items-center gap-5">
         <Filter className="h-10 w-10" />
         <Text size="lg">Filtros</Text>
         <Switch variant="regular" />
@@ -20,28 +44,21 @@ export default function HistoricCard() {
           placeholder="Digite o titulo da atividade..."
         />
       </div>
-      <div className="">
-        <Select.Root>
-          <Select.Trigger className="flex flex-row items-center gap-3 rounded-md bg-skin-fill p-2">
-            <Select.Value placeholder="Projetos" />
-            <Select.Icon>
-              <ChevronDown className="h-5 w-5" />
-            </Select.Icon>
-          </Select.Trigger>
-          <Select.Portal>
-            <Select.Content
-              align="center"
-              position="popper"
-              className="bg-white"
-            >
-              <Select.Viewport className="bg-white">
-                <Select.Item value="PI">
-                  <Select.ItemText>Portal Interno</Select.ItemText>
-                  <Select.ItemIndicator></Select.ItemIndicator>
-                </Select.Item>
-              </Select.Viewport>
-            </Select.Content>
-          </Select.Portal>
+      <div className="flex flex-row gap-5">
+        <Select.Root label="Projetos">
+          <Select.Content value="PI">Portal Interno</Select.Content>
+          <Select.Content value="PI">Portal Interno</Select.Content>
+          <Select.Content value="PI">Portal Interno</Select.Content>
+        </Select.Root>
+        <Select.Root label="Área">
+          <Select.Content value="PI">Portal Interno</Select.Content>
+          <Select.Content value="PI">Portal Interno</Select.Content>
+          <Select.Content value="PI">Portal Interno</Select.Content>
+        </Select.Root>
+        <Select.Root label="Ação">
+          <Select.Content value="PI">Portal Interno</Select.Content>
+          <Select.Content value="PI">Portal Interno</Select.Content>
+          <Select.Content value="PI">Portal Interno</Select.Content>
         </Select.Root>
       </div>
     </Card>
