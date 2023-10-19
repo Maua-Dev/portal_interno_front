@@ -1,4 +1,5 @@
 import logo from '../assets/logo_dev.png'
+import logo_white from '../assets/logo_dev_white.png'
 import { BiSolidUser } from 'react-icons/bi'
 import { AiOutlineHistory, AiOutlineDoubleRight } from 'react-icons/ai'
 import { BsFillPlusSquareFill, BsMoonStars, BsSun } from 'react-icons/bs'
@@ -19,11 +20,9 @@ export default function Navbar() {
     >
       <div className="flex flex-col items-center gap-12">
         <img
-          src={logo}
+          src={darkMode ? logo_white : logo}
           alt="Logo da Dev. Community Mauá"
-          className={`h-14 w-16 ${
-            !darkMode ? '' : 'brightness-0 invert filter'
-          }`}
+          className="h-14 w-16"
         />
         <div className="flex flex-col gap-8 font-sans text-3xl">
           <div className="flex cursor-pointer select-none gap-8 overflow-x-hidden">
@@ -83,7 +82,7 @@ export default function Navbar() {
         </div>
       </div>
       <div className="flex flex-col gap-6 text-2xl">
-        {darkMode ? (
+        {!darkMode ? (
           <BsMoonStars className="cursor-pointer" onClick={toggleDarkMode} />
         ) : (
           <BsSun className="cursor-pointer" onClick={toggleDarkMode} />
