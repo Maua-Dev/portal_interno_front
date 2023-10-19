@@ -2,32 +2,34 @@ import logo from '../assets/logo_dev.png'
 import { BiSolidUser } from 'react-icons/bi'
 import { AiOutlineHistory, AiOutlineDoubleRight } from 'react-icons/ai'
 import { BsFillPlusSquareFill, BsMoonStars, BsSun } from 'react-icons/bs'
-import { useContext, useState } from 'react'
-import { ThemeContext } from '../contexts/theme_context'
+import { useState } from 'react'
+import useDarkMode from '../utils/functions/useDarkMode'
 
 export default function Navbar() {
   const [hover, setHover] = useState<boolean>(false)
-  const { theme, handleThemeChange } = useContext(ThemeContext)
+  const { darkMode, toggleDarkMode } = useDarkMode()
 
   return (
     <div
-      className={`fixed z-40 flex h-screen transform flex-col items-center justify-between gap-12 overflow-x-hidden ${
-        theme ? 'bg-white' : 'bg-black text-white'
-      } px-4 py-10 drop-shadow-md transition-all duration-200 ease-in-out ${
-        hover ? 'w-56' : 'w-28'
-      }`}
+      className={`fixed z-40 flex h-screen transform flex-col items-center justify-between  gap-12 overflow-x-hidden px-4 py-10 transition-all  duration-200 ease-in-out ${
+        !darkMode
+          ? 'bg-white drop-shadow-md'
+          : 'border-r-2 border-white bg-black text-white'
+      } ${hover ? 'w-56' : 'w-28'}`}
     >
       <div className="flex flex-col items-center gap-12">
         <img
           src={logo}
           alt="Logo da Dev. Community Mauá"
-          className="h-14 w-16"
+          className={`h-14 w-16 ${
+            !darkMode ? '' : 'brightness-0 invert filter'
+          }`}
         />
         <div className="flex flex-col gap-8 font-sans text-3xl">
           <div className="flex cursor-pointer select-none gap-8 overflow-x-hidden">
             <BiSolidUser
               className={`transform cursor-pointer ${
-                theme ? 'text-gray-700' : 'text-white'
+                !darkMode ? 'text-gray-700' : 'text-white'
               } transition-all duration-100 ${
                 hover ? '-translate-x-0' : 'translate-x-0'
               } hover:fill-blue-600`}
@@ -45,7 +47,7 @@ export default function Navbar() {
           <div className="flex cursor-pointer select-none gap-8 overflow-x-hidden">
             <BsFillPlusSquareFill
               className={`transform cursor-pointer ${
-                theme ? 'text-gray-700' : 'text-white'
+                !darkMode ? 'text-gray-700' : 'text-white'
               } transition-all duration-100 ${
                 hover ? '-translate-x-0' : 'translate-x-0'
               } hover:fill-blue-600`}
@@ -63,7 +65,7 @@ export default function Navbar() {
           <div className="flex cursor-pointer select-none gap-8 overflow-x-hidden">
             <AiOutlineHistory
               className={`transform cursor-pointer ${
-                theme ? 'text-gray-700' : 'text-white'
+                !darkMode ? 'text-gray-700' : 'text-white'
               } transition-all duration-100 ${
                 hover ? '-translate-x-0' : 'translate-x-0'
               } hover:fill-blue-600`}
@@ -81,10 +83,10 @@ export default function Navbar() {
         </div>
       </div>
       <div className="flex flex-col gap-6 text-2xl">
-        {theme ? (
-          <BsSun className="cursor-pointer" onClick={handleThemeChange} />
+        {darkMode ? (
+          <BsMoonStars className="cursor-pointer" onClick={toggleDarkMode} />
         ) : (
-          <BsMoonStars className="cursor-pointer" onClick={handleThemeChange} />
+          <BsSun className="cursor-pointer" onClick={toggleDarkMode} />
         )}
         <AiOutlineDoubleRight
           onClick={() => setHover(!hover)}
