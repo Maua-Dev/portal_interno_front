@@ -22,10 +22,10 @@ module.exports = {
           fill: 'var(--color-background)',
           secundary: 'var(--color-secundary)',
           'base-foreground': 'var(--color-text-base)',
-          'button-blue-accent': '--color-button-accent-blue',
-          'button-blue-accent-hover': '--color-button-accent-blue-hover',
-          'button-red-accent': '--color-button-accent-red',
-          'button-red-accent-hover': '--color-button-accent-red-hover'
+          'button-blue-accent': 'var(--color-button-accent-blue)',
+          'button-blue-accent-hover': 'var(--color-button-accent-blue-hover)',
+          'button-red-accent': 'var(--color-button-accent-red)',
+          'button-red-accent-hover': 'var(--color-button-accent-red-hover0'
         }
       },
       borderColor: {
