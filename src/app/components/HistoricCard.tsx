@@ -5,6 +5,7 @@ import { Filter } from 'lucide-react'
 import { useContext } from 'react'
 import { ThemeContext } from '../contexts/theme_context'
 import * as Select from './little_components/Select'
+import TextField from './little_components/TextField'
 
 interface ProjectProp {
   name: string
@@ -38,11 +39,7 @@ export default function HistoricCard() {
         <Filter className="h-10 w-10" />
         <Text size="lg">Filtros</Text>
         <Switch variant="regular" />
-        <input
-          type="text"
-          className="h-10 w-64 rounded-full border border-skin-muted bg-skin-fill pl-3"
-          placeholder="Digite o titulo da atividade..."
-        />
+        <TextField />
       </div>
       <div className="flex flex-row gap-5">
         <Select.Root label="Projetos">
@@ -50,7 +47,7 @@ export default function HistoricCard() {
           <Select.Content value="PI">Portal Interno</Select.Content>
           <Select.Content value="PI">Portal Interno</Select.Content>
         </Select.Root>
-        <Select.Root label="Área">
+        <Select.Root label="Área" className="w-fit">
           <Select.Content value="PI">Portal Interno</Select.Content>
           <Select.Content value="PI">Portal Interno</Select.Content>
           <Select.Content value="PI">Portal Interno</Select.Content>
