@@ -8,7 +8,11 @@ interface RootProps extends HTMLAttributes<HTMLSelectElement> {
 
 function Root({ label, children, ...props }: RootProps) {
   return (
-    <div className="relative flex h-10 w-36 flex-row items-center justify-between rounded-md bg-skin-fill ">
+    <div
+      className={twMerge(
+        'relative flex h-10 w-36 flex-row items-center justify-between rounded-md bg-skin-secundary '
+      )}
+    >
       <select
         {...props}
         name="projects"
