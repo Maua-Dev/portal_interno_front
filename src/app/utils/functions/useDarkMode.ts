@@ -13,6 +13,7 @@ export default function useDarkMode() {
   const toggleDarkMode = (): void => {
     setDarkMode(!darkMode)
     localStorage.setItem('darkMode', String(!darkMode))
+    window.location.reload()
   }
 
   return { darkMode, toggleDarkMode }
