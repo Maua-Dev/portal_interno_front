@@ -5,6 +5,10 @@ import { ActionRepositoryMock } from '../repositories/action_repository_mock'
 import { ActionRepositoryHttp } from '../repositories/action_repository_http'
 import { CreateActionUsecase } from '../../../modules/action/usecases/create_action_usecase'
 import { CreateAssociatedActionUsecase } from '../../../modules/action/usecases/create_associated_action_usecase'
+import { GetHistoryUsecase } from '../../../modules/action/usecases/get_history_usecase'
+import { UpdateActionUsecase } from '../../../modules/action/usecases/update_action_usecase'
+import { GetAllMembersUsecase } from '../../../modules/action/usecases/get_all_members_usecase'
+import { GetMember } from '../../../modules/action/usecases/get_member_usecase'
 
 export const RegistryAction = {
   // Axios Adapter
@@ -16,7 +20,11 @@ export const RegistryAction = {
 
   // Usecases
   CreateActionUsecase: Symbol.for('CreateActionUsecase'),
-  CreateAssociatedActionUsecase: Symbol.for('CreateAssociatedActionUsecase')
+  CreateAssociatedActionUsecase: Symbol.for('CreateAssociatedActionUsecase'),
+  GetHistoryUsecase: Symbol.for('GetHistoryUsecase'),
+  UpdateActionUsecase: Symbol.for('UpdateActionUsecase'),
+  GetMemberUsecase: Symbol.for('GetMemberUsecase'),
+  GetAllMembersUsecase: Symbol.for('GetAllMembersUsecase')
 }
 
 export const containerAction = new Container()
@@ -71,6 +79,90 @@ containerAction
       )
     } else {
       return new CreateAssociatedActionUsecase(
+        context.container.get(RegistryAction.ActionRepositoryMock)
+      )
+    }
+  })
+
+containerAction
+  .bind(RegistryAction.GetHistoryUsecase)
+  .toDynamicValue((context) => {
+    if (import.meta.env.VITE_STAGE === 'TEST') {
+      return new GetHistoryUsecase(
+        context.container.get(RegistryAction.ActionRepositoryMock)
+      )
+    } else if (
+      import.meta.env.VITE_STAGE === 'DEV' ||
+      import.meta.env.VITE_STAGE === 'PROD'
+    ) {
+      return new GetHistoryUsecase(
+        context.container.get(RegistryAction.ActionRepositoryHttp)
+      )
+    } else {
+      return new GetHistoryUsecase(
+        context.container.get(RegistryAction.ActionRepositoryMock)
+      )
+    }
+  })
+
+containerAction
+  .bind(RegistryAction.UpdateActionUsecase)
+  .toDynamicValue((context) => {
+    if (import.meta.env.VITE_STAGE === 'TEST') {
+      return new UpdateActionUsecase(
+        context.container.get(RegistryAction.ActionRepositoryMock)
+      )
+    } else if (
+      import.meta.env.VITE_STAGE === 'DEV' ||
+      import.meta.env.VITE_STAGE === 'PROD'
+    ) {
+      return new UpdateActionUsecase(
+        context.container.get(RegistryAction.ActionRepositoryHttp)
+      )
+    } else {
+      return new UpdateActionUsecase(
+        context.container.get(RegistryAction.ActionRepositoryMock)
+      )
+    }
+  })
+
+containerAction
+  .bind(RegistryAction.GetMemberUsecase)
+  .toDynamicValue((context) => {
+    if (import.meta.env.VITE_STAGE === 'TEST') {
+      return new GetMember(
+        context.container.get(RegistryAction.ActionRepositoryMock)
+      )
+    } else if (
+      import.meta.env.VITE_STAGE === 'DEV' ||
+      import.meta.env.VITE_STAGE === 'PROD'
+    ) {
+      return new GetMember(
+        context.container.get(RegistryAction.ActionRepositoryHttp)
+      )
+    } else {
+      return new GetMember(
+        context.container.get(RegistryAction.ActionRepositoryMock)
+      )
+    }
+  })
+
+containerAction
+  .bind(RegistryAction.GetAllMembersUsecase)
+  .toDynamicValue((context) => {
+    if (import.meta.env.VITE_STAGE === 'TEST') {
+      return new GetAllMembersUsecase(
+        context.container.get(RegistryAction.ActionRepositoryMock)
+      )
+    } else if (
+      import.meta.env.VITE_STAGE === 'DEV' ||
+      import.meta.env.VITE_STAGE === 'PROD'
+    ) {
+      return new GetAllMembersUsecase(
+        context.container.get(RegistryAction.ActionRepositoryHttp)
+      )
+    } else {
+      return new GetAllMembersUsecase(
         context.container.get(RegistryAction.ActionRepositoryMock)
       )
     }

@@ -14,8 +14,8 @@ export type JsonProps = {
   year: number
   cellphone: string
   course: string
-  hiredDate: number
-  deactivatedDate?: number
+  hired_date: number
+  deactivated_date?: number
   active: string
   projects: Object[] // Project
 }
@@ -278,8 +278,8 @@ export class Member {
       year: json.year,
       cellphone: json.cellphone,
       course: courseToEnum(json.course),
-      hiredDate: json.hiredDate,
-      deactivatedDate: json.deactivatedDate,
+      hiredDate: json.hired_date,
+      deactivatedDate: json.deactivated_date,
       active: activeToEnum(json.active),
       projects: json.projects.map((project: any) => Project.fromJSON(project))
     })
@@ -310,7 +310,7 @@ export class Member {
   }
 
   static validateRa(ra: string) {
-    const regexRa = /^\d{2}\.\d{5}-\d$/
+    const regexRa = /^\d{8}$/
     if (ra == null) {
       return false
     } else if (typeof ra !== 'string') {
@@ -406,9 +406,11 @@ export class Member {
       return false
     } else if (Array.isArray(projects) === false) {
       return false
-    } else if (projects.length === 0) {
-      return false
-    } else if (
+    }
+    // else if (projects.length === 0) {
+    //   return false
+    // }
+    else if (
       projects.every((project) => typeof project === 'object') === false
     ) {
       return false

@@ -28,3 +28,20 @@ export function stackToEnum(value: string): STACK {
       throw new Error('Invalid value')
   }
 }
+
+export function stackFormatter(stackArray: STACK[]): string[] {
+  const stackFormatted: string[] = []
+  stackArray.forEach((stack) => {
+    stackFormatted.push(stack.toString())
+  })
+  console.log(stackFormatted)
+  return stackFormatted
+}
+
+export function stackFormatterFromJSON(stackArray: string[]): STACK[] {
+  const stackFormatted: STACK[] = []
+  stackArray.map((stack) => {
+    stackFormatted.push(stackToEnum(stack))
+  })
+  return stackFormatted
+}

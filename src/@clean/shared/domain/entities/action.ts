@@ -2,19 +2,19 @@ import { ACTION_TYPE, actionTypeToEnum } from '../enums/action_type_enum'
 import { STACK, stackToEnum } from '../enums/stack_enum'
 import { EntityError } from '../helpers/errors/domain_error'
 
-export type JsonProps = {
-  ownerRa: string
-  startDate: number
-  endDate: number
+export type ActionJsonProps = {
+  owner_ra: string
+  start_date: number
+  end_date: number
   duration: number
-  actionId: string
-  storyId?: number
+  action_id: string
+  story_id?: number
   title: string
   description?: string
-  projectCode: string
-  associatedMembersRa?: string[]
-  stackTags: string[]
-  actionTypeTag: string
+  project_code: string
+  associated_members_ra?: string[]
+  stack_tags: string[]
+  action_type_tag: string
 }
 
 export type ActionProps = {
@@ -39,12 +39,12 @@ export class Action {
     }
     this.props.ownerRa = props.ownerRa
 
-    if (!Action.validatestartDate(props.startDate)) {
+    if (!Action.validateStartDate(props.startDate)) {
       throw new EntityError('props.startDate')
     }
     this.props.startDate = props.startDate
 
-    if (!Action.validateendDate(props.endDate, props.startDate)) {
+    if (!Action.validateEndDate(props.endDate, props.startDate)) {
       throw new EntityError('props.endDate')
     }
     this.props.endDate = props.endDate
@@ -115,7 +115,7 @@ export class Action {
     return this.props.ownerRa
   }
 
-  set setOwnerRa(ownerRa: string) {
+  set ownerRa(ownerRa: string) {
     if (!Action.validateOwnerRa(ownerRa)) {
       throw new EntityError('props.ownerRa')
     }
@@ -126,8 +126,8 @@ export class Action {
     return this.props.startDate
   }
 
-  set setstartDate(startDate: number) {
-    if (!Action.validatestartDate(startDate)) {
+  set startDate(startDate: number) {
+    if (!Action.validateStartDate(startDate)) {
       throw new EntityError('props.startDate')
     }
     this.props.startDate = startDate
@@ -137,8 +137,8 @@ export class Action {
     return this.props.endDate
   }
 
-  set setendDate(endDate: number) {
-    if (!Action.validateendDate(endDate, this.startDate)) {
+  set endDate(endDate: number) {
+    if (!Action.validateEndDate(endDate, this.startDate)) {
       throw new EntityError('props.endDate')
     }
     this.props.endDate = endDate
@@ -148,7 +148,7 @@ export class Action {
     return this.props.duration
   }
 
-  set setDuration(duration: number) {
+  set duration(duration: number) {
     if (!Action.validateDuration(duration, this.startDate, this.endDate)) {
       throw new EntityError('props.duration')
     }
@@ -159,7 +159,7 @@ export class Action {
     return this.props.actionId
   }
 
-  set setActionId(actionId: string) {
+  set actionId(actionId: string) {
     if (!Action.validateActionId(actionId)) {
       throw new EntityError('props.actionId')
     }
@@ -167,10 +167,13 @@ export class Action {
   }
 
   get storyId() {
+    if (this.props.storyId == null) {
+      return -1
+    }
     return this.props.storyId
   }
 
-  set setStoryId(storyId: number) {
+  set storyId(storyId: number) {
     if (!Action.validateStoryId(storyId)) {
       throw new EntityError('props.storyId')
     }
@@ -181,7 +184,7 @@ export class Action {
     return this.props.title
   }
 
-  set setTitle(title: string) {
+  set title(title: string) {
     if (!Action.validateTitle(title)) {
       throw new EntityError('props.title')
     }
@@ -189,10 +192,13 @@ export class Action {
   }
 
   get description() {
+    if (this.props.description == null) {
+      return ''
+    }
     return this.props.description
   }
 
-  set setDescription(description: string) {
+  set description(description: string) {
     if (!Action.validateDescription(description)) {
       throw new EntityError('props.description')
     }
@@ -203,7 +209,7 @@ export class Action {
     return this.props.projectCode
   }
 
-  set setProjectCode(projectCode: string) {
+  set projectCode(projectCode: string) {
     if (!Action.validateProjectCode(projectCode)) {
       throw new EntityError('props.projectCode')
     }
@@ -211,10 +217,13 @@ export class Action {
   }
 
   get associatedMembersRa() {
+    if (this.props.associatedMembersRa == null) {
+      return []
+    }
     return this.props.associatedMembersRa
   }
 
-  set setAssociatedMembersRa(associatedMembersRa: string[]) {
+  set associatedMembersRa(associatedMembersRa: string[]) {
     if (!Action.validateAssociatedMembersRa(associatedMembersRa)) {
       throw new EntityError('props.associatedMembersRa')
     }
@@ -225,7 +234,7 @@ export class Action {
     return this.props.stackTags
   }
 
-  set setStackTags(stackTags: STACK[]) {
+  set stackTags(stackTags: STACK[]) {
     if (!Action.validateStackTags(stackTags)) {
       throw new EntityError('props.stackTags')
     }
@@ -236,7 +245,7 @@ export class Action {
     return this.props.actionTypeTag
   }
 
-  set setactionTypeTag(actionTypeTag: ACTION_TYPE) {
+  set actionTypeTag(actionTypeTag: ACTION_TYPE) {
     if (!Action.validateActionTypeTag(actionTypeTag)) {
       throw new EntityError('props.actionTypeTag')
     }
@@ -247,52 +256,53 @@ export class Action {
 
   toJSON() {
     return {
-      ownerRa: this.ownerRa,
-      startDate: this.startDate,
-      endDate: this.endDate,
+      owner_ra: this.ownerRa,
+      start_date: this.startDate,
+      end_date: this.endDate,
       duration: this.duration,
-      actionId: this.actionId,
-      storyId: this.storyId,
+      action_id: this.actionId,
+      story_id: this.storyId,
       title: this.title,
       description: this.description,
-      projectCode: this.projectCode,
-      associatedMembersRa: this.associatedMembersRa,
-      stackTags: this.stackTags,
-      actionTypeTag: this.actionTypeTag
+      project_code: this.projectCode,
+      associated_members_ra: this.associatedMembersRa,
+      stack_tags: this.stackTags,
+      action_type_tag: this.actionTypeTag
     }
   }
 
-  static fromJSON(json: JsonProps) {
+  static fromJSON(json: ActionJsonProps) {
     return new Action({
-      ownerRa: json.ownerRa,
-      startDate: json.startDate,
-      endDate: json.endDate,
+      ownerRa: json.owner_ra,
+      startDate: json.start_date,
+      endDate: json.end_date,
       duration: json.duration,
-      actionId: json.actionId,
-      storyId: json.storyId,
+      actionId: json.action_id,
+      storyId: json.story_id,
       title: json.title,
       description: json.description,
-      projectCode: json.projectCode,
-      associatedMembersRa: json.associatedMembersRa,
-      stackTags: json.stackTags.map((stackTag) => stackToEnum(stackTag)),
-      actionTypeTag: actionTypeToEnum(json.actionTypeTag)
+      projectCode: json.project_code,
+      associatedMembersRa: json.associated_members_ra,
+      stackTags: json.stack_tags.map((stackTag) => stackToEnum(stackTag)),
+      actionTypeTag: actionTypeToEnum(json.action_type_tag)
     })
   }
 
   // Validate functions
   static validateOwnerRa(ra: string) {
-    const regexRa = /^\d{2}\.\d{5}-\d$/
     if (ra == null) {
       return false
     } else if (typeof ra !== 'string') {
       return false
-    } else if (!ra.match(regexRa)) {
+    } else if (ra.length !== 8) {
+      return false
+    } else if (!ra.match(/^\d{8}$/)) {
       return false
     }
     return true
   }
 
-  static validatestartDate(startDate: number) {
+  static validateStartDate(startDate: number) {
     if (startDate == null) {
       return false
     } else if (typeof startDate !== 'number') {
@@ -301,7 +311,7 @@ export class Action {
     return true
   }
 
-  static validateendDate(endDate: number, startDate: number) {
+  static validateEndDate(endDate: number, startDate: number) {
     if (endDate == null) {
       return false
     } else if (typeof endDate !== 'number') {
@@ -342,7 +352,7 @@ export class Action {
     if (storyId !== null) {
       if (typeof storyId !== 'number') {
         return false
-      } else if (storyId < 100 || storyId > 9999) {
+      } else if (storyId < 1 || storyId > 999999) {
         return false
       }
     }
@@ -385,8 +395,6 @@ export class Action {
   static validateAssociatedMembersRa(associatedMembersRa: string[]) {
     if (associatedMembersRa != null) {
       if (Array.isArray(associatedMembersRa) === false) {
-        return false
-      } else if (associatedMembersRa.length === 0) {
         return false
       } else if (
         associatedMembersRa.every((ra) => this.validateOwnerRa(ra)) === false
