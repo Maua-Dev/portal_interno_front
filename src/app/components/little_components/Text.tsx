@@ -2,7 +2,7 @@ import { HTMLAttributes } from 'react'
 import { twMerge } from 'tailwind-merge'
 
 type variantType = 'base' | 'muted' | 'link'
-type sizeType = 'sm' | 'md' | 'lg'
+type sizeType = 'sm' | 'md' | 'lg' | '2xl'
 
 interface CardProps extends HTMLAttributes<HTMLHeadingElement> {
   variant?: variantType
@@ -13,7 +13,8 @@ export default function Text({ variant, size, children, ...props }: CardProps) {
   const sizeVariants: Record<sizeType, string> = {
     sm: 'text-sm',
     md: 'text-base',
-    lg: 'text-2xl'
+    lg: 'text-lg',
+    '2xl': 'text-2xl'
   }
 
   const variants: Record<variantType, string> = {

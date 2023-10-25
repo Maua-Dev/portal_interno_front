@@ -38,7 +38,7 @@ interface SwitchProps
 export default function Switch({ variant, children, ...props }: SwitchProps) {
   const variants: Record<variantType, variantsProps> = {
     regular: {
-      root: 'relative h-6 w-12 rounded-full border-skin-muted data-[state=unchecked]:border data-[state=checked]:bg-skin-button-blue-accent data-[state=unchecked]:bg-skin-fill',
+      root: 'relative h-6 w-12 rounded-full border-skin-muted border data-[state=checked]:bg-skin-button-blue-accent data-[state=unchecked]:bg-skin-fill',
       thumb:
         'block h-5 w-6 translate-x-0.5 rounded-full bg-white transition-transform duration-100 will-change-transform data-[state=checked]:translate-x-5 data-[state=unchecked]:border data-[state=checked]:bg-white data-[state=unchecked]:bg-skin-secundary'
     }
