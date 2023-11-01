@@ -1,10 +1,11 @@
+import { SlidersHorizontal } from 'lucide-react'
+import Button from './little_components/Button'
 import Card from './little_components/Card'
-import { History, SlidersHorizontal } from 'lucide-react'
 import TextField from './little_components/TextField'
 import Text from './little_components/Text'
-import Button from './little_components/Button'
+import { History } from 'lucide-react'
 
-export default function HistoricCard() {
+export default function FilterBar() {
   return (
     <Card
       variant="lg"
@@ -15,7 +16,7 @@ export default function HistoricCard() {
           <History className="h-10 w-10" />
           <Text size="2xl">Histórico</Text>
         </div>
-        <TextField />
+        <TextField placeholder="Digite o titulo da atividade..." />
       </div>
       <div className="flex h-full flex-row gap-5">
         <Button variant="default">

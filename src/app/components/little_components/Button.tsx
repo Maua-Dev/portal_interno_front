@@ -10,7 +10,7 @@ interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
 export default function Button({ variant, children, ...props }: ButtonProps) {
   const variantsStyle: Record<variantTypes, string> = {
     default:
-      'flex flex-row items-center gap-2 rounded-sm bg-skin-secundary px-4 font-semibold duration-150 ease-in hover:bg-skin-fill'
+      'flex flex-row items-center gap-2 rounded-sm bg-skin-secundary px-4 py-2 font-semibold duration-150 ease-in hover:bg-skin-fill'
   }
 
   const style = variantsStyle[variant]

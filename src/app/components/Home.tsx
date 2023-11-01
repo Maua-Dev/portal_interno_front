@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { ThemeContext } from '../contexts/theme_context'
-import HistoricCard from './HistoricCard'
 import { Sun, Moon } from 'lucide-react'
+import Historic from './Historic'
 
 export default function Home() {
   const { theme, handleThemeChange } = useContext(ThemeContext)
@@ -10,7 +10,7 @@ export default function Home() {
     <div
       className={`${
         theme ? 'theme-white' : null
-      } flex h-screen w-screen flex-col items-center bg-skin-fill p-10`}
+      } flex h-full w-screen flex-col items-center bg-skin-fill p-10`}
     >
       <button
         onClick={handleThemeChange}
@@ -18,7 +18,7 @@ export default function Home() {
       >
         {theme ? <Moon /> : <Sun />}
       </button>
-      <HistoricCard />
+      <Historic />
     </div>
   )
 }
