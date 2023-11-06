@@ -11,6 +11,7 @@
     "test:debug": "jest --runInBand"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.3.2",
     "@types/react": "^18.2.19",
     "@types/react-dom": "^18.2.7",
     "axios": "^1.3.5",
@@ -19,6 +20,7 @@
     "inversify": "^6.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.48.2",
     "react-icons": "^4.11.0",
     "react-router-dom": "^6.14.2",
     "reflect-metadata": "^0.1.13",
@@ -57,6 +59,7 @@
     "tailwindcss": "^3.3.3",
     "ts-jest": "^29.1.1",
     "ts-node": "^10.9.1",
-    "vite": "^4.4.9"
+    "vite": "^4.4.9",
+    "zod": "^3.22.4"
   }
 }
