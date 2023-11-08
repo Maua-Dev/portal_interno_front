@@ -41,7 +41,7 @@ export default function Login() {
       <img
         src={background}
         alt="Ondas coloridas com degradê"
-        className={`absolute h-screen w-full object-cover`}
+        className="absolute h-screen w-full object-cover"
       />
       <form
         onSubmit={handleSubmit(handleLogin)}
@@ -91,7 +91,7 @@ export default function Login() {
         </div>
         <button
           type="submit"
-          className={`w-3/5 rounded-md bg-gradient-to-r from-red-400 to-blue-600 py-[2px] text-lg font-bold text-white`}
+          className="w-3/5 rounded-md bg-gradient-to-r from-red-400 to-blue-600 py-[2px] text-lg font-bold text-white"
         >
           login
         </button>
