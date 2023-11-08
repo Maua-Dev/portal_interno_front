@@ -41,15 +41,13 @@ export default function Login() {
       <img
         src={background}
         alt="Ondas coloridas com degradê"
-        className={`absolute h-screen w-full object-cover ${
-          darkMode ? 'grayscale' : ''
-        }`}
+        className={`absolute h-screen w-full object-cover`}
       />
       <form
         onSubmit={handleSubmit(handleLogin)}
         className={`z-10 flex h-4/6 w-96 flex-col items-center justify-between gap-6 rounded-lg py-12 ${
           darkMode
-            ? 'bg-black shadow-[1px_1px_0px_9px_rgba(255,255,255,0.74)]'
+            ? 'bg-black shadow-[1px_1px_0px_9px_rgba(255,255,255,0.34)]'
             : 'bg-white shadow-[1px_1px_0px_9px_rgba(176,173,173,0.74)]'
         }`}
       >
@@ -93,9 +91,7 @@ export default function Login() {
         </div>
         <button
           type="submit"
-          className={`w-3/5 rounded-md bg-gradient-to-r from-red-400 to-blue-600 py-[2px] text-lg font-bold text-white ${
-            darkMode ? 'grayscale' : ''
-          }`}
+          className={`w-3/5 rounded-md bg-gradient-to-r from-red-400 to-blue-600 py-[2px] text-lg font-bold text-white`}
         >
           login
         </button>
