@@ -47,8 +47,8 @@ export default function Login() {
         onSubmit={handleSubmit(handleLogin)}
         className={`z-10 flex h-4/6 w-96 flex-col items-center justify-between gap-6 rounded-lg py-12 ${
           darkMode
-            ? 'bg-black shadow-[1px_1px_0px_9px_rgba(255,255,255,0.34)]'
-            : 'bg-white shadow-[1px_1px_0px_9px_rgba(176,173,173,0.74)]'
+            ? 'sm:bg-black sm:shadow-[1px_1px_0px_9px_rgba(255,255,255,0.34)]'
+            : 'sm:bg-white sm:shadow-[1px_1px_0px_9px_rgba(176,173,173,0.74)]'
         }`}
       >
         <img
