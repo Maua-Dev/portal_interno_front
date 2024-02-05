@@ -6,6 +6,7 @@ import useDarkMode from '../utils/functions/useDarkMode'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const loginSchema = z.object({
   email: z
@@ -19,6 +20,7 @@ export type User = z.infer<typeof loginSchema>
 
 export default function Login() {
   const { darkMode } = useDarkMode()
+  const navigate = useNavigate()
 
   // Set in the local storage if there's a token in URL
   const decoded = decodeURIComponent(location.hash.slice(1))
@@ -36,7 +38,10 @@ export default function Login() {
         'https://auth-dev.devmaua.com/?redirect_uri=http://localhost:5000/login'
       )
     }
-  }, [])
+    setTimeout(() => {
+      navigate('/')
+    }, 1000)
+  }, [navigate])
 
   const handleLogin = (data: User) => {
     // alert(`E-mail: ${data.email}\nSenha: ${data.password}`)
