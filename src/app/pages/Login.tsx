@@ -5,6 +5,7 @@ import logo_white from '../assets/logo_dev_white.png'
 import useDarkMode from '../utils/functions/useDarkMode'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
+import { useEffect } from 'react'
 
 const loginSchema = z.object({
   email: z
@@ -19,8 +20,30 @@ export type User = z.infer<typeof loginSchema>
 export default function Login() {
   const { darkMode } = useDarkMode()
 
+  // Set in the local storage if there's a token in URL
+  const decoded = decodeURIComponent(location.hash.slice(1))
+  const param = new URLSearchParams(decoded)
+  const token = param.get('id_token')
+  if (token) localStorage.setItem('idToken', token)
+
+  // Check if there's a Token in the local storage
+  useEffect(() => {
+    const token = localStorage.getItem('idToken')
+
+    // If there's no token in the local storage, redirect to integrated login
+    if (!token) {
+      window.location.replace(
+        'https://auth-dev.devmaua.com/?redirect_uri=http://localhost:5000/login'
+      )
+    }
+  }, [])
+
   const handleLogin = (data: User) => {
-    alert(`E-mail: ${data.email}\nSenha: ${data.password}`)
+    // alert(`E-mail: ${data.email}\nSenha: ${data.password}`)
+    console.log(data)
+    window.location.replace(
+      'https://auth-dev.devmaua.com/?redirect_uri=http://localhost:5000/login'
+    )
   }
 
   // Hook Form
