@@ -9,6 +9,9 @@ module.exports = {
   important: '#root',
   theme: {
     extend: {
+      colors: {
+        'dev-gray': '#191919'
+      },
       textColor: {
         skin: {
           base: 'var(--color-text-base)',
