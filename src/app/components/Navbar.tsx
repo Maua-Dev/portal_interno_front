@@ -2,6 +2,7 @@ import logo from '../assets/logo_dev.png'
 import logo_white from '../assets/logo_dev_white.png'
 import { BiSolidUser } from 'react-icons/bi'
 import { AiOutlineHistory, AiOutlineDoubleRight } from 'react-icons/ai'
+import { IoMdExit } from 'react-icons/io'
 import {
   BsFillPlusSquareFill,
   BsMoonStars,
@@ -10,6 +11,7 @@ import {
 } from 'react-icons/bs'
 import { useEffect, useState } from 'react'
 import useDarkMode from '../utils/functions/useDarkMode'
+import { useNavigate } from 'react-router-dom'
 
 interface window {
   innerWidth: number
@@ -21,6 +23,7 @@ export default function Navbar() {
   const { darkMode, toggleDarkMode } = useDarkMode()
   const [windowSize, setWindowSize] = useState<window>(getWindowSize())
   const maximumWidth: number = 768
+  const navigate = useNavigate()
 
   useEffect(() => {
     function handleWindowResize() {
@@ -37,6 +40,11 @@ export default function Navbar() {
   function getWindowSize() {
     const { innerWidth, innerHeight } = window
     return { innerWidth, innerHeight }
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem('idToken')
+    navigate('/login')
   }
 
   return (
@@ -113,13 +121,20 @@ export default function Navbar() {
             </div>
           </div>
           <div className="flex flex-col gap-6 text-2xl">
+            <IoMdExit
+              onClick={handleLogout}
+              className="cursor-pointer transition-all duration-100 hover:text-blue-600"
+            />
             {!darkMode ? (
               <BsMoonStars
                 className="cursor-pointer text-gray-700 transition-all duration-100 hover:text-black"
                 onClick={toggleDarkMode}
               />
             ) : (
-              <BsSun className="cursor-pointer" onClick={toggleDarkMode} />
+              <BsSun
+                className="cursor-pointer text-white transition-all duration-100 hover:text-blue-600"
+                onClick={toggleDarkMode}
+              />
             )}
             <AiOutlineDoubleRight
               onClick={() => setHover(!hover)}
