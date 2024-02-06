@@ -46,7 +46,7 @@ export default function Navbar() {
           className={`fixed z-40 flex h-screen transform flex-col items-center justify-between  gap-12 overflow-x-hidden px-4 py-10 transition-all  duration-200 ease-in-out ${
             !darkMode
               ? 'bg-white drop-shadow-md'
-              : 'border-r-2 border-white bg-black text-white'
+              : 'border-r-2 border-white bg-dev-gray text-white'
           } ${hover ? 'w-56' : 'w-28'}`}
         >
           <div className="flex flex-col items-center gap-12">
@@ -134,7 +134,7 @@ export default function Navbar() {
           <div
             className={`flex justify-center py-2 ${
               darkMode
-                ? 'border-b-2 border-white bg-black'
+                ? 'border-b-2 border-white bg-dev-gray'
                 : 'bg-white drop-shadow-md'
             }`}
           >
@@ -147,7 +147,7 @@ export default function Navbar() {
           <div
             className={`flex justify-center py-4 text-3xl ${
               darkMode
-                ? 'border-t-2 border-white bg-black'
+                ? 'border-t-2 border-white bg-dev-gray'
                 : 'bg-white drop-shadow-md'
             }`}
           >

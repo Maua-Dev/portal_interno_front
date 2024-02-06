@@ -38,9 +38,9 @@ export default function Login() {
         'https://auth-dev.devmaua.com/?redirect_uri=http://localhost:5000/login'
       )
     }
-    setTimeout(() => {
-      navigate('/')
-    }, 1000)
+    // setTimeout(() => {
+    //   navigate('/')
+    // }, 1000)
   }, [navigate])
 
   const handleLogin = (data: User) => {
@@ -63,7 +63,7 @@ export default function Login() {
   return (
     <main
       className={`flex h-screen w-full items-center justify-center ${
-        darkMode ? 'bg-black' : 'bg-white'
+        darkMode ? 'bg-dev-gray' : 'bg-white'
       }`}
     >
       <img
@@ -75,7 +75,7 @@ export default function Login() {
         onSubmit={handleSubmit(handleLogin)}
         className={`z-10 flex h-4/6 w-96 flex-col items-center justify-between gap-6 rounded-lg py-12 ${
           darkMode
-            ? 'sm:bg-black sm:shadow-[1px_1px_0px_9px_rgba(255,255,255,0.34)]'
+            ? 'sm:bg-dev-gray sm:shadow-[1px_1px_0px_9px_rgba(255,255,255,0.34)]'
             : 'sm:bg-white sm:shadow-[1px_1px_0px_9px_rgba(176,173,173,0.74)]'
         }`}
       >
@@ -90,7 +90,7 @@ export default function Login() {
             placeholder="E-mail"
             className={`w-5/6 border-b-2 border-gray-600 py-[4px] outline-none transition-all duration-500 focus:border-blue-800 ${
               errors.email && 'border-red-600'
-            } ${darkMode ? 'bg-black text-white' : 'bg-white text-black'}`}
+            } ${darkMode ? 'bg-dev-gray text-white' : 'bg-white text-black'}`}
             {...register('email', { required: true })}
           />
           <div className="-mt-[12px] w-5/6 text-left">
@@ -103,7 +103,7 @@ export default function Login() {
             placeholder="Senha"
             className={`w-5/6 border-b-2 border-gray-600 py-[4px] outline-none transition-all duration-500 focus:border-blue-800 ${
               errors.password && 'border-red-600'
-            } ${darkMode ? 'bg-black text-white' : 'bg-white text-black'}`}
+            } ${darkMode ? 'bg-dev-gray text-white' : 'bg-white text-black'}`}
             {...register('password', { required: true })}
           />
           <div className="-mt-[12px] w-5/6 text-left">
