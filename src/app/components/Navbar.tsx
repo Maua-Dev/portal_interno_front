@@ -16,7 +16,7 @@ interface window {
   innerHeight: number
 }
 
-export default function Navbar() {
+export default function Navbar({ openModal }: { openModal: boolean }) {
   const [hover, setHover] = useState<boolean>(false)
   const { darkMode, toggleDarkMode } = useDarkMode()
   const [windowSize, setWindowSize] = useState<window>(getWindowSize())
@@ -39,11 +39,35 @@ export default function Navbar() {
     return { innerWidth, innerHeight }
   }
 
+  const personIconStyles = `transform ${openModal ? '' : 'cursor-pointer'} ${
+    !darkMode ? 'text-gray-700' : 'text-white'
+  } transition-all duration-100 ${hover ? '-translate-x-0' : 'translate-x-0'} ${
+    openModal ? '' : 'hover:fill-blue-600'
+  }`
+
+  const textPersonIconStyles = `transform text-xl transition-all duration-200 ${
+    hover
+      ? 'relative translate-x-0 opacity-100 delay-[50ms]'
+      : 'absolute left-32 translate-x-32 opacity-0'
+  }`
+
+  const addActionIconStyles = `transform cursor-pointer ${
+    !darkMode ? 'text-gray-700' : 'text-white'
+  } transition-all duration-100 ${
+    hover ? '-translate-x-0' : 'translate-x-0'
+  } hover:fill-blue-600`
+
+  const addActionModalOpenned = `transform ${
+    !darkMode ? 'text-gray-700' : 'text-white'
+  } transition-all duration-100 ${hover ? '-translate-x-0' : 'translate-x-0'}`
+
   return (
     <div>
       {windowSize.innerWidth > maximumWidth ? (
         <div
-          className={`fixed z-40 flex h-screen transform flex-col items-center justify-between  gap-12 overflow-x-hidden px-4 py-10 transition-all  duration-200 ease-in-out ${
+          className={`fixed z-40 flex h-screen ${
+            openModal ? 'bg-black bg-opacity-50' : ''
+          } transform flex-col items-center justify-between  gap-12 overflow-x-hidden px-4 py-10 transition-all  duration-200 ease-in-out ${
             !darkMode
               ? 'bg-white drop-shadow-md'
               : 'border-r-2 border-white bg-black text-white'
@@ -56,31 +80,33 @@ export default function Navbar() {
               className="h-14 w-16"
             />
             <div className="flex flex-col gap-8 font-sans text-3xl">
-              <div className="flex cursor-pointer select-none gap-8 overflow-x-hidden">
-                <BiSolidUser
-                  className={`transform cursor-pointer ${
-                    !darkMode ? 'text-gray-700' : 'text-white'
-                  } transition-all duration-100 ${
-                    hover ? '-translate-x-0' : 'translate-x-0'
-                  } hover:fill-blue-600`}
-                />
+              <div
+                className={
+                  openModal
+                    ? 'flex select-none gap-8 overflow-x-hidden'
+                    : 'flex cursor-pointer select-none gap-8 overflow-x-hidden'
+                }
+              >
+                <BiSolidUser className={personIconStyles} />
                 <p
-                  className={`transform text-xl transition-all duration-200 ${
-                    hover
-                      ? 'relative translate-x-0 opacity-100 delay-[50ms]'
-                      : 'absolute left-32 translate-x-32 opacity-0'
-                  }`}
+                  className={
+                    openModal
+                      ? 'cur absolute left-32 translate-x-32 transform text-xl opacity-0 transition-all duration-200'
+                      : textPersonIconStyles
+                  }
                 >
                   Perfil
                 </p>
               </div>
-              <div className="flex cursor-pointer select-none gap-8 overflow-x-hidden">
+              <div
+                className={`flex ${
+                  openModal ? '' : 'cursor-pointer'
+                } select-none gap-8 overflow-x-hidden`}
+              >
                 <BsFillPlusSquareFill
-                  className={`transform cursor-pointer ${
-                    !darkMode ? 'text-gray-700' : 'text-white'
-                  } transition-all duration-100 ${
-                    hover ? '-translate-x-0' : 'translate-x-0'
-                  } hover:fill-blue-600`}
+                  className={
+                    openModal ? addActionModalOpenned : addActionIconStyles
+                  }
                 />
                 <p
                   className={`transform text-xl transition-all duration-200 ${
@@ -92,13 +118,17 @@ export default function Navbar() {
                   Tarefa
                 </p>
               </div>
-              <div className="flex cursor-pointer select-none gap-8 overflow-x-hidden">
+              <div
+                className={`flex ${
+                  openModal ? '' : 'cursor-pointer'
+                } select-none gap-8 overflow-x-hidden`}
+              >
                 <AiOutlineHistory
-                  className={`transform cursor-pointer ${
+                  className={`transform ${openModal ? '' : 'cursor-pointer'} ${
                     !darkMode ? 'text-gray-700' : 'text-white'
                   } transition-all duration-100 ${
                     hover ? '-translate-x-0' : 'translate-x-0'
-                  } hover:fill-blue-600`}
+                  } ${openModal ? '' : 'hover:fill-blue-600'}`}
                 />
                 <p
                   className={`transform text-xl transition-all duration-200 ${
@@ -115,15 +145,24 @@ export default function Navbar() {
           <div className="flex flex-col gap-6 text-2xl">
             {!darkMode ? (
               <BsMoonStars
-                className="cursor-pointer text-gray-700 transition-all duration-100 hover:text-black"
-                onClick={toggleDarkMode}
+                className={` ${
+                  openModal ? '' : 'cursor-pointer'
+                } text-gray-700 transition-all duration-100 ${
+                  openModal ? '' : 'hover:text-black'
+                }`}
+                onClick={openModal ? () => null : toggleDarkMode}
               />
             ) : (
-              <BsSun className="cursor-pointer" onClick={toggleDarkMode} />
+              <BsSun
+                className={openModal ? '' : 'cursor-pointer'}
+                onClick={openModal ? () => null : toggleDarkMode}
+              />
             )}
             <AiOutlineDoubleRight
-              onClick={() => setHover(!hover)}
-              className={`cursor-pointer transition-all duration-300 ${
+              onClick={openModal ? () => null : () => setHover(!hover)}
+              className={`${
+                openModal ? '' : 'cursor-pointer'
+              } transition-all duration-300 ${
                 hover ? 'rotate-180' : 'rotate-0'
               }`}
             />
