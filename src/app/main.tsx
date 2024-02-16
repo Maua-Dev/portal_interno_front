@@ -5,13 +5,16 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import './globals.css'
 import { ActionProvider } from './contexts/action_context.tsx'
 import { ThemeProvider } from './contexts/theme_context.tsx'
+import { ModalProvider } from './contexts/modal_context.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <Router>
       <ThemeProvider>
         <ActionProvider>
-          <AppRouter />
+          <ModalProvider>
+            <AppRouter />
+          </ModalProvider>
         </ActionProvider>
       </ThemeProvider>
     </Router>
