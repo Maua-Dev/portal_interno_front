@@ -9,9 +9,10 @@ import {
   BsSun,
   BsClipboard
 } from 'react-icons/bs'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import useDarkMode from '../utils/functions/useDarkMode'
 import { useNavigate } from 'react-router-dom'
+import { ModalContext } from '../contexts/modal_context'
 
 interface window {
   innerWidth: number
@@ -24,6 +25,7 @@ export default function Navbar() {
   const [windowSize, setWindowSize] = useState<window>(getWindowSize())
   const maximumWidth: number = 768
   const navigate = useNavigate()
+  const { openModal } = useContext(ModalContext)
 
   useEffect(() => {
     function handleWindowResize() {
@@ -51,7 +53,7 @@ export default function Navbar() {
     <div>
       {windowSize.innerWidth > maximumWidth ? (
         <div
-          className={`fixed z-40 flex h-screen transform flex-col items-center justify-between  gap-12 overflow-x-hidden px-4 py-10 transition-all  duration-200 ease-in-out ${
+          className={`fixed z-40 flex h-screen transform flex-col items-center justify-between gap-12 overflow-x-hidden px-4 py-10 transition-all  duration-200 ease-in-out ${
             !darkMode
               ? 'bg-white drop-shadow-md'
               : 'border-r-2 border-white bg-dev-gray text-white'
@@ -89,6 +91,7 @@ export default function Navbar() {
                   } transition-all duration-100 ${
                     hover ? '-translate-x-0' : 'translate-x-0'
                   } hover:fill-blue-600`}
+                  onClick={openModal}
                 />
                 <p
                   className={`transform text-xl transition-all duration-200 ${
