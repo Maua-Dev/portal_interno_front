@@ -174,8 +174,8 @@ export default function ActionModal({ action }: { action?: Action }) {
                 </div>
               </div>
             </div>
+            {/* Description */}
             <div className="flex flex-col gap-2">
-              {/* Description */}
               <p className="text-lg">Descrição</p>
               <textarea
                 {...register('description')}
