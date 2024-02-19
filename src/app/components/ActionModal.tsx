@@ -5,15 +5,36 @@ import { z } from 'zod'
 import { ACTION_TYPE } from '../../@clean/shared/domain/enums/action_type_enum'
 import { useForm } from 'react-hook-form'
 import { STACK } from '../../@clean/shared/domain/enums/stack_enum'
+import {
+  millisecondsToHours,
+  timeStampToDate,
+  dateToMilliseconds,
+  hoursToMilliseconds
+} from '../utils/functions/timeStamp'
 
 const actionSchema = z.object({
   title: z.string().min(1, { message: 'Title is required' }),
   projectCode: z.string().min(1, { message: 'Project Code is required' }),
   description: z.string(),
   actionId: z.string().min(1, { message: 'Action Id is required' }),
-  startDate: z.string().min(1, { message: 'Initial date is required' }),
-  endDate: z.string().min(1, { message: 'Final date is required' }),
-  duration: z.string().min(1, { message: 'Time stamp is required' }),
+  startDate: z
+    .string()
+    .refine((value) => /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(value), {
+      message: 'Invalid date format'
+    }),
+  endDate: z
+    .string()
+    .refine((value) => /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(value), {
+      message: 'Invalid date format'
+    }),
+  duration: z
+    .number({
+      required_error: 'Duration is required',
+      invalid_type_error: 'This field must be a number'
+    })
+    .positive({ message: 'Duration must be a positive number' })
+    .gte(0.1, { message: 'Duration is required' })
+    .finite(),
   members: z.array(z.string()),
   actionTypeTag: z.nativeEnum(ACTION_TYPE, {
     errorMap: (issue) => {
@@ -34,6 +55,19 @@ export default function ActionModal({ action }: { action?: Action }) {
   const actionTypes: string[] = Object.values(ACTION_TYPE)
   const { darkMode } = useDarkMode()
 
+  const handleCreateActionSubmit = (data: ActionModalType) => {
+    console.log('Create Action')
+    data['startDate'] = dateToMilliseconds(data['startDate']).toString()
+    data['endDate'] = dateToMilliseconds(data['endDate']).toString()
+    data['duration'] = hoursToMilliseconds(data['duration'])
+    console.table(data)
+  }
+
+  const handleUpdateActionSubmit = (data: ActionModalType) => {
+    console.log('Update Action')
+    console.table(data)
+  }
+
   const {
     register,
     handleSubmit,
@@ -47,9 +81,7 @@ export default function ActionModal({ action }: { action?: Action }) {
       actionId: action?.actionId || '',
       startDate: action?.startDate ? timeStampToDate(action!.startDate) : '',
       endDate: action?.endDate ? timeStampToDate(action!.endDate) : '',
-      duration: action?.duration
-        ? `${secondsToDays(action!.duration)} dias`
-        : '0 dias',
+      duration: action?.duration ? millisecondsToHours(action!.duration) : 0,
       members: action?.associatedMembersRa || [],
       actionTypeTag: action?.actionTypeTag || undefined,
       stackTags: action?.stackTags || []
@@ -63,8 +95,15 @@ export default function ActionModal({ action }: { action?: Action }) {
           darkMode ? 'bg-dev-gray text-white' : 'bg-white'
         }`}
       >
-        <div className="flex h-full flex-row gap-6 px-12 py-24">
-          <div className="flex w-3/5 flex-col justify-between gap-8">
+        <form
+          onSubmit={
+            action
+              ? handleSubmit(handleUpdateActionSubmit)
+              : handleSubmit(handleCreateActionSubmit)
+          }
+          className="flex h-full flex-row gap-6 px-12 py-12"
+        >
+          <div className="flex w-4/5 flex-col justify-between gap-8">
             <div className="flex flex-col gap-4">
               {/* Title */}
               <h1 className="text-2xl font-bold">Título da atividade</h1>
@@ -75,9 +114,7 @@ export default function ActionModal({ action }: { action?: Action }) {
                   darkMode ? 'bg-gray-600' : 'bg-gray-300'
                 } px-2 py-1 outline-none`}
               />
-              <span className="text-red-800">
-                {errors.title && errors.title.message}
-              </span>
+              <span className="text-red-600">{errors.title?.message}</span>
             </div>
             <div className="flex flex-col gap-2">
               <div className="grid grid-cols-3 gap-6">
@@ -95,8 +132,8 @@ export default function ActionModal({ action }: { action?: Action }) {
                     <option value="SM">Smile</option>
                     <option value="MF">Mauá Food</option>
                   </select>
-                  <span className="text-red-800">
-                    {errors.projectCode && errors.projectCode.message}
+                  <span className="text-red-600">
+                    {errors.projectCode?.message}
                   </span>
                 </div>
 
@@ -110,8 +147,8 @@ export default function ActionModal({ action }: { action?: Action }) {
                       darkMode ? 'bg-gray-600' : 'bg-gray-300'
                     } px-2 py-1 outline-none`}
                   />
-                  <span className="text-red-800">
-                    {errors.actionId && errors.actionId.message}
+                  <span className="text-red-600">
+                    {errors.actionId?.message}
                   </span>
                 </div>
 
@@ -131,8 +168,8 @@ export default function ActionModal({ action }: { action?: Action }) {
                       </option>
                     ))}
                   </select>
-                  <span className="text-red-800">
-                    {errors.actionTypeTag && errors.actionTypeTag.message}
+                  <span className="text-red-600">
+                    {errors.actionTypeTag?.message}
                   </span>
                 </div>
 
@@ -142,10 +179,14 @@ export default function ActionModal({ action }: { action?: Action }) {
                   <input
                     type="text"
                     {...register('startDate')}
+                    placeholder="DD/MM/AAAA"
                     className={`rounded ${
                       darkMode ? 'bg-gray-600' : 'bg-gray-300'
                     } px-2 py-1 outline-none`}
                   />
+                  <span className="text-red-600">
+                    {errors.startDate?.message}
+                  </span>
                 </div>
 
                 {/* End Date */}
@@ -154,10 +195,14 @@ export default function ActionModal({ action }: { action?: Action }) {
                   <input
                     type="text"
                     {...register('endDate')}
+                    placeholder="DD/MM/AAAA"
                     className={`rounded ${
                       darkMode ? 'bg-gray-600' : 'bg-gray-300'
                     } px-2 py-1 outline-none`}
                   />
+                  <span className="text-red-600">
+                    {errors.endDate?.message}
+                  </span>
                 </div>
 
                 {/* Duration */}
@@ -165,30 +210,39 @@ export default function ActionModal({ action }: { action?: Action }) {
                   <p className="text-lg">Duração</p>
                   <input
                     type="text"
-                    {...register('duration')}
+                    {...register('duration', {
+                      valueAsNumber: true
+                    })}
+                    placeholder="Em horas"
                     className={`rounded ${
                       darkMode ? 'bg-gray-600' : 'bg-gray-300'
                     } select-none px-2 py-1 outline-none`}
-                    readOnly
                   />
+                  <span className="text-red-600">
+                    {errors.duration?.message}
+                  </span>
                 </div>
               </div>
             </div>
             {/* Description */}
-            <div className="flex flex-col gap-2">
+            <div className="flex h-44 flex-col gap-2">
               <p className="text-lg">Descrição</p>
               <textarea
                 {...register('description')}
-                className={`h-56 resize-none rounded ${
+                className={`h-full resize-none rounded ${
                   darkMode ? 'bg-gray-600' : 'bg-gray-300'
                 } px-2 py-1 outline-none`}
               ></textarea>
+              <span className="text-red-600">
+                {errors.description?.message}
+              </span>
             </div>
           </div>
-          <div className="flex w-2/5 flex-col">
-            <h1 className="text-2xl font-bold">Código do projeto</h1>
+          <div className="flex w-1/5 flex-col gap-16">
+            <h1 className="text-2xl font-bold">Membros</h1>
+            <h1 className="text-2xl font-bold">Ações</h1>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   )
