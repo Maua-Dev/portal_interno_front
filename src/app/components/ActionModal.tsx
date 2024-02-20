@@ -11,6 +11,9 @@ import {
   dateToMilliseconds,
   hoursToMilliseconds
 } from '../utils/functions/timeStamp'
+import { useContext, useEffect, useState } from 'react'
+import { ActionContext } from '../contexts/action_context'
+import { Member } from '../../@clean/shared/domain/entities/member'
 
 const actionSchema = z.object({
   title: z.string().min(1, { message: 'Title is required' }),
@@ -54,6 +57,27 @@ type ActionModalType = z.infer<typeof actionSchema>
 export default function ActionModal({ action }: { action?: Action }) {
   const actionTypes: string[] = Object.values(ACTION_TYPE)
   const { darkMode } = useDarkMode()
+  const { getAllMembers, getMember } = useContext(ActionContext)
+  const [members, setMembers] = useState<Member[] | undefined>()
+  const [member, setMember] = useState<string | undefined>()
+
+  useEffect(() => {
+    getAllMembers()
+      .then((members) => setMembers(members))
+      .catch((error) => console.log(error))
+  }, [getAllMembers])
+
+  const validateAndAddMember = () => {
+    if (member) {
+      getMember(member)
+        .then((member) => {
+          console.log(member)
+          setValue('members', [...getValues('members'), member!.ra])
+          console.log(getValues('members'))
+        })
+        .catch((error) => console.log(error))
+    }
+  }
 
   const handleCreateActionSubmit = (data: ActionModalType) => {
     console.log('Create Action')
@@ -71,6 +95,8 @@ export default function ActionModal({ action }: { action?: Action }) {
   const {
     register,
     handleSubmit,
+    getValues,
+    setValue,
     formState: { errors }
   } = useForm<ActionModalType>({
     resolver: zodResolver(actionSchema),
@@ -239,8 +265,36 @@ export default function ActionModal({ action }: { action?: Action }) {
             </div>
           </div>
           <div className="flex w-1/5 flex-col gap-16">
-            <h1 className="text-2xl font-bold">Membros</h1>
+            <div className="flex flex-col gap-4">
+              <p className="text-2xl font-bold">Membros</p>
+              <select
+                className={`rounded ${
+                  darkMode ? 'bg-gray-600' : 'bg-gray-300'
+                } px-2 py-1 outline-none`}
+                onChange={(e) => {
+                  if (e.target.value !== '') {
+                    setMember(e.target.value)
+                  }
+                }}
+              >
+                <option value="">Selecione</option>
+                {members &&
+                  members.map((member) => (
+                    <option key={member.email} value={member.ra}>
+                      {`${member.name} | ${member.ra}`}
+                    </option>
+                  ))}
+              </select>
+              <button type="button" onClick={validateAndAddMember}>
+                Adicionar
+              </button>
+              {/* <span className="text-red-600">{errors.members?.message}</span> */}
+              {getValues('members').map((member) => (
+                <p key={member}>{member}</p>
+              ))}
+            </div>
             <h1 className="text-2xl font-bold">Ações</h1>
+            <button type="submit">Enviar</button>
           </div>
         </form>
       </div>
