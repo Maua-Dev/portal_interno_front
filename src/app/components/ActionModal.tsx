@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { ACTION_TYPE } from '../../@clean/shared/domain/enums/action_type_enum'
 import { useForm } from 'react-hook-form'
-import { STACK } from '../../@clean/shared/domain/enums/stack_enum'
+import { STACK, stackToEnum } from '../../@clean/shared/domain/enums/stack_enum'
 import {
   millisecondsToHours,
   timeStampToDate,
@@ -56,10 +56,10 @@ type ActionModalType = z.infer<typeof actionSchema>
 
 export default function ActionModal({ action }: { action?: Action }) {
   const actionTypes: string[] = Object.values(ACTION_TYPE)
+  const stackTags: string[] = Object.values(STACK)
   const { darkMode } = useDarkMode()
   const { getAllMembers, getMember } = useContext(ActionContext)
   const [members, setMembers] = useState<Member[] | undefined>()
-  const [member, setMember] = useState<string | undefined>()
 
   useEffect(() => {
     getAllMembers()
@@ -67,8 +67,8 @@ export default function ActionModal({ action }: { action?: Action }) {
       .catch((error) => console.log(error))
   }, [getAllMembers])
 
-  const validateAndAddMember = () => {
-    if (member) {
+  const validateAndAddMember = (member: string) => {
+    if (member && getValues('members').indexOf(member) === -1) {
       getMember(member)
         .then((member) => {
           console.log(member)
@@ -76,6 +76,15 @@ export default function ActionModal({ action }: { action?: Action }) {
           console.log(getValues('members'))
         })
         .catch((error) => console.log(error))
+    }
+  }
+
+  const validateAndAddStackTag = (stackTag: string) => {
+    if (stackTag) {
+      const stackFormatted: STACK = stackToEnum(stackTag)
+      if (getValues('stackTags').indexOf(stackFormatted) === -1) {
+        setValue('stackTags', [...getValues('stackTags'), stackFormatted])
+      }
     }
   }
 
@@ -264,8 +273,9 @@ export default function ActionModal({ action }: { action?: Action }) {
               </span>
             </div>
           </div>
-          <div className="flex w-1/5 flex-col gap-16">
-            <div className="flex flex-col gap-4">
+          <div className="flex w-1/5 flex-col justify-between gap-16">
+            {/* Associated Members */}
+            <div className="flex h-1/4 flex-col gap-4">
               <p className="text-2xl font-bold">Membros</p>
               <select
                 className={`rounded ${
@@ -273,7 +283,7 @@ export default function ActionModal({ action }: { action?: Action }) {
                 } px-2 py-1 outline-none`}
                 onChange={(e) => {
                   if (e.target.value !== '') {
-                    setMember(e.target.value)
+                    validateAndAddMember(e.target.value)
                   }
                 }}
               >
@@ -285,16 +295,52 @@ export default function ActionModal({ action }: { action?: Action }) {
                     </option>
                   ))}
               </select>
-              <button type="button" onClick={validateAndAddMember}>
-                Adicionar
-              </button>
-              {/* <span className="text-red-600">{errors.members?.message}</span> */}
+              <p className="text-xl font-bold">Membros associados</p>
               {getValues('members').map((member) => (
-                <p key={member}>{member}</p>
+                <li key={member}>{member}</li>
               ))}
+              <span className="text-red-600">{errors.members?.message}</span>
             </div>
-            <h1 className="text-2xl font-bold">Ações</h1>
-            <button type="submit">Enviar</button>
+
+            {/* Stack Tag Selector */}
+            <div className="flex h-1/3 flex-col gap-4">
+              <p className="text-2xl font-bold">Ações</p>
+              <select
+                className={`rounded ${
+                  darkMode ? 'bg-gray-600' : 'bg-gray-300'
+                } px-2 py-1 outline-none`}
+                onChange={(e) => {
+                  if (e.target.value !== '') {
+                    validateAndAddStackTag(e.target.value)
+                  }
+                }}
+              >
+                <option value="">Selecione uma opção</option>
+                {stackTags.map((stackTag) => (
+                  <option key={stackTag} value={stackTag}>
+                    {stackTag}
+                  </option>
+                ))}
+              </select>
+              {getValues('stackTags').map((stack) => (
+                <li key={stack}>{stack}</li>
+              ))}
+              <span className="text-red-600">{errors.stackTags?.message}</span>
+            </div>
+            <div className="flex w-full flex-col items-center gap-8">
+              <button
+                type="submit"
+                className="w-1/2 rounded-lg border-2 border-blue-600 px-2 py-1 text-blue-600"
+              >
+                Enviar
+              </button>
+              <button
+                type="button"
+                className="w-1/2 rounded-lg bg-red-500 px-2 py-1 text-white"
+              >
+                Cancelar
+              </button>
+            </div>
           </div>
         </form>
       </div>
