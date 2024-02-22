@@ -331,7 +331,7 @@ export class Action {
       return false
     } else if (duration <= 0) {
       return false
-    } else if (duration !== endDate - startDate) {
+    } else if (duration > endDate - startDate) {
       return false
     }
     return true
