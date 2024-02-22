@@ -673,6 +673,41 @@ test('Test Action Entity with invalid duration', () => {
   }).toThrowError('Field props.duration is not valid')
 })
 
+test('Test Action Entity with invalid duration 2', () => {
+  expect(() => {
+    new Action({
+      ownerRa: '21002100',
+      startDate: 1000,
+      endDate: 2000,
+      duration: 1100,
+      actionId: '4000',
+      storyId: 1,
+      title: 'Test Action Entity',
+      description: 'Testing',
+      projectCode: '76',
+      associatedMembersRa: ['21.00833-7'],
+      stackTags: [STACK.FRONTEND, STACK.BACKEND],
+      actionTypeTag: ACTION_TYPE.CODE
+    })
+  }).toThrowError(EntityError)
+  expect(() => {
+    new Action({
+      ownerRa: '21002100',
+      startDate: 1000,
+      endDate: 2000,
+      duration: 0,
+      actionId: '4000',
+      storyId: 1,
+      title: 'Test Action Entity',
+      description: 'Testing',
+      projectCode: '76',
+      associatedMembersRa: ['21.00833-7'],
+      stackTags: [STACK.FRONTEND, STACK.BACKEND],
+      actionTypeTag: ACTION_TYPE.CODE
+    })
+  }).toThrowError('Field props.duration is not valid')
+})
+
 test('Test Action Entity without storyId prop', () => {
   const action = new Action({
     ownerRa: '21002100',
