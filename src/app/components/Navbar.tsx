@@ -126,7 +126,7 @@ export default function Navbar() {
           <div className="flex flex-col gap-6 text-2xl">
             <IoMdExit
               onClick={handleLogout}
-              className="cursor-pointer transition-all duration-100 hover:text-blue-600"
+              className="cursor-pointer text-gray-700 transition-all duration-100 hover:text-blue-600"
             />
             {!darkMode ? (
               <BsMoonStars
