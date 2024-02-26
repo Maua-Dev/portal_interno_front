@@ -10,7 +10,7 @@ export default function Home() {
     <div
       className={`${
         theme ? 'theme-white' : null
-      } flex h-full w-screen flex-col items-center bg-skin-fill p-10`}
+      } flex h-full flex-col items-center bg-skin-fill`}
     >
       <button
         onClick={handleThemeChange}

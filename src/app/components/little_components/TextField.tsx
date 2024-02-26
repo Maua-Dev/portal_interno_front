@@ -7,7 +7,12 @@ export default function TextField({
   ...props
 }: HTMLAttributes<HTMLInputElement>) {
   return (
-    <div className="relative h-10 w-72 overflow-hidden rounded-full border border-skin-muted bg-skin-fill focus:bg-red-500">
+    <div
+      className={twMerge(
+        'relative h-10 w-72 overflow-hidden rounded-full border border-skin-muted bg-skin-fill focus:bg-red-500',
+        props.className
+      )}
+    >
       <input
         {...props}
         type="text"

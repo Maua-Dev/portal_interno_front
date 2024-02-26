@@ -1,11 +1,14 @@
-import { SlidersHorizontal } from 'lucide-react'
-import Button from './little_components/Button'
 import Card from './little_components/Card'
 import TextField from './little_components/TextField'
 import Text from './little_components/Text'
 import { History } from 'lucide-react'
+import Popover from './little_components/Popover'
 
-export default function FilterBar() {
+interface FilterBarProps {
+  setSearchText: (search: string) => void
+}
+
+export default function FilterBar({ setSearchText }: FilterBarProps) {
   return (
     <Card
       variant="lg"
@@ -13,16 +16,19 @@ export default function FilterBar() {
     >
       <div className="flex flex-row items-center gap-5">
         <div className="flex flex-row items-center gap-2">
-          <History className="h-10 w-10" />
+          <History className="h-8 w-8" />
           <Text size="2xl">Histórico</Text>
         </div>
-        <TextField placeholder="Digite o titulo da atividade..." />
+        <TextField
+          placeholder="Digite o titulo da atividade..."
+          className="hidden w-64 md:block lg:w-72"
+          onChange={(event) => {
+            setSearchText(event.currentTarget.value)
+          }}
+        />
       </div>
       <div className="flex h-full flex-row gap-5">
-        <Button variant="default">
-          <SlidersHorizontal className="h-5 w-5" />
-          Filtrar
-        </Button>
+        <Popover></Popover>
       </div>
     </Card>
   )

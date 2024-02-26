@@ -1,6 +1,4 @@
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu'
-import { SlidersHorizontal } from 'lucide-react'
-import Button from './Button'
 import { BsThreeDots } from 'react-icons/bs'
 
 export default function DropDown() {

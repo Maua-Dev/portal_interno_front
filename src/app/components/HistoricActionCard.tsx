@@ -1,26 +1,25 @@
-import { useContext, useState } from 'react'
+import { HTMLAttributes, useState } from 'react'
 import Card from './little_components/Card'
 import { StateIcon, IconText } from './little_components/Icon'
 import { AiOutlineCalendar } from 'react-icons/ai'
-import { BsClockHistory, BsThreeDots } from 'react-icons/bs'
+import { BsClockHistory } from 'react-icons/bs'
 import { Action } from '../../@clean/shared/domain/entities/action'
-import { ActionContext } from '../contexts/action_context'
 import { stackFormatter } from '../../@clean/shared/domain/enums/stack_enum'
 import Tag from './little_components/Tag'
 import DropDown from './little_components/DropDown'
+import { twMerge } from 'tailwind-merge'
 
 type actionStates = 'rejected' | 'waiting' | 'approved'
 
-interface HistoricActionCardProps {
+interface HistoricActionCardProps extends HTMLAttributes<HTMLDivElement> {
   action: Action
 }
 
 export default function HistoricActionCard({
-  action
+  action,
+  ...props
 }: HistoricActionCardProps) {
   const [actionState] = useState<actionStates>('approved')
-
-  const { getMember } = useContext(ActionContext)
 
   const title = `${action.projectCode}: ${action?.title} `
 
@@ -31,9 +30,12 @@ export default function HistoricActionCard({
   return (
     <Card
       variant="lg"
-      className="flex h-fit flex-row items-center justify-between pr-6 opacity-80 shadow-sm shadow-gray-500 duration-150 ease-in hover:opacity-100"
+      className={twMerge(
+        'flex h-fit cursor-pointer flex-row items-center justify-between pr-6 opacity-80 shadow-sm shadow-gray-500 duration-150 ease-in hover:opacity-100',
+        props.className
+      )}
     >
-      <div className="flex w-3/6 flex-row items-center gap-3">
+      <div className="flex w-fit flex-row items-center gap-3 md:w-3/6">
         <StateIcon variant={actionState} />
         <div className="flex flex-col overflow-hidden">
           <h1 className="text-lg text-skin-base">
@@ -46,13 +48,13 @@ export default function HistoricActionCard({
         </div>
       </div>
 
-      <div className="flex w-1/5 flex-row justify-start gap-2">
+      <div className="hidden w-1/5 flex-row justify-start gap-2 lg:flex">
         {stackStringArray.map((stack, index) => {
           return <Tag key={index} variant={stack} />
         })}
       </div>
 
-      <div className="flex w-1/5 flex-row items-center justify-between gap-7">
+      <div className="flex w-fit flex-row items-center justify-between gap-3 md:w-1/5">
         <div className="flex flex-col gap-1 ">
           <IconText
             text={endDateFormated.toString()}
