@@ -14,42 +14,45 @@ import {
 import { useContext, useEffect, useState } from 'react'
 import { ActionContext } from '../contexts/action_context'
 import { Member } from '../../@clean/shared/domain/entities/member'
+import ListRow from './ListRow'
 
 const actionSchema = z.object({
-  title: z.string().min(1, { message: 'Title is required' }),
-  projectCode: z.string().min(1, { message: 'Project Code is required' }),
+  title: z.string().min(1, { message: 'Título é obrigatório' }),
+  projectCode: z
+    .string()
+    .min(1, { message: 'Código de Projeto é obrigatório' }),
   description: z.string(),
-  actionId: z.string().min(1, { message: 'Action Id is required' }),
+  actionId: z.string().min(1, { message: 'Action Id é obrigatório' }),
   startDate: z
     .string()
     .refine((value) => /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(value), {
-      message: 'Invalid date format'
+      message: 'Formato inválido de data'
     }),
   endDate: z
     .string()
     .refine((value) => /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(value), {
-      message: 'Invalid date format'
+      message: 'Formato inválido de data'
     }),
   duration: z
     .number({
-      required_error: 'Duration is required',
-      invalid_type_error: 'This field must be a number'
+      required_error: 'Duração é obrigatória',
+      invalid_type_error: 'Esse campo deve ser um número'
     })
-    .positive({ message: 'Duration must be a positive number' })
-    .gte(0.1, { message: 'Duration is required' })
+    .positive({ message: 'Duração deve ser um número maior que zero' })
+    .gte(0.1, { message: 'Duração é obrigatória' })
     .finite(),
-  members: z.array(z.string()),
+  associatedMembersRa: z.array(z.string()),
   actionTypeTag: z.nativeEnum(ACTION_TYPE, {
     errorMap: (issue) => {
       if (issue.code === 'invalid_enum_value') {
-        return { message: 'Action Tag is required' }
+        return { message: 'Action Tag é obrigatória' }
       }
       return { message: issue.message ?? '' }
     }
   }),
   stackTags: z
     .array(z.nativeEnum(STACK))
-    .min(1, { message: 'Action type tag is required' })
+    .min(1, { message: 'Action type tag é obrigatória' })
 })
 
 type ActionModalType = z.infer<typeof actionSchema>
@@ -67,13 +70,28 @@ export default function ActionModal({ action }: { action?: Action }) {
       .catch((error) => console.log(error))
   }, [getAllMembers])
 
+  const removeItemFromList = (
+    field: string,
+    item: string | STACK,
+    list: string[] | STACK[],
+    setValue: any
+  ): void => {
+    setValue(
+      field,
+      list.filter((itemInList) => itemInList !== item)
+    )
+  }
+
   const validateAndAddMember = (member: string) => {
-    if (member && getValues('members').indexOf(member) === -1) {
+    if (member && getValues('associatedMembersRa').indexOf(member) === -1) {
       getMember(member)
         .then((member) => {
           console.log(member)
-          setValue('members', [...getValues('members'), member!.ra])
-          console.log(getValues('members'))
+          setValue('associatedMembersRa', [
+            ...getValues('associatedMembersRa'),
+            member!.ra
+          ])
+          console.log(getValues('associatedMembersRa'))
         })
         .catch((error) => console.log(error))
     }
@@ -117,7 +135,7 @@ export default function ActionModal({ action }: { action?: Action }) {
       startDate: action?.startDate ? timeStampToDate(action!.startDate) : '',
       endDate: action?.endDate ? timeStampToDate(action!.endDate) : '',
       duration: action?.duration ? millisecondsToHours(action!.duration) : 0,
-      members: action?.associatedMembersRa || [],
+      associatedMembersRa: action?.associatedMembersRa || [],
       actionTypeTag: action?.actionTypeTag || undefined,
       stackTags: action?.stackTags || []
     },
@@ -296,10 +314,22 @@ export default function ActionModal({ action }: { action?: Action }) {
                   ))}
               </select>
               <p className="text-xl font-bold">Membros associados</p>
-              {getValues('members').map((member) => (
-                <li key={member}>{member}</li>
+              {getValues('associatedMembersRa').map((member) => (
+                <ListRow
+                  text={member}
+                  onClick={() => {
+                    removeItemFromList(
+                      'associatedMembersRa',
+                      member,
+                      getValues('associatedMembersRa'),
+                      setValue
+                    )
+                  }}
+                />
               ))}
-              <span className="text-red-600">{errors.members?.message}</span>
+              <span className="text-red-600">
+                {errors.associatedMembersRa?.message}
+              </span>
             </div>
 
             {/* Stack Tag Selector */}
@@ -323,7 +353,17 @@ export default function ActionModal({ action }: { action?: Action }) {
                 ))}
               </select>
               {getValues('stackTags').map((stack) => (
-                <li key={stack}>{stack}</li>
+                <ListRow
+                  text={stack}
+                  onClick={() =>
+                    removeItemFromList(
+                      'stackTags',
+                      stack,
+                      getValues('stackTags'),
+                      setValue
+                    )
+                  }
+                />
               ))}
               <span className="text-red-600">{errors.stackTags?.message}</span>
             </div>
