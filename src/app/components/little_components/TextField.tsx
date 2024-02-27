@@ -17,7 +17,7 @@ export default function TextField({
         {...props}
         type="text"
         className={twMerge(
-          'peer z-20 h-full w-full rounded-full bg-transparent pl-3 placeholder:pl-7 placeholder:text-skin-base placeholder:transition-transform placeholder:duration-150 placeholder:ease-linear focus:outline-none focus:placeholder:-translate-x-7',
+          'focus: peer z-20 h-full w-full rounded-full bg-transparent pl-9 duration-150 placeholder:text-skin-base placeholder:transition-transform placeholder:duration-150 placeholder:ease-linear focus:pl-3 focus:outline-none focus:placeholder:-translate-x-7 focus:placeholder:pl-7',
           props.className
         )}
       />

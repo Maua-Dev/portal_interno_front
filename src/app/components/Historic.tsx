@@ -21,15 +21,20 @@ export default function Historic() {
   }, [])
 
   return (
-    <div className="flex h-screen w-full flex-col items-center gap-2 bg-skin-fill py-10">
+    <div className="flex h-fit w-full flex-col items-center gap-2 bg-skin-fill py-10">
       <FilterBar setSearchText={setSearchText} />
       {history ? (
         history
           .filter((actionUnit) => {
-            return searchText.toLowerCase() === ''
+            const searchTextLowerCase = searchText.toLowerCase()
+
+            return searchTextLowerCase === ''
               ? actionUnit
-              : actionUnit.title.toLowerCase().includes(searchText) ||
-                  actionUnit.description.toLowerCase().includes(searchText)
+              : actionUnit.title.toLowerCase().includes(searchTextLowerCase) ||
+                  actionUnit.description
+                    .toLowerCase()
+                    .includes(searchTextLowerCase) ||
+                  actionUnit.storyId.toString().includes(searchTextLowerCase)
           })
           .map((actionUnit, key) => {
             return <HistoricActionCard key={key} action={actionUnit} />
