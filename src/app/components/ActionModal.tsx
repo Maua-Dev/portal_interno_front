@@ -15,6 +15,7 @@ import { useContext, useEffect, useState } from 'react'
 import { ActionContext } from '../contexts/action_context'
 import { Member } from '../../@clean/shared/domain/entities/member'
 import ListRow from './ListRow'
+import { ModalContext } from '../contexts/modal_context'
 
 const actionSchema = z.object({
   title: z.string().min(1, { message: 'Título é obrigatório' }),
@@ -63,6 +64,13 @@ export default function ActionModal({ action }: { action?: Action }) {
   const { darkMode } = useDarkMode()
   const { getAllMembers, getMember } = useContext(ActionContext)
   const [members, setMembers] = useState<Member[] | undefined>()
+  const { closeModal } = useContext(ModalContext)
+  const { updateAction, createAction, getHistory } = useContext(ActionContext)
+  let isUpdateModal: boolean = false
+
+  if (action) {
+    isUpdateModal = true
+  }
 
   useEffect(() => {
     getAllMembers()
@@ -106,17 +114,53 @@ export default function ActionModal({ action }: { action?: Action }) {
     }
   }
 
-  const handleCreateActionSubmit = (data: ActionModalType) => {
+  const handleCreateActionSubmit = async (data: ActionModalType) => {
     console.log('Create Action')
-    data['startDate'] = dateToMilliseconds(data['startDate']).toString()
-    data['endDate'] = dateToMilliseconds(data['endDate']).toString()
-    data['duration'] = hoursToMilliseconds(data['duration'])
     console.table(data)
+
+    const createdAction = await createAction(
+      new Action({
+        ownerRa: '21002100',
+        startDate: dateToMilliseconds(data.startDate),
+        endDate: dateToMilliseconds(data.endDate),
+        duration: hoursToMilliseconds(data.duration),
+        actionId: data.actionId,
+        storyId: undefined,
+        title: data.title,
+        description: data.description,
+        projectCode: data.projectCode,
+        associatedMembersRa: data.associatedMembersRa,
+        stackTags: data.stackTags,
+        actionTypeTag: data.actionTypeTag
+      })
+    )
+
+    console.log(createdAction)
+
+    console.log(await getHistory('21002100', 10))
   }
 
-  const handleUpdateActionSubmit = (data: ActionModalType) => {
+  const handleUpdateActionSubmit = async (data: ActionModalType) => {
     console.log('Update Action')
     console.table(data)
+    const updatedAction = await updateAction(
+      data.actionId,
+      '23017310',
+      dateToMilliseconds(data.startDate),
+      dateToMilliseconds(data.endDate),
+      hoursToMilliseconds(data.duration),
+      undefined,
+      data.title,
+      data.description,
+      data.projectCode,
+      data.associatedMembersRa,
+      data.stackTags,
+      data.actionTypeTag
+    )
+
+    console.log(updatedAction)
+
+    console.log(await getHistory('23017310', 10))
   }
 
   const {
@@ -142,7 +186,13 @@ export default function ActionModal({ action }: { action?: Action }) {
     mode: 'onBlur'
   })
   return (
-    <div className="ml-14 flex h-screen w-full items-center justify-center">
+    <div
+      className={`${
+        isUpdateModal
+          ? 'absolute left-0 top-0 z-50 flex h-screen w-full items-center justify-center bg-black bg-opacity-50'
+          : 'ml-14 flex h-screen w-full items-center justify-center'
+      }`}
+    >
       <div
         className={`h-4/5 w-4/5 rounded-2xl ${
           darkMode ? 'bg-dev-gray text-white' : 'bg-white'
@@ -179,6 +229,7 @@ export default function ActionModal({ action }: { action?: Action }) {
                     className={`rounded ${
                       darkMode ? 'bg-gray-600' : 'bg-gray-300'
                     } px-2 py-1 outline-none`}
+                    value={action?.projectCode}
                   >
                     <option value="">Selecione uma opção</option>
                     <option value="PI">Portal Interno</option>
@@ -372,11 +423,12 @@ export default function ActionModal({ action }: { action?: Action }) {
                 type="submit"
                 className="w-1/2 rounded-lg border-2 border-blue-600 px-2 py-1 text-blue-600"
               >
-                Enviar
+                {isUpdateModal ? 'Salvar' : 'Enviar'}
               </button>
               <button
                 type="button"
                 className="w-1/2 rounded-lg bg-red-500 px-2 py-1 text-white"
+                onClick={closeModal}
               >
                 Cancelar
               </button>
