@@ -18,7 +18,7 @@ export function hoursToMilliseconds(hours: number): number {
 export function dateToMilliseconds(data: string): number {
   const [day, month, year] = data.split('/')
 
-  const newData = new Date(`${day}-${month}-${year}`)
+  const newData = new Date(`${year}-${month}-${day}`)
 
   return newData.getTime()
 }
