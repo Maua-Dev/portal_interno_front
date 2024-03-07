@@ -16,6 +16,7 @@ import { ActionContext } from '../contexts/action_context'
 import { Member } from '../../@clean/shared/domain/entities/member'
 import ListRow from './ListRow'
 import { ModalContext } from '../contexts/modal_context'
+import { plainTextToRa } from '../utils/functions/formatters'
 
 const actionSchema = z.object({
   title: z.string().min(1, { message: 'Título é obrigatório' }),
@@ -23,17 +24,32 @@ const actionSchema = z.object({
     .string()
     .min(1, { message: 'Código de Projeto é obrigatório' }),
   description: z.string(),
-  actionId: z.string().min(1, { message: 'Action Id é obrigatório' }),
+  storyId: z.string().refine((value) => /^\d{4}$/.test(value), {
+    message: 'Story Id deve ter 4 dígitos'
+  }),
+  actionId: z.string().optional(),
   startDate: z
     .string()
-    .refine((value) => /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(value), {
-      message: 'Formato inválido de data'
-    }),
+    .refine(
+      (value) =>
+        /^([1-9]|0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2]|[1-9])\/((19|20)\d\d)$/.test(
+          value
+        ),
+      {
+        message: 'Formato inválido de data'
+      }
+    ),
   endDate: z
     .string()
-    .refine((value) => /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(value), {
-      message: 'Formato inválido de data'
-    }),
+    .refine(
+      (value) =>
+        /^([1-9]|0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2]|[1-9])\/((19|20)\d\d)$/.test(
+          value
+        ),
+      {
+        message: 'Formato inválido de data'
+      }
+    ),
   duration: z
     .number({
       required_error: 'Duração é obrigatória',
@@ -59,25 +75,34 @@ const actionSchema = z.object({
 type ActionModalType = z.infer<typeof actionSchema>
 
 export default function ActionModal({ action }: { action?: Action }) {
-  const actionTypes: string[] = Object.values(ACTION_TYPE)
-  const stackTags: string[] = Object.values(STACK)
+  // Local State
   const { darkMode } = useDarkMode()
+
+  // Contexts
   const { getAllMembers, getMember } = useContext(ActionContext)
-  const [members, setMembers] = useState<Member[] | undefined>()
   const { closeModal } = useContext(ModalContext)
   const { updateAction, createAction, getHistory } = useContext(ActionContext)
+
+  // Use state
+  const [members, setMembers] = useState<Member[] | undefined>()
+
+  // Constants
+  const actionTypes: string[] = Object.values(ACTION_TYPE)
+  const stackTags: string[] = Object.values(STACK)
   let isUpdateModal: boolean = false
 
   if (action) {
     isUpdateModal = true
   }
 
+  // Fetch all members
   useEffect(() => {
     getAllMembers()
       .then((members) => setMembers(members))
       .catch((error) => console.log(error))
   }, [getAllMembers])
 
+  // Functions
   const removeItemFromList = (
     field: string,
     item: string | STACK,
@@ -124,8 +149,8 @@ export default function ActionModal({ action }: { action?: Action }) {
         startDate: dateToMilliseconds(data.startDate),
         endDate: dateToMilliseconds(data.endDate),
         duration: hoursToMilliseconds(data.duration),
-        actionId: data.actionId,
-        storyId: undefined,
+        storyId: parseInt(data.storyId),
+        actionId: Math.floor(Math.random() * 1000000).toString(),
         title: data.title,
         description: data.description,
         projectCode: data.projectCode,
@@ -144,12 +169,12 @@ export default function ActionModal({ action }: { action?: Action }) {
     console.log('Update Action')
     console.table(data)
     const updatedAction = await updateAction(
-      data.actionId,
+      data.actionId!,
       '23017310',
       dateToMilliseconds(data.startDate),
       dateToMilliseconds(data.endDate),
       hoursToMilliseconds(data.duration),
-      undefined,
+      parseInt(data.storyId),
       data.title,
       data.description,
       data.projectCode,
@@ -175,7 +200,7 @@ export default function ActionModal({ action }: { action?: Action }) {
       title: action?.title || '',
       projectCode: action?.projectCode || '',
       description: action?.description || '',
-      actionId: action?.actionId || '',
+      storyId: action?.storyId.toString() || '',
       startDate: action?.startDate ? timeStampToDate(action!.startDate) : '',
       endDate: action?.endDate ? timeStampToDate(action!.endDate) : '',
       duration: action?.duration ? millisecondsToHours(action!.duration) : 0,
@@ -243,16 +268,16 @@ export default function ActionModal({ action }: { action?: Action }) {
 
                 {/* Action Id */}
                 <div className="flex flex-col gap-2">
-                  <p className="text-lg">Action Id</p>
+                  <p className="text-lg">Story Id</p>
                   <input
                     type="text"
-                    {...register('actionId')}
+                    {...register('storyId')}
                     className={`rounded ${
                       darkMode ? 'bg-gray-600' : 'bg-gray-300'
                     } px-2 py-1 outline-none`}
                   />
                   <span className="text-red-600">
-                    {errors.actionId?.message}
+                    {errors.storyId?.message}
                   </span>
                 </div>
 
@@ -342,9 +367,10 @@ export default function ActionModal({ action }: { action?: Action }) {
               </span>
             </div>
           </div>
-          <div className="flex w-1/5 flex-col justify-between gap-16">
+
+          <div className="flex w-1/5 flex-col justify-between gap-4">
             {/* Associated Members */}
-            <div className="flex h-1/4 flex-col gap-4">
+            <div className="flex h-1/2 flex-col gap-4">
               <p className="text-2xl font-bold">Membros</p>
               <select
                 className={`rounded ${
@@ -365,26 +391,28 @@ export default function ActionModal({ action }: { action?: Action }) {
                   ))}
               </select>
               <p className="text-xl font-bold">Membros associados</p>
-              {getValues('associatedMembersRa').map((member) => (
-                <ListRow
-                  text={member}
-                  onClick={() => {
-                    removeItemFromList(
-                      'associatedMembersRa',
-                      member,
-                      getValues('associatedMembersRa'),
-                      setValue
-                    )
-                  }}
-                />
-              ))}
+              <div className="h-24 overflow-y-scroll rounded-md border-[1px] border-gray-400 p-2">
+                {getValues('associatedMembersRa').map((member) => (
+                  <ListRow
+                    text={plainTextToRa(member)}
+                    onClick={() => {
+                      removeItemFromList(
+                        'associatedMembersRa',
+                        member,
+                        getValues('associatedMembersRa'),
+                        setValue
+                      )
+                    }}
+                  />
+                ))}
+              </div>
               <span className="text-red-600">
                 {errors.associatedMembersRa?.message}
               </span>
             </div>
 
             {/* Stack Tag Selector */}
-            <div className="flex h-1/3 flex-col gap-4">
+            <div className="flex h-1/2 flex-col gap-4">
               <p className="text-2xl font-bold">Ações</p>
               <select
                 className={`rounded ${
@@ -403,19 +431,21 @@ export default function ActionModal({ action }: { action?: Action }) {
                   </option>
                 ))}
               </select>
-              {getValues('stackTags').map((stack) => (
-                <ListRow
-                  text={stack}
-                  onClick={() =>
-                    removeItemFromList(
-                      'stackTags',
-                      stack,
-                      getValues('stackTags'),
-                      setValue
-                    )
-                  }
-                />
-              ))}
+              <div className="h-20 overflow-y-scroll rounded-md border-[1px] border-gray-400 p-2">
+                {getValues('stackTags').map((stack) => (
+                  <ListRow
+                    text={stack}
+                    onClick={() =>
+                      removeItemFromList(
+                        'stackTags',
+                        stack,
+                        getValues('stackTags'),
+                        setValue
+                      )
+                    }
+                  />
+                ))}
+              </div>
               <span className="text-red-600">{errors.stackTags?.message}</span>
             </div>
             <div className="flex w-full flex-col items-center gap-8">
