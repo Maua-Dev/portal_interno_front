@@ -53,7 +53,7 @@ export default function Navbar() {
     <div>
       {windowSize.innerWidth > maximumWidth ? (
         <div
-          className={`fixed z-40 flex h-screen transform flex-col items-center justify-between gap-12 overflow-x-hidden px-4 py-10 transition-all  duration-200 ease-in-out ${
+          className={`fixed z-40 flex h-screen transform flex-col items-center justify-between gap-12 overflow-x-hidden px-4 py-10 transition-all duration-200 ease-in-out ${
             !darkMode
               ? 'bg-white drop-shadow-md'
               : 'border-r-2 border-white bg-dev-gray text-white'
@@ -126,7 +126,9 @@ export default function Navbar() {
           <div className="flex flex-col gap-6 text-2xl">
             <IoMdExit
               onClick={handleLogout}
-              className="cursor-pointer text-gray-700 transition-all duration-100 hover:text-blue-600"
+              className={`cursor-pointer ${
+                darkMode ? 'text-white' : 'text-gray-700'
+              } transition-all duration-100 hover:text-blue-600`}
             />
             {!darkMode ? (
               <BsMoonStars
@@ -148,7 +150,7 @@ export default function Navbar() {
           </div>
         </div>
       ) : (
-        <div className="fixed z-40 flex h-screen w-screen flex-col justify-between">
+        <div className="fixed z-40 flex h-screen w-full flex-col justify-between overflow-x-hidden">
           <div
             className={`flex justify-center py-2 ${
               darkMode
@@ -181,6 +183,7 @@ export default function Navbar() {
                 } transition-all duration-100 ${
                   hover ? '-translate-x-0' : 'translate-x-0'
                 } hover:fill-blue-600`}
+                onClick={openModal}
               />
               <AiOutlineHistory
                 className={`transform cursor-pointer ${
@@ -196,8 +199,6 @@ export default function Navbar() {
                   hover ? '-translate-x-0' : 'translate-x-0'
                 } hover:fill-blue-600`}
               />
-            </div>
-            <div className="absolute right-0 mt-[3px] flex items-center justify-center pr-4 text-2xl">
               {!darkMode ? (
                 <BsMoonStars
                   className="cursor-pointer text-gray-700 transition-all duration-100 hover:text-black"
