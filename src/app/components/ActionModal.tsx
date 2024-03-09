@@ -212,14 +212,14 @@ export default function ActionModal({ action }: { action?: Action }) {
   })
   return (
     <div
-      className={`${
+      className={`h-auto w-full items-center justify-center overflow-hidden py-24 md:h-screen md:overflow-hidden md:py-0 ${
         isUpdateModal
-          ? 'absolute left-0 top-0 z-50 flex h-screen w-full items-center justify-center bg-black bg-opacity-50'
-          : 'ml-14 flex h-screen w-full items-center justify-center'
+          ? 'absolute left-0 top-0 z-50 flex bg-black bg-opacity-50'
+          : 'flex md:ml-14'
       }`}
     >
       <div
-        className={`h-4/5 w-4/5 rounded-2xl ${
+        className={`h-auto w-4/5 rounded-2xl md:h-4/5 ${
           darkMode ? 'bg-dev-gray text-white' : 'bg-white'
         }`}
       >
@@ -229,9 +229,9 @@ export default function ActionModal({ action }: { action?: Action }) {
               ? handleSubmit(handleUpdateActionSubmit)
               : handleSubmit(handleCreateActionSubmit)
           }
-          className="flex h-full flex-row gap-6 px-12 py-12"
+          className="flex h-auto flex-col gap-6 px-12 py-12 md:h-full md:flex-row"
         >
-          <div className="flex w-4/5 flex-col justify-between gap-8">
+          <div className="flex w-full flex-col justify-between gap-8 md:w-3/5 lg:w-4/5">
             <div className="flex flex-col gap-4">
               {/* Title */}
               <h1 className="text-2xl font-bold">Título da atividade</h1>
@@ -245,7 +245,7 @@ export default function ActionModal({ action }: { action?: Action }) {
               <span className="text-red-600">{errors.title?.message}</span>
             </div>
             <div className="flex flex-col gap-2">
-              <div className="grid grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
                 {/* Project Selector */}
                 <div className="flex flex-col gap-2">
                   <p className="text-lg">Projeto</p>
@@ -368,7 +368,7 @@ export default function ActionModal({ action }: { action?: Action }) {
             </div>
           </div>
 
-          <div className="flex w-1/5 flex-col justify-between gap-4">
+          <div className="flex w-full flex-col justify-between gap-4 md:w-2/5 lg:w-1/5">
             {/* Associated Members */}
             <div className="flex h-1/2 flex-col gap-4">
               <p className="text-2xl font-bold">Membros</p>
@@ -448,16 +448,16 @@ export default function ActionModal({ action }: { action?: Action }) {
               </div>
               <span className="text-red-600">{errors.stackTags?.message}</span>
             </div>
-            <div className="flex w-full flex-col items-center gap-8">
+            <div className="flex w-full flex-col items-center gap-8 sm:flex-row lg:flex-col">
               <button
                 type="submit"
-                className="w-1/2 rounded-lg border-2 border-blue-600 px-2 py-1 text-blue-600"
+                className="w-full rounded-lg border-2 border-blue-600 px-2 py-1 text-blue-600 sm:w-1/2"
               >
                 {isUpdateModal ? 'Salvar' : 'Enviar'}
               </button>
               <button
                 type="button"
-                className="w-1/2 rounded-lg bg-red-500 px-2 py-1 text-white"
+                className="w-full rounded-lg bg-red-500 px-2 py-1 text-white sm:w-1/2"
                 onClick={closeModal}
               >
                 Cancelar
