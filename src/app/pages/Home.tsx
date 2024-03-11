@@ -29,9 +29,9 @@ export default function Home() {
     <>
       <Navbar />
       <main
-        className={`${isModalOpen ? 'h-auto' : 'h-screen'} w-full ${
-          darkMode ? 'bg-black' : 'bg-sky-200'
-        }`}
+        className={`${
+          isModalOpen ? 'h-auto' : 'h-screen'
+        } w-full overflow-x-hidden ${darkMode ? 'bg-black' : 'bg-sky-200'}`}
       >
         {isModalOpen && <ActionModal />}
       </main>
