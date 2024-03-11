@@ -85,6 +85,7 @@ export default function ActionModal({ action }: { action?: Action }) {
 
   // Use state
   const [members, setMembers] = useState<Member[] | undefined>()
+  const [fade, setFade] = useState<boolean>(false)
 
   // Constants
   const actionTypes: string[] = Object.values(ACTION_TYPE)
@@ -101,6 +102,12 @@ export default function ActionModal({ action }: { action?: Action }) {
       .then((members) => setMembers(members))
       .catch((error) => console.log(error))
   }, [getAllMembers])
+
+  useEffect(() => {
+    setTimeout(() => {
+      setFade(true)
+    })
+  }, [])
 
   // Functions
   const removeItemFromList = (
@@ -212,11 +219,12 @@ export default function ActionModal({ action }: { action?: Action }) {
   })
   return (
     <div
-      className={`h-auto w-full items-center justify-center overflow-hidden py-24 md:h-screen md:overflow-hidden md:py-0 ${
+      className={`h-auto w-full transform items-center justify-center overflow-hidden py-24 transition-all duration-300 md:h-screen md:overflow-hidden md:py-0 ${
         isUpdateModal
           ? 'absolute left-0 top-0 z-50 flex bg-black bg-opacity-50'
-          : 'flex md:ml-14'
-      }`}
+          : 'flex md:pl-14'
+      } ${fade ? 'translate-x-0 opacity-100' : 'translate-x-24 opacity-0'}
+      `}
     >
       <div
         className={`h-auto w-4/5 rounded-2xl md:h-4/5 ${
