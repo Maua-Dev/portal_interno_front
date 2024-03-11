@@ -150,9 +150,9 @@ export default function Navbar() {
           </div>
         </div>
       ) : (
-        <div className="fixed z-40 flex h-screen w-full flex-col justify-between overflow-x-hidden">
+        <>
           <div
-            className={`flex justify-center py-2 ${
+            className={`fixed z-40 flex w-full justify-center py-2 ${
               darkMode
                 ? 'border-b-2 border-white bg-dev-gray'
                 : 'bg-white drop-shadow-md'
@@ -165,7 +165,7 @@ export default function Navbar() {
             />
           </div>
           <div
-            className={`flex justify-center py-4 text-3xl ${
+            className={`fixed bottom-0 z-40 flex w-full justify-center py-4 text-3xl ${
               darkMode
                 ? 'border-t-2 border-white bg-dev-gray'
                 : 'bg-white drop-shadow-md'
@@ -212,7 +212,7 @@ export default function Navbar() {
               )}
             </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   )
