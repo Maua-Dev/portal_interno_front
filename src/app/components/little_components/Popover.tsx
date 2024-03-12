@@ -14,7 +14,7 @@ export const PopoverContent = React.forwardRef(
     forwardedRef: React.Ref<HTMLDivElement>
   ) => (
     <PopoverPrimitive.PopoverContent
-      className="flex flex-col gap-2 rounded-md border border-skin-muted bg-skin-secundary p-3"
+      className="flex flex-col gap-2 rounded-md border border-skin-muted bg-skin-secundary p-1"
       sideOffset={5}
       {...props}
       ref={forwardedRef}

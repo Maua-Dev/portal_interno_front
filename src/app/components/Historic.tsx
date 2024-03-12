@@ -9,6 +9,7 @@ import Loader from './little_components/Loader'
 export default function Historic() {
   const [history, setHistory] = useState<Action[] | undefined>(undefined)
   const [searchText, setSearchText] = useState<string>('')
+  const [focus, setFocus] = useState<boolean>(false)
   const { getHistory } = useContext(ActionContext)
 
   const loadHistoricByRA = async () => {
@@ -22,7 +23,7 @@ export default function Historic() {
 
   return (
     <div className="flex h-fit w-full flex-col items-center gap-2 bg-skin-fill py-10">
-      <FilterBar className="z-20" setSearchText={setSearchText} />
+      <FilterBar className="z-30" setSearchText={setSearchText} />
       {history ? (
         history
           .filter((actionUnit) => {
@@ -39,7 +40,7 @@ export default function Historic() {
           .map((actionUnit, key) => {
             return (
               <HistoricActionCard
-                className="z-10"
+                className="z-10 checked:z-20"
                 key={key}
                 action={actionUnit}
               />

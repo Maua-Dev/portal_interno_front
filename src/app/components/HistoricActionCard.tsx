@@ -2,12 +2,19 @@ import { HTMLAttributes, useState } from 'react'
 import Card from './little_components/Card'
 import { StateIcon, IconText } from './little_components/Icon'
 import { AiOutlineCalendar } from 'react-icons/ai'
-import { BsClockHistory } from 'react-icons/bs'
+import { BsClockHistory, BsThreeDots } from 'react-icons/bs'
+import { Trash2, PenBox } from 'lucide-react'
 import { Action } from '../../@clean/shared/domain/entities/action'
 import { stackFormatter } from '../../@clean/shared/domain/enums/stack_enum'
 import Tag from './little_components/Tag'
-import DropDown from './little_components/DropDown'
 import { twMerge } from 'tailwind-merge'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  PopoverArrow
+} from '../components/little_components/Popover'
+import Button from './little_components/Button'
 
 type actionStates = 'rejected' | 'waiting' | 'approved'
 
@@ -31,7 +38,7 @@ export default function HistoricActionCard({
     <Card
       variant="lg"
       className={twMerge(
-        'z-10 flex h-fit cursor-pointer flex-row items-center justify-between pr-6 opacity-80 shadow-sm shadow-gray-500 duration-150 ease-in hover:opacity-100',
+        'flex h-fit cursor-pointer flex-row items-center justify-between pr-6 opacity-80 shadow-sm shadow-gray-500 duration-150 ease-in hover:opacity-100',
         props.className
       )}
     >
@@ -65,8 +72,24 @@ export default function HistoricActionCard({
             icon={<BsClockHistory className="h-4 w-4 text-skin-muted" />}
           />
         </div>
-        {/* <BsThreeDots className="h-6 w-6 cursor-pointer text-skin-base" /> */}
-        <DropDown></DropDown>
+        <Popover>
+          <PopoverTrigger>
+            <BsThreeDots className="h-6 w-6 cursor-pointer text-skin-base" />
+          </PopoverTrigger>
+          <PopoverContent>
+            <div className="z-30">
+              <Button variant="default">
+                <PenBox className="w-4" />
+                Editar
+              </Button>
+              <Button variant="default">
+                <Trash2 className="w-4" />
+                Excluir
+              </Button>
+              <PopoverArrow children={undefined} />
+            </div>
+          </PopoverContent>
+        </Popover>
       </div>
     </Card>
   )
