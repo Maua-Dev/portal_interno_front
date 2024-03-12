@@ -2,7 +2,7 @@ import { Search } from 'lucide-react'
 import { HTMLAttributes } from 'react'
 import { twMerge } from 'tailwind-merge'
 
-export default function TextField({
+export default function SearchField({
   children,
   ...props
 }: HTMLAttributes<HTMLInputElement>) {

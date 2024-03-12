@@ -1,37 +1,44 @@
 import { ChevronDown } from 'lucide-react'
 import React, { HTMLAttributes, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
+import Text from './Text'
+
+type selectTypes = 'default' | 'withTextLabel'
 
 interface RootProps extends HTMLAttributes<HTMLSelectElement> {
+  variant: selectTypes
   label: string
 }
 
-function Root({ label, children, ...props }: RootProps) {
+function Root({ label, variant, children, ...props }: RootProps) {
   const [isOptionSelected, setIsOptionSelected] = useState(false)
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setIsOptionSelected(event.target.value !== label)
   }
+
   return (
     <div
       className={twMerge(
-        `relative flex h-10 w-auto flex-row items-center justify-between rounded-md border border-skin-muted bg-skin-secundary ${
-          isOptionSelected && 'bg-skin-fill'
-        }`
+        'relative flex h-10 w-auto flex-row items-center justify-between gap-4 bg-skin-secundary'
       )}
     >
+      {variant === 'withTextLabel' ? (
+        <Text variant="muted">{label}: </Text>
+      ) : null}
       <select
-        {...props}
         name={label}
         id={label}
         onChange={handleChange}
         className={twMerge(
-          'peer z-20 h-full w-auto flex-grow appearance-none bg-transparent px-3',
+          `peer z-20 h-full w-32 appearance-none rounded-md border border-skin-muted bg-transparent px-3 ${
+            isOptionSelected && 'bg-skin-fill'
+          }`,
           props.className
         )}
       >
         <option value={label} selected>
-          {label}
+          {variant === 'default' ? label : ''}
         </option>
         {children}
       </select>

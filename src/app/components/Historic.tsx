@@ -22,7 +22,7 @@ export default function Historic() {
 
   return (
     <div className="flex h-fit w-full flex-col items-center gap-2 bg-skin-fill py-10">
-      <FilterBar setSearchText={setSearchText} />
+      <FilterBar className="z-20" setSearchText={setSearchText} />
       {history ? (
         history
           .filter((actionUnit) => {
@@ -37,7 +37,13 @@ export default function Historic() {
                   actionUnit.storyId.toString().includes(searchTextLowerCase)
           })
           .map((actionUnit, key) => {
-            return <HistoricActionCard key={key} action={actionUnit} />
+            return (
+              <HistoricActionCard
+                className="z-10"
+                key={key}
+                action={actionUnit}
+              />
+            )
           })
       ) : (
         <Loader />

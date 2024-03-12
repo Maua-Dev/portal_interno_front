@@ -28,6 +28,11 @@ module.exports = {
           'button-red-accent-hover': 'var(--color-button-accent-red-hover0'
         }
       },
+      fill: {
+        skin: {
+          muted: 'var(--color-text-muted)'
+        }
+      },
       borderColor: {
         skin: {
           muted: 'var(--color-text-muted)'

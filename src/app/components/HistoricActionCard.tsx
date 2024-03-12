@@ -31,7 +31,7 @@ export default function HistoricActionCard({
     <Card
       variant="lg"
       className={twMerge(
-        'flex h-fit cursor-pointer flex-row items-center justify-between pr-6 opacity-80 shadow-sm shadow-gray-500 duration-150 ease-in hover:opacity-100',
+        'z-10 flex h-fit cursor-pointer flex-row items-center justify-between pr-6 opacity-80 shadow-sm shadow-gray-500 duration-150 ease-in hover:opacity-100',
         props.className
       )}
     >
