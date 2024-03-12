@@ -221,9 +221,13 @@ export default function ActionModal({ action }: { action?: Action }) {
     <div
       className={`h-auto w-full transform items-center justify-center overflow-hidden py-24 transition-all duration-300 md:h-screen md:overflow-hidden md:py-0 ${
         isUpdateModal
-          ? 'absolute left-0 top-0 z-50 flex bg-black bg-opacity-50'
+          ? 'absolute left-0 top-0 z-50 flex bg-black bg-opacity-80'
           : 'flex md:pl-14'
-      } ${fade ? 'translate-x-0 opacity-100' : 'translate-x-24 opacity-0'}
+      } ${
+        isUpdateModal
+          ? `${fade ? 'opacity-100' : 'opacity-0'}`
+          : `${fade ? 'translate-x-0 opacity-100' : 'translate-x-24 opacity-0'}`
+      }
       `}
     >
       <div
