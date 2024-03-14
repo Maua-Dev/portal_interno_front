@@ -31,15 +31,14 @@ function Root({ label, variant, children, ...props }: RootProps) {
         id={label}
         onChange={handleChange}
         className={twMerge(
-          `peer z-20 h-full w-32 appearance-none rounded-md border border-skin-muted bg-transparent px-3 ${
+          `peer z-20 h-full w-32 appearance-none rounded-md border border-skin-muted bg-transparent px-3 outline-none ${
             isOptionSelected && 'bg-skin-fill'
           }`,
           props.className
         )}
+        defaultValue={''}
       >
-        <option value={label} selected>
-          {variant === 'default' ? label : ''}
-        </option>
+        <option>{variant === 'default' ? label : ''}</option>
         {children}
       </select>
       <ChevronDown
