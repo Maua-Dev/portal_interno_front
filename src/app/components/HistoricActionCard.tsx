@@ -27,12 +27,21 @@ export default function HistoricActionCard({
   ...props
 }: HistoricActionCardProps) {
   const [actionState] = useState<actionStates>('approved')
+  const [isPopUpOpen, setPopUpOpen] = useState<boolean>(false)
 
   const title = `${action.projectCode}: ${action?.title} `
 
   const endDateFormated = new Date(action.endDate).toLocaleDateString()
   const durationFormated = new Date(action.duration).getMinutes()
   const stackStringArray = stackFormatter(action.stackTags)
+
+  const handleSettingsPopUp = () => {
+    setPopUpOpen((prev) => (prev = !prev))
+  }
+
+  const closeSettingsPopUp = () => {
+    setPopUpOpen(false)
+  }
 
   return (
     <Card
@@ -72,24 +81,31 @@ export default function HistoricActionCard({
             icon={<BsClockHistory className="h-4 w-4 text-skin-muted" />}
           />
         </div>
-        <Popover>
-          <PopoverTrigger>
-            <BsThreeDots className="h-6 w-6 cursor-pointer text-skin-base" />
-          </PopoverTrigger>
-          <PopoverContent>
-            <div className="z-30">
-              <Button variant="default">
-                <PenBox className="w-4" />
-                Editar
-              </Button>
-              <Button variant="default">
-                <Trash2 className="w-4" />
-                Excluir
-              </Button>
-              <PopoverArrow children={undefined} />
-            </div>
-          </PopoverContent>
-        </Popover>
+        <div onMouseLeave={closeSettingsPopUp}>
+          <Popover open={isPopUpOpen}>
+            <PopoverTrigger onClick={handleSettingsPopUp}>
+              <BsThreeDots className="h-10 w-10 cursor-pointer p-2 text-skin-base" />
+            </PopoverTrigger>
+            <PopoverContent sideOffset={-5}>
+              <div
+                className="z-30"
+                onMouseEnter={() => {
+                  setPopUpOpen(true)
+                }}
+              >
+                <Button variant="default">
+                  <PenBox className="w-4" />
+                  Editar
+                </Button>
+                <Button variant="default">
+                  <Trash2 className="w-4" />
+                  Excluir
+                </Button>
+                <PopoverArrow children={undefined} />
+              </div>
+            </PopoverContent>
+          </Popover>
+        </div>
       </div>
     </Card>
   )

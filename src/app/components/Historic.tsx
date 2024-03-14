@@ -40,7 +40,7 @@ export default function Historic() {
           .map((actionUnit, key) => {
             return (
               <HistoricActionCard
-                className="z-10 checked:z-20"
+                className="z-10 hover:z-20"
                 key={key}
                 action={actionUnit}
               />
