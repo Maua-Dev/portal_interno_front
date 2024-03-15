@@ -17,14 +17,18 @@ interface FilterProps {
 export default function Historic() {
   const [history, setHistory] = useState<Action[] | undefined>(undefined)
   const [searchText, setSearchText] = useState<string>('')
-  const [focus, setFocus] = useState<boolean>(false)
   const { getHistory } = useContext(ActionContext)
+  const [filterClick, setFilterClick] = useState<boolean>(false)
   const [filterProps, setFilterProps] = useState<FilterProps>({
     searchText: '',
     project: '',
     area: '',
     orderBy: ''
   })
+  const handleFilterClick = () => {
+    setFilterClick((prev) => !prev)
+  }
+
   const loadHistoricByRA = async () => {
     const response = await getHistory('19017310', 20)
     setHistory(response)
@@ -54,7 +58,7 @@ export default function Historic() {
     }
 
     return Array.from(responseFiltered)
-  }, [filterProps])
+  }, [filterClick, filterProps])
 
   useEffect(() => {
     loadHistoricByRA()
@@ -65,6 +69,7 @@ export default function Historic() {
       <FilterBar
         setFilterProps={setFilterProps}
         filterProps={filterProps}
+        setFilterClick={handleFilterClick}
         className="z-30"
         setSearchText={setSearchText}
       />

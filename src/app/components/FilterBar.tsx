@@ -36,6 +36,16 @@ export default function FilterBar({
   ...props
 }: FilterBarProps) {
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false)
+  const [localFilterProps, setLocalFilterProps] = useState<FilterProps>({
+    searchText: '',
+    project: '',
+    area: '',
+    orderBy: ''
+  })
+
+  function filter() {
+    setFilterProps(localFilterProps)
+  }
 
   function clearFilter() {
     setFilterProps({
@@ -48,7 +58,7 @@ export default function FilterBar({
 
   function handleFilterData(event: React.ChangeEvent<HTMLSelectElement>) {
     const { name, value } = event.target
-    setFilterProps((prev) => ({
+    setLocalFilterProps((prev) => ({
       ...prev,
       [name]: value
     }))
@@ -100,7 +110,6 @@ export default function FilterBar({
             <form
               onSubmit={(event) => {
                 event.preventDefault()
-                console.log(filterProps)
                 setPopUpOpen(false)
               }}
               className="pt-10"
@@ -139,7 +148,7 @@ export default function FilterBar({
                 <Select.Content value="new">Mais Recente</Select.Content>
                 <Select.Content value="old">Mais Antigo</Select.Content>
               </Select.Root>
-              <Button variant="form" className="mt-4">
+              <Button variant="form" className="mt-4" onClick={filter}>
                 Filtrar
                 <Search className="h-4 w-4" />
               </Button>
