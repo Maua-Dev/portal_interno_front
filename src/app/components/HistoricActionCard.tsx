@@ -6,7 +6,7 @@ import { BsClockHistory, BsThreeDots } from 'react-icons/bs'
 import { Trash2, PenBox } from 'lucide-react'
 import { Action } from '../../@clean/shared/domain/entities/action'
 import { stackFormatter } from '../../@clean/shared/domain/enums/stack_enum'
-import Tag from './little_components/Tag'
+import { Tag } from './little_components/Tags'
 import { twMerge } from 'tailwind-merge'
 import {
   Popover,

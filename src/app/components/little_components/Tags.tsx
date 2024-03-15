@@ -1,6 +1,8 @@
-import { useContext } from 'react'
+import { HTMLAttributes, useContext } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { ThemeContext } from '../../contexts/theme_context'
+import Text from './Text'
+import { X } from 'lucide-react'
 
 type TagType =
   | 'BACKEND'
@@ -20,7 +22,7 @@ interface VariantsProps {
   style: string
 }
 
-export default function Tag({ variant }: TagProps) {
+export function Tag({ variant }: TagProps) {
   const { theme } = useContext(ThemeContext)
   const DARKNESS = theme ? '900' : '400'
   const variants: Record<string, VariantsProps> = {
@@ -66,5 +68,26 @@ export default function Tag({ variant }: TagProps) {
     >
       {label}
     </p>
+  )
+}
+
+interface FilterTagProps extends HTMLAttributes<HTMLDivElement> {
+  label: string
+}
+
+export function FilterTag({ label, ...props }: FilterTagProps) {
+  return (
+    <div
+      {...props}
+      className={twMerge(
+        'flex flex-row items-center justify-between gap-3 rounded-3xl bg-skin-base-foreground px-3 py-1.5',
+        props.className
+      )}
+    >
+      <Text className="font-medium text-skin-inverted" variant="muted">
+        {label}
+      </Text>
+      <X className="h-5 cursor-pointer text-skin-inverted" />
+    </div>
   )
 }

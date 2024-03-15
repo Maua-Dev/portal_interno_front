@@ -14,6 +14,7 @@ import Button from './little_components/Button'
 import { HTMLAttributes, useEffect, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { SlidersHorizontal } from 'lucide-react'
+import { FilterTag } from './little_components/Tags'
 
 interface FilterBarProps extends HTMLAttributes<HTMLDivElement> {
   setSearchText: (search: string) => void
@@ -79,6 +80,7 @@ export default function FilterBar({
             setSearchText(event.currentTarget.value)
           }}
         />
+        <FilterTag label="Portal Interno" className="hidden lg:flex" />
       </div>
       <div className="flex h-full flex-row gap-5">
         <Popover open={popUpOpen}>

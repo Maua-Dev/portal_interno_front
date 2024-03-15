@@ -31,10 +31,11 @@ export default function Historic() {
   }
 
   const filteredActions = useMemo(() => {
-    const responseFiltered = new Set<Action>(history)
     if (filterProps.project === '' && filterProps.area === '') {
       return history
     }
+
+    const responseFiltered = new Set<Action>(history)
 
     if (filterProps.project !== '') {
       history?.filter((action) => {

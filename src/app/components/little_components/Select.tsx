@@ -1,5 +1,5 @@
 import { ChevronDown } from 'lucide-react'
-import React, { HTMLAttributes, useState } from 'react'
+import React from 'react'
 import { twMerge } from 'tailwind-merge'
 import Text from './Text'
 
