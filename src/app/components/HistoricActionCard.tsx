@@ -86,7 +86,7 @@ export default function HistoricActionCard({
             <PopoverTrigger onClick={handleSettingsPopUp}>
               <BsThreeDots className="h-10 w-10 cursor-pointer p-2 text-skin-base" />
             </PopoverTrigger>
-            <PopoverContent sideOffset={-5}>
+            <PopoverContent>
               <div
                 className="z-30"
                 onMouseEnter={() => {

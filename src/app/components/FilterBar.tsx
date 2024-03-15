@@ -1,7 +1,8 @@
 import Card from './little_components/Card'
 import SearchField from './little_components/SearchField'
 import Text from './little_components/Text'
-import { History, Search } from 'lucide-react'
+import { History, Search, X, Filter } from 'lucide-react'
+import * as PopoverPrimitive from '@radix-ui/react-popover'
 import {
   Popover,
   PopoverContent,
@@ -10,21 +11,53 @@ import {
 } from '../components/little_components/Popover'
 import * as Select from '../components/little_components/Select'
 import Button from './little_components/Button'
-import { HTMLAttributes } from 'react'
+import { HTMLAttributes, useEffect, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { SlidersHorizontal } from 'lucide-react'
-import { useForm } from 'react-hook-form'
 
 interface FilterBarProps extends HTMLAttributes<HTMLDivElement> {
   setSearchText: (search: string) => void
+  setFilterProps: (props: React.SetStateAction<FilterProps>) => void
+  filterProps: FilterProps
 }
 
-export default function FilterBar({ setSearchText, ...props }: FilterBarProps) {
-  const { register, handleSubmit } = useForm()
+interface FilterProps {
+  searchText: string
+  project: string
+  area: string
+  orderBy: string
+}
 
-  function handleFilterProduts(data: any) {
-    console.log(data)
+export default function FilterBar({
+  setSearchText,
+  setFilterProps,
+  filterProps,
+  ...props
+}: FilterBarProps) {
+  const [popUpOpen, setPopUpOpen] = useState<boolean>(false)
+
+  function clearFilter() {
+    setFilterProps({
+      searchText: '',
+      project: '',
+      area: '',
+      orderBy: ''
+    })
   }
+
+  function handleFilterData(event: React.ChangeEvent<HTMLSelectElement>) {
+    const { name, value } = event.target
+    setFilterProps((prev) => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+
+  useEffect(() => {
+    setTimeout(() => {
+      clearFilter()
+    }, 1000)
+  }, [])
 
   return (
     <Card
@@ -48,20 +81,33 @@ export default function FilterBar({ setSearchText, ...props }: FilterBarProps) {
         />
       </div>
       <div className="flex h-full flex-row gap-5">
-        <Popover>
+        <Popover open={popUpOpen}>
           <PopoverTrigger>
-            <Button variant="default">
+            <Button
+              variant="default"
+              onClick={() => {
+                clearFilter()
+                setPopUpOpen((prev) => !prev)
+              }}
+            >
               Filtro
               <SlidersHorizontal className="h-5 w-5" />
             </Button>
           </PopoverTrigger>
           <PopoverContent>
-            <form>
+            <form
+              onSubmit={(event) => {
+                event.preventDefault()
+                console.log(filterProps)
+                setPopUpOpen(false)
+              }}
+              className="pt-10"
+            >
               <Select.Root
-                onSubmit={handleSubmit(handleFilterProduts)}
                 label="Projetos"
+                name="project"
                 variant="withTextLabel"
-                {...register('projects')}
+                onChange={handleFilterData}
               >
                 <Select.Content value="PI">Portal Interno</Select.Content>
                 <Select.Content value="MF">Mauá Food</Select.Content>
@@ -72,8 +118,9 @@ export default function FilterBar({ setSearchText, ...props }: FilterBarProps) {
               </Select.Root>
               <Select.Root
                 label="Área"
+                name="area"
                 variant="withTextLabel"
-                {...register('area')}
+                onChange={handleFilterData}
               >
                 <Select.Content value="FRONTEND">FRONT</Select.Content>
                 <Select.Content value="BACKEND">BACK</Select.Content>
@@ -83,17 +130,25 @@ export default function FilterBar({ setSearchText, ...props }: FilterBarProps) {
               </Select.Root>
               <Select.Root
                 label="Ordenar Por"
+                name="orderBy"
                 variant="withTextLabel"
-                {...register('orderBy')}
+                onChange={handleFilterData}
               >
                 <Select.Content value="new">Mais Recente</Select.Content>
                 <Select.Content value="old">Mais Antigo</Select.Content>
               </Select.Root>
-              <Button variant="form">
+              <Button variant="form" className="mt-4">
                 Filtrar
                 <Search className="h-4 w-4" />
               </Button>
               <PopoverArrow children={undefined} />
+              <X
+                className="absolute right-2.5 top-3 h-5 cursor-pointer"
+                onClick={() => {
+                  setPopUpOpen(false)
+                  clearFilter()
+                }}
+              />
             </form>
           </PopoverContent>
         </Popover>
