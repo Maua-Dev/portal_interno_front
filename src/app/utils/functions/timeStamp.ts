@@ -15,10 +15,8 @@ export function hoursToMilliseconds(hours: number): number {
   return Math.floor(hours * Math.pow(3.6, 6))
 }
 
-export function dateToMilliseconds(data: string): number {
-  const [day, month, year] = data.split('/')
+export function dateToMilliseconds(date: string): number {
+  const newDate = new Date(date)
 
-  const newData = new Date(`${year}-${month}-${day}`)
-
-  return newData.getTime()
+  return newDate.getTime()
 }
