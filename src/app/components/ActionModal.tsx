@@ -195,6 +195,26 @@ export default function ActionModal({ action }: { action?: Action }) {
     console.log(await getHistory('23017310', 10))
   }
 
+  const handleConfirmCloseModal = () => {
+    let isEmpty = true
+    if (getValues('title') !== '') isEmpty = false
+    if (getValues('projectCode') !== '') isEmpty = false
+    if (getValues('description') !== '') isEmpty = false
+    if (getValues('storyId') !== '') isEmpty = false
+    if (getValues('startDate') !== '') isEmpty = false
+    if (getValues('endDate') !== '') isEmpty = false
+    if (getValues('duration') !== 0) isEmpty = false
+    if (getValues('associatedMembersRa').length !== 0) isEmpty = false
+    if (getValues('stackTags').length !== 0) isEmpty = false
+
+    if (isEmpty) {
+      closeModal()
+      return
+    }
+
+    if (confirm('Deseja fechar sem salvar?')) closeModal()
+  }
+
   const {
     register,
     handleSubmit,
@@ -219,10 +239,10 @@ export default function ActionModal({ action }: { action?: Action }) {
   })
   return (
     <div
-      className={`h-auto w-full transform items-center justify-center overflow-hidden py-24 transition-all duration-300 md:h-screen md:overflow-hidden md:py-0 ${
+      className={`flex h-auto w-full transform items-center justify-center overflow-hidden py-24 transition-all duration-300 md:h-screen md:overflow-hidden md:py-0 ${
         isUpdateModal
-          ? 'absolute left-0 top-0 z-50 flex bg-black bg-opacity-80'
-          : 'flex md:pl-14'
+          ? 'absolute left-0 top-0 z-50 bg-black bg-opacity-80'
+          : 'md:pl-14'
       } ${
         isUpdateModal
           ? `${fade ? 'opacity-100' : 'opacity-0'}`
@@ -231,7 +251,11 @@ export default function ActionModal({ action }: { action?: Action }) {
       `}
     >
       <div
-        className={`h-auto w-4/5 rounded-2xl md:h-4/5 ${
+        className="absolute z-[60] h-screen w-full"
+        onClick={isUpdateModal ? handleConfirmCloseModal : undefined}
+      ></div>
+      <div
+        className={`z-[70] h-auto w-4/5 rounded-2xl md:h-4/5 ${
           darkMode ? 'bg-dev-gray text-white' : 'bg-white'
         }`}
       >
@@ -470,7 +494,7 @@ export default function ActionModal({ action }: { action?: Action }) {
               <button
                 type="button"
                 className="w-full rounded-lg bg-red-500 px-2 py-1 text-white sm:w-1/2"
-                onClick={closeModal}
+                onClick={handleConfirmCloseModal}
               >
                 Cancelar
               </button>
