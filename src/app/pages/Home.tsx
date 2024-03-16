@@ -33,6 +33,7 @@ export default function Home() {
           isModalOpen ? 'h-auto' : 'h-screen'
         } w-full overflow-x-hidden ${darkMode ? 'bg-black' : 'bg-sky-200'}`}
       >
+        {/* {isModalOpen && <ActionModal action={action} />} */}
         {isModalOpen && <ActionModal />}
       </main>
     </>
