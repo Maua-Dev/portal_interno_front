@@ -28,28 +28,8 @@ const actionSchema = z.object({
     message: 'Story Id deve ter 4 dígitos'
   }),
   actionId: z.string().optional(),
-  startDate: z
-    .string()
-    .refine(
-      (value) =>
-        /^([1-9]|0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2]|[1-9])\/((19|20)\d\d)$/.test(
-          value
-        ),
-      {
-        message: 'Formato inválido de data'
-      }
-    ),
-  endDate: z
-    .string()
-    .refine(
-      (value) =>
-        /^([1-9]|0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2]|[1-9])\/((19|20)\d\d)$/.test(
-          value
-        ),
-      {
-        message: 'Formato inválido de data'
-      }
-    ),
+  startDate: z.string().min(1, { message: 'Data inicial é obrigatória' }),
+  endDate: z.string().min(1, { message: 'Data final é obrigatória' }),
   duration: z
     .number({
       required_error: 'Duração é obrigatória',
@@ -342,7 +322,7 @@ export default function ActionModal({ action }: { action?: Action }) {
                 <div className="flex flex-col gap-2">
                   <p className="text-lg">Data inicial</p>
                   <input
-                    type="text"
+                    type="datetime-local"
                     {...register('startDate')}
                     placeholder="DD/MM/AAAA"
                     className={`rounded ${
@@ -358,9 +338,20 @@ export default function ActionModal({ action }: { action?: Action }) {
                 <div className="flex flex-col gap-2">
                   <p className="text-lg">Data final</p>
                   <input
-                    type="text"
+                    type="datetime-local"
                     {...register('endDate')}
-                    placeholder="DD/MM/AAAA"
+                    // TODO!!
+                    onChange={(e) => {
+                      const startDate = dateToMilliseconds(
+                        getValues('startDate')
+                      )
+                      const endDate = dateToMilliseconds(e.target.value)
+                      setValue(
+                        'duration',
+                        (millisecondsToHours(endDate - startDate) / 1000 / 60) ^
+                          2
+                      )
+                    }}
                     className={`rounded ${
                       darkMode ? 'bg-gray-600' : 'bg-gray-300'
                     } px-2 py-1 outline-none`}
@@ -374,6 +365,7 @@ export default function ActionModal({ action }: { action?: Action }) {
                 <div className="flex flex-col gap-2">
                   <p className="text-lg">Duração</p>
                   <input
+                    readOnly
                     type="text"
                     {...register('duration', {
                       valueAsNumber: true
