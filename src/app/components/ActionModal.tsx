@@ -64,12 +64,14 @@ export default function ActionModal({ action }: { action?: Action }) {
   const { updateAction, createAction, getHistory } = useContext(ActionContext)
 
   // Use state
-  const [members, setMembers] = useState<Member[] | undefined>()
+  const [allMembers, setAllMembers] = useState<Member[] | undefined>()
   const [fade, setFade] = useState<boolean>(false)
+  const [stackTags, setStackTags] = useState<STACK[]>([])
+  const [members, setMembers] = useState<string[]>()
 
   // Constants
   const actionTypes: string[] = Object.values(ACTION_TYPE)
-  const stackTags: string[] = Object.values(STACK)
+  const allStackTags: string[] = Object.values(STACK)
   let isUpdateModal: boolean = false
 
   if (action) {
@@ -79,7 +81,7 @@ export default function ActionModal({ action }: { action?: Action }) {
   // Fetch all members
   useEffect(() => {
     getAllMembers()
-      .then((members) => setMembers(members))
+      .then((members) => setAllMembers(members))
       .catch((error) => console.log(error))
   }, [getAllMembers])
 
@@ -100,6 +102,13 @@ export default function ActionModal({ action }: { action?: Action }) {
       field,
       list.filter((itemInList) => itemInList !== item)
     )
+    if (field === 'associatedMembersRa') {
+      setMembers(getValues('associatedMembersRa'))
+    }
+
+    if (field === 'stackTags') {
+      setStackTags(getValues('stackTags'))
+    }
   }
 
   const validateAndAddMember = (member: string) => {
@@ -111,6 +120,7 @@ export default function ActionModal({ action }: { action?: Action }) {
             ...getValues('associatedMembersRa'),
             member!.ra
           ])
+          setMembers(getValues('associatedMembersRa'))
           console.log(getValues('associatedMembersRa'))
         })
         .catch((error) => console.log(error))
@@ -122,6 +132,7 @@ export default function ActionModal({ action }: { action?: Action }) {
       const stackFormatted: STACK = stackToEnum(stackTag)
       if (getValues('stackTags').indexOf(stackFormatted) === -1) {
         setValue('stackTags', [...getValues('stackTags'), stackFormatted])
+        setStackTags(getValues('stackTags'))
       }
     }
   }
@@ -340,18 +351,17 @@ export default function ActionModal({ action }: { action?: Action }) {
                   <input
                     type="datetime-local"
                     {...register('endDate')}
-                    // TODO!!
-                    onChange={(e) => {
-                      const startDate = dateToMilliseconds(
-                        getValues('startDate')
-                      )
-                      const endDate = dateToMilliseconds(e.target.value)
-                      setValue(
-                        'duration',
-                        (millisecondsToHours(endDate - startDate) / 1000 / 60) ^
-                          2
-                      )
-                    }}
+                    // Old onChange function
+                    // onChange={(e) => {
+                    //   const startDate = dateToMilliseconds(
+                    //     getValues('startDate')
+                    //   )
+                    //   const endDate = dateToMilliseconds(e.target.value)
+                    //   setValue(
+                    //     'duration',
+                    //     millisecondsToHours(endDate - startDate)
+                    //   )
+                    // }}
                     className={`rounded ${
                       darkMode ? 'bg-gray-600' : 'bg-gray-300'
                     } px-2 py-1 outline-none`}
@@ -365,7 +375,6 @@ export default function ActionModal({ action }: { action?: Action }) {
                 <div className="flex flex-col gap-2">
                   <p className="text-lg">Duração</p>
                   <input
-                    readOnly
                     type="text"
                     {...register('duration', {
                       valueAsNumber: true
@@ -411,8 +420,8 @@ export default function ActionModal({ action }: { action?: Action }) {
                 }}
               >
                 <option value="">Selecione</option>
-                {members &&
-                  members.map((member) => (
+                {allMembers &&
+                  allMembers.map((member) => (
                     <option key={member.email} value={member.ra}>
                       {`${member.name} | ${member.ra}`}
                     </option>
@@ -420,7 +429,7 @@ export default function ActionModal({ action }: { action?: Action }) {
               </select>
               <p className="text-xl font-bold">Membros associados</p>
               <div className="h-24 overflow-y-scroll rounded-md border-[1px] border-gray-400 p-2">
-                {getValues('associatedMembersRa').map((member) => (
+                {members?.map((member) => (
                   <ListRow
                     text={plainTextToRa(member)}
                     onClick={() => {
@@ -453,14 +462,14 @@ export default function ActionModal({ action }: { action?: Action }) {
                 }}
               >
                 <option value="">Selecione uma opção</option>
-                {stackTags.map((stackTag) => (
+                {allStackTags.map((stackTag) => (
                   <option key={stackTag} value={stackTag}>
                     {stackTag}
                   </option>
                 ))}
               </select>
               <div className="h-20 overflow-y-scroll rounded-md border-[1px] border-gray-400 p-2">
-                {getValues('stackTags').map((stack) => (
+                {stackTags.map((stack) => (
                   <ListRow
                     text={stack}
                     onClick={() =>
