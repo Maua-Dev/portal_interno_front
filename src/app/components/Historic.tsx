@@ -76,6 +76,12 @@ export default function Historic() {
             new Date(b.endDate).getTime() - new Date(a.endDate).getTime()
         )
         break
+      case 'BIGGER':
+        currentActions.sort((a, b) => b.duration - a.duration)
+        break
+      case 'SMALLER':
+        currentActions.sort((a, b) => a.duration - b.duration)
+        break
       default:
         break
     }

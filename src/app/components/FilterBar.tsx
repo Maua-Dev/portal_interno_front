@@ -180,6 +180,8 @@ export default function FilterBar({
               >
                 <Select.Content value="NEW">Mais Recente</Select.Content>
                 <Select.Content value="OLD">Mais Antigo</Select.Content>
+                <Select.Content value="BIGGER">Maior Duração</Select.Content>
+                <Select.Content value="SMALLER">Menor Duração</Select.Content>
               </Select.Root>
               <Button variant="form" className="mt-4" onClick={filter}>
                 Filtrar

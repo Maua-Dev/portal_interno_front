@@ -24,7 +24,7 @@ function Root({ label, variant, children, ...props }: RootProps) {
         <select
           id={label}
           className={twMerge(
-            'peer z-20 h-full w-32 appearance-none bg-transparent px-3 outline-none',
+            'peer z-20 h-full w-36 appearance-none bg-transparent px-3 outline-none',
             props.className
           )}
           {...props}

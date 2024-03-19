@@ -79,6 +79,24 @@ export function FilterTag({
   const [isVisble, setVisibility] = useState<boolean>(true)
 
   const variants: Record<string, FilterProps> = {
+    PI: {
+      label: 'Portal Interno'
+    },
+    MF: {
+      label: 'Mauá Food'
+    },
+    PT: {
+      label: 'Portifólio'
+    },
+    SF: {
+      label: 'Selfie Mauá'
+    },
+    SM: {
+      label: 'Smile'
+    },
+    GM: {
+      label: 'Gameficação'
+    },
     BACKEND: {
       label: 'BACK-END'
     },
@@ -106,23 +124,11 @@ export function FilterTag({
     OLD: {
       label: 'Mais Antigo'
     },
-    PI: {
-      label: 'Portal Interno'
+    BIGGER: {
+      label: 'Maior Duração'
     },
-    MF: {
-      label: 'Mauá Food'
-    },
-    PT: {
-      label: 'Portifólio'
-    },
-    SF: {
-      label: 'Selfie Mauá'
-    },
-    SM: {
-      label: 'Smile'
-    },
-    GM: {
-      label: 'Gameficação'
+    SMALLER: {
+      label: 'Menor Duração'
     }
   }
 
