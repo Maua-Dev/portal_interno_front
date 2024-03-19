@@ -1,6 +1,7 @@
 import {
   dateToMilliseconds,
-  hoursToMilliseconds
+  hoursToMilliseconds,
+  timeStampToDate
 } from '../../../../../src/app/utils/functions/timeStamp'
 import '@testing-library/jest-dom'
 
@@ -18,4 +19,12 @@ test('Milliseconds to hour', () => {
   const milliseconds = hoursToMilliseconds(hours)
 
   expect(milliseconds).toBe(7200000)
+})
+
+test('Timstamp to date', () => {
+  const timestamp = 1710797634000
+
+  const date = timeStampToDate(timestamp)
+
+  expect(date).toBe('2024-03-18T21:33')
 })
