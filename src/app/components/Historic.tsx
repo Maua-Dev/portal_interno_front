@@ -8,6 +8,7 @@ import Loader from './little_components/Loader'
 import { STACK, stackToEnum } from '../../@clean/shared/domain/enums/stack_enum'
 
 interface FilterProps {
+  [key: string]: string
   searchText: string
   project: string
   area: string
@@ -25,8 +26,14 @@ export default function Historic() {
     area: '',
     orderBy: ''
   })
-  const handleFilterClick = () => {
-    setFilterClick((prev) => !prev)
+
+  const clearFilter = () => {
+    setFilterProps({
+      searchText: '',
+      project: '',
+      area: '',
+      orderBy: ''
+    })
   }
 
   const loadHistoricByRA = async () => {
@@ -39,37 +46,37 @@ export default function Historic() {
       return history
     }
 
-    const responseFiltered = new Set<Action>(history)
+    let currentActions: Action[] = [...(history || [])]
 
-    if (filterProps.project !== '') {
-      history?.filter((action) => {
-        if (action.projectCode !== filterProps.project) {
-          responseFiltered.delete(action)
-        }
-      })
+    if (filterProps.project) {
+      currentActions = currentActions.filter(
+        (action) => action.projectCode === filterProps.project
+      )
     }
 
-    if (filterProps.area !== '') {
-      history?.filter((action) => {
-        if (!action.stackTags.includes(stackToEnum(filterProps.area))) {
-          responseFiltered.delete(action)
-        }
-      })
+    if (filterProps.area) {
+      currentActions = currentActions.filter((action) =>
+        action.stackTags.includes(stackToEnum(filterProps.area))
+      )
     }
 
-    return Array.from(responseFiltered)
-  }, [filterClick, filterProps])
+    return Array.from(currentActions)
+  }, [history, filterClick, filterProps])
 
   useEffect(() => {
+    clearFilter()
     loadHistoricByRA()
   }, [])
+
+  useEffect(() => {
+    console.log(filterProps)
+  }, [filterProps])
 
   return (
     <div className="flex h-fit w-full flex-col items-center gap-2 bg-skin-fill py-10">
       <FilterBar
         setFilterProps={setFilterProps}
         filterProps={filterProps}
-        setFilterClick={handleFilterClick}
         className="z-30"
         setSearchText={setSearchText}
       />

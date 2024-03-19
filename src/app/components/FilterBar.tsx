@@ -1,8 +1,8 @@
+/* eslint-disable prettier/prettier */
 import Card from './little_components/Card'
 import SearchField from './little_components/SearchField'
 import Text from './little_components/Text'
-import { History, Search, X, Filter } from 'lucide-react'
-import * as PopoverPrimitive from '@radix-ui/react-popover'
+import { History, Search, X } from 'lucide-react'
 import {
   Popover,
   PopoverContent,
@@ -11,7 +11,7 @@ import {
 } from '../components/little_components/Popover'
 import * as Select from '../components/little_components/Select'
 import Button from './little_components/Button'
-import { HTMLAttributes, useEffect, useState } from 'react'
+import React, { HTMLAttributes, ReactComponentElement, useEffect, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { SlidersHorizontal } from 'lucide-react'
 import { FilterTag } from './little_components/Tags'
@@ -23,6 +23,7 @@ interface FilterBarProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 interface FilterProps {
+  [filterName: string]: string
   searchText: string
   project: string
   area: string
@@ -36,24 +37,26 @@ export default function FilterBar({
   ...props
 }: FilterBarProps) {
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false)
-  const [localFilterProps, setLocalFilterProps] = useState<FilterProps>({
+
+  const emptyFilterProps = {
     searchText: '',
     project: '',
     area: '',
     orderBy: ''
-  })
+  }
+
+  const [localFilterProps, setLocalFilterProps] =
+    useState<FilterProps>(emptyFilterProps)
 
   function filter() {
     setFilterProps(localFilterProps)
   }
 
-  function clearFilter() {
-    setFilterProps({
-      searchText: '',
-      project: '',
-      area: '',
-      orderBy: ''
-    })
+
+
+  function clearFilters() {
+    setFilterProps(emptyFilterProps)
+    setLocalFilterProps(emptyFilterProps)
   }
 
   function handleFilterData(event: React.ChangeEvent<HTMLSelectElement>) {
@@ -64,9 +67,32 @@ export default function FilterBar({
     }))
   }
 
+  function clearFilterData(key: string) {
+    setFilterProps((prev) => ({
+      ...prev,
+      [key]: ''
+    }))
+  }
+
+  function renderFilterTags(key: string, value: any): JSX.Element {
+    if (value !== '') {
+      return (
+        <FilterTag
+          key={key}
+          label={value}
+          className={filterProps[key] === '' ? 'hidden' : ''}
+          clearFilterProp={() => {
+            clearFilterData(key)
+          }}
+        />
+      )
+    } 
+    return <></>
+  }
+
   useEffect(() => {
     setTimeout(() => {
-      clearFilter()
+      clearFilters()
     }, 1000)
   }, [])
 
@@ -90,7 +116,13 @@ export default function FilterBar({
             setSearchText(event.currentTarget.value)
           }}
         />
-        <FilterTag label="Portal Interno" className="hidden lg:flex" />
+        <div className='flex flex-row gap-4'> 
+          {filterProps !== emptyFilterProps
+            ? Object.entries(filterProps).map(([key, value]) => {
+              return renderFilterTags(key, value)
+            })
+            : null}
+        </div>
       </div>
       <div className="flex h-full flex-row gap-5">
         <Popover open={popUpOpen}>
@@ -98,7 +130,7 @@ export default function FilterBar({
             <Button
               variant="default"
               onClick={() => {
-                clearFilter()
+                clearFilters()
                 setPopUpOpen((prev) => !prev)
               }}
             >
@@ -157,7 +189,7 @@ export default function FilterBar({
                 className="absolute right-2.5 top-3 h-5 cursor-pointer"
                 onClick={() => {
                   setPopUpOpen(false)
-                  clearFilter()
+                  clearFilters()
                 }}
               />
             </form>
