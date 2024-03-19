@@ -12,15 +12,15 @@ export default function Home() {
   const { isModalOpen } = useContext(ModalContext)
   // const action = new Action({
   //   ownerRa: '21002100',
-  //   startDate: 1689969600000,
-  //   endDate: 1689976380000,
-  //   duration: 6780000,
+  //   startDate: 1710797634000,
+  //   endDate: 1710797634000 + 7200000, // Duas horas depois
+  //   duration: 7200000, // Duas horas
   //   actionId: 'uuid8',
   //   title: 'Componente Histórico e Atividades',
   //   actionTypeTag: ACTION_TYPE.MEETING,
   //   projectCode: 'MF',
-  //   stackTags: [STACK.FRONTEND],
-  //   storyId: 150,
+  //   stackTags: [STACK.FRONTEND, STACK.UX_UI],
+  //   storyId: 1501,
   //   description: 'Reunião Daily',
   //   associatedMembersRa: ['21002102', '21002101']
   // })
