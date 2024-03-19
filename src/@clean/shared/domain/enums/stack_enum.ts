@@ -34,7 +34,6 @@ export function stackFormatter(stackArray: STACK[]): string[] {
   stackArray.forEach((stack) => {
     stackFormatted.push(stack.toString())
   })
-  console.log(stackFormatted)
   return stackFormatted
 }
 
