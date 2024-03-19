@@ -24,9 +24,15 @@ const actionSchema = z.object({
     .string()
     .min(1, { message: 'Código de Projeto é obrigatório' }),
   description: z.string(),
-  storyId: z.string().refine((value) => /^\d{4}$/.test(value), {
-    message: 'Story Id deve ter 4 dígitos'
-  }),
+  storyId: z.string().refine(
+    (storyId) => {
+      if (storyId === '') return true
+      return /^\d{4}$/.test(storyId)
+    },
+    {
+      message: 'Story Id deve ter 4 dígitos'
+    }
+  ),
   actionId: z.string().optional(),
   startDate: z.string().min(1, { message: 'Data inicial é obrigatória' }),
   endDate: z.string().min(1, { message: 'Data final é obrigatória' }),
@@ -66,8 +72,10 @@ export default function ActionModal({ action }: { action?: Action }) {
   // Use state
   const [allMembers, setAllMembers] = useState<Member[] | undefined>()
   const [fade, setFade] = useState<boolean>(false)
-  const [stackTags, setStackTags] = useState<STACK[]>([])
-  const [members, setMembers] = useState<string[]>()
+  const [stackTags, setStackTags] = useState<STACK[]>(action?.stackTags || [])
+  const [members, setMembers] = useState<string[]>(
+    action?.associatedMembersRa || []
+  )
 
   // Constants
   const actionTypes: string[] = Object.values(ACTION_TYPE)
@@ -287,6 +295,7 @@ export default function ActionModal({ action }: { action?: Action }) {
                     <option value="PI">Portal Interno</option>
                     <option value="SM">Smile</option>
                     <option value="MF">Mauá Food</option>
+                    <option value="MF">Outros</option>
                   </select>
                   <span className="text-red-600">
                     {errors.projectCode?.message}
