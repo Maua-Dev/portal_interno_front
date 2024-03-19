@@ -41,7 +41,11 @@ export default function Historic() {
   }
 
   const filteredActions = useMemo(() => {
-    if (filterProps.project === '' && filterProps.area === '') {
+    if (
+      filterProps.project === '' &&
+      filterProps.area === '' &&
+      filterProps.orderBy === ''
+    ) {
       return history
     }
 
@@ -57,6 +61,23 @@ export default function Historic() {
       currentActions = currentActions.filter((action) =>
         action.stackTags.includes(stackToEnum(filterProps.area))
       )
+    }
+
+    switch (filterProps.orderBy) {
+      case 'Mais Antigo':
+        currentActions.sort(
+          (a, b) =>
+            new Date(a.endDate).getTime() - new Date(b.endDate).getTime()
+        )
+        break
+      case 'Mais Recente':
+        currentActions.sort(
+          (a, b) =>
+            new Date(b.endDate).getTime() - new Date(a.endDate).getTime()
+        )
+        break
+      default:
+        break
     }
 
     return Array.from(currentActions)
