@@ -1,10 +1,14 @@
-import { BiLoaderAlt } from 'react-icons/bi'
+import HistoricActionCardSkeleton from './HistoricActionCardSkeleton'
 
 export default function Loader() {
   return (
-    <div className="flex h-screen flex-row items-center gap-2 text-skin-base">
-      <BiLoaderAlt className="animate-spin text-2xl" />
-      <p className="text-xl">Carregando...</p>
+    <div className="flex w-full flex-col items-center gap-2 text-skin-base">
+      <HistoricActionCardSkeleton />
+      <HistoricActionCardSkeleton className="opacity-80" />
+      <HistoricActionCardSkeleton className="opacity-60" />
+      <HistoricActionCardSkeleton className="opacity-40" />
+      <HistoricActionCardSkeleton className="opacity-20" />
+      <HistoricActionCardSkeleton className="opacity-10" />
     </div>
   )
 }
