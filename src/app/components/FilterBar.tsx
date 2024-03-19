@@ -74,11 +74,11 @@ export default function FilterBar({
     }))
   }
 
-  function renderFilterTags(key: string, value: any): JSX.Element {
+  function renderFilterTags(key: string, value: any, index: number): JSX.Element {
     if (value !== '') {
       return (
         <FilterTag
-          key={key}
+          key={index}
           label={value}
           className={filterProps[key] === '' ? 'hidden' : ''}
           clearFilterProp={() => {
@@ -117,10 +117,10 @@ export default function FilterBar({
             setSearchText(event.currentTarget.value)
           }}
         />
-        <div className='flex flex-row gap-4'> 
+        <div className='flex-row gap-4 hidden lg:flex'> 
           {filterProps !== emptyFilterProps
-            ? Object.entries(filterProps).map(([key, value]) => {
-              return renderFilterTags(key, value)
+            ? Object.entries(filterProps).map(([key, value], index) => {
+              return renderFilterTags(key, value, index)
             })
             : null}
         </div>

@@ -2499,6 +2499,11 @@
     "@typescript-eslint/types" "6.3.0"
     eslint-visitor-keys "^3.4.1"
 
+"@uidotdev/usehooks@^2.4.1":
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/@uidotdev/usehooks/-/usehooks-2.4.1.tgz#4b733eaeae09a7be143c6c9ca158b56cc1ea75bf"
+  integrity sha512-1I+RwWyS+kdv3Mv0Vmc+p0dPYH0DTRAo04HLyXReYBL9AeseDWUJyi4THuksBJcu9F0Pih69Ak150VDnqbVnXg==
+
 "@vitejs/plugin-react@^4.0.4":
   version "4.0.4"
   resolved "https://registry.npmjs.org/@vitejs/plugin-react/-/plugin-react-4.0.4.tgz"
@@ -5424,11 +5429,6 @@ react-dom@^18.2.0:
   dependencies:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
-
-react-hook-form@^7.51.0:
-  version "7.51.0"
-  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.51.0.tgz#757ae71b37c26e00590bd3788508287dcc5ecdaf"
-  integrity sha512-BggOy5j58RdhdMzzRUHGOYhSz1oeylFAv6jUSG86OvCIvlAvS7KvnRY7yoAf2pfEiPN7BesnR0xx73nEk3qIiw==
 
 react-icons@*, react-icons@^4.11.0:
   version "4.11.0"
