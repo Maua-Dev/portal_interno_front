@@ -1,4 +1,4 @@
-import { HTMLAttributes, useContext } from 'react'
+import { HTMLAttributes, useContext, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { ThemeContext } from '../../contexts/theme_context'
 import Text from './Text'
@@ -73,21 +73,35 @@ export function Tag({ variant }: TagProps) {
 
 interface FilterTagProps extends HTMLAttributes<HTMLDivElement> {
   label: string
+  clearFilterProp: () => void
 }
 
-export function FilterTag({ label, ...props }: FilterTagProps) {
+export function FilterTag({
+  label,
+  clearFilterProp,
+  ...props
+}: FilterTagProps) {
+  const [isVisble, setVisibility] = useState<boolean>(true)
   return (
     <div
       {...props}
       className={twMerge(
-        'flex flex-row items-center justify-between gap-3 rounded-3xl bg-skin-base-foreground px-3 py-1.5',
+        `flex flex-row items-center justify-between gap-3 rounded-3xl bg-skin-base-foreground px-3 py-1.5 ${
+          isVisble ? '' : 'hidden'
+        }`,
         props.className
       )}
     >
       <Text className="font-medium text-skin-inverted" variant="muted">
         {label}
       </Text>
-      <X className="h-5 cursor-pointer text-skin-inverted" />
+      <X
+        onClick={() => {
+          clearFilterProp()
+          setVisibility(false)
+        }}
+        className="h-5 cursor-pointer text-skin-inverted"
+      />
     </div>
   )
 }
