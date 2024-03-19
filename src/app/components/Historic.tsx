@@ -5,7 +5,7 @@ import FilterBar from './FilterBar'
 import HistoricActionCard from './HistoricActionCard'
 import { ActionContext } from '../contexts/action_context'
 import Loader from './little_components/Loader'
-import { STACK, stackToEnum } from '../../@clean/shared/domain/enums/stack_enum'
+import { stackToEnum } from '../../@clean/shared/domain/enums/stack_enum'
 
 interface FilterProps {
   [key: string]: string
@@ -19,7 +19,6 @@ export default function Historic() {
   const [history, setHistory] = useState<Action[] | undefined>(undefined)
   const [searchText, setSearchText] = useState<string>('')
   const { getHistory } = useContext(ActionContext)
-  const [filterClick, setFilterClick] = useState<boolean>(false)
   const [filterProps, setFilterProps] = useState<FilterProps>({
     searchText: '',
     project: '',
@@ -61,16 +60,13 @@ export default function Historic() {
     }
 
     return Array.from(currentActions)
-  }, [history, filterClick, filterProps])
+  }, [history, filterProps])
 
   useEffect(() => {
     clearFilter()
     loadHistoricByRA()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  useEffect(() => {
-    console.log(filterProps)
-  }, [filterProps])
 
   return (
     <div className="flex h-fit w-full flex-col items-center gap-2 bg-skin-fill py-10">

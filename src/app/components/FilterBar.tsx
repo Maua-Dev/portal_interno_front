@@ -11,7 +11,7 @@ import {
 } from '../components/little_components/Popover'
 import * as Select from '../components/little_components/Select'
 import Button from './little_components/Button'
-import React, { HTMLAttributes, ReactComponentElement, useEffect, useState } from 'react'
+import React, { HTMLAttributes, useEffect, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { SlidersHorizontal } from 'lucide-react'
 import { FilterTag } from './little_components/Tags'
@@ -94,6 +94,7 @@ export default function FilterBar({
     setTimeout(() => {
       clearFilters()
     }, 1000)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

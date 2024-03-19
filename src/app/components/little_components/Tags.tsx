@@ -4,15 +4,6 @@ import { ThemeContext } from '../../contexts/theme_context'
 import Text from './Text'
 import { X } from 'lucide-react'
 
-type TagType =
-  | 'BACKEND'
-  | 'FRONTEND'
-  | 'INFRA'
-  | 'UX_UI'
-  | 'PO'
-  | 'INTERNAL'
-  | 'DATA_SCIENCE'
-
 interface TagProps {
   variant: string
 }
