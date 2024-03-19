@@ -64,13 +64,13 @@ export default function Historic() {
     }
 
     switch (filterProps.orderBy) {
-      case 'Mais Antigo':
+      case 'OLD':
         currentActions.sort(
           (a, b) =>
             new Date(a.endDate).getTime() - new Date(b.endDate).getTime()
         )
         break
-      case 'Mais Recente':
+      case 'NEW':
         currentActions.sort(
           (a, b) =>
             new Date(b.endDate).getTime() - new Date(a.endDate).getTime()

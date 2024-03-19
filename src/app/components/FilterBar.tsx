@@ -178,8 +178,8 @@ export default function FilterBar({
                 variant="withTextLabel"
                 onChange={handleFilterData}
               >
-                <Select.Content value="Mais Recente">Mais Recente</Select.Content>
-                <Select.Content value="Mais Antigo">Mais Antigo</Select.Content>
+                <Select.Content value="NEW">Mais Recente</Select.Content>
+                <Select.Content value="OLD">Mais Antigo</Select.Content>
               </Select.Root>
               <Button variant="form" className="mt-4" onClick={filter}>
                 Filtrar

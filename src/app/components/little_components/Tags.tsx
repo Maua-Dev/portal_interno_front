@@ -67,12 +67,67 @@ interface FilterTagProps extends HTMLAttributes<HTMLDivElement> {
   clearFilterProp: () => void
 }
 
+interface FilterProps {
+  label: string
+}
+
 export function FilterTag({
   label,
   clearFilterProp,
   ...props
 }: FilterTagProps) {
   const [isVisble, setVisibility] = useState<boolean>(true)
+
+  const variants: Record<string, FilterProps> = {
+    BACKEND: {
+      label: 'BACK-END'
+    },
+    FRONTEND: {
+      label: 'FRONT-END'
+    },
+    INFRA: {
+      label: 'INFRA'
+    },
+    UX_UI: {
+      label: 'UX/UI'
+    },
+    PO: {
+      label: 'PO'
+    },
+    INTERNAL: {
+      label: 'INTERNAL'
+    },
+    DATA_SCIENCE: {
+      label: 'DATA'
+    },
+    NEW: {
+      label: 'Mais Recente'
+    },
+    OLD: {
+      label: 'Mais Antigo'
+    },
+    PI: {
+      label: 'Portal Interno'
+    },
+    MF: {
+      label: 'Mauá Food'
+    },
+    PT: {
+      label: 'Portifólio'
+    },
+    SF: {
+      label: 'Selfie Mauá'
+    },
+    SM: {
+      label: 'Smile'
+    },
+    GM: {
+      label: 'Gameficação'
+    }
+  }
+
+  const filterVariant = variants[label] || { label: label }
+  const filterName = filterVariant.label
   return (
     <div
       {...props}
@@ -84,7 +139,7 @@ export function FilterTag({
       )}
     >
       <Text className="font-medium text-skin-inverted" variant="muted">
-        {label}
+        {filterName}
       </Text>
       <X
         onClick={() => {
