@@ -162,8 +162,6 @@ export class ActionRepositoryHttp implements IActionRepository {
         body
       )
 
-      console.log(response.data)
-      console.log(response.data.message)
       return response.data.action
     } catch (error: any) {
       throw new Error('Error updating action: ' + error.message)
@@ -224,11 +222,6 @@ export class ActionRepositoryHttp implements IActionRepository {
           start_date: secondCase.data.last_evaluated_key.start_date
         }
       } else if (amount && exclusiveStartKey) {
-        console.log({
-          ra,
-          amount,
-          exclusiveStartKey
-        })
         const thirdCase = await this.http.post<getHistoryRawResponse>(
           '/get-history',
           {
@@ -237,7 +230,6 @@ export class ActionRepositoryHttp implements IActionRepository {
             exclusive_start_key: exclusiveStartKey
           }
         )
-        console.log('thirdCase', thirdCase)
         for (let i = 0; i < thirdCase.data.actions.length; i++) {
           response.actions.push(Action.fromJSON(thirdCase.data.actions[i]))
         }
@@ -245,9 +237,7 @@ export class ActionRepositoryHttp implements IActionRepository {
           action_id: thirdCase.data.last_evaluated_key.action_id,
           start_date: thirdCase.data.last_evaluated_key.start_date
         }
-        console.log(thirdCase)
       } else if (amount) {
-        console.log('aqui')
         const fourthCase = await this.http.post<getHistoryRawResponse>(
           '/get-history',
           {
@@ -255,9 +245,7 @@ export class ActionRepositoryHttp implements IActionRepository {
             amount
           }
         )
-        console.log(fourthCase)
         for (let i = 0; i < fourthCase.data.actions.length; i++) {
-          console.log(Action.fromJSON(fourthCase.data.actions[i]))
           response.actions.push(Action.fromJSON(fourthCase.data.actions[i]))
         }
         response.lastEvaluatedKey = {
@@ -287,8 +275,6 @@ export class ActionRepositoryHttp implements IActionRepository {
   }
 
   async createAction(action: Action): Promise<Action> {
-    // console.log(JSON.stringify(action, null, 2))
-
     const ownerRa = raFormatterToJson(action.ownerRa)
     const stackTags = stackFormatter(action.stackTags)
 
@@ -318,7 +304,6 @@ export class ActionRepositoryHttp implements IActionRepository {
         bodyRequest
       )
 
-      console.log(response.data.message)
       return response.data.action
     } catch (error: any) {
       throw new Error('Error creating action: ' + error.message)
@@ -410,7 +395,6 @@ export class ActionRepositoryHttp implements IActionRepository {
         )
       })
 
-      console.log(membersArray[0].ra)
       return membersArray
     } catch (error: any) {
       throw new Error('Error Getting All Members: ' + error.message)

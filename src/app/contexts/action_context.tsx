@@ -222,7 +222,6 @@ export function ActionProvider({ children }: PropsWithChildren) {
         end,
         exclusiveStartKey
       )
-      console.log(lastEvaluatedKey)
       setHistory(actions)
       setFirstEvaluatedKey(
         actions[(activitiesPaginationCounter - 1) * 20].actionId
