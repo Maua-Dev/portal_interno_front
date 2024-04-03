@@ -3,30 +3,32 @@
 @tailwind utilities;
 
 body {
-    -webkit-font-smoothing: antialised
+  -webkit-font-smoothing: antialised;
 }
 
 @layer base {
-    :root {
-        --color-background: #000000;
-        --color-secundary: #4d4d4d;
-        --color-text-base: #ffffff;
-        --color-text-muted: #808080;
-        --color-text-hover: #6666ff;
-        --color-button-accent-blue: #6666ff;
-        --color-button-accent-blue-hover: #6262d1;;
-        --color-button-accent-red: #ff0000;
-        --color-button-accent-red-hover: #e00000;
-    }
-    .theme-white {
-        --color-background: #eceaf5;
-        --color-secundary: #cccccc;
-        --color-text-base: #000000;
-        --color-text-muted: #4d4d4d;
-        --color-text-inverted: #6666ff;
-        --color-button-accent-blue: #6666ff;
-        --color-button-accent-blue-hover: #6262d1;;
-        --color-button-accent-red: #ff0000;
-        --color-button-accent-red-hover: #e00000;
-    }
+  :root {
+    --color-background: #1b1b1b;
+    --color-secundary: #000000;
+    --color-text-base: #ffffff;
+    --color-text-muted: #808080;
+    --color-text-hover: #6666ff;
+    --color-button-accent-blue: #6666ff;
+    --color-button-accent-blue-hover: #6262d1;
+    --color-button-accent-red: #ff0000;
+    --color-button-accent-red-hover: #e00000;
+    --color-skeleton-foreground: #403d39;
+  }
+  .theme-white {
+    --color-background: #cccccc;
+    --color-secundary: #eceaf5;
+    --color-text-base: #000000;
+    --color-text-muted: #4d4d4d;
+    --color-text-inverted: #6666ff;
+    --color-button-accent-blue: #6666ff;
+    --color-button-accent-blue-hover: #6262d1;
+    --color-button-accent-red: #ff0000;
+    --color-button-accent-red-hover: #e00000;
+    --color-skeleton-foreground: #a5a5a5;
+  }
 }

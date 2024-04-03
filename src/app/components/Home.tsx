@@ -1,5 +1,7 @@
 import { useContext } from 'react'
 import { ThemeContext } from '../contexts/theme_context'
+import { Sun, Moon } from 'lucide-react'
+import Historic from './Historic'
 
 export default function Home() {
   const { theme, handleThemeChange } = useContext(ThemeContext)
@@ -8,15 +10,15 @@ export default function Home() {
     <div
       className={`${
         theme ? 'theme-white' : null
-      } h-screen w-screen bg-skin-fill`}
+      } flex h-screen flex-col items-center bg-skin-fill`}
     >
-      <p className="text-center text-3xl text-skin-base">TESTE</p>
       <button
         onClick={handleThemeChange}
-        className="bg-skin-button-red-accent text-skin-inverted"
+        className="absolute right-3 top-3 text-skin-base"
       >
-        Change Theme
+        {theme ? <Moon /> : <Sun />}
       </button>
+      <Historic />
     </div>
   )
 }

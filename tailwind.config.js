@@ -17,7 +17,8 @@ module.exports = {
           base: 'var(--color-text-base)',
           muted: 'var(--color-text-muted)',
           hover: 'var(--color-text-hover)',
-          inverted: 'var(--color-background)'
+          inverted: 'var(--color-background)',
+          skeleton: 'var(--color-skeleton-foreground)'
         }
       },
       backgroundColor: {
@@ -28,13 +29,24 @@ module.exports = {
           'button-blue-accent': 'var(--color-button-accent-blue)',
           'button-blue-accent-hover': 'var(--color-button-accent-blue-hover)',
           'button-red-accent': 'var(--color-button-accent-red)',
-          'button-red-accent-hover': 'var(--color-button-accent-red-hover0'
+          'button-red-accent-hover': 'var(--color-button-accent-red-hover0',
+          'skeleton-foreground': 'var(--color-skeleton-foreground)'
+        }
+      },
+      fill: {
+        skin: {
+          muted: 'var(--color-text-muted)'
         }
       },
       borderColor: {
         skin: {
           muted: 'var(--color-text-muted)'
         }
+      }
+    },
+    keyframes: {
+      shimmer: {
+        '100%': { transform: 'translateX(100%)' }
       }
     }
   },

@@ -19,10 +19,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "types": [
-      "node",
-      "vite/client",
-    ]
+    "types": ["node", "vite/client"]
   },
   "include": ["src", "index.d.ts", "__tests__"],
   "references": [{ "path": "./tsconfig.node.json" }]
