@@ -5,8 +5,8 @@ import { IActionRepository } from '../domain/repositories/action_repository_inte
 export class GetMember {
   constructor(private actionRepo: IActionRepository) {}
 
-  async execute(ra: string): Promise<Member> {
-    const member = await this.actionRepo.getMember(ra)
+  async execute(): Promise<Member> {
+    const member = await this.actionRepo.getMember()
 
     if (!member) {
       throw new NoItemsFoundError('No member found')
