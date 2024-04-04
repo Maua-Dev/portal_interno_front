@@ -862,7 +862,6 @@ test('Test Action Entity without description prop', () => {
     isValid: true,
     storyId: 1,
     title: 'Test Action Entity',
-    description: '',
     projectCode: '76',
     associatedMembersUserIds: [
       '492e9fa2-9189-4fe7-b0f7-e6ca472b19f0',
