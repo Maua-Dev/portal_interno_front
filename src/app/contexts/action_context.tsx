@@ -20,14 +20,28 @@ import { UpdateActionUsecase } from '../../@clean/modules/action/usecases/update
 import { GetAllMembersUsecase } from '../../@clean/modules/action/usecases/get_all_members_usecase'
 import { Member } from '../../@clean/shared/domain/entities/member'
 import { GetMember } from '../../@clean/modules/action/usecases/get_member_usecase'
+import { historyResponse } from '../../@clean/shared/infra/repositories/action_repository_http'
 
 interface lastEvaluatedKeyResponse {
-  action_id: string
-  start_date: number
+  actionId: string
+  startDate: number
 }
 
 export type ActionContextType = {
-  createAction: (action: Action) => Promise<Action | undefined>
+  createAction: (
+    startDate: number,
+    title: string,
+    description: string,
+    actionId: string,
+    isValid: boolean,
+    endDate: number,
+    duration: number,
+    projectCode: string,
+    storyId?: number,
+    associatedMembersUserIds?: string[],
+    stackTags?: STACK[],
+    actionTypeTag?: ACTION_TYPE
+  ) => Promise<Action | undefined>
 
   createAssociatedAction: (
     associatedAction: AssociatedAction
@@ -38,15 +52,14 @@ export type ActionContextType = {
   setAction: Dispatch<SetStateAction<Action | undefined>>
 
   getHistory: (
-    ra: string,
-    amount?: number,
-    start?: number,
-    end?: number,
+    start?: number, // milissegundos da data do inicio das actions
+    end?: number, // milissegundos da data de fim da action (vai até essa data contando ela mesma)
+    amount?: number, // quantidade de actions retornadas
     exclusiveStartKey?: {
-      action_id: string
-      start_date: number
+      actionId: string
+      startDate: number
     }
-  ) => Promise<Action[] | undefined>
+  ) => Promise<historyResponse>
 
   history: Action[]
   activitiesPaginationCounter: number
@@ -57,20 +70,20 @@ export type ActionContextType = {
 
   updateAction: (
     actionId: string,
-    newOwnerRa?: string,
     newStartDate?: number,
     newEndDate?: number,
     newDuration?: number,
-    newStoryId?: number | -1,
+    newStoryId?: number,
     newTitle?: string,
-    newDescription?: string | '',
+    newDescription?: string,
     newProjectCode?: string,
-    newAssociatedMembersRa?: string[],
+    newAssociatedMembersUserIds?: string[],
     newStackTags?: STACK[],
-    newActionTypeTag?: ACTION_TYPE
+    newActionTypeTag?: ACTION_TYPE,
+    newisValid?: boolean
   ) => Promise<Action | undefined>
 
-  getMember: (ra: string) => Promise<Member | undefined>
+  getMember: () => Promise<Member | undefined>
 
   getAllMembers: () => Promise<Member[] | undefined>
 
@@ -81,8 +94,21 @@ export type ActionContextType = {
 
 const defaultContext: ActionContextType = {
   history: [],
-  createAction: async (action: Action) => {
-    return action
+  createAction: async (
+    _startDate: number,
+    _title: string,
+    _description: string,
+    _actionId: string,
+    _isValid: boolean,
+    _endDate: number,
+    _duration: number,
+    _projectCode: string,
+    _storyId?: number,
+    _associatedMembersUserIds?: string[],
+    _stackTags?: STACK[],
+    _actionTypeTag?: ACTION_TYPE
+  ) => {
+    return undefined
   },
 
   createAssociatedAction: async (associatedAction: AssociatedAction) => {
@@ -96,16 +122,21 @@ const defaultContext: ActionContextType = {
   },
 
   getHistory: async (
-    _ra: string,
-    _amount?: number,
     _start?: number,
     _end?: number,
+    _amount?: number,
     _exclusiveStartKey?: {
-      action_id: string
-      start_date: number
+      actionId: string
+      startDate: number
     }
   ) => {
-    return []
+    return {
+      actions: [],
+      lastEvaluatedKey: {
+        actionId: '',
+        startDate: 0
+      }
+    }
   },
 
   activitiesPaginationCounter: 1,
@@ -115,21 +146,21 @@ const defaultContext: ActionContextType = {
 
   updateAction: async (
     _actionId: string,
-    _newOwnerRa?: string,
     _newStartDate?: number,
     _newEndDate?: number,
     _newDuration?: number,
-    _newStoryId?: number | -1,
+    _newStoryId?: number,
     _newTitle?: string,
-    _newDescription?: string | '',
+    _newDescription?: string,
     _newProjectCode?: string,
-    _newAssociatedMembersRa?: string[],
+    _newAssociatedMembersUserIds?: string[],
     _newStackTags?: STACK[],
-    _newActionTypeTag?: ACTION_TYPE
+    _newActionTypeTag?: ACTION_TYPE,
+    _newisValid?: boolean
   ) => {
     return undefined
   },
-  getMember: async (_ra: string) => {
+  getMember: async () => {
     return undefined
   },
 
@@ -183,10 +214,43 @@ export function ActionProvider({ children }: PropsWithChildren) {
   const [membersSelected, setMembersSelected] = useState<Member[] | undefined>(
     undefined
   )
+  const [fullHistory, setFullHistory] = useState<historyResponse>({
+    actions: [],
+    lastEvaluatedKey: {
+      actionId: '',
+      startDate: 0
+    }
+  })
 
-  async function createAction(action: Action) {
+  async function createAction(
+    startDate: number,
+    title: string,
+    description: string,
+    actionId: string,
+    isValid: boolean,
+    endDate: number,
+    duration: number,
+    projectCode: string,
+    storyId?: number,
+    associatedMembersUserIds?: string[],
+    stackTags?: STACK[],
+    actionTypeTag?: ACTION_TYPE
+  ) {
     try {
-      const createdAction = await createActionUsecase.execute(action)
+      const createdAction = await createActionUsecase.execute(
+        startDate,
+        title,
+        description,
+        actionId,
+        isValid,
+        endDate,
+        duration,
+        projectCode,
+        storyId,
+        associatedMembersUserIds,
+        stackTags,
+        actionTypeTag
+      )
       setCreatedActions([...createdActions, createdAction])
       return createdAction
     } catch (error: any) {
@@ -205,39 +269,38 @@ export function ActionProvider({ children }: PropsWithChildren) {
   }
 
   async function getHistory(
-    ra: string,
-    amount?: number,
-    start?: number,
-    end?: number,
+    start?: number, // milissegundos da data do inicio das actions
+    end?: number, // milissegundos da data de fim da action (vai até essa data contando ela mesma)
+    amount?: number, // quantidade de actions retornadas
     exclusiveStartKey?: {
-      action_id: string
-      start_date: number
+      actionId: string
+      startDate: number
     }
   ) {
     try {
       const { actions, lastEvaluatedKey } = await getHistoryUsecase.execute(
-        ra,
-        amount as number,
         start,
         end,
+        amount,
         exclusiveStartKey
       )
+      setFullHistory({ actions, lastEvaluatedKey })
       setHistory(actions)
       setFirstEvaluatedKey(
         actions[(activitiesPaginationCounter - 1) * 20].actionId
       )
       setLastEvaluatedKeyResponse(lastEvaluatedKey)
-      setStartDate(lastEvaluatedKey.start_date)
-      return actions
+      setStartDate(lastEvaluatedKey.startDate)
+      return fullHistory
     } catch (error: any) {
       console.error('Something went wrong on get history: ', error)
     }
-    return await history
+    return fullHistory
   }
 
-  async function getMember(ra: string) {
+  async function getMember() {
     try {
-      const member = await getMembersUsecase.execute(ra)
+      const member = await getMembersUsecase.execute()
 
       return member
     } catch (error: any) {
@@ -257,30 +320,30 @@ export function ActionProvider({ children }: PropsWithChildren) {
 
   async function updateAction(
     actionId: string,
-    newOwnerRa?: string,
     newStartDate?: number,
     newEndDate?: number,
     newDuration?: number,
-    newStoryId?: number | -1,
+    newStoryId?: number,
     newTitle?: string,
-    newDescription?: string | '',
+    newDescription?: string,
     newProjectCode?: string,
-    newAssociatedMembersRa?: string[],
+    newAssociatedMembersUserIds?: string[],
     newStackTags?: STACK[],
-    newActionTypeTag?: ACTION_TYPE
+    newActionTypeTag?: ACTION_TYPE,
+    newisValid?: boolean
   ) {
     try {
       const updatedAction = await updateActionUsecase.execute(
         actionId,
-        newOwnerRa,
         newStartDate,
         newEndDate,
         newDuration,
         newStoryId,
+        newisValid,
         newTitle,
         newDescription,
         newProjectCode,
-        newAssociatedMembersRa,
+        newAssociatedMembersUserIds,
         newStackTags,
         newActionTypeTag
       )
