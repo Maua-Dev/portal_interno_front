@@ -1,11 +1,10 @@
 import { Member } from '../../../../../src/@clean/shared/domain/entities/member'
-import { Project } from '../../../../../src/@clean/shared/domain/entities/project'
 import { ACTIVE } from '../../../../../src/@clean/shared/domain/enums/active_enum'
 import { COURSE } from '../../../../../src/@clean/shared/domain/enums/course_enum'
 import { ROLE } from '../../../../../src/@clean/shared/domain/enums/role_enum'
 import { STACK } from '../../../../../src/@clean/shared/domain/enums/stack_enum'
 import { EntityError } from '../../../../../src/@clean/shared/domain/helpers/errors/domain_error'
-import '@testing-library/jest-dom'
+import { test, expect } from 'vitest'
 
 test('Test Member Entity', () => {
   const member = new Member({
@@ -19,13 +18,8 @@ test('Test Member Entity', () => {
     course: COURSE.ECM,
     hiredDate: 10,
     active: ACTIVE.ACTIVE,
-    projects: [
-      new Project({
-        code: 'PI',
-        name: 'Portal Interno',
-        description: 'Site controle de membros'
-      })
-    ]
+    emailDev: 'furlan.devmaua@gmail.com',
+    userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
   })
   expect(member).toBeInstanceOf(Member)
 })
@@ -42,13 +36,8 @@ test('Test Member Entity RA', () => {
     course: COURSE.ECM,
     hiredDate: 10,
     active: ACTIVE.ACTIVE,
-    projects: [
-      new Project({
-        code: 'PI',
-        name: 'Portal Interno',
-        description: 'Site controle de membros'
-      })
-    ]
+    emailDev: 'furlan.devmaua@gmail.com',
+    userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
   })
   expect(member.ra).toBe('21002100')
 })
@@ -65,13 +54,8 @@ test('Test Member Entity Name', () => {
     course: COURSE.ECM,
     hiredDate: 10,
     active: ACTIVE.ACTIVE,
-    projects: [
-      new Project({
-        code: 'PI',
-        name: 'Portal Interno',
-        description: 'Site controle de membros'
-      })
-    ]
+    emailDev: 'furlan.devmaua@gmail.com',
+    userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
   })
   expect(member.name).toBe('Furlan mata pomba')
 })
@@ -88,13 +72,8 @@ test('Test Member Entity email', () => {
     course: COURSE.ECM,
     hiredDate: 10,
     active: ACTIVE.ACTIVE,
-    projects: [
-      new Project({
-        code: 'PI',
-        name: 'Portal Interno',
-        description: 'Site controle de membros'
-      })
-    ]
+    emailDev: 'furlan.devmaua@gmail.com',
+    userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
   })
   expect(member.email).toBe('furlas@maua.br')
 })
@@ -111,13 +90,8 @@ test('Test Member Entity role', () => {
     course: COURSE.ECM,
     hiredDate: 10,
     active: ACTIVE.ACTIVE,
-    projects: [
-      new Project({
-        code: 'PI',
-        name: 'Portal Interno',
-        description: 'Site controle de membros'
-      })
-    ]
+    emailDev: 'furlan.devmaua@gmail.com',
+    userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
   })
   expect(member.role).toBe(ROLE.DEV)
   expect(Object.values(ROLE)).toContain(member.role)
@@ -135,13 +109,8 @@ test('Test Member Entity stack', () => {
     course: COURSE.ECM,
     hiredDate: 10,
     active: ACTIVE.ACTIVE,
-    projects: [
-      new Project({
-        code: 'PI',
-        name: 'Portal Interno',
-        description: 'Site controle de membros'
-      })
-    ]
+    emailDev: 'furlan.devmaua@gmail.com',
+    userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
   })
   expect(member.stack).toBe(STACK.FRONTEND)
   expect(Object.values(STACK)).toContain(member.stack)
@@ -159,13 +128,8 @@ test('Test Member Entity year', () => {
     course: COURSE.ECM,
     hiredDate: 10,
     active: ACTIVE.ACTIVE,
-    projects: [
-      new Project({
-        code: 'PI',
-        name: 'Portal Interno',
-        description: 'Site controle de membros'
-      })
-    ]
+    emailDev: 'furlan.devmaua@gmail.com',
+    userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
   })
   expect(member.year).toBe(2)
 })
@@ -182,13 +146,8 @@ test('Test Member Entity cellphone', () => {
     course: COURSE.ECM,
     hiredDate: 10,
     active: ACTIVE.ACTIVE,
-    projects: [
-      new Project({
-        code: 'PI',
-        name: 'Portal Interno',
-        description: 'Site controle de membros'
-      })
-    ]
+    emailDev: 'furlan.devmaua@gmail.com',
+    userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
   })
   expect(member.cellphone).toBe('11999999999')
 })
@@ -205,13 +164,8 @@ test('Test Member Entity course', () => {
     course: COURSE.ECM,
     hiredDate: 10,
     active: ACTIVE.ACTIVE,
-    projects: [
-      new Project({
-        code: 'PI',
-        name: 'Portal Interno',
-        description: 'Site controle de membros'
-      })
-    ]
+    emailDev: 'furlan.devmaua@gmail.com',
+    userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
   })
   expect(member.course).toBe(COURSE.ECM)
   expect(Object.values(COURSE)).toContain(member.course)
@@ -229,13 +183,8 @@ test('Test Member Entity hiredDate', () => {
     course: COURSE.ECM,
     hiredDate: 10,
     active: ACTIVE.ACTIVE,
-    projects: [
-      new Project({
-        code: 'PI',
-        name: 'Portal Interno',
-        description: 'Site controle de membros'
-      })
-    ]
+    emailDev: 'furlan.devmaua@gmail.com',
+    userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
   })
   expect(member.hiredDate).toBe(10)
 })
@@ -252,13 +201,8 @@ test('Test Member Entity deactivatedDate', () => {
     course: COURSE.ECM,
     hiredDate: 10,
     active: ACTIVE.ACTIVE,
-    projects: [
-      new Project({
-        code: 'PI',
-        name: 'Portal Interno',
-        description: 'Site controle de membros'
-      })
-    ]
+    emailDev: 'furlan.devmaua@gmail.com',
+    userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
   })
   expect(member.deactivatedDate).toBe(-1)
 })
@@ -275,19 +219,14 @@ test('Test Member Entity active', () => {
     course: COURSE.ECM,
     hiredDate: 10,
     active: ACTIVE.ACTIVE,
-    projects: [
-      new Project({
-        code: 'PI',
-        name: 'Portal Interno',
-        description: 'Site controle de membros'
-      })
-    ]
+    emailDev: 'furlan.devmaua@gmail.com',
+    userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
   })
   expect(member.active).toBe(ACTIVE.ACTIVE)
   expect(Object.values(ACTIVE)).toContain(member.active)
 })
 
-test('Test Member Entity projects', () => {
+test('Test Member Entity emailDev', () => {
   const member = new Member({
     name: 'Furlan mata pomba',
     email: 'furlas@maua.br',
@@ -299,27 +238,11 @@ test('Test Member Entity projects', () => {
     course: COURSE.ECM,
     hiredDate: 10,
     active: ACTIVE.ACTIVE,
-    projects: [
-      new Project({
-        code: 'PI',
-        name: 'Portal Interno',
-        description: 'Site controle de membros'
-      })
-    ]
+    emailDev: 'furlan.devmaua@gmail.com',
+    userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
   })
 
-  const expectedProject = {
-    code: 'PI',
-    name: 'Portal Interno',
-    description: 'Site controle de membros'
-  }
-
-  const receivedProject = member.projects[0].props
-
-  expect(member.projects.length).toBe(1)
-  expect(receivedProject.code).toEqual(expectedProject.code)
-  expect(receivedProject.name).toEqual(expectedProject.name)
-  expect(receivedProject.description).toEqual(expectedProject.description)
+  expect(member.emailDev).toBe('furlan.devmaua@gmail.com')
 })
 
 test('Test Member Entity to JSON', () => {
@@ -334,13 +257,8 @@ test('Test Member Entity to JSON', () => {
     course: COURSE.ECM,
     hiredDate: 10,
     active: ACTIVE.ACTIVE,
-    projects: [
-      new Project({
-        code: 'PI',
-        name: 'Portal Interno',
-        description: 'Site controle de membros'
-      })
-    ]
+    emailDev: 'furlan.devmaua@gmail.com',
+    userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
   })
 
   expect(member.toJSON()).toEqual({
@@ -352,16 +270,11 @@ test('Test Member Entity to JSON', () => {
     year: 2,
     cellphone: '11999999999',
     course: COURSE.ECM,
-    deactivatedDate: -1,
-    hiredDate: 10,
+    deactivated_date: -1,
+    hired_date: 10,
     active: ACTIVE.ACTIVE,
-    projects: [
-      new Project({
-        code: 'PI',
-        name: 'Portal Interno',
-        description: 'Site controle de membros'
-      })
-    ]
+    email_dev: 'furlan.devmaua@gmail.com',
+    user_id: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
   })
 
   expect(member.toJSON()).toBeInstanceOf(Object)
@@ -369,23 +282,21 @@ test('Test Member Entity to JSON', () => {
 
 test('Test Member Entity from JSON', () => {
   const member = {
-    name: 'Furlan mata pomba',
-    email: 'furlas@maua.br',
-    ra: '21002100',
-    role: 'DEV',
-    stack: 'FRONTEND',
-    year: 2,
-    cellphone: '11999999999',
-    course: 'ECM',
-    hired_date: 10,
-    active: 'ACTIVE',
-    projects: [
-      {
-        code: 'PI',
-        name: 'Portal Interno',
-        description: 'Site controle de membros'
-      }
-    ]
+    member: {
+      name: 'Furlan mata pomba',
+      email: 'furlas@maua.br',
+      ra: '21002100',
+      role: 'DEV',
+      stack: 'FRONTEND',
+      year: 2,
+      cellphone: '11999999999',
+      course: 'ECM',
+      hired_date: 10,
+      active: 'ACTIVE',
+      email_dev: 'furlan.devmaua@gmail.com',
+      user_id: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
+    },
+    message: 'Member created successfully'
   }
 
   const memberFromJSON = Member.fromJSON(member)
@@ -406,13 +317,8 @@ test('Test Member Entity with invalid name', () => {
       course: COURSE.ECM,
       hiredDate: 10,
       active: ACTIVE.ACTIVE,
-      projects: [
-        new Project({
-          code: 'PI',
-          name: 'Portal Interno',
-          description: 'Site controle de membros'
-        })
-      ]
+      emailDev: 'furlan.devmaua@gmail.com',
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
     })
   }).toThrowError(EntityError)
   expect(() => {
@@ -427,13 +333,8 @@ test('Test Member Entity with invalid name', () => {
       course: COURSE.ECM,
       hiredDate: 10,
       active: ACTIVE.ACTIVE,
-      projects: [
-        new Project({
-          code: 'PI',
-          name: 'Portal Interno',
-          description: 'Site controle de membros'
-        })
-      ]
+      emailDev: 'furlan.devmaua@gmail.com',
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
     })
   }).toThrowError('Field props.name is not valid')
 })
@@ -451,13 +352,8 @@ test('Test Member Entity with invalid email', () => {
       course: COURSE.ECM,
       hiredDate: 10,
       active: ACTIVE.ACTIVE,
-      projects: [
-        new Project({
-          code: 'PI',
-          name: 'Portal Interno',
-          description: 'Site controle de membros'
-        })
-      ]
+      emailDev: 'furlan.devmaua@gmail.com',
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
     })
   }).toThrowError(EntityError)
   expect(() => {
@@ -472,13 +368,8 @@ test('Test Member Entity with invalid email', () => {
       course: COURSE.ECM,
       hiredDate: 10,
       active: ACTIVE.ACTIVE,
-      projects: [
-        new Project({
-          code: 'PI',
-          name: 'Portal Interno',
-          description: 'Site controle de membros'
-        })
-      ]
+      emailDev: 'furlan.devmaua@gmail.com',
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
     })
   }).toThrowError('Field props.email is not valid')
 })
@@ -496,13 +387,8 @@ test('Test Member Entity with invalid ra', () => {
       course: COURSE.ECM,
       hiredDate: 10,
       active: ACTIVE.ACTIVE,
-      projects: [
-        new Project({
-          code: 'PI',
-          name: 'Portal Interno',
-          description: 'Site controle de membros'
-        })
-      ]
+      emailDev: 'furlan.devmaua@gmail.com',
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
     })
   }).toThrowError(EntityError)
   expect(() => {
@@ -517,13 +403,8 @@ test('Test Member Entity with invalid ra', () => {
       course: COURSE.ECM,
       hiredDate: 10,
       active: ACTIVE.ACTIVE,
-      projects: [
-        new Project({
-          code: 'PI',
-          name: 'Portal Interno',
-          description: 'Site controle de membros'
-        })
-      ]
+      emailDev: 'furlan.devmaua@gmail.com',
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
     })
   }).toThrowError('Field props.ra is not valid')
 })
@@ -541,13 +422,8 @@ test('Test Member Entity with invalid year', () => {
       course: COURSE.ECM,
       hiredDate: 10,
       active: ACTIVE.ACTIVE,
-      projects: [
-        new Project({
-          code: 'PI',
-          name: 'Portal Interno',
-          description: 'Site controle de membros'
-        })
-      ]
+      emailDev: 'furlan.devmaua@gmail.com',
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
     })
   }).toThrowError(EntityError)
   expect(() => {
@@ -562,13 +438,8 @@ test('Test Member Entity with invalid year', () => {
       course: COURSE.ECM,
       hiredDate: 10,
       active: ACTIVE.ACTIVE,
-      projects: [
-        new Project({
-          code: 'PI',
-          name: 'Portal Interno',
-          description: 'Site controle de membros'
-        })
-      ]
+      emailDev: 'furlan.devmaua@gmail.com',
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
     })
   }).toThrowError('Field props.year is not valid')
 })
@@ -586,13 +457,8 @@ test('Test Member Entity with invalid cellphone', () => {
       course: COURSE.ECM,
       hiredDate: 10,
       active: ACTIVE.ACTIVE,
-      projects: [
-        new Project({
-          code: 'PI',
-          name: 'Portal Interno',
-          description: 'Site controle de membros'
-        })
-      ]
+      emailDev: 'furlan.devmaua@gmail.com',
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
     })
   }).toThrowError(EntityError)
   expect(() => {
@@ -607,13 +473,8 @@ test('Test Member Entity with invalid cellphone', () => {
       course: COURSE.ECM,
       hiredDate: 10,
       active: ACTIVE.ACTIVE,
-      projects: [
-        new Project({
-          code: 'PI',
-          name: 'Portal Interno',
-          description: 'Site controle de membros'
-        })
-      ]
+      emailDev: 'furlan.devmaua@gmail.com',
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
     })
   }).toThrowError('Field props.cellphone is not valid')
 })
@@ -631,13 +492,8 @@ test('Test Member Entity with invalid hiredDate', () => {
       course: COURSE.ECM,
       hiredDate: -1,
       active: ACTIVE.ACTIVE,
-      projects: [
-        new Project({
-          code: 'PI',
-          name: 'Portal Interno',
-          description: 'Site controle de membros'
-        })
-      ]
+      emailDev: 'furlan.devmaua@gmail.com',
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
     })
   }).toThrowError(EntityError)
   expect(() => {
@@ -652,13 +508,8 @@ test('Test Member Entity with invalid hiredDate', () => {
       course: COURSE.ECM,
       hiredDate: -1,
       active: ACTIVE.ACTIVE,
-      projects: [
-        new Project({
-          code: 'PI',
-          name: 'Portal Interno',
-          description: 'Site controle de membros'
-        })
-      ]
+      emailDev: 'furlan.devmaua@gmail.com',
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
     })
   }).toThrowError('Field props.hiredDate is not valid')
 })
@@ -677,13 +528,8 @@ test('Test Member Entity with invalid deactivatedDate', () => {
       hiredDate: 10,
       deactivatedDate: -2,
       active: ACTIVE.ACTIVE,
-      projects: [
-        new Project({
-          code: 'PI',
-          name: 'Portal Interno',
-          description: 'Site controle de membros'
-        })
-      ]
+      emailDev: 'furlan.devmaua@gmail.com',
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
     })
   }).toThrowError(EntityError)
   expect(() => {
@@ -699,50 +545,10 @@ test('Test Member Entity with invalid deactivatedDate', () => {
       hiredDate: 10,
       deactivatedDate: -2,
       active: ACTIVE.ACTIVE,
-      projects: [
-        new Project({
-          code: 'PI',
-          name: 'Portal Interno',
-          description: 'Site controle de membros'
-        })
-      ]
+      emailDev: 'furlan.devmaua@gmail.com',
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
     })
   }).toThrowError('Field props.deactivatedDate is not valid')
-})
-
-test('Test Member Entity with empty projects', () => {
-  expect(() => {
-    new Member({
-      name: 'Furlan mata pomba',
-      email: 'furlas@maua.br',
-      ra: '21002100',
-      role: ROLE.DEV,
-      stack: STACK.FRONTEND,
-      year: 2,
-      cellphone: '11999999999',
-      course: COURSE.ECM,
-      hiredDate: 10,
-
-      active: ACTIVE.ACTIVE,
-      projects: []
-    })
-  }).not.toThrowError(EntityError)
-  expect(() => {
-    new Member({
-      name: 'Furlan mata pomba',
-      email: 'furlas@maua.br',
-      ra: '21002100',
-      role: ROLE.DEV,
-      stack: STACK.FRONTEND,
-      year: 2,
-      cellphone: '11999999999', //11999999999
-      course: COURSE.ECM,
-      hiredDate: 10,
-
-      active: ACTIVE.ACTIVE,
-      projects: []
-    })
-  }).not.toThrowError('Field props.projects is not valid')
 })
 
 test('Test Member Entity with deactivatedDate prop', () => {
@@ -758,13 +564,8 @@ test('Test Member Entity with deactivatedDate prop', () => {
     hiredDate: 10,
     deactivatedDate: 20,
     active: ACTIVE.DISCONNECTED,
-    projects: [
-      new Project({
-        code: 'PI',
-        name: 'Portal Interno',
-        description: 'Site controle de membros'
-      })
-    ]
+    emailDev: 'furlan.devmaua@gmail.com',
+    userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
   })
   expect(member).toBeInstanceOf(Member)
   expect(member.deactivatedDate).toBe(20)
