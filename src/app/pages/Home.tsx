@@ -8,7 +8,9 @@ export default function Home() {
       <Navbar />
       <main
         className={`h-screen w-full ${darkMode ? 'bg-black' : 'bg-sky-200'}`}
-      ></main>
+      >
+        <h1 className="bg-red-800 text-center text-white">teste</h1>
+      </main>
     </>
   )
 }
