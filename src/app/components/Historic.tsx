@@ -36,8 +36,8 @@ export default function Historic() {
   }
 
   const loadHistoricByRA = async () => {
-    const response = await getHistory('19017310', 20)
-    setHistory(response)
+    const response = await getHistory(undefined, undefined, 20)
+    setHistory(response.actions)
   }
 
   const filteredActions = useMemo(() => {

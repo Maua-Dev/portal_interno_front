@@ -1,4 +1,3 @@
-import { uuid } from 'uuidv4'
 import { CreateActionUsecase } from '../../../../../src/@clean/modules/action/usecases/create_action_usecase'
 import { Action } from '../../../../../src/@clean/shared/domain/entities/action'
 import { ACTION_TYPE } from '../../../../../src/@clean/shared/domain/enums/action_type_enum'

@@ -1,4 +1,3 @@
-import { Action } from '../../../shared/domain/entities/action'
 import { NoItemsFoundError } from '../../../shared/domain/helpers/errors/domain_error'
 import { historyResponse } from '../../../shared/infra/repositories/action_repository_http'
 import { IActionRepository } from '../domain/repositories/action_repository_interface'

@@ -12,7 +12,6 @@ import { stackFormatter, stackToEnum } from '../../domain/enums/stack_enum'
 import { roleToEnum } from '../../domain/enums/role_enum'
 import { courseToEnum } from '../../domain/enums/course_enum'
 import { activeToEnum } from '../../domain/enums/active_enum'
-import { Project } from '../../domain/entities/project'
 
 interface getHistoryRawResponse {
   actions: [
@@ -87,16 +86,16 @@ interface updateActionRawResponse {
   message: string
 }
 
-interface projectRawResponse {
-  code: string
-  name: string
-  description: string
-  po_user_id: string
-  scrum_user_id: string
-  start_date: number
-  members_user_ids: number[]
-  photos: string[]
-}
+// interface projectRawResponse {
+//   code: string
+//   name: string
+//   description: string
+//   po_user_id: string
+//   scrum_user_id: string
+//   start_date: number
+//   members_user_ids: number[]
+//   photos: string[]
+// }
 
 interface memberRawResponse {
   member: {

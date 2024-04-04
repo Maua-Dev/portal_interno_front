@@ -348,8 +348,8 @@ export class Action {
 
   static validateDuration(
     duration: number,
-    startDate: number,
-    endDate: number
+    _startDate: number,
+    _endDate: number
   ) {
     if (typeof duration !== 'number') {
       return false
