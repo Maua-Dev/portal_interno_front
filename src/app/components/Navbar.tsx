@@ -9,16 +9,21 @@ import {
   BsSun,
   BsClipboard
 } from 'react-icons/bs'
-import { useEffect, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import useDarkMode from '../utils/functions/useDarkMode'
 import { useNavigate } from 'react-router-dom'
+import Historic from './Historic'
 
 interface window {
   innerWidth: number
   innerHeight: number
 }
 
-export default function Navbar() {
+interface NavbarProps {
+  setMainContent: (content: ReactNode) => void
+}
+
+export default function Navbar({ setMainContent }: NavbarProps) {
   const [hover, setHover] = useState<boolean>(false)
   const { darkMode, toggleDarkMode } = useDarkMode()
   const [windowSize, setWindowSize] = useState<window>(getWindowSize())
@@ -100,7 +105,12 @@ export default function Navbar() {
                   Tarefa
                 </p>
               </div>
-              <div className="flex cursor-pointer select-none gap-8 overflow-x-hidden">
+              <div
+                className="flex cursor-pointer select-none gap-8 overflow-x-hidden"
+                onClick={() => {
+                  setMainContent(<Historic />)
+                }}
+              >
                 <AiOutlineHistory
                   className={`transform cursor-pointer ${
                     !darkMode ? 'text-gray-700' : 'text-white'

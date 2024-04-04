@@ -21,7 +21,7 @@ body {
   }
   .theme-white {
     --color-background: #cccccc;
-    --color-secundary: #eceaf5;
+    --color-secundary: #ffffff;
     --color-text-base: #000000;
     --color-text-muted: #4d4d4d;
     --color-text-inverted: #6666ff;
