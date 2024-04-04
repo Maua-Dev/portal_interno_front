@@ -28,7 +28,7 @@ jobs:
         run:
           yarn install
       - name: Run tests
-        run: yarn test --coverage --watchAll=false
+        run: yarn test:run
       
       - name: Build Next.js app
         run: yarn build
