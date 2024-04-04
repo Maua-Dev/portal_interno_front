@@ -3,25 +3,29 @@ import { COURSE, courseToEnum } from '../enums/course_enum'
 import { ROLE, roleToEnum } from '../enums/role_enum'
 import { STACK, stackToEnum } from '../enums/stack_enum'
 import { EntityError } from '../helpers/errors/domain_error'
-import { Project } from './project'
 
 export type JsonProps = {
-  name: string
-  email: string
-  ra: string
-  role: string
-  stack: string
-  year: number
-  cellphone: string
-  course: string
-  hired_date: number
-  deactivated_date?: number
-  active: string
-  projects: Object[] // Project
+  member: {
+    name: string
+    email_dev: string
+    email: string
+    ra: string
+    role: string
+    stack: string
+    year: number
+    cellphone: string
+    course: string
+    hired_date: number
+    deactivated_date?: number
+    active: string
+    user_id: string
+  }
+  message: string
 }
 
 export type MemberProps = {
   name: string
+  emailDev: string
   email: string
   ra: string
   role: ROLE // ENUM
@@ -32,7 +36,7 @@ export type MemberProps = {
   hiredDate: number
   deactivatedDate?: number
   active: ACTIVE // ENUM
-  projects: Project[] // Project
+  userId: string
 }
 
 export class Member {
@@ -100,11 +104,6 @@ export class Member {
       throw new EntityError('props.active')
     }
     this.props.active = props.active
-
-    if (!Member.validateProjects(props.projects)) {
-      throw new EntityError('props.projects')
-    }
-    this.props.projects = props.projects
   }
 
   // Getters and Setters
@@ -238,15 +237,26 @@ export class Member {
     this.props.active = active
   }
 
-  get projects() {
-    return this.props.projects
+  get userId() {
+    return this.props.userId
   }
 
-  set projects(projects: Project[]) {
-    if (!Member.validateProjects(projects)) {
-      throw new EntityError('projects')
+  set userId(userId: string) {
+    if (!Member.validateUserId(userId)) {
+      throw new EntityError('userId')
     }
-    this.props.projects = projects
+    this.props.userId = userId
+  }
+
+  get emailDev() {
+    return this.props.emailDev
+  }
+
+  set emailDev(emailDev: string) {
+    if (!Member.validateEmailDev(emailDev)) {
+      throw new EntityError('emailDev')
+    }
+    this.props.emailDev = emailDev
   }
 
   // JSON conversion
@@ -254,6 +264,7 @@ export class Member {
   toJSON() {
     return {
       name: this.name,
+      email_dev: this.emailDev,
       email: this.email,
       ra: this.ra,
       role: this.role,
@@ -261,27 +272,28 @@ export class Member {
       year: this.year,
       cellphone: this.cellphone,
       course: this.course,
-      hiredDate: this.hiredDate,
-      deactivatedDate: this.deactivatedDate,
+      hired_date: this.hiredDate,
+      deactivated_date: this.deactivatedDate,
       active: this.active,
-      projects: this.projects
+      user_id: this.userId
     }
   }
 
   static fromJSON(json: JsonProps) {
     return new Member({
-      name: json.name,
-      email: json.email,
-      ra: json.ra,
-      role: roleToEnum(json.role),
-      stack: stackToEnum(json.stack),
-      year: json.year,
-      cellphone: json.cellphone,
-      course: courseToEnum(json.course),
-      hiredDate: json.hired_date,
-      deactivatedDate: json.deactivated_date,
-      active: activeToEnum(json.active),
-      projects: json.projects.map((project: any) => Project.fromJSON(project))
+      name: json.member.name,
+      emailDev: json.member.email_dev,
+      email: json.member.email,
+      ra: json.member.ra,
+      role: roleToEnum(json.member.role),
+      stack: stackToEnum(json.member.stack),
+      year: json.member.year,
+      cellphone: json.member.cellphone,
+      course: courseToEnum(json.member.course),
+      hiredDate: json.member.hired_date,
+      deactivatedDate: json.member.deactivated_date,
+      active: activeToEnum(json.member.active),
+      userId: json.member.user_id
     })
   }
 
@@ -401,18 +413,25 @@ export class Member {
     return true
   }
 
-  static validateProjects(projects: Project[]) {
-    if (projects == null) {
+  static validateUserId(userId: string) {
+    if (userId == null) {
       return false
-    } else if (Array.isArray(projects) === false) {
+    } else if (typeof userId !== 'string') {
+      return false
+    } else if (userId.length !== 36) {
       return false
     }
-    // else if (projects.length === 0) {
-    //   return false
-    // }
-    else if (
-      projects.every((project) => typeof project === 'object') === false
-    ) {
+    return true
+  }
+
+  static validateEmailDev(emailDev: string) {
+    const regexEmail = /^\w+\.devmaua@gmail\.com$/
+
+    if (emailDev == null) {
+      return false
+    } else if (typeof emailDev !== 'string') {
+      return false
+    } else if (!emailDev.match(regexEmail)) {
       return false
     }
     return true

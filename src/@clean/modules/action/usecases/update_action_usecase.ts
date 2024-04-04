@@ -9,15 +9,15 @@ export class UpdateActionUsecase {
 
   async execute(
     actionId: string,
-    newOwnerRa?: string,
     newStartDate?: number,
     newEndDate?: number,
     newDuration?: number,
     newStoryId?: number | -1,
+    newIsValid?: boolean,
     newTitle?: string,
     newDescription?: string | '',
     newProjectCode?: string,
-    newAssociatedMembersRa?: string[],
+    newAssociatedMembersUserÌds?: string[],
     newStackTags?: STACK[],
     newActionTypeTag?: ACTION_TYPE
   ): Promise<Action> {
@@ -25,17 +25,16 @@ export class UpdateActionUsecase {
       throw new EntityError('actionId')
     }
 
-    if (newOwnerRa && !Action.validateOwnerRa(newOwnerRa)) {
-      throw new EntityError('ownerRa')
-    }
-
     if (newStartDate && !Action.validateStartDate(newStartDate)) {
       throw new EntityError('startDate')
     }
 
     if (newEndDate && newStartDate) {
-      if (!Action.validateEndDate(newEndDate, newStartDate))
-        throw new EntityError('endDate')
+      if (!Action.validateEndDate(newEndDate)) throw new EntityError('endDate')
+    }
+
+    if (newIsValid && typeof newIsValid !== 'boolean') {
+      throw new EntityError('isValid')
     }
 
     if (
@@ -64,10 +63,10 @@ export class UpdateActionUsecase {
     }
 
     if (
-      newAssociatedMembersRa &&
-      !Action.validateAssociatedMembersRa(newAssociatedMembersRa)
+      newAssociatedMembersUserÌds &&
+      !Action.validateAssociatedMembersUserIds(newAssociatedMembersUserÌds)
     ) {
-      throw new EntityError('associatedMembersRa')
+      throw new EntityError('associatedMembersUserIds')
     }
 
     if (newStackTags && !Action.validateStackTags(newStackTags)) {
@@ -80,7 +79,6 @@ export class UpdateActionUsecase {
 
     return this.actionRepo.updateAction(
       actionId,
-      newOwnerRa,
       newStartDate,
       newEndDate,
       newDuration,
@@ -88,9 +86,10 @@ export class UpdateActionUsecase {
       newTitle,
       newDescription,
       newProjectCode,
-      newAssociatedMembersRa,
+      newAssociatedMembersUserÌds,
       newStackTags,
-      newActionTypeTag
+      newActionTypeTag,
+      newIsValid
     )
   }
 }

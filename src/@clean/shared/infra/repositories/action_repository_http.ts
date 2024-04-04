@@ -4,33 +4,29 @@ import { AssociatedAction } from '../../domain/entities/associated_action'
 import { decorate, injectable } from 'inversify'
 import { AxiosInstance } from 'axios'
 import { IActionRepository } from '../../../modules/action/domain/repositories/action_repository_interface'
-import {
-  associatedMembersRaFormatter,
-  raFormatterFromJson,
-  raFormatterToJson
-} from '../../../../app/utils/functions/formatters'
+import { raFormatterFromJson } from '../../../../app/utils/functions/formatters'
 import { ACTION_TYPE } from '../../domain/enums/action_type_enum'
 import { STACK } from '../../domain/enums/stack_enum'
-import { Member } from '../../domain/entities/member'
+import { JsonProps, Member } from '../../domain/entities/member'
 import { stackFormatter, stackToEnum } from '../../domain/enums/stack_enum'
 import { roleToEnum } from '../../domain/enums/role_enum'
 import { courseToEnum } from '../../domain/enums/course_enum'
 import { activeToEnum } from '../../domain/enums/active_enum'
-import { Project } from '../../domain/entities/project'
 
 interface getHistoryRawResponse {
   actions: [
     {
-      owner_ra: string
+      user_id: string
       start_date: number
       end_date: number
       duration: number
       action_id: string
+      is_valid: boolean
       story_id?: number
       title: string
       description?: string
       project_code: string
-      associated_members_ra?: string[]
+      associated_members_user_ids?: string[]
       stack_tags: string[]
       action_type_tag: string
     }
@@ -45,37 +41,39 @@ interface getHistoryRawResponse {
 export interface historyResponse {
   actions: Action[]
   lastEvaluatedKey: {
-    action_id: string
-    start_date: number
+    actionId: string
+    startDate: number
   }
 }
+
 interface createActionBodyRequest {
-  owner_ra: string
   start_date: number
-  story_id: number | undefined
   title: string
-  description: string | undefined
+  description: string | ''
+  action_id: string
+  is_valid: boolean
   end_date: number
   duration: number
   project_code: string
-  associated_members_ra: string[] | undefined
-  stack_tags: string[]
-  action_type_tag: string
+  story_id?: number
+  associated_members_user_ids?: string[]
+  stack_tags?: string[]
+  action_type_tag?: string
 }
 
 interface updateActionBodyRequest {
   action_id: string
-  new_owner_ra: string | undefined
-  new_start_date: number | undefined
-  new_end_date: number | undefined
-  new_duration: number | undefined
-  new_story_id: number | undefined
-  new_associated_members_ra: string[] | undefined
-  new_title: string | undefined
-  new_description: string | undefined
-  new_project_code: string | undefined
-  new_stack_tags: string[] | undefined
-  new_action_type_tag: string | undefined
+  new_start_date?: number
+  new_end_date?: number
+  new_duration?: number
+  new_story_id?: number
+  new_associated_members_user_ids?: string[]
+  new_title?: string
+  new_description?: string
+  new_project_code?: string
+  new_stack_tags?: string[]
+  new_action_type_tag?: string
+  new_is_valid?: boolean
 }
 
 interface createActionRawResponse {
@@ -88,16 +86,16 @@ interface updateActionRawResponse {
   message: string
 }
 
-interface projectRawResponse {
-  code: string
-  name: string
-  description: string
-  po_RA: string
-  scrum_RA: string
-  start_date: number
-  members: number[]
-  photos: string[]
-}
+// interface projectRawResponse {
+//   code: string
+//   name: string
+//   description: string
+//   po_user_id: string
+//   scrum_user_id: string
+//   start_date: number
+//   members_user_ids: number[]
+//   photos: string[]
+// }
 
 interface memberRawResponse {
   member: {
@@ -113,7 +111,7 @@ interface memberRawResponse {
     hired_date: number
     deactivated_date?: number
     active: string
-    projects: projectRawResponse[] // Project
+    user_id: string
   }
 }
 
@@ -125,28 +123,34 @@ export class ActionRepositoryHttp implements IActionRepository {
   constructor(private http: AxiosInstance) {}
   async updateAction(
     actionId: string,
-    newOwnerRa?: string | undefined,
-    newStartDate?: number | undefined,
-    newEndDate?: number | undefined,
-    newDuration?: number | undefined,
-    newStoryId?: number | undefined,
-    newTitle?: string | undefined,
-    newDescription?: string | undefined,
-    newProjectCode?: string | undefined,
-    newAssociatedMembersRa?: string[] | undefined,
-    newStackTags?: STACK[] | undefined,
-    newActionTypeTag?: ACTION_TYPE | undefined
+    newStartDate?: number,
+    newEndDate?: number,
+    newDuration?: number,
+    newStoryId?: number,
+    newTitle?: string,
+    newDescription?: string,
+    newProjectCode?: string,
+    newAssociatedMembersUserIds?: string[],
+    newStackTags?: STACK[],
+    newActionTypeTag?: ACTION_TYPE,
+    newisValid?: boolean
   ): Promise<Action> {
     try {
+      const token = localStorage.getItem('idToken')
+
+      if (!token) {
+        throw new Error('Token not found')
+      }
+
       const body: updateActionBodyRequest = {
         action_id: actionId,
-        new_owner_ra: newOwnerRa ? raFormatterToJson(newOwnerRa) : undefined,
         new_start_date: newStartDate ? newStartDate : undefined,
         new_end_date: newEndDate ? newEndDate : undefined,
         new_duration: newDuration ? newDuration : undefined,
         new_story_id: newStoryId ? newStoryId : undefined,
-        new_associated_members_ra: newAssociatedMembersRa
-          ? associatedMembersRaFormatter(newAssociatedMembersRa)
+        new_is_valid: newisValid ? newisValid : undefined,
+        new_associated_members_user_ids: newAssociatedMembersUserIds
+          ? newAssociatedMembersUserIds
           : undefined,
         new_title: newTitle ? newTitle : undefined,
         new_description: newDescription ? newDescription : undefined,
@@ -159,7 +163,12 @@ export class ActionRepositoryHttp implements IActionRepository {
 
       const response = await this.http.put<updateActionRawResponse>(
         '/update-action',
-        body
+        body,
+        {
+          headers: {
+            Authorization: 'Bearer ' + token
+          }
+        }
       )
 
       return response.data.action
@@ -169,20 +178,25 @@ export class ActionRepositoryHttp implements IActionRepository {
   }
 
   async getHistoryActions(
-    ra: string,
     amount?: number | undefined,
     start?: number | undefined,
     end?: number | undefined,
     exclusiveStartKey?: {
-      action_id: string
-      start_date: number
+      actionId: string
+      startDate: number
     }
   ): Promise<historyResponse> {
+    const token = localStorage.getItem('idToken')
+
+    if (!token) {
+      throw new Error('Token not found')
+    }
+
     const response: historyResponse = {
       actions: [],
       lastEvaluatedKey: {
-        action_id: '',
-        start_date: 0
+        actionId: '',
+        startDate: 0
       }
     }
     try {
@@ -190,81 +204,96 @@ export class ActionRepositoryHttp implements IActionRepository {
         const firstCase = await this.http.post<getHistoryRawResponse>(
           '/get-history',
           {
-            ra,
             start,
             end,
             amount,
             exclusiveStartKey
+          },
+          {
+            headers: {
+              Authorization: 'Bearer ' + token
+            }
           }
         )
         for (let i = 0; i < firstCase.data.actions.length; i++) {
           response.actions.push(Action.fromJSON(firstCase.data.actions[i]))
         }
         response.lastEvaluatedKey = {
-          action_id: firstCase.data.last_evaluated_key.action_id,
-          start_date: firstCase.data.last_evaluated_key.start_date
+          actionId: firstCase.data.last_evaluated_key.action_id,
+          startDate: firstCase.data.last_evaluated_key.start_date
         }
       } else if (amount && start && end) {
         const secondCase = await this.http.post<getHistoryRawResponse>(
           '/get-history',
           {
-            ra,
             start,
             end,
             amount
+          },
+          {
+            headers: {
+              Authorization: 'Bearer ' + token
+            }
           }
         )
         for (let i = 0; i < secondCase.data.actions.length; i++) {
           response.actions.push(Action.fromJSON(secondCase.data.actions[i]))
         }
         response.lastEvaluatedKey = {
-          action_id: secondCase.data.last_evaluated_key.action_id,
-          start_date: secondCase.data.last_evaluated_key.start_date
+          actionId: secondCase.data.last_evaluated_key.action_id,
+          startDate: secondCase.data.last_evaluated_key.start_date
         }
       } else if (amount && exclusiveStartKey) {
         const thirdCase = await this.http.post<getHistoryRawResponse>(
           '/get-history',
           {
-            ra,
             amount,
             exclusive_start_key: exclusiveStartKey
+          },
+          {
+            headers: {
+              Authorization: 'Bearer ' + token
+            }
           }
         )
         for (let i = 0; i < thirdCase.data.actions.length; i++) {
           response.actions.push(Action.fromJSON(thirdCase.data.actions[i]))
         }
         response.lastEvaluatedKey = {
-          action_id: thirdCase.data.last_evaluated_key.action_id,
-          start_date: thirdCase.data.last_evaluated_key.start_date
+          actionId: thirdCase.data.last_evaluated_key.action_id,
+          startDate: thirdCase.data.last_evaluated_key.start_date
         }
       } else if (amount) {
         const fourthCase = await this.http.post<getHistoryRawResponse>(
           '/get-history',
           {
-            ra,
             amount
+          },
+          {
+            headers: {
+              Authorization: 'Bearer ' + token
+            }
           }
         )
         for (let i = 0; i < fourthCase.data.actions.length; i++) {
           response.actions.push(Action.fromJSON(fourthCase.data.actions[i]))
         }
         response.lastEvaluatedKey = {
-          action_id: fourthCase.data.last_evaluated_key.action_id,
-          start_date: fourthCase.data.last_evaluated_key.start_date
+          actionId: fourthCase.data.last_evaluated_key.action_id,
+          startDate: fourthCase.data.last_evaluated_key.start_date
         }
       } else {
         const fifthCase = await this.http.post<getHistoryRawResponse>(
           '/get-history',
+          {},
           {
-            ra
+            headers: {
+              Authorization: 'Bearer ' + token
+            }
           }
         )
         for (let i = 0; i < fifthCase.data.actions.length; i++) {
           response.actions.push(Action.fromJSON(fifthCase.data.actions[i]))
-        }
-        response.lastEvaluatedKey = {
-          action_id: fifthCase.data.last_evaluated_key.action_id,
-          start_date: fifthCase.data.last_evaluated_key.start_date
         }
       }
 
@@ -274,34 +303,50 @@ export class ActionRepositoryHttp implements IActionRepository {
     }
   }
 
-  async createAction(action: Action): Promise<Action> {
-    const ownerRa = raFormatterToJson(action.ownerRa)
-    const stackTags = stackFormatter(action.stackTags)
-
-    const description = action.description ? action.description : undefined
-    const storyId = action.storyId ? action.storyId : undefined
-    const associatedMembersRa = action.associatedMembersRa
-      ? associatedMembersRaFormatter(action.associatedMembersRa)
-      : undefined
+  async createAction(
+    startDate: number,
+    title: string,
+    description: string,
+    actionId: string,
+    isValid: boolean,
+    endDate: number,
+    duration: number,
+    projectCode: string,
+    storyId?: number,
+    associatedMembersUserIds?: string[],
+    stackTags?: STACK[],
+    actionTypeTag?: ACTION_TYPE
+  ): Promise<Action> {
+    const token = localStorage.getItem('idToken')
+    if (!token) {
+      throw new Error('Token not found')
+    }
+    const stackTagsFormatted = stackFormatter(stackTags as STACK[]) || []
 
     const bodyRequest: createActionBodyRequest = {
-      owner_ra: ownerRa,
-      start_date: action.startDate,
+      start_date: startDate,
       story_id: storyId,
-      title: action.title,
+      title: title,
       description: description,
-      end_date: action.endDate,
-      duration: action.duration,
-      project_code: action.projectCode,
-      associated_members_ra: associatedMembersRa,
-      stack_tags: stackTags,
-      action_type_tag: action.actionTypeTag.toString()
+      action_id: actionId,
+      is_valid: isValid,
+      end_date: endDate,
+      duration: duration,
+      project_code: projectCode,
+      associated_members_user_ids: associatedMembersUserIds,
+      stack_tags: stackTagsFormatted,
+      action_type_tag: actionTypeTag?.toString() || undefined
     }
 
     try {
       const response = await this.http.post<createActionRawResponse>(
         '/create-action',
-        bodyRequest
+        bodyRequest,
+        {
+          headers: {
+            Authorization: 'Bearer ' + token
+          }
+        }
       )
 
       return response.data.action
@@ -310,44 +355,21 @@ export class ActionRepositoryHttp implements IActionRepository {
     }
   }
 
-  async getMember(ra: string): Promise<Member> {
+  async getMember(): Promise<Member> {
     try {
-      const formatedRa = raFormatterToJson(ra)
-
-      const response = await this.http.get<memberRawResponse>(
-        `/get-member/?ra=${formatedRa}`
-      )
-
-      const memberRawResponse = response.data.member
-
-      const projectsArray: Project[] = []
-
-      if (memberRawResponse.projects) {
-        memberRawResponse.projects.map((project) => {
-          return projectsArray.push(
-            new Project({
-              code: project.code,
-              name: project.name,
-              description: project.description
-            })
-          )
-        })
+      const token = localStorage.getItem('idToken')
+      if (!token) {
+        throw new Error('Token not found')
       }
 
-      return new Member({
-        name: memberRawResponse.name,
-        email: memberRawResponse.email,
-        ra: raFormatterFromJson(memberRawResponse.ra),
-        role: roleToEnum(memberRawResponse.role),
-        stack: stackToEnum(memberRawResponse.stack),
-        year: memberRawResponse.year,
-        cellphone: memberRawResponse.cellphone,
-        course: courseToEnum(memberRawResponse.course),
-        hiredDate: memberRawResponse.hired_date,
-        deactivatedDate: memberRawResponse.deactivated_date,
-        active: activeToEnum(memberRawResponse.active),
-        projects: projectsArray
+      const response = await this.http.get<JsonProps>('/get-member', {
+        headers: {
+          Authorization: 'Bearer ' + token
+        }
       })
+
+      const member = Member.fromJSON(response.data)
+      return member
     } catch (error: any) {
       throw new Error('Error Getting All Members: ' + error.message)
     }
@@ -355,31 +377,30 @@ export class ActionRepositoryHttp implements IActionRepository {
 
   async getAllMembers(): Promise<Member[]> {
     try {
+      const token = localStorage.getItem('idToken')
+
+      if (!token) {
+        throw new Error('Token not found')
+      }
+
       const response = await this.http.get<getAllMembersRawResponse>(
-        '/get-all-members'
+        '/get-all-members',
+        {
+          headers: {
+            Authorization: 'Bearer ' + token
+          }
+        }
       )
 
       const membersArray: Member[] = []
 
       response.data.members.map((member) => {
         const memberUnit: memberRawResponse = member
-        const projectsArray: Project[] = []
-
-        if (memberUnit.member.projects) {
-          memberUnit.member.projects.map((project) => {
-            projectsArray.push(
-              new Project({
-                code: project.code,
-                name: project.name,
-                description: project.description
-              })
-            )
-          })
-        }
 
         return membersArray.push(
           new Member({
             name: memberUnit.member.name,
+            emailDev: memberUnit.member.email_dev,
             email: memberUnit.member.email,
             ra: raFormatterFromJson(memberUnit.member.ra),
             role: roleToEnum(memberUnit.member.role),
@@ -390,7 +411,7 @@ export class ActionRepositoryHttp implements IActionRepository {
             hiredDate: memberUnit.member.hired_date,
             deactivatedDate: memberUnit.member.deactivated_date,
             active: activeToEnum(memberUnit.member.active),
-            projects: projectsArray
+            userId: memberUnit.member.user_id
           })
         )
       })
