@@ -18,27 +18,72 @@ export class ActionRepositoryMock implements IActionRepository {
     new Project({
       code: 'MF',
       name: 'Mauá Food',
-      description: 'Aplicativo voltado ao #foramoleza'
+      description: 'Aplicativo voltado ao #foramoleza',
+      poUserId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
+      scrumUserId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
+      startDate: 1612137600000,
+      membersUserIds: [
+        'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
+        '492e9fa2-9189-4fe7-b0f7-e6ca472b19f0',
+        '4a9019df-ab29-453f-8e8d-1cc845492f12'
+      ],
+      photos: ['photo1', 'photo2']
     }),
     new Project({
       code: 'PT',
       name: 'Portifólio',
-      description: 'É o portifólio da nossa entidade'
+      description: 'É o portifólio da nossa entidade',
+      poUserId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
+      scrumUserId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
+      startDate: 1612137600000,
+      membersUserIds: [
+        'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
+        '492e9fa2-9189-4fe7-b0f7-e6ca472b19f0',
+        '4a9019df-ab29-453f-8e8d-1cc845492f12'
+      ],
+      photos: ['photo1', 'photo2']
     }),
     new Project({
       code: 'SM',
       name: 'Smile',
-      description: 'Site do evento Smile Maua'
+      description: 'Site do evento Smile Maua',
+      poUserId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
+      scrumUserId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
+      startDate: 1612137600000,
+      membersUserIds: [
+        'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
+        '492e9fa2-9189-4fe7-b0f7-e6ca472b19f0',
+        '4a9019df-ab29-453f-8e8d-1cc845492f12'
+      ],
+      photos: ['photo1', 'photo2']
     }),
     new Project({
       code: 'GM',
       name: 'Gamificação',
-      description: 'Projeto de gamificação para organização da nossa entidade'
+      description: 'Projeto de gamificação para organização da nossa entidade',
+      poUserId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
+      scrumUserId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
+      startDate: 1612137600000,
+      membersUserIds: [
+        'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
+        '492e9fa2-9189-4fe7-b0f7-e6ca472b19f0',
+        '4a9019df-ab29-453f-8e8d-1cc845492f12'
+      ],
+      photos: ['photo1', 'photo2']
     }),
     new Project({
       code: 'PI',
       name: 'Portal Interno',
-      description: 'Portal interno da nossa entidade'
+      description: 'Portal interno da nossa entidade',
+      poUserId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
+      scrumUserId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
+      startDate: 1612137600000,
+      membersUserIds: [
+        'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
+        '492e9fa2-9189-4fe7-b0f7-e6ca472b19f0',
+        '4a9019df-ab29-453f-8e8d-1cc845492f12'
+      ],
+      photos: ['photo1', 'photo2']
     })
   ]
   private members: Member[] = [
@@ -53,7 +98,8 @@ export class ActionRepositoryMock implements IActionRepository {
       course: COURSE.CIC,
       hiredDate: 1612137600000,
       active: ACTIVE.ACTIVE,
-      projects: [this.projects[1], this.projects[4]]
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
+      emailDev: 'dsiqueira.devmaua@gmail.com'
     }),
     new Member({
       name: 'Bruno fevs',
@@ -66,7 +112,8 @@ export class ActionRepositoryMock implements IActionRepository {
       course: COURSE.ECM,
       hiredDate: 1612137600000,
       active: ACTIVE.ACTIVE,
-      projects: [this.projects[1], this.projects[4]]
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
+      emailDev: 'bfevs.devmaua@maua.com'
     }),
     new Member({
       name: 'Rubicks Cube',
@@ -79,7 +126,8 @@ export class ActionRepositoryMock implements IActionRepository {
       course: COURSE.ECM,
       hiredDate: 1640192165000,
       active: ACTIVE.ACTIVE,
-      projects: [this.projects[1], this.projects[4]]
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
+      emailDev: 'rcube.devmaua@gmai.com'
     }),
     new Member({
       name: 'Enzo sakas',
@@ -92,7 +140,8 @@ export class ActionRepositoryMock implements IActionRepository {
       course: COURSE.ECM,
       hiredDate: 1640192165000,
       active: ACTIVE.ACTIVE,
-      projects: [this.projects[1], this.projects[4]]
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
+      emailDev: 'esakas.devmaua@gmail.com'
     }),
     new Member({
       name: 'Lounis Televisas',
@@ -105,7 +154,8 @@ export class ActionRepositoryMock implements IActionRepository {
       course: COURSE.CIC,
       hiredDate: 1640192165000,
       active: ACTIVE.ACTIVE,
-      projects: [this.projects[1], this.projects[4]]
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
+      emailDev: 'ltelevision.devmaua@gmail.com'
     }),
     new Member({
       name: 'MAGIC WHITE HANDS',
@@ -118,20 +168,21 @@ export class ActionRepositoryMock implements IActionRepository {
       course: COURSE.ECM,
       hiredDate: 1640192165000,
       active: ACTIVE.ACTIVE,
-      projects: [this.projects[1], this.projects[4]]
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
+      emailDev: 'jbranco.devmaua@gmail.com'
     })
   ]
   private actions: Action[] = [
     new Action({
-      ownerRa: this.members[0].ra,
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
       startDate: 1612137600000,
       endDate: 1612141200000,
       duration: 3600000,
-      actionId: 'uuid1',
-      associatedMembersRa: [
-        this.members[0].ra,
-        this.members[1].ra,
-        this.members[3].ra
+      actionId: '663ef972-cc93-4bb8-8b69-8b5cfa2f532c',
+      isValid: true,
+      associatedMembersUserIds: [
+        '492e9fa2-9189-4fe7-b0f7-e6ca472b19f0',
+        '4a9019df-ab29-453f-8e8d-1cc845492f12'
       ],
       title: '**Reunião**',
       actionTypeTag: ACTION_TYPE.MEETING,
@@ -141,15 +192,15 @@ export class ActionRepositoryMock implements IActionRepository {
       description: 'Reunião de como instalar o yarn'
     }),
     new Action({
-      ownerRa: this.members[0].ra,
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
       startDate: 1612141200000,
       endDate: 1612144800000,
       duration: 3600000,
-      actionId: 'uuid2',
-      associatedMembersRa: [
-        this.members[0].ra,
-        this.members[1].ra,
-        this.members[3].ra
+      actionId: '663ef972-cc93-4bb8-8b69-8b5cfa2f532c',
+      isValid: true,
+      associatedMembersUserIds: [
+        '492e9fa2-9189-4fe7-b0f7-e6ca472b19f0',
+        '4a9019df-ab29-453f-8e8d-1cc845492f12'
       ],
       title: '**Reunião do Front**',
       actionTypeTag: ACTION_TYPE.MEETING,
@@ -159,12 +210,16 @@ export class ActionRepositoryMock implements IActionRepository {
       description: 'Reunião do front'
     }),
     new Action({
-      ownerRa: this.members[2].ra,
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
       startDate: 1612137600000,
       endDate: 1612141200000,
       duration: 3600000,
-      actionId: 'uuid3',
-      associatedMembersRa: [this.members[2].ra, this.members[4].ra],
+      actionId: '663ef972-cc93-4bb8-8b69-8b5cfa2f532c',
+      isValid: true,
+      associatedMembersUserIds: [
+        '492e9fa2-9189-4fe7-b0f7-e6ca472b19f0',
+        '4a9019df-ab29-453f-8e8d-1cc845492f12'
+      ],
       title: '**Reunião do Back**',
       actionTypeTag: ACTION_TYPE.MEETING,
       projectCode: this.projects[1].code,
@@ -173,12 +228,16 @@ export class ActionRepositoryMock implements IActionRepository {
       description: 'Reunião do back'
     }),
     new Action({
-      ownerRa: this.members[2].ra,
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
       startDate: 1612137600000,
       endDate: 1612141200000,
       duration: 3600000,
-      actionId: 'uuid4',
-      associatedMembersRa: [this.members[2].ra, this.members[4].ra],
+      actionId: '663ef972-cc93-4bb8-8b69-8b5cfa2f532c',
+      isValid: true,
+      associatedMembersUserIds: [
+        '492e9fa2-9189-4fe7-b0f7-e6ca472b19f0',
+        '4a9019df-ab29-453f-8e8d-1cc845492f12'
+      ],
       title: '**Reunião do Back para codar o repo**',
       actionTypeTag: ACTION_TYPE.MEETING,
       projectCode: this.projects[1].code,
@@ -187,11 +246,12 @@ export class ActionRepositoryMock implements IActionRepository {
       description: 'Reunião do back codando o repo'
     }),
     new Action({
-      ownerRa: '21002100',
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
       startDate: 1689948000000,
       endDate: 1689955200000,
       duration: 7200000,
-      actionId: 'uuid5',
+      actionId: '663ef972-cc93-4bb8-8b69-8b5cfa2f532c',
+      isValid: true,
       title: 'Reunião do Front',
       actionTypeTag: ACTION_TYPE.MEETING,
       projectCode: 'PT',
@@ -200,11 +260,12 @@ export class ActionRepositoryMock implements IActionRepository {
       description: 'Reunião do front'
     }),
     new Action({
-      ownerRa: '21002100',
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
       startDate: 1689955200000,
       endDate: 1689964020000,
       duration: 8820000,
-      actionId: 'uuid6',
+      actionId: '663ef972-cc93-4bb8-8b69-8b5cfa2f532c',
+      isValid: true,
       title: 'Imp. Navbar',
       actionTypeTag: ACTION_TYPE.CODE,
       projectCode: 'PT',
@@ -213,11 +274,12 @@ export class ActionRepositoryMock implements IActionRepository {
       description: 'Navbar codada'
     }),
     new Action({
-      ownerRa: '21002100',
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
       startDate: 1689966000000,
       endDate: 1689966420000,
       duration: 420000,
-      actionId: 'uuid7',
+      actionId: '663ef972-cc93-4bb8-8b69-8b5cfa2f532c',
+      isValid: true,
       title: 'Daily',
       actionTypeTag: ACTION_TYPE.MEETING,
       projectCode: 'PT',
@@ -226,11 +288,12 @@ export class ActionRepositoryMock implements IActionRepository {
       description: 'Reunião Daily'
     }),
     new Action({
-      ownerRa: '21002100',
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
       startDate: 1689969600000,
       endDate: 1689976380000,
       duration: 6780000,
-      actionId: 'uuid8',
+      actionId: '663ef972-cc93-4bb8-8b69-8b5cfa2f532c',
+      isValid: true,
       title: 'Componente Histórico e Atividades',
       actionTypeTag: ACTION_TYPE.MEETING,
       projectCode: 'PT',
@@ -241,78 +304,92 @@ export class ActionRepositoryMock implements IActionRepository {
   ]
   private associatedActions: AssociatedAction[] = [
     new AssociatedAction({
-      memberRa: this.members[0].ra,
-      action: this.actions[0]
+      actionId: '663ef972-cc93-4bb8-8b69-8b5cfa2f532c',
+      startDate: 1612137600000,
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
     }),
     new AssociatedAction({
-      memberRa: this.members[0].ra,
-      action: this.actions[1]
+      actionId: '663ef972-cc93-4bb8-8b69-8b5cfa2f532c',
+      startDate: 1612141200000,
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
     }),
     new AssociatedAction({
-      memberRa: this.members[1].ra,
-      action: this.actions[0]
+      actionId: '663ef972-cc93-4bb8-8b69-8b5cfa2f532c',
+      startDate: 1612137600000,
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
     }),
     new AssociatedAction({
-      memberRa: this.members[1].ra,
-      action: this.actions[1]
+      actionId: '663ef972-cc93-4bb8-8b69-8b5cfa2f532c',
+      startDate: 1612137600000,
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
     }),
     new AssociatedAction({
-      memberRa: this.members[3].ra,
-      action: this.actions[0]
+      actionId: '663ef972-cc93-4bb8-8b69-8b5cfa2f532c',
+      startDate: 1689948000000,
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
     }),
     new AssociatedAction({
-      memberRa: this.members[3].ra,
-      action: this.actions[1]
+      actionId: '663ef972-cc93-4bb8-8b69-8b5cfa2f532c',
+      startDate: 1689955200000,
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
     }),
     new AssociatedAction({
-      memberRa: this.members[3].ra,
-      action: this.actions[4]
+      actionId: '663ef972-cc93-4bb8-8b69-8b5cfa2f532c',
+      startDate: 1689966000000,
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
     }),
     new AssociatedAction({
-      memberRa: this.members[3].ra,
-      action: this.actions[5]
-    }),
-    new AssociatedAction({
-      memberRa: this.members[3].ra,
-      action: this.actions[6]
-    }),
-    new AssociatedAction({
-      memberRa: this.members[3].ra,
-      action: this.actions[7]
-    }),
-    new AssociatedAction({
-      memberRa: this.members[2].ra,
-      action: this.actions[2]
-    }),
-    new AssociatedAction({
-      memberRa: this.members[2].ra,
-      action: this.actions[3]
-    }),
-    new AssociatedAction({
-      memberRa: this.members[4].ra,
-      action: this.actions[2]
-    }),
-    new AssociatedAction({
-      memberRa: this.members[4].ra,
-      action: this.actions[3]
+      actionId: '663ef972-cc93-4bb8-8b69-8b5cfa2f532c',
+      startDate: 1689969600000,
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
     })
   ]
 
-  async createAction(action: Action): Promise<Action> {
+  async createAction(
+    startDate: number,
+    title: string,
+    description: string,
+    actionId: string,
+    isValid: boolean,
+    endDate: number,
+    duration: number,
+    projectCode: string,
+    storyId?: number,
+    associatedMembersUserIds?: string[],
+    stackTags?: STACK[],
+    actionTypeTag?: ACTION_TYPE
+  ): Promise<Action> {
+    const action = new Action({
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
+      startDate,
+      title,
+      description,
+      actionId,
+      isValid,
+      endDate,
+      duration,
+      projectCode,
+      storyId,
+      associatedMembersUserIds,
+      stackTags,
+      actionTypeTag
+    })
     this.actions.push(action)
     this.createAssociatedAction(
       new AssociatedAction({
-        memberRa: action.ownerRa,
-        action: action
+        actionId: action.actionId,
+        startDate: action.startDate,
+        userId: action.userId
       })
     )
-    if (action.associatedMembersRa !== undefined) {
-      if (action.associatedMembersRa.length > 0) {
-        action.associatedMembersRa.forEach((memberRa) => {
+    if (action.associatedMembersUserIds !== undefined) {
+      if (action.associatedMembersUserIds.length > 0) {
+        action.associatedMembersUserIds.forEach((userId) => {
           this.createAssociatedAction(
             new AssociatedAction({
-              memberRa: memberRa,
-              action: action
+              actionId: action.actionId,
+              startDate: action.startDate,
+              userId: userId
             })
           )
         })
@@ -337,14 +414,13 @@ export class ActionRepositoryMock implements IActionRepository {
   }
 
   async getHistoryActions(
-    ra: string,
     amount?: number,
     start?: number | undefined,
     end?: number | undefined,
     exclusiveStartKey?:
       | {
-          action_id: string
-          start_date: number
+          actionId: string
+          startDate: number
         }
       | undefined
   ): Promise<historyResponse> {
@@ -356,7 +432,7 @@ export class ActionRepositoryMock implements IActionRepository {
       let action0 = actions[0]
       while (
         action0 !== undefined &&
-        action0.actionId !== exclusiveStartKey.action_id
+        action0.actionId !== exclusiveStartKey.actionId
       ) {
         actions.shift()
         if (actions.length > 0) action0 = actions[0]
@@ -374,8 +450,11 @@ export class ActionRepositoryMock implements IActionRepository {
 
     actions = actions.filter((action) => {
       if (
-        action.ownerRa === ra ||
-        (action.associatedMembersRa && action.associatedMembersRa.includes(ra))
+        action.userId === 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627' ||
+        (action.associatedMembersUserIds &&
+          action.associatedMembersUserIds.includes(
+            'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
+          ))
       ) {
         return true
       }
@@ -384,15 +463,14 @@ export class ActionRepositoryMock implements IActionRepository {
     return {
       actions: actions.slice(0, amount),
       lastEvaluatedKey: {
-        action_id: actions[actions.length - 1].actionId,
-        start_date: actions[actions.length - 1].startDate
+        actionId: '663ef972-cc93-4bb8-8b69-8b5cfa2f532c',
+        startDate: 1689969600000
       }
     }
   }
 
   async updateAction(
     actionId: string,
-    newOwnerRa?: string,
     newStartDate?: number,
     newEndDate?: number,
     newDuration?: number,
@@ -400,16 +478,14 @@ export class ActionRepositoryMock implements IActionRepository {
     newTitle?: string,
     newDescription?: string | '',
     newProjectCode?: string,
-    newAssociatedMembersRa?: string[],
+    newAssociatedMembersUserIds?: string[],
     newStackTags?: STACK[],
-    newActionTypeTag?: ACTION_TYPE
+    newActionTypeTag?: ACTION_TYPE,
+    newIsValid?: boolean
   ): Promise<Action> {
     let newAction = null
     this.actions.forEach((action) => {
       if (action.actionId.includes(actionId)) {
-        if (newOwnerRa) {
-          action.ownerRa = newOwnerRa
-        }
         if (newStartDate) {
           action.startDate = newStartDate
         }
@@ -422,6 +498,9 @@ export class ActionRepositoryMock implements IActionRepository {
         if (newStoryId) {
           action.storyId = newStoryId
         }
+        if (newIsValid) {
+          action.isValid = newIsValid
+        }
         if (newTitle) {
           action.title = newTitle
         }
@@ -431,8 +510,8 @@ export class ActionRepositoryMock implements IActionRepository {
         if (newProjectCode) {
           action.projectCode = newProjectCode
         }
-        if (newAssociatedMembersRa) {
-          action.associatedMembersRa = newAssociatedMembersRa
+        if (newAssociatedMembersUserIds) {
+          action.associatedMembersUserIds = newAssociatedMembersUserIds
         }
         if (newStackTags) {
           action.stackTags = newStackTags
@@ -453,7 +532,7 @@ export class ActionRepositoryMock implements IActionRepository {
     members: string[]
   ): Promise<void> {
     this.associatedActions.forEach((associatedAction) => {
-      if (associatedAction.action.actionId === actionId) {
+      if (associatedAction.actionId === actionId) {
         this.associatedActions.splice(
           this.associatedActions.indexOf(associatedAction),
           1
@@ -464,19 +543,16 @@ export class ActionRepositoryMock implements IActionRepository {
     members.forEach((member) => {
       this.associatedActions.push(
         new AssociatedAction({
-          memberRa: member,
-          action: this.actions.find((action) => action.actionId === actionId)!
+          actionId: actionId,
+          startDate: 1612137600000,
+          userId: member
         })
       )
     })
   }
 
-  async getMember(ra: string): Promise<Member> {
-    const member = this.members.find((member) => member.ra === ra)
-
-    if (!member) {
-      throw new NoItemsFoundError('memberRa' + ra)
-    }
+  async getMember(): Promise<Member> {
+    const member = this.members[0]
 
     return member
   }
