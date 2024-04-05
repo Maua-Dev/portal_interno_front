@@ -1,92 +1,113 @@
 import { EntityError } from '../helpers/errors/domain_error'
-import { Action, ActionJsonProps, ActionProps } from './action'
+import { validate } from 'uuid'
 
 export type AssociatedActionProps = {
-  memberRa: string
-  action: ActionProps
+  actionId: string
+  startDate: number
+  userId: string
 }
 
 export type AssociatedActionJsonProps = {
-  member_ra: string
-  action: ActionJsonProps
+  action_id: string
+  start_date: number
+  user_id: string
 }
 
 export class AssociatedAction {
   constructor(public props: AssociatedActionProps) {
-    if (!AssociatedAction.validateMemberRa(props.memberRa)) {
-      throw new EntityError('props.memberRa')
+    if (!AssociatedAction.validateActionId(props.actionId)) {
+      throw new EntityError('props.actionId')
     }
-    this.props.memberRa = props.memberRa
+    this.props.actionId = props.actionId
 
-    if (!(props.action instanceof Action)) {
-      throw new EntityError('props.action')
+    if (typeof props.startDate !== 'number') {
+      throw new EntityError('props.startDate')
     }
-    this.props.action = props.action
+    this.props.startDate = props.startDate
+
+    if (!AssociatedAction.validateUserId(props.userId)) {
+      throw new EntityError('props.userId')
+    }
+    this.props.userId = props.userId
   }
 
   // Getters and Setters
 
-  get memberRa() {
-    return this.props.memberRa
+  get actionId() {
+    return this.props.actionId
   }
 
-  get action() {
-    return this.props.action
+  get startDate() {
+    return this.props.startDate
   }
 
-  set setMemberRa(memberRa: string) {
-    if (!AssociatedAction.validateMemberRa(memberRa)) {
-      throw new EntityError('props.memberRa')
+  get userId() {
+    return this.props.userId
+  }
+
+  set actionId(actionId: string) {
+    if (!AssociatedAction.validateActionId(actionId)) {
+      throw new EntityError('props.actionId')
     }
-    this.props.memberRa = memberRa
+    this.props.actionId = actionId
   }
 
-  set setAction(action: Action) {
-    if (!(action instanceof Action)) {
-      throw new EntityError('props.action')
+  set startDate(startDate: number) {
+    if (typeof startDate !== 'number') {
+      throw new EntityError('props.startDate')
     }
-    this.props.action = action
+    this.props.startDate = startDate
+  }
+
+  set userId(userId: string) {
+    if (AssociatedAction.validateUserId(userId)) {
+      throw new EntityError('props.userId')
+    }
+    this.props.userId = userId
   }
 
   // JSON Conversion
 
   static fromJSON(json: AssociatedActionJsonProps): AssociatedAction {
     return new AssociatedAction({
-      memberRa: json.member_ra,
-      action: Action.fromJSON(json.action)
+      actionId: json.action_id,
+      startDate: json.start_date,
+      userId: json.user_id
     })
   }
 
   toJSON() {
     return {
-      member_ra: this.memberRa,
-      action: {
-        owner_ra: this.action.ownerRa,
-        start_date: this.action.startDate,
-        end_date: this.action.endDate,
-        duration: this.action.duration,
-        action_id: this.action.actionId,
-        story_id: this.action.storyId,
-        title: this.action.title,
-        description: this.action.description,
-        project_code: this.action.projectCode,
-        associated_members_ra: this.action.associatedMembersRa,
-        stack_tags: this.action.stackTags,
-        action_type_tag: this.action.actionTypeTag
-      }
+      action_id: this.actionId,
+      start_date: this.startDate,
+      user_id: this.userId
     }
   }
 
   //Validations
 
-  static validateMemberRa(memberRa: string): boolean {
-    if (memberRa == null) {
+  static validateActionId(actionId: string): boolean {
+    if (typeof actionId !== 'string') {
       return false
-    } else if (typeof memberRa != 'string') {
+    }
+    if (actionId.length !== 36) {
       return false
-    } else if (memberRa.length != 8) {
+    }
+    return true
+  }
+
+  static validateStartDate(startDate: number): boolean {
+    if (typeof startDate !== 'number') {
       return false
-    } else if (!memberRa.match(/^\d{8}$/)) {
+    }
+    return true
+  }
+
+  static validateUserId(userId: string): boolean {
+    if (typeof userId !== 'string') {
+      return false
+    }
+    if (!validate(userId)) {
       return false
     }
     return true

@@ -1,31 +1,18 @@
-import '@testing-library/jest-dom'
 import { ActionRepositoryMock } from '../../../../../src/@clean/shared/infra/repositories/action_repository_mock'
 import { UpdateActionUsecase } from '../../../../../src/@clean/modules/action/usecases/update_action_usecase'
 import { Action } from '../../../../../src/@clean/shared/domain/entities/action'
 import { STACK } from '../../../../../src/@clean/shared/domain/enums/stack_enum'
 import { ACTION_TYPE } from '../../../../../src/@clean/shared/domain/enums/action_type_enum'
-
-test('Update Action Usecase - update ownerRa', async () => {
-  const repo = new ActionRepositoryMock()
-  const actionUsecase = new UpdateActionUsecase(repo)
-
-  const actionWithOwnerRaUpdated = await actionUsecase.execute(
-    'uuid1',
-    '21002100'
-  )
-
-  expect(actionWithOwnerRaUpdated).toBeInstanceOf(Action)
-  expect(actionWithOwnerRaUpdated.ownerRa).toBe('21002100')
-})
+import { test, expect } from 'vitest'
 
 test('Update Action Usecase - update startDate', async () => {
   const repo = new ActionRepositoryMock()
   const actionUsecase = new UpdateActionUsecase(repo)
 
   const actionWithStartDateUpdated = await actionUsecase.execute(
-    'uuid1',
-    undefined,
-    1612137800000
+    '663ef972-cc93-4bb8-8b69-8b5cfa2f532c',
+    1612137800000,
+    undefined
   )
 
   expect(actionWithStartDateUpdated).toBeInstanceOf(Action)
@@ -37,10 +24,10 @@ test('Update Action Usecase - update endDate', async () => {
   const actionUsecase = new UpdateActionUsecase(repo)
 
   const actionWithEndDateUpdated = await actionUsecase.execute(
-    'uuid1',
+    '663ef972-cc93-4bb8-8b69-8b5cfa2f532c',
     undefined,
-    undefined,
-    1612141400000
+    1612141400000,
+    undefined
   )
 
   expect(actionWithEndDateUpdated).toBeInstanceOf(Action)
@@ -52,8 +39,7 @@ test('Update Action Usecase - update duration', async () => {
   const actionUsecase = new UpdateActionUsecase(repo)
 
   const actionWithDurationUpdated = await actionUsecase.execute(
-    'uuid1',
-    undefined,
+    '663ef972-cc93-4bb8-8b69-8b5cfa2f532c',
     1612137800000,
     1612141800000,
     4000000
@@ -70,7 +56,7 @@ test('Update Action Usecase - update title', async () => {
   const actionUsecase = new UpdateActionUsecase(repo)
 
   const actionWithTitleUpdated = await actionUsecase.execute(
-    'uuid1',
+    '663ef972-cc93-4bb8-8b69-8b5cfa2f532c',
     undefined,
     undefined,
     undefined,
@@ -90,7 +76,7 @@ test('Update Action Usecase - update description', async () => {
   const actionUsecase = new UpdateActionUsecase(repo)
 
   const actionWithDescriptionUpdated = await actionUsecase.execute(
-    'uuid1',
+    '663ef972-cc93-4bb8-8b69-8b5cfa2f532c',
     undefined,
     undefined,
     undefined,
@@ -109,7 +95,7 @@ test('Update Action Usecase - update projectCode', async () => {
   const actionUsecase = new UpdateActionUsecase(repo)
 
   const actionWithProjectCodeUpdated = await actionUsecase.execute(
-    'uuid1',
+    '663ef972-cc93-4bb8-8b69-8b5cfa2f532c',
     undefined,
     undefined,
     undefined,
@@ -129,7 +115,7 @@ test('Update Action Usecase - update associatedMembers', async () => {
   const actionUsecase = new UpdateActionUsecase(repo)
 
   const actionWithAssociatedMembersUpdated = await actionUsecase.execute(
-    'uuid1',
+    '663ef972-cc93-4bb8-8b69-8b5cfa2f532c',
     undefined,
     undefined,
     undefined,
@@ -138,13 +124,15 @@ test('Update Action Usecase - update associatedMembers', async () => {
     undefined,
     undefined,
     undefined,
-    ['21002100']
+    ['3623dd12-15fc-4859-ade4-61f1b3f84de4']
   )
 
   expect(actionWithAssociatedMembersUpdated).toBeInstanceOf(Action)
-  expect(actionWithAssociatedMembersUpdated.associatedMembersRa.length).toBe(1)
-  expect(actionWithAssociatedMembersUpdated.associatedMembersRa[0]).toBe(
-    '21002100'
+  expect(
+    actionWithAssociatedMembersUpdated.associatedMembersUserIds.length
+  ).toBe(1)
+  expect(actionWithAssociatedMembersUpdated.associatedMembersUserIds[0]).toBe(
+    '3623dd12-15fc-4859-ade4-61f1b3f84de4'
   )
 })
 
@@ -153,7 +141,7 @@ test('Update Action Usecase - update stackTags', async () => {
   const actionUsecase = new UpdateActionUsecase(repo)
 
   const actionWithStacksTagsUpdated = await actionUsecase.execute(
-    'uuid1',
+    '663ef972-cc93-4bb8-8b69-8b5cfa2f532c',
     undefined,
     undefined,
     undefined,
@@ -176,7 +164,7 @@ test('Update Action Usecase - update actionTypeTags', async () => {
   const actionUsecase = new UpdateActionUsecase(repo)
 
   const actionWithActionTypeTagsUpdated = await actionUsecase.execute(
-    'uuid1',
+    '663ef972-cc93-4bb8-8b69-8b5cfa2f532c',
     undefined,
     undefined,
     undefined,
@@ -198,7 +186,7 @@ test('Update Action Usecase with invalid uuid', async () => {
   const repo = new ActionRepositoryMock()
   const actionUsecase = new UpdateActionUsecase(repo)
 
-  await expect(actionUsecase.execute('uuid10', '21002100')).rejects.toThrow(
+  await expect(actionUsecase.execute('uuid10')).rejects.toThrow(
     'No items found for this actionId: uuid10'
   )
 })

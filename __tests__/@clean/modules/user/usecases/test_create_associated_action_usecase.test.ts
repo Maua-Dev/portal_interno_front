@@ -5,29 +5,34 @@ import { ACTION_TYPE } from '../../../../../src/@clean/shared/domain/enums/actio
 import { STACK } from '../../../../../src/@clean/shared/domain/enums/stack_enum'
 import { EntityError } from '../../../../../src/@clean/shared/domain/helpers/errors/domain_error'
 import { ActionRepositoryMock } from '../../../../../src/@clean/shared/infra/repositories/action_repository_mock'
-import '@testing-library/jest-dom'
+import { test, expect } from 'vitest'
 
 test('Test create associated action usecase', async () => {
   const repo = new ActionRepositoryMock()
   const useCase = new CreateAssociatedActionUsecase(repo)
   const action = new Action({
-    ownerRa: '21002100',
+    userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
     startDate: 1000,
     endDate: 2000,
     duration: 1000,
-    actionId: '4000',
+    actionId: 'a6a112ae-f488-4868-b49f-eb9c0ae42749',
     storyId: 1000,
     title: 'Test Usecase',
     description: 'Testing',
     projectCode: '76',
-    associatedMembersRa: ['21008337'],
+    associatedMembersUserIds: [
+      '492e9fa2-9189-4fe7-b0f7-e6ca472b19f0',
+      '4a9019df-ab29-453f-8e8d-1cc845492f12'
+    ],
+    isValid: true,
     stackTags: [STACK.FRONTEND, STACK.BACKEND],
     actionTypeTag: ACTION_TYPE.CODE
   })
 
   const associatedAction = new AssociatedAction({
-    memberRa: '21008337',
-    action: action
+    userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
+    actionId: 'a6a112ae-f488-4868-b49f-eb9c0ae42749',
+    startDate: 1000
   })
   const associatedActionCreated = await useCase.execute(associatedAction)
 
@@ -38,36 +43,23 @@ test('Test create associated action usecase', async () => {
 test('Test create associated action usecase with invalid member Ra', async () => {
   const repo = new ActionRepositoryMock()
   const useCase = new CreateAssociatedActionUsecase(repo)
-  const action = new Action({
-    ownerRa: '21002100',
-    startDate: 1000,
-    endDate: 2000,
-    duration: 1000,
-    actionId: '4000',
-    storyId: 1000,
-    title: 'Test Usecase',
-    description: 'Testing',
-    projectCode: '76',
-    associatedMembersRa: ['21008337'],
-    stackTags: [STACK.FRONTEND, STACK.BACKEND],
-    actionTypeTag: ACTION_TYPE.CODE
-  })
 
-  expect(action).toBeInstanceOf(Action)
   expect(() => {
     useCase.execute(
       new AssociatedAction({
-        memberRa: '21.00833.7',
-        action: action
+        userId: '',
+        actionId: 'a6a112ae-f488-4868-b49f-eb9c0ae42749',
+        startDate: 1000
       })
     )
   }).toThrowError(EntityError)
   expect(() => {
     useCase.execute(
       new AssociatedAction({
-        memberRa: '21.00833.7',
-        action: action
+        userId: '',
+        actionId: 'a6a112ae-f488-4868-b49f-eb9c0ae42749',
+        startDate: 1000
       })
     )
-  }).toThrowError('Field props.memberRa is not valid')
+  }).toThrowError('Field props.userId is not valid')
 })
