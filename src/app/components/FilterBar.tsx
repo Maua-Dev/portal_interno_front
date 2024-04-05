@@ -38,7 +38,6 @@ export default function FilterBar({
   ...props
 }: FilterBarProps) {
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false)
-  const [filterLabel, setFilterLabel] = useState<string | undefined>(undefined)
 
   const emptyFilterProps = {
     searchText: '',
