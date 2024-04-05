@@ -44,7 +44,7 @@ const actionSchema = z.object({
     .positive({ message: 'Duração deve ser um número maior que zero' })
     .gte(0.1, { message: 'Duração é obrigatória' })
     .finite(),
-  associatedMembersRa: z.array(z.string()),
+  associatedMembersUserIds: z.array(z.string()),
   actionTypeTag: z.nativeEnum(ACTION_TYPE, {
     errorMap: (issue) => {
       if (issue.code === 'invalid_enum_value') {
@@ -65,16 +65,23 @@ export default function ActionModal({ action }: { action?: Action }) {
   const { darkMode } = useDarkMode()
 
   // Contexts
-  const { getAllMembers, getMember } = useContext(ActionContext)
+  const {
+    getAllMembers
+    //getMember
+  } = useContext(ActionContext)
   const { closeModal } = useContext(ModalContext)
-  const { updateAction, createAction, getHistory } = useContext(ActionContext)
+  const {
+    //updateAction,
+    createAction
+    // getHistory
+  } = useContext(ActionContext)
 
   // Use state
   const [allMembers, setAllMembers] = useState<Member[] | undefined>()
   const [fade, setFade] = useState<boolean>(false)
   const [stackTags, setStackTags] = useState<STACK[]>(action?.stackTags || [])
   const [members, setMembers] = useState<string[]>(
-    action?.associatedMembersRa || []
+    action?.associatedMembersUserIds || []
   )
 
   // Constants
@@ -110,8 +117,8 @@ export default function ActionModal({ action }: { action?: Action }) {
       field,
       list.filter((itemInList) => itemInList !== item)
     )
-    if (field === 'associatedMembersRa') {
-      setMembers(getValues('associatedMembersRa'))
+    if (field === 'associatedMembersUserIds') {
+      setMembers(getValues('associatedMembersUserIds'))
     }
 
     if (field === 'stackTags') {
@@ -119,19 +126,17 @@ export default function ActionModal({ action }: { action?: Action }) {
     }
   }
 
-  const validateAndAddMember = (member: string) => {
-    if (member && getValues('associatedMembersRa').indexOf(member) === -1) {
-      getMember(member)
-        .then((member) => {
-          console.log(member)
-          setValue('associatedMembersRa', [
-            ...getValues('associatedMembersRa'),
-            member!.ra
-          ])
-          setMembers(getValues('associatedMembersRa'))
-          console.log(getValues('associatedMembersRa'))
-        })
-        .catch((error) => console.log(error))
+  const validateAndAddMember = (userId: string) => {
+    if (
+      userId &&
+      getValues('associatedMembersUserIds').indexOf(userId) === -1
+    ) {
+      setValue('associatedMembersUserIds', [
+        ...getValues('associatedMembersUserIds'),
+        userId
+      ])
+      setMembers(getValues('associatedMembersUserIds'))
+      console.log(getValues('associatedMembersUserIds'))
     }
   }
 
@@ -150,48 +155,46 @@ export default function ActionModal({ action }: { action?: Action }) {
     console.table(data)
 
     const createdAction = await createAction(
-      new Action({
-        ownerRa: '21002100',
-        startDate: dateToMilliseconds(data.startDate),
-        endDate: dateToMilliseconds(data.endDate),
-        duration: hoursToMilliseconds(data.duration),
-        storyId: parseInt(data.storyId),
-        actionId: Math.floor(Math.random() * 1000000).toString(),
-        title: data.title,
-        description: data.description,
-        projectCode: data.projectCode,
-        associatedMembersRa: data.associatedMembersRa,
-        stackTags: data.stackTags,
-        actionTypeTag: data.actionTypeTag
-      })
+      dateToMilliseconds(data.startDate),
+      data.title,
+      data.description,
+      Math.floor(Math.random() * 1000000).toString(),
+      true,
+      dateToMilliseconds(data.endDate),
+      hoursToMilliseconds(data.duration),
+      data.projectCode,
+      parseInt(data.storyId),
+      data.associatedMembersUserIds,
+      data.stackTags,
+      data.actionTypeTag
     )
 
     console.log(createdAction)
 
-    console.log(await getHistory('21002100', 10))
+    // console.log(await getHistory('21002100', 10))
   }
 
   const handleUpdateActionSubmit = async (data: ActionModalType) => {
     console.log('Update Action')
     console.table(data)
-    const updatedAction = await updateAction(
-      data.actionId!,
-      '23017310',
-      dateToMilliseconds(data.startDate),
-      dateToMilliseconds(data.endDate),
-      hoursToMilliseconds(data.duration),
-      parseInt(data.storyId),
-      data.title,
-      data.description,
-      data.projectCode,
-      data.associatedMembersRa,
-      data.stackTags,
-      data.actionTypeTag
-    )
+    // const updatedAction = await updateAction(
+    //   data.actionId!,
+    //   '23017310',
+    //   dateToMilliseconds(data.startDate),
+    //   dateToMilliseconds(data.endDate),
+    //   hoursToMilliseconds(data.duration),
+    //   parseInt(data.storyId),
+    //   data.title,
+    //   data.description,
+    //   data.projectCode,
+    //   data.associatedMembersUserIds,
+    //   data.stackTags,
+    //   data.actionTypeTag
+    // )
 
-    console.log(updatedAction)
+    // console.log(updatedAction)
 
-    console.log(await getHistory('23017310', 10))
+    // console.log(await getHistory('23017310', 10))
   }
 
   const handleConfirmCloseModal = () => {
@@ -203,7 +206,7 @@ export default function ActionModal({ action }: { action?: Action }) {
     if (getValues('startDate') !== '') isEmpty = false
     if (getValues('endDate') !== '') isEmpty = false
     if (getValues('duration') !== 0) isEmpty = false
-    if (getValues('associatedMembersRa').length !== 0) isEmpty = false
+    if (getValues('associatedMembersUserIds').length !== 0) isEmpty = false
     if (getValues('stackTags').length !== 0) isEmpty = false
 
     if (isEmpty) {
@@ -230,7 +233,7 @@ export default function ActionModal({ action }: { action?: Action }) {
       startDate: action?.startDate ? timeStampToDate(action!.startDate) : '',
       endDate: action?.endDate ? timeStampToDate(action!.endDate) : '',
       duration: action?.duration ? millisecondsToHours(action!.duration) : 0,
-      associatedMembersRa: action?.associatedMembersRa || [],
+      associatedMembersUserIds: action?.associatedMembersUserIds || [],
       actionTypeTag: action?.actionTypeTag || undefined,
       stackTags: action?.stackTags || []
     },
@@ -431,7 +434,7 @@ export default function ActionModal({ action }: { action?: Action }) {
                 <option value="">Selecione</option>
                 {allMembers &&
                   allMembers.map((member) => (
-                    <option key={member.email} value={member.ra}>
+                    <option key={member.email} value={member.userId}>
                       {`${member.name} | ${member.ra}`}
                     </option>
                   ))}
@@ -443,9 +446,9 @@ export default function ActionModal({ action }: { action?: Action }) {
                     text={plainTextToRa(member)}
                     onClick={() => {
                       removeItemFromList(
-                        'associatedMembersRa',
+                        'associatedMembersUserIds',
                         member,
-                        getValues('associatedMembersRa'),
+                        getValues('associatedMembersUserIds'),
                         setValue
                       )
                     }}
@@ -453,7 +456,7 @@ export default function ActionModal({ action }: { action?: Action }) {
                 ))}
               </div>
               <span className="text-red-600">
-                {errors.associatedMembersRa?.message}
+                {errors.associatedMembersUserIds?.message}
               </span>
             </div>
 
