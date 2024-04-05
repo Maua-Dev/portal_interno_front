@@ -3,9 +3,9 @@ import ActionModal from '../components/ActionModal'
 import Navbar from '../components/Navbar'
 import { ModalContext } from '../contexts/modal_context'
 import useDarkMode from '../utils/functions/useDarkMode'
-import { Action } from '../../@clean/shared/domain/entities/action'
-import { ACTION_TYPE } from '../../@clean/shared/domain/enums/action_type_enum'
-import { STACK } from '../../@clean/shared/domain/enums/stack_enum'
+// import { Action } from '../../@clean/shared/domain/entities/action'
+// import { ACTION_TYPE } from '../../@clean/shared/domain/enums/action_type_enum'
+// import { STACK } from '../../@clean/shared/domain/enums/stack_enum'
 
 export default function Home() {
   const { darkMode } = useDarkMode()
