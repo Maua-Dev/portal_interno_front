@@ -7,7 +7,6 @@ import { ActionContext } from '../contexts/action_context'
 import Loader from './little_components/Loader'
 import { STACK, stackToEnum } from '../../@clean/shared/domain/enums/stack_enum'
 import { ACTION_TYPE } from '../../@clean/shared/domain/enums/action_type_enum'
-import { ModalContext } from '../contexts/modal_context'
 
 interface FilterProps {
   [key: string]: string
@@ -113,7 +112,7 @@ export default function Historic() {
   }, [])
 
   return (
-    <div className="flex h-fit w-full flex-col items-center gap-2 py-10">
+    <div className="flex h-fit w-full flex-col items-center gap-2 py-20 pl-0 md:py-10 md:pl-14">
       <FilterBar
         setFilterProps={setFilterProps}
         filterProps={filterProps}

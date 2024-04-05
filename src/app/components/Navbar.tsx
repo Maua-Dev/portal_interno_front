@@ -9,7 +9,7 @@ import {
   BsSun,
   BsClipboard
 } from 'react-icons/bs'
-import { ReactNode, useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import useDarkMode from '../utils/functions/useDarkMode'
 import { useNavigate } from 'react-router-dom'
 import Historic from './Historic'
@@ -86,16 +86,18 @@ export default function Navbar() {
                   Perfil
                 </p>
               </div>
-              <div className="flex cursor-pointer select-none gap-8 overflow-x-hidden">
+              <div
+                className="flex cursor-pointer select-none gap-8 overflow-x-hidden"
+                onClick={() => {
+                  changeModalContent(<ActionModal />)
+                }}
+              >
                 <BsFillPlusSquareFill
                   className={`transform cursor-pointer ${
                     !darkMode ? 'text-gray-700' : 'text-white'
                   } transition-all duration-100 ${
                     hover ? '-translate-x-0' : 'translate-x-0'
                   } hover:fill-blue-600`}
-                  onClick={() => {
-                    changeModalContent(<ActionModal />)
-                  }}
                 />
                 <p
                   className={`transform text-xl transition-all duration-200 ${

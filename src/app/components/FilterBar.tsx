@@ -113,7 +113,7 @@ export default function FilterBar({
           <Text size="2xl" className='font-semibold'>Histórico</Text>
         </div>
         <SearchField
-          // placeholder="Digite o titulo da atividade..."
+          placeholder="Pesquisar"
           className="hidden w-64 md:block lg:w-72"
           onChange={(event) => {
             setSearchText(event.currentTarget.value)
