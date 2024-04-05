@@ -7,6 +7,7 @@ import { ActionContext } from '../contexts/action_context'
 import Loader from './little_components/Loader'
 import { STACK, stackToEnum } from '../../@clean/shared/domain/enums/stack_enum'
 import { ACTION_TYPE } from '../../@clean/shared/domain/enums/action_type_enum'
+import { ModalContext } from '../contexts/modal_context'
 
 interface FilterProps {
   [key: string]: string

@@ -9,26 +9,25 @@ import {
   BsSun,
   BsClipboard
 } from 'react-icons/bs'
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode, useContext, useEffect, useState } from 'react'
 import useDarkMode from '../utils/functions/useDarkMode'
 import { useNavigate } from 'react-router-dom'
 import Historic from './Historic'
+import { ModalContext } from '../contexts/modal_context'
+import ActionModal from './ActionModal'
 
 interface window {
   innerWidth: number
   innerHeight: number
 }
 
-interface NavbarProps {
-  setMainContent: (content: ReactNode) => void
-}
-
-export default function Navbar({ setMainContent }: NavbarProps) {
+export default function Navbar() {
   const [hover, setHover] = useState<boolean>(false)
   const { darkMode, toggleDarkMode } = useDarkMode()
   const [windowSize, setWindowSize] = useState<window>(getWindowSize())
   const maximumWidth: number = 768
   const navigate = useNavigate()
+  const { changeModalContent } = useContext(ModalContext)
 
   useEffect(() => {
     function handleWindowResize() {
@@ -56,7 +55,7 @@ export default function Navbar({ setMainContent }: NavbarProps) {
     <div>
       {windowSize.innerWidth > maximumWidth ? (
         <div
-          className={`fixed z-40 flex h-screen transform flex-col items-center justify-between  gap-12 overflow-x-hidden px-4 py-10 transition-all  duration-200 ease-in-out ${
+          className={`fixed z-40 flex h-screen transform flex-col items-center justify-between gap-12 overflow-x-hidden px-4 py-10 transition-all duration-200 ease-in-out ${
             !darkMode
               ? 'bg-white drop-shadow-md'
               : 'border-r-2 border-white bg-dev-gray text-white'
@@ -94,6 +93,9 @@ export default function Navbar({ setMainContent }: NavbarProps) {
                   } transition-all duration-100 ${
                     hover ? '-translate-x-0' : 'translate-x-0'
                   } hover:fill-blue-600`}
+                  onClick={() => {
+                    changeModalContent(<ActionModal />)
+                  }}
                 />
                 <p
                   className={`transform text-xl transition-all duration-200 ${
@@ -108,7 +110,7 @@ export default function Navbar({ setMainContent }: NavbarProps) {
               <div
                 className="flex cursor-pointer select-none gap-8 overflow-x-hidden"
                 onClick={() => {
-                  setMainContent(<Historic />)
+                  changeModalContent(<Historic />)
                 }}
               >
                 <AiOutlineHistory
@@ -133,7 +135,9 @@ export default function Navbar({ setMainContent }: NavbarProps) {
           <div className="flex flex-col gap-6 text-2xl">
             <IoMdExit
               onClick={handleLogout}
-              className="cursor-pointer transition-all duration-100 hover:text-blue-600"
+              className={`cursor-pointer ${
+                darkMode ? 'text-white' : 'text-gray-700'
+              } transition-all duration-100 hover:text-blue-600`}
             />
             {!darkMode ? (
               <BsMoonStars
@@ -155,9 +159,9 @@ export default function Navbar({ setMainContent }: NavbarProps) {
           </div>
         </div>
       ) : (
-        <div className="fixed z-40 flex h-screen w-screen flex-col justify-between">
+        <>
           <div
-            className={`flex justify-center py-2 ${
+            className={`fixed z-40 flex w-full justify-center py-2 ${
               darkMode
                 ? 'border-b-2 border-white bg-dev-gray'
                 : 'bg-white drop-shadow-md'
@@ -170,7 +174,7 @@ export default function Navbar({ setMainContent }: NavbarProps) {
             />
           </div>
           <div
-            className={`flex justify-center py-4 text-3xl ${
+            className={`fixed bottom-0 z-40 flex w-full justify-center py-4 text-3xl ${
               darkMode
                 ? 'border-t-2 border-white bg-dev-gray'
                 : 'bg-white drop-shadow-md'
@@ -188,6 +192,9 @@ export default function Navbar({ setMainContent }: NavbarProps) {
                 } transition-all duration-100 ${
                   hover ? '-translate-x-0' : 'translate-x-0'
                 } hover:fill-blue-600`}
+                onClick={() => {
+                  changeModalContent(<ActionModal />)
+                }}
               />
               <AiOutlineHistory
                 className={`transform cursor-pointer ${
@@ -195,6 +202,9 @@ export default function Navbar({ setMainContent }: NavbarProps) {
                 } transition-all duration-100 ${
                   hover ? '-translate-x-0' : 'translate-x-0'
                 } hover:fill-blue-600`}
+                onClick={() => {
+                  changeModalContent(<Historic />)
+                }}
               />
               <BsClipboard
                 className={`transform cursor-pointer ${
@@ -203,8 +213,6 @@ export default function Navbar({ setMainContent }: NavbarProps) {
                   hover ? '-translate-x-0' : 'translate-x-0'
                 } hover:fill-blue-600`}
               />
-            </div>
-            <div className="absolute right-0 mt-[3px] flex items-center justify-center pr-4 text-2xl">
               {!darkMode ? (
                 <BsMoonStars
                   className="cursor-pointer text-gray-700 transition-all duration-100 hover:text-black"
@@ -218,7 +226,7 @@ export default function Navbar({ setMainContent }: NavbarProps) {
               )}
             </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   )

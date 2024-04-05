@@ -26,8 +26,11 @@ export default function Login() {
   }, [navigate])
 
   const handleRedirect = () => {
+    console.log(
+      `https://auth-dev.devmaua.com/?redirect_uri=${window.origin}/login`
+    )
     window.location.replace(
-      'https://auth-dev.devmaua.com/?redirect_uri=http://localhost:5000/login'
+      `https://auth-dev.devmaua.com/?redirect_uri=${window.origin}/login`
     )
   }
 

@@ -1,4 +1,4 @@
-import { HTMLAttributes, useState } from 'react'
+import { HTMLAttributes, useContext, useState } from 'react'
 import Card from './little_components/Card'
 import { StateIcon, IconText } from './little_components/Icon'
 import { AiOutlineCalendar } from 'react-icons/ai'
@@ -15,6 +15,8 @@ import {
   PopoverArrow
 } from '../components/little_components/Popover'
 import Button from './little_components/Button'
+import ActionModal from './ActionModal'
+import { ModalContext } from '../contexts/modal_context'
 
 type actionStates = 'rejected' | 'waiting' | 'approved'
 
@@ -28,6 +30,7 @@ export default function HistoricActionCard({
 }: HistoricActionCardProps) {
   const [actionState] = useState<actionStates>('approved')
   const [isPopUpOpen, setPopUpOpen] = useState<boolean>(false)
+  const { changeModalContent } = useContext(ModalContext)
 
   const title = `${action.projectCode}: ${action?.title} `
 
@@ -93,7 +96,13 @@ export default function HistoricActionCard({
                   setPopUpOpen(true)
                 }}
               >
-                <Button variant="default">
+                <Button
+                  variant="default"
+                  onClick={() => {
+                    changeModalContent(<ActionModal action={action} />)
+                    setPopUpOpen(false)
+                  }}
+                >
                   <PenBox className="w-4" />
                   Editar
                 </Button>
