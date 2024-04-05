@@ -1,5 +1,5 @@
 import { plainTextToRa } from '../../../../../src/app/utils/functions/formatters'
-import '@testing-library/jest-dom'
+import { test, expect } from 'vitest'
 
 test('Plain Text to Ra', () => {
   const plainText = '21002100'

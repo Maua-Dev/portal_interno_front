@@ -3,7 +3,7 @@ import {
   hoursToMilliseconds,
   timeStampToDate
 } from '../../../../../src/app/utils/functions/timeStamp'
-import '@testing-library/jest-dom'
+import { test, expect } from 'vitest'
 
 test('Date to timestamp', () => {
   const date = '2024-03-18T18:33:54'
