@@ -52,8 +52,6 @@ export default function FilterBar({
     setFilterProps(localFilterProps)
   }
 
-
-
   function clearFilters() {
     setFilterProps(emptyFilterProps)
     setLocalFilterProps(emptyFilterProps)
@@ -74,7 +72,11 @@ export default function FilterBar({
     }))
   }
 
-  function renderFilterTags(key: string, value: any, index: number): JSX.Element {
+  function renderFilterTags(
+    key: string,
+    value: any,
+    index: number
+  ): JSX.Element {
     if (value !== '') {
       return (
         <FilterTag
@@ -86,7 +88,7 @@ export default function FilterBar({
           }}
         />
       )
-    } 
+    }
     return <></>
   }
 
@@ -94,7 +96,7 @@ export default function FilterBar({
     setTimeout(() => {
       clearFilters()
     }, 1000)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -111,13 +113,13 @@ export default function FilterBar({
           <Text size="2xl">Histórico</Text>
         </div>
         <SearchField
-          placeholder="Digite o titulo da atividade..."
+          // placeholder="Digite o titulo da atividade..."
           className="hidden w-64 md:block lg:w-72"
           onChange={(event) => {
             setSearchText(event.currentTarget.value)
           }}
         />
-        <div className='flex-row gap-4 hidden lg:flex'> 
+        <div className="hidden flex-row gap-4 lg:flex">
           {filterProps !== emptyFilterProps
             ? Object.entries(filterProps).map(([key, value], index) => {
               return renderFilterTags(key, value, index)
