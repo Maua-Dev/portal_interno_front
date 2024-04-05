@@ -41,7 +41,7 @@ test('Test Get All Members Usecase', async () => {
   expect(members[1].course).toBe('ECM')
   expect(members[1].hiredDate).toBe(1612137600000)
   expect(members[1].active).toBe('ACTIVE')
-  expect(members[1].userId).toBe('f28a92a3-0434-4efd-8f1b-a9c0af6ee627')
+  expect(members[1].userId).toBe('f28a92a3-0434-4efd-8f1b-a9c0af6ee626')
   expect(members[1].emailDev).toBe('bfevs.devmaua@maua.com')
 
   expect(members[0].email).toMatch(devEmailRegex)
