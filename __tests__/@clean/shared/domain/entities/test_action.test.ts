@@ -834,32 +834,40 @@ test('Test Action Entity with invalid duration', () => {
 test('Test Action Entity with invalid duration 2', () => {
   expect(() => {
     new Action({
-      ownerRa: '21002100',
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
       startDate: 1000,
       endDate: 2000,
-      duration: 1100,
+      duration: -123,
       actionId: '4000',
       storyId: 1,
+      isValid: true,
       title: 'Test Action Entity',
       description: 'Testing',
       projectCode: '76',
-      associatedMembersRa: ['21.00833-7'],
+      associatedMembersUserIds: [
+        '492e9fa2-9189-4fe7-b0f7-e6ca472b19f0',
+        '4a9019df-ab29-453f-8e8d-1cc845492f12'
+      ],
       stackTags: [STACK.FRONTEND, STACK.BACKEND],
       actionTypeTag: ACTION_TYPE.CODE
     })
   }).toThrowError(EntityError)
   expect(() => {
     new Action({
-      ownerRa: '21002100',
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
       startDate: 1000,
       endDate: 2000,
       duration: 0,
       actionId: '4000',
       storyId: 1,
+      isValid: true,
       title: 'Test Action Entity',
       description: 'Testing',
       projectCode: '76',
-      associatedMembersRa: ['21.00833-7'],
+      associatedMembersUserIds: [
+        '492e9fa2-9189-4fe7-b0f7-e6ca472b19f0',
+        '4a9019df-ab29-453f-8e8d-1cc845492f12'
+      ],
       stackTags: [STACK.FRONTEND, STACK.BACKEND],
       actionTypeTag: ACTION_TYPE.CODE
     })
