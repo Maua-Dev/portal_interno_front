@@ -831,6 +831,49 @@ test('Test Action Entity with invalid duration', () => {
   }).toThrowError('Field props.duration is not valid')
 })
 
+test('Test Action Entity with invalid duration 2', () => {
+  expect(() => {
+    new Action({
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
+      startDate: 1000,
+      endDate: 2000,
+      duration: -123,
+      actionId: '4000',
+      storyId: 1,
+      isValid: true,
+      title: 'Test Action Entity',
+      description: 'Testing',
+      projectCode: '76',
+      associatedMembersUserIds: [
+        '492e9fa2-9189-4fe7-b0f7-e6ca472b19f0',
+        '4a9019df-ab29-453f-8e8d-1cc845492f12'
+      ],
+      stackTags: [STACK.FRONTEND, STACK.BACKEND],
+      actionTypeTag: ACTION_TYPE.CODE
+    })
+  }).toThrowError(EntityError)
+  expect(() => {
+    new Action({
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
+      startDate: 1000,
+      endDate: 2000,
+      duration: 0,
+      actionId: '4000',
+      storyId: 1,
+      isValid: true,
+      title: 'Test Action Entity',
+      description: 'Testing',
+      projectCode: '76',
+      associatedMembersUserIds: [
+        '492e9fa2-9189-4fe7-b0f7-e6ca472b19f0',
+        '4a9019df-ab29-453f-8e8d-1cc845492f12'
+      ],
+      stackTags: [STACK.FRONTEND, STACK.BACKEND],
+      actionTypeTag: ACTION_TYPE.CODE
+    })
+  }).toThrowError('Field props.duration is not valid')
+})
+
 test('Test Action Entity without storyId prop', () => {
   const action = new Action({
     userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
