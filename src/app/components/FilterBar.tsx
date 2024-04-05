@@ -3,6 +3,7 @@ import Card from './little_components/Card'
 import SearchField from './little_components/SearchField'
 import Text from './little_components/Text'
 import { History, Search, X } from 'lucide-react'
+import HoverCard from './little_components/HoverCard'
 import {
   Popover,
   PopoverContent,
@@ -37,6 +38,7 @@ export default function FilterBar({
   ...props
 }: FilterBarProps) {
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false)
+  const [filterLabel, setFilterLabel] = useState<string | undefined>(undefined)
 
   const emptyFilterProps = {
     searchText: '',
@@ -112,13 +114,14 @@ export default function FilterBar({
           <History className="h-8 w-8" />
           <Text size="2xl" className='font-semibold'>Histórico</Text>
         </div>
-        <SearchField
-          placeholder="Pesquisar"
-          className="hidden w-64 md:block lg:w-72"
-          onChange={(event) => {
-            setSearchText(event.currentTarget.value)
-          }}
-        />
+        <div>
+          <SearchField
+            placeholder="Pesquisar"
+            className="hidden w-64 md:block lg:w-72"
+            onChange={(event) => {
+              setSearchText(event.currentTarget.value)
+            }}
+          /></div>
         <div className="hidden flex-row gap-4 lg:flex">
           {filterProps !== emptyFilterProps
             ? Object.entries(filterProps).map(([key, value], index) => {
@@ -127,19 +130,27 @@ export default function FilterBar({
             : null}
         </div>
       </div>
-      <div className="flex h-full flex-row gap-5">
+      <div className="flex h-full flex-row">
+        <HoverCard placeholder='Pesquisar'>
+          <Button variant='default' className='h-fit w-fit p-2 md:hidden'>
+            <Search className='text-skin-base h-5' />
+          </Button>
+        </HoverCard>
         <Popover open={popUpOpen}>
           <PopoverTrigger>
-            <Button
-              variant="default"
-              onClick={() => {
-                clearFilters()
-                setPopUpOpen((prev) => !prev)
-              }}
-            >
-              Filtro
-              <SlidersHorizontal className="h-5 w-5" />
-            </Button>
+            <HoverCard placeholder='Filtrar' className='md:hidden'>
+              <Button
+                variant="default"
+                className='p-2 md:px-4'
+                onClick={() => {
+                  clearFilters()
+                  setPopUpOpen((prev) => !prev)
+                }}
+              >
+                <p className='md:block hidden'>Filtro</p>
+                <SlidersHorizontal className="h-5 w-5" />
+              </Button>
+            </HoverCard>
           </PopoverTrigger>
           <PopoverContent>
             <form
