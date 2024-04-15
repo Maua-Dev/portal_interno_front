@@ -2,7 +2,7 @@
 import Card from './little_components/Card'
 import SearchField from './little_components/SearchField'
 import Text from './little_components/Text'
-import { History, Search, X } from 'lucide-react'
+import { MoveLeft, History, Search, X } from 'lucide-react'
 import HoverCard from './little_components/HoverCard'
 import {
   Popover,
@@ -38,6 +38,7 @@ export default function FilterBar({
   ...props
 }: FilterBarProps) {
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false)
+  const [searchOpen, setSearchOpen] = useState<boolean>(false)
 
   const emptyFilterProps = {
     searchText: '',
@@ -110,13 +111,13 @@ export default function FilterBar({
     >
       <div className="flex flex-row items-center gap-5">
         <div className="flex flex-row items-center gap-2">
-          <History className="h-8 w-8" />
-          <Text size="2xl" className='font-semibold'>Histórico</Text>
+          {searchOpen ? <HoverCard placeholder={'Voltar'}><Button variant='icon' onClick={() => {setSearchOpen(false)}}><MoveLeft /></Button></HoverCard> : <><History className="h-8 w-8" />
+            <Text size="2xl" className='font-semibold'>Histórico</Text></>}
         </div>
         <div>
           <SearchField
             placeholder="Pesquisar"
-            className="hidden w-64 md:block lg:w-72"
+            className={`${searchOpen ? 'block' : 'hidden'} w-64 md:block lg:w-72`}
             onChange={(event) => {
               setSearchText(event.currentTarget.value)
             }}
@@ -131,7 +132,9 @@ export default function FilterBar({
       </div>
       <div className="flex h-full flex-row">
         <HoverCard placeholder='Pesquisar'>
-          <Button variant='default' className='h-fit w-fit p-2 md:hidden'>
+          <Button variant='default' className='h-fit w-fit p-2 md:hidden' onClick={() => {
+            setSearchOpen(true)
+          }}>
             <Search className='text-skin-base h-5' />
           </Button>
         </HoverCard>
