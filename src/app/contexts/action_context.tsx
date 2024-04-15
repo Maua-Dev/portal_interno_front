@@ -21,6 +21,9 @@ import { GetAllMembersUsecase } from '../../@clean/modules/action/usecases/get_a
 import { Member } from '../../@clean/shared/domain/entities/member'
 import { GetMember } from '../../@clean/modules/action/usecases/get_member_usecase'
 import { historyResponse } from '../../@clean/shared/infra/repositories/action_repository_http'
+import { ROLE } from '../../@clean/shared/domain/enums/role_enum'
+import { COURSE } from '../../@clean/shared/domain/enums/course_enum'
+import { CreateMemberUsecase } from '../../@clean/modules/action/usecases/create_member_usecase'
 
 interface lastEvaluatedKeyResponse {
   actionId: string
@@ -90,6 +93,19 @@ export type ActionContextType = {
   membersSelected: Member[] | undefined
 
   setMembersSelected: Dispatch<SetStateAction<Member[] | undefined>>
+
+  createMember: (
+    ra: string,
+    emailDev: string,
+    role: ROLE,
+    stack: STACK,
+    year: number,
+    cellphone: string,
+    course: COURSE
+  ) => Promise<Member | undefined>
+
+  memberError: string
+  setMemberError: Dispatch<SetStateAction<string>>
 }
 
 const defaultContext: ActionContextType = {
@@ -172,6 +188,23 @@ const defaultContext: ActionContextType = {
 
   setMembersSelected: (_memberRa: SetStateAction<Member[] | undefined>) => {
     return []
+  },
+
+  createMember: async (
+    _ra: string,
+    _emailDev: string,
+    _role: ROLE,
+    _stack: STACK,
+    _year: number,
+    _cellphone: string,
+    _course: COURSE
+  ) => {
+    return undefined
+  },
+
+  memberError: '',
+  setMemberError: (_memberError: SetStateAction<string>) => {
+    return ''
   }
 }
 
@@ -201,6 +234,10 @@ const getAllMembersUsecase = containerAction.get<GetAllMembersUsecase>(
   RegistryAction.GetAllMembersUsecase
 )
 
+const createMemberUsecase = containerAction.get<CreateMemberUsecase>(
+  RegistryAction.CreateMemberUsecase
+)
+
 export function ActionProvider({ children }: PropsWithChildren) {
   const [createdActions, setCreatedActions] = useState<Action[]>([])
   const [action, setAction] = useState<Action | undefined>(undefined)
@@ -221,6 +258,8 @@ export function ActionProvider({ children }: PropsWithChildren) {
       startDate: 0
     }
   })
+
+  const [memberError, setMemberError] = useState<string>('')
 
   async function createAction(
     startDate: number,
@@ -354,9 +393,37 @@ export function ActionProvider({ children }: PropsWithChildren) {
     }
   }
 
+  async function createMember(
+    ra: string,
+    emailDev: string,
+    role: ROLE,
+    stack: STACK,
+    year: number,
+    cellphone: string,
+    course: COURSE
+  ) {
+    try {
+      const createdMember = await createMemberUsecase.execute(
+        ra,
+        emailDev,
+        role,
+        stack,
+        year,
+        cellphone,
+        course
+      )
+      return createdMember
+    } catch (error: any) {
+      setMemberError(error.message)
+      console.error('Something went wrong on create member: ', error.message)
+    }
+  }
+
   return (
     <ActionContext.Provider
       value={{
+        setMemberError,
+        memberError,
         createAction,
         action,
         setAction,
@@ -372,7 +439,8 @@ export function ActionProvider({ children }: PropsWithChildren) {
         getMember,
         getAllMembers,
         membersSelected,
-        setMembersSelected
+        setMembersSelected,
+        createMember
       }}
     >
       {children}

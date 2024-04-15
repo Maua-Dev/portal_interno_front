@@ -9,8 +9,8 @@ import { ACTION_TYPE } from '../../domain/enums/action_type_enum'
 import { STACK } from '../../domain/enums/stack_enum'
 import { JsonProps, Member } from '../../domain/entities/member'
 import { stackFormatter, stackToEnum } from '../../domain/enums/stack_enum'
-import { roleToEnum } from '../../domain/enums/role_enum'
-import { courseToEnum } from '../../domain/enums/course_enum'
+import { ROLE, roleToEnum } from '../../domain/enums/role_enum'
+import { COURSE, courseToEnum } from '../../domain/enums/course_enum'
 import { activeToEnum } from '../../domain/enums/active_enum'
 
 interface getHistoryRawResponse {
@@ -419,6 +419,51 @@ export class ActionRepositoryHttp implements IActionRepository {
       return membersArray
     } catch (error: any) {
       throw new Error('Error Getting All Members: ' + error.message)
+    }
+  }
+
+  async createMember(
+    ra: string,
+    emailDev: string,
+    role: ROLE,
+    stack: STACK,
+    year: number,
+    cellphone: string,
+    course: COURSE
+  ): Promise<Member> {
+    try {
+      const token = localStorage.getItem('idToken')
+
+      if (!token) {
+        throw new Error('Token not found')
+      }
+
+      const response = await this.http.post<JsonProps>(
+        '/create-member',
+        {
+          ra,
+          email_dev: emailDev,
+          role,
+          stack,
+          year,
+          cellphone,
+          course,
+          hired_date: 1713141151000
+        },
+        {
+          headers: {
+            Authorization: 'Bearer ' + token
+          }
+        }
+      )
+
+      console.log(response.data)
+
+      const member = Member.fromJSON(response.data)
+
+      return member
+    } catch (error: any) {
+      throw new Error('Error Creating Member: ' + error.response.data)
     }
   }
 

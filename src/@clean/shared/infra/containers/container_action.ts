@@ -9,6 +9,8 @@ import { GetHistoryUsecase } from '../../../modules/action/usecases/get_history_
 import { UpdateActionUsecase } from '../../../modules/action/usecases/update_action_usecase'
 import { GetAllMembersUsecase } from '../../../modules/action/usecases/get_all_members_usecase'
 import { GetMember } from '../../../modules/action/usecases/get_member_usecase'
+import { CreateMemberUsecase } from '../../../modules/action/usecases/create_member_usecase'
+
 
 export const RegistryAction = {
   // Axios Adapter
@@ -24,7 +26,8 @@ export const RegistryAction = {
   GetHistoryUsecase: Symbol.for('GetHistoryUsecase'),
   UpdateActionUsecase: Symbol.for('UpdateActionUsecase'),
   GetMemberUsecase: Symbol.for('GetMemberUsecase'),
-  GetAllMembersUsecase: Symbol.for('GetAllMembersUsecase')
+  GetAllMembersUsecase: Symbol.for('GetAllMembersUsecase'),
+  CreateMemberUsecase: Symbol.for('CreateMemberUsecase'),
 }
 
 export const containerAction = new Container()
@@ -163,6 +166,27 @@ containerAction
       )
     } else {
       return new GetAllMembersUsecase(
+        context.container.get(RegistryAction.ActionRepositoryMock)
+      )
+    }
+  })
+
+containerAction
+  .bind(RegistryAction.CreateMemberUsecase)
+  .toDynamicValue((context) => {
+    if (import.meta.env.VITE_STAGE === 'TEST') {
+      return new CreateMemberUsecase(
+        context.container.get(RegistryAction.ActionRepositoryMock)
+      )
+    } else if (
+      import.meta.env.VITE_STAGE === 'DEV' ||
+      import.meta.env.VITE_STAGE === 'PROD'
+    ) {
+      return new CreateMemberUsecase(
+        context.container.get(RegistryAction.ActionRepositoryHttp)
+      )
+    } else {
+      return new CreateMemberUsecase(
         context.container.get(RegistryAction.ActionRepositoryMock)
       )
     }

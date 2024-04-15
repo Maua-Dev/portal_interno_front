@@ -4,6 +4,8 @@ import { historyResponse } from '../../../../shared/infra/repositories/action_re
 import { ACTION_TYPE } from '../../../../shared/domain/enums/action_type_enum'
 import { STACK } from '../../../../shared/domain/enums/stack_enum'
 import { Member } from '../../../../shared/domain/entities/member'
+import { COURSE } from '../../../../shared/domain/enums/course_enum'
+import { ROLE } from '../../../../shared/domain/enums/role_enum'
 
 export interface IActionRepository {
   // creates action and associatedActions for each associatedMember and the owner
@@ -56,4 +58,14 @@ export interface IActionRepository {
     newActionTypeTag?: ACTION_TYPE,
     newisValid?: boolean
   ): Promise<Action>
+
+  createMember(
+    ra: string,
+    emailDev: string,
+    role: ROLE,
+    stack: STACK,
+    year: number,
+    cellphone: string,
+    course: COURSE
+  ): Promise<Member>
 }
