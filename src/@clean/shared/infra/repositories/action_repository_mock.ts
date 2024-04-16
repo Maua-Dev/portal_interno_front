@@ -566,6 +566,51 @@ export class ActionRepositoryMock implements IActionRepository {
 
     return members
   }
+
+  async createMember(
+    ra: string,
+    emailDev: string,
+    role: ROLE,
+    stack: STACK,
+    year: number,
+    cellphone: string,
+    course: COURSE
+  ): Promise<Member> {
+    const member = new Member({
+      ra,
+      emailDev,
+      role,
+      stack,
+      year,
+      course,
+      cellphone,
+      name: 'NameForMock',
+      email: 'emailformock@gmail.com',
+      active: ACTIVE.ACTIVE,
+      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
+      hiredDate: 1640192165000
+    })
+
+    this.members.push(member)
+
+    return member
+  }
+
+  async updateActionValidation(
+    actionId: string,
+    isValid: boolean
+  ): Promise<Action> {
+    let newAction = null
+    this.actions.forEach((action) => {
+      if (action.actionId.includes(actionId)) {
+        action.isValid = isValid
+        newAction = action
+      }
+    })
+
+    if (newAction) return newAction
+    throw new NoItemsFoundError(`actionId: ${actionId}`)
+  }
 }
 
 decorate(injectable(), ActionRepositoryMock)

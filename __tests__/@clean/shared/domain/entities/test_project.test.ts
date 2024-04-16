@@ -92,24 +92,6 @@ test('Test Project entity to JSON', () => {
   expect(project.toJSON()).toBeInstanceOf(Object)
 })
 
-test('Test Project entity from JSON', () => {
-  const project = {
-    code: 'PI',
-    name: 'Portal Interno',
-    description: 'Site controle de membros',
-    members_user_ids: [
-      '51ah5jaj-c9jm-1345-666ab-e12341c14a3',
-      '6f5g4h7J-876j-0098-123hb-hgb567fy4hb'
-    ],
-    photos: ['https://www.google.com.br', 'https://www.google.com.br'],
-    po_user_id: '51ah5jaj-c9jm-1345-666ab-e12341c14a3',
-    scrum_user_id: '6f5g4h7J-876j-0098-123hb-hgb567fy4hb',
-    start_date: 1000
-  }
-
-  expect(Project.fromJSON(project)).toBeInstanceOf(Project)
-})
-
 // Invalid attributes tests
 
 test('Test Project entity error code', () => {

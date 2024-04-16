@@ -17,10 +17,8 @@ import { GetHistoryUsecase } from '../../@clean/modules/action/usecases/get_hist
 import { STACK } from '../../@clean/shared/domain/enums/stack_enum'
 import { ACTION_TYPE } from '../../@clean/shared/domain/enums/action_type_enum'
 import { UpdateActionUsecase } from '../../@clean/modules/action/usecases/update_action_usecase'
-import { GetAllMembersUsecase } from '../../@clean/modules/action/usecases/get_all_members_usecase'
-import { Member } from '../../@clean/shared/domain/entities/member'
-import { GetMember } from '../../@clean/modules/action/usecases/get_member_usecase'
 import { historyResponse } from '../../@clean/shared/infra/repositories/action_repository_http'
+import { UpdateActionValidationUsecase } from '../../@clean/modules/action/usecases/update_action_validation'
 
 interface lastEvaluatedKeyResponse {
   actionId: string
@@ -83,13 +81,10 @@ export type ActionContextType = {
     newisValid?: boolean
   ) => Promise<Action | undefined>
 
-  getMember: () => Promise<Member | undefined>
-
-  getAllMembers: () => Promise<Member[] | undefined>
-
-  membersSelected: Member[] | undefined
-
-  setMembersSelected: Dispatch<SetStateAction<Member[] | undefined>>
+  updateActionValidation: (
+    actionId: string,
+    isValid: boolean
+  ) => Promise<Action | undefined>
 }
 
 const defaultContext: ActionContextType = {
@@ -160,18 +155,9 @@ const defaultContext: ActionContextType = {
   ) => {
     return undefined
   },
-  getMember: async () => {
+
+  updateActionValidation: async (_actionId: string, _isValid: boolean) => {
     return undefined
-  },
-
-  getAllMembers: async () => {
-    return []
-  },
-
-  membersSelected: [],
-
-  setMembersSelected: (_memberRa: SetStateAction<Member[] | undefined>) => {
-    return []
   }
 }
 
@@ -193,13 +179,11 @@ const getHistoryUsecase = containerAction.get<GetHistoryUsecase>(
 const updateActionUsecase = containerAction.get<UpdateActionUsecase>(
   RegistryAction.UpdateActionUsecase
 )
-const getMembersUsecase = containerAction.get<GetMember>(
-  RegistryAction.GetMemberUsecase
-)
 
-const getAllMembersUsecase = containerAction.get<GetAllMembersUsecase>(
-  RegistryAction.GetAllMembersUsecase
-)
+const updateActionValidationUsecase =
+  containerAction.get<UpdateActionValidationUsecase>(
+    RegistryAction.UpdateActionValidationUsecase
+  )
 
 export function ActionProvider({ children }: PropsWithChildren) {
   const [createdActions, setCreatedActions] = useState<Action[]>([])
@@ -211,9 +195,6 @@ export function ActionProvider({ children }: PropsWithChildren) {
     useState<lastEvaluatedKeyResponse>()
   const [firstEvaluatedKey, setFirstEvaluatedKey] = useState<string>()
   const [startDate, setStartDate] = useState<number>()
-  const [membersSelected, setMembersSelected] = useState<Member[] | undefined>(
-    undefined
-  )
   const [fullHistory, setFullHistory] = useState<historyResponse>({
     actions: [],
     lastEvaluatedKey: {
@@ -298,26 +279,6 @@ export function ActionProvider({ children }: PropsWithChildren) {
     return fullHistory
   }
 
-  async function getMember() {
-    try {
-      const member = await getMembersUsecase.execute()
-
-      return member
-    } catch (error: any) {
-      console.log('Something went wrong on get member: ', error)
-    }
-  }
-
-  async function getAllMembers(): Promise<Member[] | undefined> {
-    try {
-      const members = await getAllMembersUsecase.execute()
-
-      return members.members
-    } catch (error: any) {
-      console.log('Something went wrong on get all members: ', error)
-    }
-  }
-
   async function updateAction(
     actionId: string,
     newStartDate?: number,
@@ -354,6 +315,18 @@ export function ActionProvider({ children }: PropsWithChildren) {
     }
   }
 
+  async function updateActionValidation(actionId: string, isValid: boolean) {
+    try {
+      const updatedAction = await updateActionValidationUsecase.execute(
+        actionId,
+        isValid
+      )
+      return updatedAction
+    } catch (error: any) {
+      console.error('Something went wrong on update action validation: ', error)
+    }
+  }
+
   return (
     <ActionContext.Provider
       value={{
@@ -369,10 +342,7 @@ export function ActionProvider({ children }: PropsWithChildren) {
         lastEvaluatedKeyResponse,
         startDate,
         updateAction,
-        getMember,
-        getAllMembers,
-        membersSelected,
-        setMembersSelected
+        updateActionValidation
       }}
     >
       {children}

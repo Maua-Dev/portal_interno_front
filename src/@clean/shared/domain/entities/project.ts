@@ -12,14 +12,16 @@ export type ProjectProps = {
 }
 
 export type JsonProps = {
-  code: string
-  name: string
-  description: string
-  po_user_id: string
-  scrum_user_id: string
-  start_date: number
-  members_user_ids: string[]
-  photos: string[]
+  project: {
+    code: string
+    name: string
+    description: string
+    po_user_id: string
+    scrum_user_id: string
+    start_date: number
+    members_user_ids: string[]
+    photos: string[]
+  }
 }
 
 export class Project {
@@ -205,14 +207,14 @@ export class Project {
 
   static fromJSON(json: JsonProps) {
     return new Project({
-      code: json.code,
-      name: json.name,
-      description: json.description,
-      poUserId: json.po_user_id,
-      scrumUserId: json.scrum_user_id,
-      startDate: json.start_date,
-      membersUserIds: json.members_user_ids,
-      photos: json.photos
+      code: json.project.code,
+      name: json.project.name,
+      description: json.project.description,
+      poUserId: json.project.po_user_id,
+      scrumUserId: json.project.scrum_user_id,
+      startDate: json.project.start_date,
+      membersUserIds: json.project.members_user_ids,
+      photos: json.project.photos
     })
   }
 
