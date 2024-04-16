@@ -1,11 +1,11 @@
 import { test, expect } from 'vitest'
-import { GetMember } from '../../../../../src/@clean/modules/action/usecases/get_member_usecase'
 import { Member } from '../../../../../src/@clean/shared/domain/entities/member'
-import { ActionRepositoryMock } from '../../../../../src/@clean/shared/infra/repositories/action_repository_mock'
+import { MemberRepositoryMock } from '../../../../../src/@clean/shared/infra/repositories/member_repository_mock'
+import { GetMemberUsecase } from '../../../../../src/@clean/modules/member/usecases/get_member_usecase'
 
 test('Test Get Member Usecase', async () => {
-  const repo = new ActionRepositoryMock()
-  const getMember = new GetMember(repo)
+  const repo = new MemberRepositoryMock()
+  const getMember = new GetMemberUsecase(repo)
 
   const member = await getMember.execute()
 
