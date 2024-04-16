@@ -4,14 +4,9 @@ import { AssociatedAction } from '../../domain/entities/associated_action'
 import { decorate, injectable } from 'inversify'
 import { AxiosInstance } from 'axios'
 import { IActionRepository } from '../../../modules/action/domain/repositories/action_repository_interface'
-import { raFormatterFromJson } from '../../../../app/utils/functions/formatters'
 import { ACTION_TYPE } from '../../domain/enums/action_type_enum'
 import { STACK } from '../../domain/enums/stack_enum'
-import { JsonProps, Member } from '../../domain/entities/member'
-import { stackFormatter, stackToEnum } from '../../domain/enums/stack_enum'
-import { ROLE, roleToEnum } from '../../domain/enums/role_enum'
-import { COURSE, courseToEnum } from '../../domain/enums/course_enum'
-import { activeToEnum } from '../../domain/enums/active_enum'
+import { stackFormatter } from '../../domain/enums/stack_enum'
 
 interface getHistoryRawResponse {
   actions: [

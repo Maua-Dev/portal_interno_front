@@ -1,4 +1,4 @@
-import { Dispatch, PropsWithChildren, createContext, useState } from 'react'
+import { PropsWithChildren, createContext, useState } from 'react'
 import { Member } from '../../@clean/shared/domain/entities/member'
 import { COURSE } from '../../@clean/shared/domain/enums/course_enum'
 import { ROLE } from '../../@clean/shared/domain/enums/role_enum'
@@ -9,10 +9,10 @@ import {
 } from '../../@clean/shared/infra/containers/container_member'
 import { GetMemberUsecase } from '../../@clean/modules/member/usecases/get_member_usecase'
 import { GetAllMembersUsecase } from '../../@clean/modules/member/usecases/get_all_members_usecase'
-import { CreateMemberUsecase } from '../../@clean/modules/action/usecases/create_member_usecase'
 import { UpdateMemberUsecase } from '../../@clean/modules/member/usecases/update_member_usecase'
 import { DeleteMemberUsecase } from '../../@clean/modules/member/usecases/delete_member_usecase'
 import { ACTIVE } from '../../@clean/shared/domain/enums/active_enum'
+import { CreateMemberUsecase } from '../../@clean/modules/member/usecases/create_member_usecase'
 
 export type MemberContextType = {
   getMember: () => Promise<Member | undefined>

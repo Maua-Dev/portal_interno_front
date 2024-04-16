@@ -17,6 +17,7 @@ import { Member } from '../../@clean/shared/domain/entities/member'
 import ListRow from './ListRow'
 import { ModalContext } from '../contexts/modal_context'
 import { plainTextToRa } from '../utils/functions/formatters'
+import { MemberContext } from '../contexts/member_context'
 
 const actionSchema = z.object({
   title: z.string().min(1, { message: 'Título é obrigatório' }),
@@ -68,7 +69,7 @@ export default function ActionModal({ action }: { action?: Action }) {
   const {
     getAllMembers
     //getMember
-  } = useContext(ActionContext)
+  } = useContext(MemberContext)
   const { closeModal } = useContext(ModalContext)
   const {
     //updateAction,
