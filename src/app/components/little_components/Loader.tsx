@@ -9,6 +9,7 @@ export default function Loader() {
       <HistoricActionCardSkeleton className="opacity-40" />
       <HistoricActionCardSkeleton className="opacity-20" />
       <HistoricActionCardSkeleton className="opacity-10" />
+      <HistoricActionCardSkeleton className="opacity-5" />
     </div>
   )
 }

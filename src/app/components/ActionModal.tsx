@@ -258,7 +258,7 @@ export default function ActionModal({ action }: { action?: Action }) {
       ></div>
       <div
         className={`z-[70] h-auto w-4/5 rounded-2xl md:h-4/5 ${
-          darkMode ? 'bg-dev-gray text-white' : 'bg-white'
+          darkMode ? 'bg-skin-secundary text-white' : 'bg-white'
         }`}
       >
         <form

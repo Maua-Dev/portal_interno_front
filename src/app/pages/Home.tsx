@@ -1,5 +1,4 @@
 import { useContext } from 'react'
-import ActionModal from '../components/ActionModal'
 import Navbar from '../components/Navbar'
 import { ModalContext } from '../contexts/modal_context'
 import useDarkMode from '../utils/functions/useDarkMode'
@@ -9,7 +8,7 @@ import useDarkMode from '../utils/functions/useDarkMode'
 
 export default function Home() {
   const { darkMode } = useDarkMode()
-  const { isModalOpen } = useContext(ModalContext)
+  const { modalContent } = useContext(ModalContext)
   // const action = new Action({
   //   ownerRa: '21002100',
   //   startDate: 1710797634000,
@@ -29,12 +28,12 @@ export default function Home() {
     <>
       <Navbar />
       <main
-        className={`${
-          isModalOpen ? 'h-auto' : 'h-screen'
-        } w-full overflow-x-hidden ${darkMode ? 'bg-black' : 'bg-sky-200'}`}
+        className={`h-screen w-full overflow-x-hidden ${
+          darkMode ? 'bg-skin-fill' : 'theme-white bg-sky-200'
+        }`}
       >
         {/* {isModalOpen && <ActionModal action={action} />} */}
-        {isModalOpen && <ActionModal />}
+        {modalContent}
       </main>
     </>
   )
