@@ -124,7 +124,7 @@ export class MemberRepositoryHttp implements IMemberRepository {
             name: memberUnit.member.name,
             emailDev: memberUnit.member.email_dev,
             email: memberUnit.member.email,
-            ra: raFormatterFromJson(memberUnit.member.ra),
+            ra: memberUnit.member.ra,
             role: roleToEnum(memberUnit.member.role),
             stack: stackToEnum(memberUnit.member.stack),
             year: memberUnit.member.year,
