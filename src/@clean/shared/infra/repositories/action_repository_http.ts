@@ -45,8 +45,6 @@ interface createActionBodyRequest {
   start_date: number
   title: string
   description: string | ''
-  action_id: string
-  is_valid: boolean
   end_date: number
   duration: number
   project_code: string
@@ -269,8 +267,6 @@ export class ActionRepositoryHttp implements IActionRepository {
     startDate: number,
     title: string,
     description: string,
-    actionId: string,
-    isValid: boolean,
     endDate: number,
     duration: number,
     projectCode: string,
@@ -290,8 +286,6 @@ export class ActionRepositoryHttp implements IActionRepository {
       story_id: storyId,
       title: title,
       description: description,
-      action_id: actionId,
-      is_valid: isValid,
       end_date: endDate,
       duration: duration,
       project_code: projectCode,
@@ -299,6 +293,8 @@ export class ActionRepositoryHttp implements IActionRepository {
       stack_tags: stackTagsFormatted,
       action_type_tag: actionTypeTag?.toString() || undefined
     }
+
+    console.log(bodyRequest)
 
     try {
       const response = await this.http.post<createActionRawResponse>(
@@ -310,7 +306,7 @@ export class ActionRepositoryHttp implements IActionRepository {
           }
         }
       )
-
+      console.log(response.data.message)
       return response.data.action
     } catch (error: any) {
       throw new Error('Error creating action: ' + error.message)
