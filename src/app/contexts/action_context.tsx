@@ -414,8 +414,25 @@ export function ActionProvider({ children }: PropsWithChildren) {
       )
       return createdMember
     } catch (error: any) {
-      setMemberError(error.message)
-      console.error('Something went wrong on create member: ', error.message)
+      if (error.message == 'Field email_dev is not valid') {
+        setMemberError('Email_Dev não é válido')
+      } else if (error.message == 'Field role is not valid') {
+        setMemberError('Role não é válida')
+      } else if (error.message == 'Field stack is not valid') {
+        setMemberError('Stack não é válida')
+      } else if (error.message == 'Field year is not valid') {
+        setMemberError('Ano não é válido')
+      } else if (error.message == 'Field cellphone is not valid') {
+        setMemberError('Celular não é válido')
+      } else if (error.message == 'Field course is not valid') {
+        setMemberError('Curso não é válido')
+      } else if (ra == '') {
+        setMemberError('RA não pode ser vazio')
+      } else if (error.message == 'The item alredy exists for this user_id') {
+        setMemberError('O usuário já existe')
+      } else {
+        setMemberError('Erro ao criar usuário')
+      }
     }
   }
 

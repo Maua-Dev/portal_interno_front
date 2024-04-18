@@ -361,13 +361,11 @@ export class ActionRepositoryHttp implements IActionRepository {
       if (!token) {
         throw new Error('Token not found')
       }
-
       const response = await this.http.get<JsonProps>('/get-member', {
         headers: {
           Authorization: 'Bearer ' + token
         }
       })
-
       const member = Member.fromJSON(response.data)
       return member
     } catch (error: any) {
@@ -457,13 +455,13 @@ export class ActionRepositoryHttp implements IActionRepository {
         }
       )
 
-      console.log(response.data)
+      // console.log(response.data)
 
       const member = Member.fromJSON(response.data)
 
       return member
     } catch (error: any) {
-      throw new Error('Error Creating Member: ' + error.response.data)
+      throw new Error(error.response.data)
     }
   }
 
