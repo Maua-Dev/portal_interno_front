@@ -5,8 +5,7 @@ import FilterBar from './FilterBar'
 import HistoricActionCard from './HistoricActionCard'
 import { ActionContext } from '../contexts/action_context'
 import Loader from './little_components/Loader'
-import { STACK, stackToEnum } from '../../@clean/shared/domain/enums/stack_enum'
-import { ACTION_TYPE } from '../../@clean/shared/domain/enums/action_type_enum'
+import { stackToEnum } from '../../@clean/shared/domain/enums/stack_enum'
 
 interface FilterProps {
   [key: string]: string
@@ -16,21 +15,6 @@ interface FilterProps {
   orderBy: string
 }
 
-const action: Action = new Action({
-  userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
-  startDate: 1689955200000,
-  endDate: 1689964020000,
-  duration: 8820000,
-  actionId: '663ef972-cc93-4bb8-8b69-8b5cfa2f532c',
-  isValid: true,
-  title: 'Imp. Navbar',
-  actionTypeTag: ACTION_TYPE.CODE,
-  projectCode: 'PT',
-  stackTags: [STACK.FRONTEND],
-  storyId: 150,
-  description: 'Navbar codada'
-})
-
 interface lastEvaluatedKey {
   actionId: string
   startDate: number
@@ -38,7 +22,7 @@ interface lastEvaluatedKey {
 
 export default function Historic() {
   const [history, setHistory] = useState<Action[]>([])
-  const [lastEvaluatedKey, setLastEvaluatedKey] = useState<lastEvaluatedKey>()
+  const [_lastEvaluatedKey, setLastEvaluatedKey] = useState<lastEvaluatedKey>()
   const [searchText, setSearchText] = useState<string>('')
   const { getHistory } = useContext(ActionContext)
   const [filterProps, setFilterProps] = useState<FilterProps>({
@@ -66,21 +50,6 @@ export default function Historic() {
     )
     setLastEvaluatedKey(response.lastEvaluatedKey)
     setHistory(response.actions)
-  }
-
-  const loadMoreHistoric = async () => {
-    if (lastEvaluatedKey !== undefined) {
-      const response = await getHistory(
-        undefined,
-        undefined,
-        1,
-        lastEvaluatedKey
-      )
-      setLastEvaluatedKey(response.lastEvaluatedKey)
-
-      setHistory((prevHistory) => prevHistory.concat(response.actions))
-      console.log('historico' + history)
-    }
   }
 
   const filteredActions = useMemo(() => {

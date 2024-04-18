@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from 'react'
-import ActionModal from '../components/ActionModal'
 import Navbar from '../components/Navbar'
 import { ModalContext } from '../contexts/modal_context'
 import useDarkMode from '../utils/functions/useDarkMode'

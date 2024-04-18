@@ -1,7 +1,6 @@
 import { ACTION_TYPE, actionTypeToEnum } from '../enums/action_type_enum'
 import { STACK, stackToEnum } from '../enums/stack_enum'
 import { EntityError } from '../helpers/errors/domain_error'
-import { validate } from 'uuid'
 
 export type ActionJsonProps = {
   user_id: string
@@ -316,7 +315,7 @@ export class Action {
   }
 
   // Validate functions
-  static validateUserId(userId: string) {
+  static validateUserId(_userId: string) {
     // if (typeof userId !== 'string') {
     //   return false
     // }
