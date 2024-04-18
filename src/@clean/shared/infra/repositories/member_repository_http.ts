@@ -5,7 +5,6 @@ import { ACTIVE, activeToEnum } from '../../domain/enums/active_enum'
 import { COURSE, courseToEnum } from '../../domain/enums/course_enum'
 import { ROLE, roleToEnum } from '../../domain/enums/role_enum'
 import { STACK, stackToEnum } from '../../domain/enums/stack_enum'
-import { raFormatterFromJson } from '../../../../app/utils/functions/formatters'
 
 interface memberRawResponse {
   member: {
@@ -89,11 +88,10 @@ export class MemberRepositoryHttp implements IMemberRepository {
           Authorization: 'Bearer ' + token
         }
       })
-
       const member = Member.fromJSON(response.data)
       return member
     } catch (error: any) {
-      throw new Error('Error Getting All Members: ' + error.message)
+      throw new Error('Error Getting Member: ' + error.message)
     }
   }
 
