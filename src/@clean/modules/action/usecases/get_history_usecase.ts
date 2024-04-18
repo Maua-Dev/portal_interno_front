@@ -14,11 +14,16 @@ export class GetHistoryUsecase {
       startDate: number
     }
   ): Promise<historyResponse> {
-    if (start && end && amount && exclusiveStartKey) {
+    if (
+      start !== undefined &&
+      end !== undefined &&
+      amount !== undefined &&
+      exclusiveStartKey !== undefined
+    ) {
       const response = await this.actionRepo.getHistoryActions(
-        amount,
         start,
         end,
+        amount,
         exclusiveStartKey
       )
 
@@ -27,11 +32,16 @@ export class GetHistoryUsecase {
       }
 
       return response
-    } else if (start && end && amount) {
+    } else if (
+      start !== undefined &&
+      end !== undefined &&
+      amount !== undefined
+    ) {
       const response = await this.actionRepo.getHistoryActions(
         start,
         end,
-        amount
+        amount,
+        undefined
       )
 
       if (response.actions.length === 0) {
@@ -39,7 +49,7 @@ export class GetHistoryUsecase {
       }
 
       return response
-    } else if (start && end) {
+    } else if (start !== undefined && end !== undefined) {
       const response = await this.actionRepo.getHistoryActions(start, end)
 
       if (response.actions.length === 0) {
@@ -47,7 +57,7 @@ export class GetHistoryUsecase {
       }
 
       return response
-    } else if (start && amount) {
+    } else if (start !== undefined && amount !== undefined) {
       const response = await this.actionRepo.getHistoryActions(amount)
 
       if (response.actions.length === 0) {
@@ -55,11 +65,12 @@ export class GetHistoryUsecase {
       }
 
       return response
-    } else if (end && amount) {
+    } else if (end !== undefined && amount !== undefined) {
       const response = await this.actionRepo.getHistoryActions(
         undefined,
         end,
-        amount
+        amount,
+        undefined
       )
 
       if (response.actions.length === 0) {
@@ -67,24 +78,25 @@ export class GetHistoryUsecase {
       }
 
       return response
-    } else if (amount) {
+    } else if (exclusiveStartKey !== undefined && amount !== undefined) {
       const response = await this.actionRepo.getHistoryActions(
         undefined,
         undefined,
-        amount
-      )
-
-      if (response.actions.length === 0) {
-        throw new NoItemsFoundError('No actions found')
-      }
-
-      return response
-    } else if (exclusiveStartKey) {
-      const response = await this.actionRepo.getHistoryActions(
-        undefined,
-        undefined,
-        undefined,
+        amount,
         exclusiveStartKey
+      )
+
+      if (response.actions.length === 0) {
+        throw new NoItemsFoundError('No actions found')
+      }
+
+      return response
+    } else if (amount !== undefined) {
+      const response = await this.actionRepo.getHistoryActions(
+        undefined,
+        undefined,
+        amount,
+        undefined
       )
 
       if (response.actions.length === 0) {

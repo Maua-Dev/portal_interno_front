@@ -28,20 +28,20 @@ export default function HistoricActionCardSkeleton({
     >
       <div className="flex w-fit flex-row items-center gap-4 md:w-3/6">
         <TextLoader className="h-5 w-5" />
-        <div className="flex flex-col gap-2 overflow-hidden">
-          <TextLoader className="h-4 w-52" />
-          <TextLoader className="h-4 w-32" />
+        <div className="flex flex-col gap-3 overflow-hidden">
+          <TextLoader className="h-2 w-16 sm:h-2 sm:w-28 lg:h-4 lg:w-52" />
+          <TextLoader className="h-2 w-14 sm:h-2 sm:w-12 lg:h-4 lg:w-32" />
         </div>
       </div>
-      <div className="hidden w-1/5 flex-row justify-start gap-2 lg:flex">
+      <div className="hidden w-1/5 flex-row justify-start gap-2 sm:flex">
         <TextLoader className="h-4 w-10 rounded-sm" />
         <TextLoader className="h-4 w-10 rounded-sm" />
         <TextLoader className="h-4 w-10 rounded-sm" />
       </div>
       <div className="flex w-fit flex-row items-center justify-between gap-3 md:w-1/5">
         <div className="flex flex-col justify-center gap-1">
-          <TextLoader className="h-3 w-20" />
-          <TextLoader className="h-3 w-16" />
+          <TextLoader className="h-1.5 w-10" />
+          <TextLoader className="h-1.5 w-8" />
         </div>
         <div>
           <BsThreeDots className="h-10 w-10 cursor-pointer p-2 text-skin-skeleton" />

@@ -250,6 +250,7 @@ export function ActionProvider({ children }: PropsWithChildren) {
       startDate: number
     }
   ) {
+    console.log(amount)
     try {
       const { actions, lastEvaluatedKey } = await getHistoryUsecase.execute(
         start,
@@ -264,6 +265,7 @@ export function ActionProvider({ children }: PropsWithChildren) {
       )
       setLastEvaluatedKeyResponse(lastEvaluatedKey)
       setStartDate(lastEvaluatedKey.startDate)
+
       return fullHistory
     } catch (error: any) {
       console.error('Something went wrong on get history: ', error)
@@ -315,7 +317,7 @@ export function ActionProvider({ children }: PropsWithChildren) {
       )
       return updatedAction
     } catch (error: any) {
-      console.error('Something went wrong on update action validation: ', error)
+      console.error('Something went wrong on update action: ', error)
     }
   }
 

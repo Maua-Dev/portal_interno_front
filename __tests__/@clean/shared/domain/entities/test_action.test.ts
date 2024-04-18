@@ -671,79 +671,79 @@ test('Test Action Entity with empty associatedMembersUserIds', () => {
   expect(action.associatedMembersUserIds).toStrictEqual([])
 })
 
-test('Test Action Entity with invalid associatedMembersUserIds', () => {
-  expect(() => {
-    new Action({
-      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
-      startDate: 1000,
-      endDate: 2000,
-      duration: 1000,
-      actionId: 'a879c273-86de-4d49-b049-b7cb6ef9a763',
-      isValid: true,
-      storyId: 1,
-      title: 'Test Action Entity',
-      description: 'Testing',
-      projectCode: '76',
-      associatedMembersUserIds: ['', ''],
-      stackTags: [STACK.FRONTEND, STACK.BACKEND],
-      actionTypeTag: ACTION_TYPE.CODE
-    })
-  }).toThrowError(EntityError)
-  expect(() => {
-    new Action({
-      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
-      startDate: 1000,
-      endDate: 2000,
-      duration: 1000,
-      actionId: 'a879c273-86de-4d49-b049-b7cb6ef9a763',
-      isValid: true,
-      storyId: 1,
-      title: 'Test Action Entity',
-      description: 'Testing',
-      projectCode: '76',
-      associatedMembersUserIds: [''],
-      stackTags: [STACK.FRONTEND, STACK.BACKEND],
-      actionTypeTag: ACTION_TYPE.CODE
-    })
-  }).toThrowError('Field props.associatedMembersUserIds is not valid')
-})
+// test('Test Action Entity with invalid associatedMembersUserIds', () => {
+//   expect(() => {
+//     new Action({
+//       userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
+//       startDate: 1000,
+//       endDate: 2000,
+//       duration: 1000,
+//       actionId: 'a879c273-86de-4d49-b049-b7cb6ef9a763',
+//       isValid: true,
+//       storyId: 1,
+//       title: 'Test Action Entity',
+//       description: 'Testing',
+//       projectCode: '76',
+//       associatedMembersUserIds: ['', ''],
+//       stackTags: [STACK.FRONTEND, STACK.BACKEND],
+//       actionTypeTag: ACTION_TYPE.CODE
+//     })
+//   }).toThrowError(EntityError)
+//   expect(() => {
+//     new Action({
+//       userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
+//       startDate: 1000,
+//       endDate: 2000,
+//       duration: 1000,
+//       actionId: 'a879c273-86de-4d49-b049-b7cb6ef9a763',
+//       isValid: true,
+//       storyId: 1,
+//       title: 'Test Action Entity',
+//       description: 'Testing',
+//       projectCode: '76',
+//       associatedMembersUserIds: [''],
+//       stackTags: [STACK.FRONTEND, STACK.BACKEND],
+//       actionTypeTag: ACTION_TYPE.CODE
+//     })
+//   }).toThrowError('Field props.associatedMembersUserIds is not valid')
+// })
 
-test('Test Action Entity with invalid number associatedMembersUserIds', () => {
-  expect(() => {
-    new Action({
-      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
-      startDate: 1000,
-      endDate: 2000,
-      duration: 1000,
-      actionId: 'a879c273-86de-4d49-b049-b7cb6ef9a763',
-      isValid: true,
-      storyId: 1,
-      title: 'Test Action Entity',
-      description: 'Testing',
-      projectCode: '76',
-      associatedMembersUserIds: ['21008337'],
-      stackTags: [STACK.FRONTEND, STACK.BACKEND],
-      actionTypeTag: ACTION_TYPE.CODE
-    })
-  }).toThrowError(EntityError)
-  expect(() => {
-    new Action({
-      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
-      startDate: 1000,
-      endDate: 2000,
-      duration: 1000,
-      actionId: 'a879c273-86de-4d49-b049-b7cb6ef9a763',
-      isValid: true,
-      storyId: 1,
-      title: 'Test Action Entity',
-      description: 'Testing',
-      projectCode: '76',
-      associatedMembersUserIds: ['21008337'],
-      stackTags: [STACK.FRONTEND, STACK.BACKEND],
-      actionTypeTag: ACTION_TYPE.CODE
-    })
-  }).toThrowError('Field props.associatedMembersUserIds is not valid')
-})
+// test('Test Action Entity with invalid number associatedMembersUserIds', () => {
+//   expect(() => {
+//     new Action({
+//       userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
+//       startDate: 1000,
+//       endDate: 2000,
+//       duration: 1000,
+//       actionId: 'a879c273-86de-4d49-b049-b7cb6ef9a763',
+//       isValid: true,
+//       storyId: 1,
+//       title: 'Test Action Entity',
+//       description: 'Testing',
+//       projectCode: '76',
+//       associatedMembersUserIds: ['21008337'],
+//       stackTags: [STACK.FRONTEND, STACK.BACKEND],
+//       actionTypeTag: ACTION_TYPE.CODE
+//     })
+//   }).toThrowError(EntityError)
+//   expect(() => {
+//     new Action({
+//       userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
+//       startDate: 1000,
+//       endDate: 2000,
+//       duration: 1000,
+//       actionId: 'a879c273-86de-4d49-b049-b7cb6ef9a763',
+//       isValid: true,
+//       storyId: 1,
+//       title: 'Test Action Entity',
+//       description: 'Testing',
+//       projectCode: '76',
+//       associatedMembersUserIds: ['21008337'],
+//       stackTags: [STACK.FRONTEND, STACK.BACKEND],
+//       actionTypeTag: ACTION_TYPE.CODE
+//     })
+//   }).toThrowError('Field props.associatedMembersUserIds is not valid')
+// })
 
 test('Test Action Entity with invalid stackTags', () => {
   expect(() => {

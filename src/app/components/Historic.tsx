@@ -5,8 +5,7 @@ import FilterBar from './FilterBar'
 import HistoricActionCard from './HistoricActionCard'
 import { ActionContext } from '../contexts/action_context'
 import Loader from './little_components/Loader'
-import { STACK, stackToEnum } from '../../@clean/shared/domain/enums/stack_enum'
-import { ACTION_TYPE } from '../../@clean/shared/domain/enums/action_type_enum'
+import { stackToEnum } from '../../@clean/shared/domain/enums/stack_enum'
 
 interface FilterProps {
   [key: string]: string
@@ -16,23 +15,14 @@ interface FilterProps {
   orderBy: string
 }
 
-const action: Action = new Action({
-  userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
-  startDate: 1689955200000,
-  endDate: 1689964020000,
-  duration: 8820000,
-  actionId: '663ef972-cc93-4bb8-8b69-8b5cfa2f532c',
-  isValid: true,
-  title: 'Imp. Navbar',
-  actionTypeTag: ACTION_TYPE.CODE,
-  projectCode: 'PT',
-  stackTags: [STACK.FRONTEND],
-  storyId: 150,
-  description: 'Navbar codada'
-})
+interface lastEvaluatedKey {
+  actionId: string
+  startDate: number
+}
 
 export default function Historic() {
-  const [history, setHistory] = useState<Action[] | undefined>(undefined)
+  const [history, setHistory] = useState<Action[]>([])
+  const [_lastEvaluatedKey, setLastEvaluatedKey] = useState<lastEvaluatedKey>()
   const [searchText, setSearchText] = useState<string>('')
   const { getHistory } = useContext(ActionContext)
   const [filterProps, setFilterProps] = useState<FilterProps>({
@@ -51,8 +41,14 @@ export default function Historic() {
     })
   }
 
-  const loadHistoricByRA = async () => {
-    const response = await getHistory(undefined, undefined, 20)
+  const loadHistoric = async () => {
+    const response = await getHistory(
+      undefined,
+      undefined,
+      undefined,
+      undefined
+    )
+    setLastEvaluatedKey(response.lastEvaluatedKey)
     setHistory(response.actions)
   }
 
@@ -102,46 +98,57 @@ export default function Historic() {
         break
     }
 
-    return Array.from(currentActions)
+    return currentActions
   }, [history, filterProps])
 
   useEffect(() => {
     clearFilter()
-    loadHistoricByRA()
+    if (history.length === 0) {
+      loadHistoric()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [getHistory])
 
   return (
-    <div className="flex h-fit w-full flex-col items-center gap-2 py-20 pl-0 md:py-10 md:pl-14">
+    <div className="flex h-fit w-full flex-col items-center justify-center gap-2 py-20 pl-0 md:py-10 md:pl-14">
       <FilterBar
         setFilterProps={setFilterProps}
         filterProps={filterProps}
         className="z-30"
         setSearchText={setSearchText}
       />
-      <HistoricActionCard action={action} />
-      {filteredActions ? (
-        filteredActions
-          .filter((actionUnit) => {
-            const searchTextLowerCase = searchText.toLowerCase()
+      {filteredActions.length !== 0 ? (
+        <div className="flex h-fit w-full flex-col items-center gap-2 ">
+          {filteredActions
+            .filter((actionUnit) => {
+              const searchTextLowerCase = searchText.toLowerCase()
 
-            return searchTextLowerCase === ''
-              ? actionUnit
-              : actionUnit.title.toLowerCase().includes(searchTextLowerCase) ||
-                  actionUnit.description
+              return searchTextLowerCase === ''
+                ? actionUnit
+                : actionUnit.title
                     .toLowerCase()
                     .includes(searchTextLowerCase) ||
-                  actionUnit.storyId.toString().includes(searchTextLowerCase)
-          })
-          .map((actionUnit, key) => {
-            return (
-              <HistoricActionCard
-                className="z-10 hover:z-20"
-                key={key}
-                action={actionUnit}
-              />
-            )
-          })
+                    actionUnit.description
+                      .toLowerCase()
+                      .includes(searchTextLowerCase) ||
+                    actionUnit.storyId.toString().includes(searchTextLowerCase)
+            })
+            .map((actionUnit, key) => {
+              return (
+                <HistoricActionCard
+                  className="z-10 hover:z-20"
+                  key={key}
+                  action={actionUnit}
+                />
+              )
+            })}
+          {/* <h1
+            className="cursor-pointer pb-8 pt-8 text-skin-muted duration-150 hover:text-skin-base"
+            onClick={loadMoreHistoric}
+          >
+            Mostrar Mais
+          </h1> */}
+        </div>
       ) : (
         <Loader />
       )}

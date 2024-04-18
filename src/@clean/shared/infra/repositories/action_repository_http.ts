@@ -7,6 +7,7 @@ import { IActionRepository } from '../../../modules/action/domain/repositories/a
 import { ACTION_TYPE } from '../../domain/enums/action_type_enum'
 import { STACK } from '../../domain/enums/stack_enum'
 import { stackFormatter } from '../../domain/enums/stack_enum'
+import { JsonProps, Member } from '../../domain/entities/member'
 
 interface getHistoryRawResponse {
   actions: [
@@ -33,12 +34,14 @@ interface getHistoryRawResponse {
   message: string
 }
 
+export interface lastEvaluatedKey {
+  actionId: string
+  startDate: number
+}
+
 export interface historyResponse {
   actions: Action[]
-  lastEvaluatedKey: {
-    actionId: string
-    startDate: number
-  }
+  lastEvaluatedKey: lastEvaluatedKey
 }
 
 interface createActionBodyRequest {
@@ -138,9 +141,9 @@ export class ActionRepositoryHttp implements IActionRepository {
   }
 
   async getHistoryActions(
-    amount?: number | undefined,
-    start?: number | undefined,
-    end?: number | undefined,
+    start?: number,
+    end?: number,
+    amount?: number,
     exclusiveStartKey?: {
       actionId: string
       startDate: number
@@ -159,8 +162,16 @@ export class ActionRepositoryHttp implements IActionRepository {
         startDate: 0
       }
     }
+
+    console.log(exclusiveStartKey)
+
     try {
-      if (amount && start && end && exclusiveStartKey) {
+      if (
+        amount !== undefined &&
+        start !== undefined &&
+        end !== undefined &&
+        exclusiveStartKey !== undefined
+      ) {
         const firstCase = await this.http.post<getHistoryRawResponse>(
           '/get-history',
           {
@@ -182,7 +193,11 @@ export class ActionRepositoryHttp implements IActionRepository {
           actionId: firstCase.data.last_evaluated_key.action_id,
           startDate: firstCase.data.last_evaluated_key.start_date
         }
-      } else if (amount && start && end) {
+      } else if (
+        amount !== undefined &&
+        start !== undefined &&
+        end !== undefined
+      ) {
         const secondCase = await this.http.post<getHistoryRawResponse>(
           '/get-history',
           {
@@ -191,9 +206,7 @@ export class ActionRepositoryHttp implements IActionRepository {
             amount
           },
           {
-            headers: {
-              Authorization: 'Bearer ' + token
-            }
+            headers: { Authorization: 'Bearer ' + token }
           }
         )
         for (let i = 0; i < secondCase.data.actions.length; i++) {
@@ -203,12 +216,15 @@ export class ActionRepositoryHttp implements IActionRepository {
           actionId: secondCase.data.last_evaluated_key.action_id,
           startDate: secondCase.data.last_evaluated_key.start_date
         }
-      } else if (amount && exclusiveStartKey) {
+      } else if (amount !== undefined && exclusiveStartKey !== undefined) {
         const thirdCase = await this.http.post<getHistoryRawResponse>(
           '/get-history',
           {
             amount,
-            exclusive_start_key: exclusiveStartKey
+            exclusive_start_key: {
+              action_id: exclusiveStartKey.actionId,
+              start_date: exclusiveStartKey.startDate
+            }
           },
           {
             headers: {
@@ -216,6 +232,7 @@ export class ActionRepositoryHttp implements IActionRepository {
             }
           }
         )
+        console.log(thirdCase)
         for (let i = 0; i < thirdCase.data.actions.length; i++) {
           response.actions.push(Action.fromJSON(thirdCase.data.actions[i]))
         }
@@ -223,7 +240,7 @@ export class ActionRepositoryHttp implements IActionRepository {
           actionId: thirdCase.data.last_evaluated_key.action_id,
           startDate: thirdCase.data.last_evaluated_key.start_date
         }
-      } else if (amount) {
+      } else if (amount !== undefined) {
         const fourthCase = await this.http.post<getHistoryRawResponse>(
           '/get-history',
           {
@@ -313,9 +330,28 @@ export class ActionRepositoryHttp implements IActionRepository {
     }
   }
 
+  async getMember(): Promise<Member> {
+    try {
+      const token = localStorage.getItem('idToken')
+      if (!token) {
+        throw new Error('Token not found')
+      }
+      const response = await this.http.get<JsonProps>('/get-member', {
+        headers: {
+          Authorization: 'Bearer ' + token
+        }
+      })
+      const member = Member.fromJSON(response.data)
+      return member
+    } catch (error: any) {
+      throw new Error('Error Getting All Members: ' + error.message)
+    }
+  }
+  
   getAction(actionId: string): Promise<Action> {
     throw new Error('Method not implemented.' + actionId)
   }
+  
   createAssociatedAction(
     associatedAction: AssociatedAction
   ): Promise<AssociatedAction> {
@@ -345,10 +381,13 @@ export class ActionRepositoryHttp implements IActionRepository {
           }
         }
       )
+      // console.log(response.data)
+
+      // const member = Member.fromJSON(response.data)
 
       return response.data.action
     } catch (error: any) {
-      throw new Error('Error updating action validation: ' + error.message)
+      throw new Error(error.response.data)
     }
   }
 }

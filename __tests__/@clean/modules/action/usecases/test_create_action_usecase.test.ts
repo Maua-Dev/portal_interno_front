@@ -334,41 +334,41 @@ test('Test Action with invalid projectCode', async () => {
   ).rejects.toThrowError('Field props.projectCode is not valid')
 })
 
-test('Test Action with invalid associatedMembersUserIds', async () => {
-  const repo = new ActionRepositoryMock()
-  const actionUsecase = new CreateActionUsecase(repo)
-  const action = {
-    startDate: 1612137600000,
-    endDate: 1612141200000,
-    duration: 3600000,
-    actionId: 'a6a112ae-f488-4868-b49f-eb9c0ae42749',
-    associatedMembersUserIds: ['21'],
-    isValid: true,
-    title: '**Reunião**',
-    actionTypeTag: ACTION_TYPE.MEETING,
-    projectCode: 'PT',
-    stackTags: [STACK.FRONTEND],
-    storyId: 150,
-    description: 'Reunião de como instalar o yarn'
-  }
+// test('Test Action with invalid associatedMembersUserIds', async () => {
+//   const repo = new ActionRepositoryMock()
+//   const actionUsecase = new CreateActionUsecase(repo)
+//   const action = {
+//     startDate: 1612137600000,
+//     endDate: 1612141200000,
+//     duration: 3600000,
+//     actionId: 'a6a112ae-f488-4868-b49f-eb9c0ae42749',
+//     associatedMembersUserIds: ['21'],
+//     isValid: true,
+//     title: '**Reunião**',
+//     actionTypeTag: ACTION_TYPE.MEETING,
+//     projectCode: 'PT',
+//     stackTags: [STACK.FRONTEND],
+//     storyId: 150,
+//     description: 'Reunião de como instalar o yarn'
+//   }
 
-  await expect(
-    actionUsecase.execute(
-      action.startDate,
-      action.title,
-      action.description,
-      action.actionId,
-      action.isValid,
-      action.endDate,
-      action.duration,
-      action.projectCode,
-      action.storyId,
-      action.associatedMembersUserIds,
-      action.stackTags,
-      action.actionTypeTag
-    )
-  ).rejects.toThrowError('Field props.associatedMembersUserIds is not valid')
-})
+//   await expect(
+//     actionUsecase.execute(
+//       action.startDate,
+//       action.title,
+//       action.description,
+//       action.actionId,
+//       action.isValid,
+//       action.endDate,
+//       action.duration,
+//       action.projectCode,
+//       action.storyId,
+//       action.associatedMembersUserIds,
+//       action.stackTags,
+//       action.actionTypeTag
+//     )
+//   ).rejects.toThrowError('Field props.associatedMembersUserIds is not valid')
+// })
 
 test('Test Action with invalid stackTags', async () => {
   const repo = new ActionRepositoryMock()

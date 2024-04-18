@@ -25,7 +25,7 @@ export default function Home() {
     <>
       <Navbar />
       <main
-        className={`h-screen w-full overflow-x-hidden ${
+        className={`h-screen w-full overflow-x-hidden scrollbar-hide ${
           darkMode ? 'bg-skin-fill' : 'theme-white bg-sky-200'
         }`}
       >
