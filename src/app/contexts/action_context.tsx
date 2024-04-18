@@ -25,13 +25,11 @@ interface lastEvaluatedKeyResponse {
   startDate: number
 }
 
-export type ActionContextType = {
+export interface ActionContextInterface {
   createAction: (
     startDate: number,
     title: string,
     description: string,
-    actionId: string,
-    isValid: boolean,
     endDate: number,
     duration: number,
     projectCode: string,
@@ -87,14 +85,12 @@ export type ActionContextType = {
   ) => Promise<Action | undefined>
 }
 
-const defaultContext: ActionContextType = {
+const defaultContext: ActionContextInterface = {
   history: [],
   createAction: async (
     _startDate: number,
     _title: string,
     _description: string,
-    _actionId: string,
-    _isValid: boolean,
     _endDate: number,
     _duration: number,
     _projectCode: string,
@@ -207,8 +203,6 @@ export function ActionProvider({ children }: PropsWithChildren) {
     startDate: number,
     title: string,
     description: string,
-    actionId: string,
-    isValid: boolean,
     endDate: number,
     duration: number,
     projectCode: string,
@@ -222,8 +216,6 @@ export function ActionProvider({ children }: PropsWithChildren) {
         startDate,
         title,
         description,
-        actionId,
-        isValid,
         endDate,
         duration,
         projectCode,
