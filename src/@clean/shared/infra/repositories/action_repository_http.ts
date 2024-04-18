@@ -7,6 +7,7 @@ import { IActionRepository } from '../../../modules/action/domain/repositories/a
 import { ACTION_TYPE } from '../../domain/enums/action_type_enum'
 import { STACK } from '../../domain/enums/stack_enum'
 import { stackFormatter } from '../../domain/enums/stack_enum'
+import { JsonProps, Member } from '../../domain/entities/member'
 
 interface getHistoryRawResponse {
   actions: [
