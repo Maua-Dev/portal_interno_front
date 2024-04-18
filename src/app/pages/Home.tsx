@@ -15,6 +15,7 @@ export default function Home() {
   const { darkMode } = useDarkMode()
   const { isModalOpen } = useContext(ModalContext)
   const { createMember, memberError } = useContext(MemberContext)
+  const { modalContent } = useContext(ModalContext)
 
   async function batchCreateMember() {
     const member = await createMember(
@@ -26,8 +27,6 @@ export default function Home() {
       '11942318600',
       COURSE.CIC
     )
-
-    console.log(member)
   }
 
   useEffect(() => {
@@ -41,13 +40,12 @@ export default function Home() {
     <>
       <Navbar />
       <main
-        className={`h-screen w-full overflow-x-hidden ${
+        className={`h-screen w-full overflow-x-hidden scrollbar-hide ${
           darkMode ? 'bg-skin-fill' : 'theme-white bg-sky-200'
         }`}
       >
         {/* {isModalOpen && <ActionModal action={action} />} */}
-        {/* {modalContent} */}
-        {isModalOpen && <ActionModal />}
+        {modalContent}
       </main>
     </>
   )

@@ -320,9 +320,9 @@ export class Action {
     // if (typeof userId !== 'string') {
     //   return false
     // }
-    if (!validate(userId)) {
-      return false
-    }
+    // if (!validate(userId)) {
+    //   return false
+    // }
     return true
   }
 

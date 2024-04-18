@@ -31,8 +31,14 @@ const action: Action = new Action({
   description: 'Navbar codada'
 })
 
+interface lastEvaluatedKey {
+  actionId: string
+  startDate: number
+}
+
 export default function Historic() {
-  const [history, setHistory] = useState<Action[] | undefined>(undefined)
+  const [history, setHistory] = useState<Action[]>([])
+  const [lastEvaluatedKey, setLastEvaluatedKey] = useState<lastEvaluatedKey>()
   const [searchText, setSearchText] = useState<string>('')
   const { getHistory } = useContext(ActionContext)
   const [filterProps, setFilterProps] = useState<FilterProps>({
@@ -51,9 +57,30 @@ export default function Historic() {
     })
   }
 
-  const loadHistoricByRA = async () => {
-    const response = await getHistory(undefined, undefined, 20)
+  const loadHistoric = async () => {
+    const response = await getHistory(
+      undefined,
+      undefined,
+      undefined,
+      undefined
+    )
+    setLastEvaluatedKey(response.lastEvaluatedKey)
     setHistory(response.actions)
+  }
+
+  const loadMoreHistoric = async () => {
+    if (lastEvaluatedKey !== undefined) {
+      const response = await getHistory(
+        undefined,
+        undefined,
+        1,
+        lastEvaluatedKey
+      )
+      setLastEvaluatedKey(response.lastEvaluatedKey)
+
+      setHistory((prevHistory) => prevHistory.concat(response.actions))
+      console.log('historico' + history)
+    }
   }
 
   const filteredActions = useMemo(() => {
@@ -102,46 +129,57 @@ export default function Historic() {
         break
     }
 
-    return Array.from(currentActions)
+    return currentActions
   }, [history, filterProps])
 
   useEffect(() => {
     clearFilter()
-    loadHistoricByRA()
+    if (history.length === 0) {
+      loadHistoric()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [getHistory])
 
   return (
-    <div className="flex h-fit w-full flex-col items-center gap-2 py-20 pl-0 md:py-10 md:pl-14">
+    <div className="flex h-fit w-full flex-col items-center justify-center gap-2 py-20 pl-0 md:py-10 md:pl-14">
       <FilterBar
         setFilterProps={setFilterProps}
         filterProps={filterProps}
         className="z-30"
         setSearchText={setSearchText}
       />
-      <HistoricActionCard action={action} />
-      {filteredActions ? (
-        filteredActions
-          .filter((actionUnit) => {
-            const searchTextLowerCase = searchText.toLowerCase()
+      {filteredActions.length !== 0 ? (
+        <div className="flex h-fit w-full flex-col items-center gap-2 ">
+          {filteredActions
+            .filter((actionUnit) => {
+              const searchTextLowerCase = searchText.toLowerCase()
 
-            return searchTextLowerCase === ''
-              ? actionUnit
-              : actionUnit.title.toLowerCase().includes(searchTextLowerCase) ||
-                  actionUnit.description
+              return searchTextLowerCase === ''
+                ? actionUnit
+                : actionUnit.title
                     .toLowerCase()
                     .includes(searchTextLowerCase) ||
-                  actionUnit.storyId.toString().includes(searchTextLowerCase)
-          })
-          .map((actionUnit, key) => {
-            return (
-              <HistoricActionCard
-                className="z-10 hover:z-20"
-                key={key}
-                action={actionUnit}
-              />
-            )
-          })
+                    actionUnit.description
+                      .toLowerCase()
+                      .includes(searchTextLowerCase) ||
+                    actionUnit.storyId.toString().includes(searchTextLowerCase)
+            })
+            .map((actionUnit, key) => {
+              return (
+                <HistoricActionCard
+                  className="z-10 hover:z-20"
+                  key={key}
+                  action={actionUnit}
+                />
+              )
+            })}
+          <h1
+            className="cursor-pointer pb-8 pt-8 text-skin-muted duration-150 hover:text-skin-base"
+            onClick={loadMoreHistoric}
+          >
+            Mostrar Mais
+          </h1>
+        </div>
       ) : (
         <Loader />
       )}

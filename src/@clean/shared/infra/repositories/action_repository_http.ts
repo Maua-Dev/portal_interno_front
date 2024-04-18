@@ -33,12 +33,14 @@ interface getHistoryRawResponse {
   message: string
 }
 
+export interface lastEvaluatedKey {
+  actionId: string
+  startDate: number
+}
+
 export interface historyResponse {
   actions: Action[]
-  lastEvaluatedKey: {
-    actionId: string
-    startDate: number
-  }
+  lastEvaluatedKey: lastEvaluatedKey
 }
 
 interface createActionBodyRequest {
@@ -140,9 +142,9 @@ export class ActionRepositoryHttp implements IActionRepository {
   }
 
   async getHistoryActions(
-    amount?: number | undefined,
-    start?: number | undefined,
-    end?: number | undefined,
+    start?: number,
+    end?: number,
+    amount?: number,
     exclusiveStartKey?: {
       actionId: string
       startDate: number
@@ -161,8 +163,16 @@ export class ActionRepositoryHttp implements IActionRepository {
         startDate: 0
       }
     }
+
+    console.log(exclusiveStartKey)
+
     try {
-      if (amount && start && end && exclusiveStartKey) {
+      if (
+        amount !== undefined &&
+        start !== undefined &&
+        end !== undefined &&
+        exclusiveStartKey !== undefined
+      ) {
         const firstCase = await this.http.post<getHistoryRawResponse>(
           '/get-history',
           {
@@ -184,7 +194,11 @@ export class ActionRepositoryHttp implements IActionRepository {
           actionId: firstCase.data.last_evaluated_key.action_id,
           startDate: firstCase.data.last_evaluated_key.start_date
         }
-      } else if (amount && start && end) {
+      } else if (
+        amount !== undefined &&
+        start !== undefined &&
+        end !== undefined
+      ) {
         const secondCase = await this.http.post<getHistoryRawResponse>(
           '/get-history',
           {
@@ -193,9 +207,7 @@ export class ActionRepositoryHttp implements IActionRepository {
             amount
           },
           {
-            headers: {
-              Authorization: 'Bearer ' + token
-            }
+            headers: { Authorization: 'Bearer ' + token }
           }
         )
         for (let i = 0; i < secondCase.data.actions.length; i++) {
@@ -205,12 +217,15 @@ export class ActionRepositoryHttp implements IActionRepository {
           actionId: secondCase.data.last_evaluated_key.action_id,
           startDate: secondCase.data.last_evaluated_key.start_date
         }
-      } else if (amount && exclusiveStartKey) {
+      } else if (amount !== undefined && exclusiveStartKey !== undefined) {
         const thirdCase = await this.http.post<getHistoryRawResponse>(
           '/get-history',
           {
             amount,
-            exclusive_start_key: exclusiveStartKey
+            exclusive_start_key: {
+              action_id: exclusiveStartKey.actionId,
+              start_date: exclusiveStartKey.startDate
+            }
           },
           {
             headers: {
@@ -218,6 +233,7 @@ export class ActionRepositoryHttp implements IActionRepository {
             }
           }
         )
+        console.log(thirdCase)
         for (let i = 0; i < thirdCase.data.actions.length; i++) {
           response.actions.push(Action.fromJSON(thirdCase.data.actions[i]))
         }
@@ -225,7 +241,7 @@ export class ActionRepositoryHttp implements IActionRepository {
           actionId: thirdCase.data.last_evaluated_key.action_id,
           startDate: thirdCase.data.last_evaluated_key.start_date
         }
-      } else if (amount) {
+      } else if (amount !== undefined) {
         const fourthCase = await this.http.post<getHistoryRawResponse>(
           '/get-history',
           {

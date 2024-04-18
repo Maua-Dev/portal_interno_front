@@ -117,12 +117,12 @@ export default function FilterBar({
         <div>
           <SearchField
             placeholder="Pesquisar"
-            className={`${searchOpen ? 'block' : 'hidden'} w-64 md:block lg:w-72`}
+            className={`${searchOpen ? 'block' : 'hidden'} w-4/5 sm:w-64 md:block lg:w-72`}
             onChange={(event) => {
               setSearchText(event.currentTarget.value)
             }}
           /></div>
-        <div className="hidden flex-row gap-4 lg:flex">
+        <div className="hidden min-w-full flex-row gap-4 lg:flex">
           {filterProps !== emptyFilterProps
             ? Object.entries(filterProps).map(([key, value], index) => {
               return renderFilterTags(key, value, index)
@@ -132,7 +132,7 @@ export default function FilterBar({
       </div>
       <div className="flex h-full flex-row">
         <HoverCard placeholder='Pesquisar'>
-          <Button variant='default' className='h-fit w-fit p-2 md:hidden' onClick={() => {
+          <Button variant='default' className={`h-fit w-fit p-2 md:hidden ${searchOpen ? 'hidden' : ''}`} onClick={() => {
             setSearchOpen(true)
           }}>
             <Search className='text-skin-base h-5' />
