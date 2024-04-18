@@ -215,7 +215,7 @@ export default function ActionModal({ action }: { action?: Action }) {
       return
     }
 
-    if (confirm('Deseja fechar sem salvar?')) closeModal()
+    if (confirm('Deseja fechar sem salvar?')) closeModal(isUpdateModal)
   }
 
   const {
