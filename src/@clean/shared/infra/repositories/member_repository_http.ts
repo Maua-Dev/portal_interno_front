@@ -5,7 +5,6 @@ import { ACTIVE, activeToEnum } from '../../domain/enums/active_enum'
 import { COURSE, courseToEnum } from '../../domain/enums/course_enum'
 import { ROLE, roleToEnum } from '../../domain/enums/role_enum'
 import { STACK, stackToEnum } from '../../domain/enums/stack_enum'
-import { raFormatterFromJson } from '../../../../app/utils/functions/formatters'
 
 interface memberRawResponse {
   member: {
@@ -124,7 +123,7 @@ export class MemberRepositoryHttp implements IMemberRepository {
             name: memberUnit.member.name,
             emailDev: memberUnit.member.email_dev,
             email: memberUnit.member.email,
-            ra: raFormatterFromJson(memberUnit.member.ra),
+            ra: memberUnit.member.ra,
             role: roleToEnum(memberUnit.member.role),
             stack: stackToEnum(memberUnit.member.stack),
             year: memberUnit.member.year,
