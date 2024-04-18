@@ -1,5 +1,4 @@
 import { useContext, useEffect } from 'react'
-import ActionModal from '../components/ActionModal'
 import Navbar from '../components/Navbar'
 import { ModalContext } from '../contexts/modal_context'
 import useDarkMode from '../utils/functions/useDarkMode'
@@ -13,7 +12,7 @@ import { MemberContext } from '../contexts/member_context'
 
 export default function Home() {
   const { darkMode } = useDarkMode()
-  const { isModalOpen } = useContext(ModalContext)
+  const { modalContent } = useContext(ModalContext)
   const { createMember, memberError } = useContext(MemberContext)
 
   async function batchCreateMember() {
@@ -46,8 +45,8 @@ export default function Home() {
         }`}
       >
         {/* {isModalOpen && <ActionModal action={action} />} */}
-        {/* {modalContent} */}
-        {isModalOpen && <ActionModal />}
+        {modalContent}
+        {/* {isModalOpen && <ActionModal />} */}
       </main>
     </>
   )
