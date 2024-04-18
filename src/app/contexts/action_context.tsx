@@ -323,7 +323,7 @@ export function ActionProvider({ children }: PropsWithChildren) {
       )
       return updatedAction
     } catch (error: any) {
-      console.error('Something went wrong on update action validation: ', error)
+      console.error('Something went wrong on update action: ', error)
     }
   }
 
