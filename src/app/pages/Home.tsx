@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from 'react'
-import ActionModal from '../components/ActionModal'
 import Navbar from '../components/Navbar'
 import { ModalContext } from '../contexts/modal_context'
 import useDarkMode from '../utils/functions/useDarkMode'
@@ -17,7 +16,7 @@ import LogoBranco from '../assets/logo_dev_white.png'
 
 export default function Home() {
   const { darkMode } = useDarkMode()
-  const { isModalOpen } = useContext(ModalContext)
+  const { modalContent } = useContext(ModalContext)
 
   const [loggedUser, setLoggedUser] = useState(false)
   const [nameUser, setNameUser] = useState('')
@@ -65,6 +64,7 @@ export default function Home() {
       cellphone,
       COURSE[course as keyof typeof COURSE]
     )
+
     if (member) {
       setLoggedUser(true)
       toast.success('Usuário criado com sucesso!', {
@@ -115,7 +115,7 @@ export default function Home() {
     <>
       <Navbar />
       <main
-        className={`h-screen w-full overflow-x-hidden ${
+        className={`h-screen w-full overflow-x-hidden scrollbar-hide ${
           darkMode ? 'bg-skin-fill' : 'theme-white bg-sky-200'
         }`}
       >
@@ -132,8 +132,8 @@ export default function Home() {
           theme="light"
         />
         {/* {isModalOpen && <ActionModal action={action} />} */}
+        {modalContent}
         {/* {modalContent} */}
-        {isModalOpen && <ActionModal />}
 
         {/* TELA DE CRIAÇÃO DO MEMBRO DEV */}
         <section

@@ -50,14 +50,14 @@ export default function HistoricActionCard({
     <Card
       variant="lg"
       className={twMerge(
-        'flex h-fit cursor-pointer flex-row items-center justify-between pr-6 shadow-sm shadow-gray-500 brightness-95 duration-150 ease-in hover:brightness-100',
+        'flex h-fit cursor-pointer flex-col items-center justify-between gap-5 pr-6 shadow-sm shadow-gray-500 brightness-95 duration-150 ease-in hover:brightness-100 sm:flex-row sm:gap-0',
         props.className
       )}
     >
-      <div className="flex w-fit flex-row items-center gap-3 md:w-3/6">
+      <div className="flex w-full flex-row items-center justify-start gap-3 sm:w-fit md:w-3/6">
         <StateIcon variant={actionState} />
         <div className="flex flex-col overflow-hidden">
-          <h1 className="text-lg text-skin-base">
+          <h1 className="text-skin-base sm:text-lg">
             {title}
             <span className="text-skin-muted"> #{action.storyId}</span>
           </h1>
@@ -73,7 +73,7 @@ export default function HistoricActionCard({
         })}
       </div>
 
-      <div className="flex w-fit flex-row items-center justify-between gap-3 md:w-1/5">
+      <div className="flex w-full max-w-64 flex-row items-center justify-evenly gap-3 sm:w-fit sm:justify-between">
         <div className="flex flex-col gap-1 ">
           <IconText
             text={endDateFormated.toString()}
