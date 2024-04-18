@@ -173,12 +173,12 @@ export default function Historic() {
                 />
               )
             })}
-          <h1
+          {/* <h1
             className="cursor-pointer pb-8 pt-8 text-skin-muted duration-150 hover:text-skin-base"
             onClick={loadMoreHistoric}
           >
             Mostrar Mais
-          </h1>
+          </h1> */}
         </div>
       ) : (
         <Loader />
