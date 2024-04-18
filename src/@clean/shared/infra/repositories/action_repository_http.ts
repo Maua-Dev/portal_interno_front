@@ -7,6 +7,7 @@ import { IActionRepository } from '../../../modules/action/domain/repositories/a
 import { ACTION_TYPE } from '../../domain/enums/action_type_enum'
 import { STACK } from '../../domain/enums/stack_enum'
 import { stackFormatter } from '../../domain/enums/stack_enum'
+import { JsonProps, Member } from '../../domain/entities/member'
 
 interface getHistoryRawResponse {
   actions: [
@@ -333,9 +334,28 @@ export class ActionRepositoryHttp implements IActionRepository {
     }
   }
 
+  async getMember(): Promise<Member> {
+    try {
+      const token = localStorage.getItem('idToken')
+      if (!token) {
+        throw new Error('Token not found')
+      }
+      const response = await this.http.get<JsonProps>('/get-member', {
+        headers: {
+          Authorization: 'Bearer ' + token
+        }
+      })
+      const member = Member.fromJSON(response.data)
+      return member
+    } catch (error: any) {
+      throw new Error('Error Getting All Members: ' + error.message)
+    }
+  }
+  
   getAction(actionId: string): Promise<Action> {
     throw new Error('Method not implemented.' + actionId)
   }
+  
   createAssociatedAction(
     associatedAction: AssociatedAction
   ): Promise<AssociatedAction> {
@@ -365,10 +385,13 @@ export class ActionRepositoryHttp implements IActionRepository {
           }
         }
       )
+      // console.log(response.data)
+
+      // const member = Member.fromJSON(response.data)
 
       return response.data.action
     } catch (error: any) {
-      throw new Error('Error updating action validation: ' + error.message)
+      throw new Error(error.response.data)
     }
   }
 }
