@@ -371,9 +371,9 @@ export class ActionRepositoryHttp implements IActionRepository {
       )
       // console.log(response.data)
 
-      const member = Member.fromJSON(response.data)
+      // const member = Member.fromJSON(response.data)
 
-      return member
+      return response.data.action
     } catch (error: any) {
       throw new Error(error.response.data)
     }
