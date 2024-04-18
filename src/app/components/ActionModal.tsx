@@ -72,7 +72,7 @@ export default function ActionModal({ action }: { action?: Action }) {
   } = useContext(MemberContext)
   const { closeModal } = useContext(ModalContext)
   const {
-    //updateAction,
+    updateAction,
     createAction
     // getHistory
   } = useContext(ActionContext)
@@ -152,50 +152,57 @@ export default function ActionModal({ action }: { action?: Action }) {
   }
 
   const handleCreateActionSubmit = async (data: ActionModalType) => {
-    console.log('Create Action')
     console.table(data)
+    try {
+      console.log({
+        startDate: dateToMilliseconds(data.startDate),
+        title: data.title,
+        description: data.description,
+        endDate: dateToMilliseconds(data.endDate),
+        duration: hoursToMilliseconds(data.duration),
+        projectCode: data.projectCode,
+        storyId: parseInt(data.storyId),
+        associatedMembersUserIds: data.associatedMembersUserIds,
+        stackTags: data.stackTags,
+        actionTypeTag: data.actionTypeTag
+      })
+      const createdAction = await createAction(
+        dateToMilliseconds(data.startDate),
+        data.title,
+        data.description,
+        dateToMilliseconds(data.endDate),
+        hoursToMilliseconds(data.duration),
+        data.projectCode,
+        parseInt(data.storyId),
+        data.associatedMembersUserIds,
+        data.stackTags,
+        data.actionTypeTag
+      )
 
-    const createdAction = await createAction(
-      dateToMilliseconds(data.startDate),
-      data.title,
-      data.description,
-      Math.floor(Math.random() * 1000000).toString(),
-      true,
-      dateToMilliseconds(data.endDate),
-      hoursToMilliseconds(data.duration),
-      data.projectCode,
-      parseInt(data.storyId),
-      data.associatedMembersUserIds,
-      data.stackTags,
-      data.actionTypeTag
-    )
-
-    console.log(createdAction)
-
-    // console.log(await getHistory('21002100', 10))
+      console.log(createdAction)
+    } catch (error: any) {
+      console.error(error)
+    }
   }
 
   const handleUpdateActionSubmit = async (data: ActionModalType) => {
     console.log('Update Action')
     console.table(data)
-    // const updatedAction = await updateAction(
-    //   data.actionId!,
-    //   '23017310',
-    //   dateToMilliseconds(data.startDate),
-    //   dateToMilliseconds(data.endDate),
-    //   hoursToMilliseconds(data.duration),
-    //   parseInt(data.storyId),
-    //   data.title,
-    //   data.description,
-    //   data.projectCode,
-    //   data.associatedMembersUserIds,
-    //   data.stackTags,
-    //   data.actionTypeTag
-    // )
+    const updatedAction = await updateAction(
+      data.actionId!,
+      dateToMilliseconds(data.startDate),
+      dateToMilliseconds(data.endDate),
+      hoursToMilliseconds(data.duration),
+      parseInt(data.storyId),
+      data.title,
+      data.description,
+      data.projectCode,
+      data.associatedMembersUserIds,
+      data.stackTags,
+      data.actionTypeTag
+    )
 
-    // console.log(updatedAction)
-
-    // console.log(await getHistory('23017310', 10))
+    console.log(updatedAction)
   }
 
   const handleConfirmCloseModal = () => {
@@ -236,7 +243,8 @@ export default function ActionModal({ action }: { action?: Action }) {
       duration: action?.duration ? millisecondsToHours(action!.duration) : 0,
       associatedMembersUserIds: action?.associatedMembersUserIds || [],
       actionTypeTag: action?.actionTypeTag || undefined,
-      stackTags: action?.stackTags || []
+      stackTags: action?.stackTags || [],
+      actionId: action?.actionId || ''
     },
     mode: 'onBlur'
   })
