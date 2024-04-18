@@ -30,7 +30,7 @@ export default function Home() {
   const [cellphone, setCellphone] = useState('')
   const [course, setCourse] = useState('')
 
-  const { createMember, memberError, getMember } = useContext(ActionContext)
+  const { createMember, memberError, getMember } = useContext(MemberContext)
   // const action = new Action({
   //   ownerRa: '21002100',
   //   startDate: 1710797634000,
