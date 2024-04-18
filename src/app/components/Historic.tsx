@@ -5,7 +5,8 @@ import FilterBar from './FilterBar'
 import HistoricActionCard from './HistoricActionCard'
 import { ActionContext } from '../contexts/action_context'
 import Loader from './little_components/Loader'
-import { stackToEnum } from '../../@clean/shared/domain/enums/stack_enum'
+import { STACK, stackToEnum } from '../../@clean/shared/domain/enums/stack_enum'
+import { ACTION_TYPE } from '../../@clean/shared/domain/enums/action_type_enum'
 
 interface FilterProps {
   [key: string]: string
@@ -14,6 +15,21 @@ interface FilterProps {
   area: string
   orderBy: string
 }
+
+const action: Action = new Action({
+  userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
+  startDate: 1689955200000,
+  endDate: 1689964020000,
+  duration: 8820000,
+  actionId: '663ef972-cc93-4bb8-8b69-8b5cfa2f532c',
+  isValid: true,
+  title: 'Imp. Navbar',
+  actionTypeTag: ACTION_TYPE.CODE,
+  projectCode: 'PT',
+  stackTags: [STACK.FRONTEND],
+  storyId: 150,
+  description: 'Navbar codada'
+})
 
 export default function Historic() {
   const [history, setHistory] = useState<Action[] | undefined>(undefined)
@@ -96,13 +112,14 @@ export default function Historic() {
   }, [])
 
   return (
-    <div className="flex h-fit w-full flex-col items-center gap-2 bg-skin-fill py-10">
+    <div className="flex h-fit w-full flex-col items-center gap-2 py-20 pl-0 md:py-10 md:pl-14">
       <FilterBar
         setFilterProps={setFilterProps}
         filterProps={filterProps}
         className="z-30"
         setSearchText={setSearchText}
       />
+      <HistoricActionCard action={action} />
       {filteredActions ? (
         filteredActions
           .filter((actionUnit) => {

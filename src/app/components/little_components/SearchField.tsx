@@ -2,10 +2,15 @@ import { Search } from 'lucide-react'
 import { HTMLAttributes } from 'react'
 import { twMerge } from 'tailwind-merge'
 
+interface SearchFieldProps extends HTMLAttributes<HTMLInputElement> {
+  placeholder?: string
+}
+
 export default function SearchField({
+  placeholder,
   children,
   ...props
-}: HTMLAttributes<HTMLInputElement>) {
+}: SearchFieldProps) {
   return (
     <div
       className={twMerge(
@@ -16,6 +21,7 @@ export default function SearchField({
       <input
         {...props}
         type="text"
+        placeholder={placeholder}
         className={twMerge(
           'focus: peer z-20 h-full w-full rounded-full bg-transparent pl-9 duration-150 placeholder:text-skin-base placeholder:transition-transform placeholder:duration-150 placeholder:ease-linear focus:pl-3 focus:outline-none focus:placeholder:-translate-x-7 focus:placeholder:pl-7',
           props.className

@@ -12,7 +12,9 @@ import {
 import { useContext, useEffect, useState } from 'react'
 import useDarkMode from '../utils/functions/useDarkMode'
 import { useNavigate } from 'react-router-dom'
+import Historic from './Historic'
 import { ModalContext } from '../contexts/modal_context'
+import ActionModal from './ActionModal'
 
 interface window {
   innerWidth: number
@@ -25,7 +27,7 @@ export default function Navbar() {
   const [windowSize, setWindowSize] = useState<window>(getWindowSize())
   const maximumWidth: number = 768
   const navigate = useNavigate()
-  const { openModal } = useContext(ModalContext)
+  const { changeModalContent } = useContext(ModalContext)
 
   useEffect(() => {
     function handleWindowResize() {
@@ -84,14 +86,18 @@ export default function Navbar() {
                   Perfil
                 </p>
               </div>
-              <div className="flex cursor-pointer select-none gap-8 overflow-x-hidden">
+              <div
+                className="flex cursor-pointer select-none gap-8 overflow-x-hidden"
+                onClick={() => {
+                  changeModalContent(<ActionModal />)
+                }}
+              >
                 <BsFillPlusSquareFill
                   className={`transform cursor-pointer ${
                     !darkMode ? 'text-gray-700' : 'text-white'
                   } transition-all duration-100 ${
                     hover ? '-translate-x-0' : 'translate-x-0'
                   } hover:fill-blue-600`}
-                  onClick={openModal}
                 />
                 <p
                   className={`transform text-xl transition-all duration-200 ${
@@ -103,7 +109,12 @@ export default function Navbar() {
                   Tarefa
                 </p>
               </div>
-              <div className="flex cursor-pointer select-none gap-8 overflow-x-hidden">
+              <div
+                className="flex cursor-pointer select-none gap-8 overflow-x-hidden"
+                onClick={() => {
+                  changeModalContent(<Historic />)
+                }}
+              >
                 <AiOutlineHistory
                   className={`transform cursor-pointer ${
                     !darkMode ? 'text-gray-700' : 'text-white'
@@ -183,7 +194,9 @@ export default function Navbar() {
                 } transition-all duration-100 ${
                   hover ? '-translate-x-0' : 'translate-x-0'
                 } hover:fill-blue-600`}
-                onClick={openModal}
+                onClick={() => {
+                  changeModalContent(<ActionModal />)
+                }}
               />
               <AiOutlineHistory
                 className={`transform cursor-pointer ${
@@ -191,6 +204,9 @@ export default function Navbar() {
                 } transition-all duration-100 ${
                   hover ? '-translate-x-0' : 'translate-x-0'
                 } hover:fill-blue-600`}
+                onClick={() => {
+                  changeModalContent(<Historic />)
+                }}
               />
               <BsClipboard
                 className={`transform cursor-pointer ${

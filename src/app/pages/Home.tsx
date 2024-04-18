@@ -3,10 +3,10 @@ import ActionModal from '../components/ActionModal'
 import Navbar from '../components/Navbar'
 import { ModalContext } from '../contexts/modal_context'
 import useDarkMode from '../utils/functions/useDarkMode'
-import { ActionContext } from '../contexts/action_context'
 import { ROLE } from '../../@clean/shared/domain/enums/role_enum'
 import { STACK } from '../../@clean/shared/domain/enums/stack_enum'
 import { COURSE } from '../../@clean/shared/domain/enums/course_enum'
+import { MemberContext } from '../contexts/member_context'
 // import { Action } from '../../@clean/shared/domain/entities/action'
 // import { ACTION_TYPE } from '../../@clean/shared/domain/enums/action_type_enum'
 // import { STACK } from '../../@clean/shared/domain/enums/stack_enum'
@@ -115,9 +115,9 @@ export default function Home() {
     <>
       <Navbar />
       <main
-        className={`${
-          isModalOpen ? 'h-auto' : 'h-screen'
-        } w-full overflow-x-hidden ${darkMode ? 'bg-black' : 'bg-sky-200'}`}
+        className={`h-screen w-full overflow-x-hidden ${
+          darkMode ? 'bg-skin-fill' : 'theme-white bg-sky-200'
+        }`}
       >
         <ToastContainer
           position="top-center"
@@ -132,6 +132,7 @@ export default function Home() {
           theme="light"
         />
         {/* {isModalOpen && <ActionModal action={action} />} */}
+        {/* {modalContent} */}
         {isModalOpen && <ActionModal />}
 
         {/* TELA DE CRIAÇÃO DO MEMBRO DEV */}

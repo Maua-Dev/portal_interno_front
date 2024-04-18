@@ -39,6 +39,8 @@ jobs:
         - name: Build and Export
           run: |
             yarn vite build
+          env: 
+            VITE_STAGE: DEV
         - name: Setup envs
           run: |
             echo AWS_REGION=${{ vars.AWS_REGION }} >> $GITHUB_ENV
@@ -48,7 +50,6 @@ jobs:
             echo ACM_CERTIFICATE_ARN=${{ secrets.DEVMAUA_ACM_CERTIFICATE_ARN }} >> $GITHUB_ENV
             echo HOSTED_ZONE_ID=${{ secrets.DEVMAUA_HOSTED_ZONE_ID }} >> $GITHUB_ENV
             echo ALTERNATIVE_DOMAIN_NAME=${{ vars.ALTERNATIVE_DOMAIN_NAME }} >> $GITHUB_ENV  
-            echo VITE_STAGE=DEV >> $GITHUB_ENV
         - name: Deploy with CDK
           run: |
             cd iac
