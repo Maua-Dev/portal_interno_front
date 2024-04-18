@@ -17,7 +17,6 @@ import LogoBranco from '../assets/logo_dev_white.png'
 
 export default function Home() {
   const { darkMode } = useDarkMode()
-  const { isModalOpen } = useContext(ModalContext)
   const { modalContent } = useContext(ModalContext)
 
   const [loggedUser, setLoggedUser] = useState(false)
@@ -66,7 +65,7 @@ export default function Home() {
       cellphone,
       COURSE[course as keyof typeof COURSE]
     )
-    
+
     if (member) {
       setLoggedUser(true)
       toast.success('Usuário criado com sucesso!', {
