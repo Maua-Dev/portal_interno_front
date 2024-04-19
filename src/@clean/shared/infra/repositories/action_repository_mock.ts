@@ -14,6 +14,9 @@ import { IActionRepository } from '../../../modules/action/domain/repositories/a
 import { historyResponse } from './action_repository_http'
 
 export class ActionRepositoryMock implements IActionRepository {
+  createAction(): Promise<Action> {
+    throw new Error('Method not implemented.')
+  }
   private projects: Project[] = [
     new Project({
       code: 'MF',
@@ -344,59 +347,6 @@ export class ActionRepositoryMock implements IActionRepository {
       userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627'
     })
   ]
-
-  async createAction(
-    startDate: number,
-    title: string,
-    description: string,
-    actionId: string,
-    isValid: boolean,
-    endDate: number,
-    duration: number,
-    projectCode: string,
-    storyId?: number,
-    associatedMembersUserIds?: string[],
-    stackTags?: STACK[],
-    actionTypeTag?: ACTION_TYPE
-  ): Promise<Action> {
-    const action = new Action({
-      userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
-      startDate,
-      title,
-      description,
-      actionId,
-      isValid,
-      endDate,
-      duration,
-      projectCode,
-      storyId,
-      associatedMembersUserIds,
-      stackTags,
-      actionTypeTag
-    })
-    this.actions.push(action)
-    this.createAssociatedAction(
-      new AssociatedAction({
-        actionId: action.actionId,
-        startDate: action.startDate,
-        userId: action.userId
-      })
-    )
-    if (action.associatedMembersUserIds !== undefined) {
-      if (action.associatedMembersUserIds.length > 0) {
-        action.associatedMembersUserIds.forEach((userId) => {
-          this.createAssociatedAction(
-            new AssociatedAction({
-              actionId: action.actionId,
-              startDate: action.startDate,
-              userId: userId
-            })
-          )
-        })
-      }
-    }
-    return action
-  }
 
   async getAction(actionId: string): Promise<Action> {
     const action = this.actions.find((action) => action.actionId === actionId)

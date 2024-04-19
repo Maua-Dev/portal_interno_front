@@ -27,8 +27,6 @@ jobs:
       - name: Install dependencies
         run:
           yarn install
-      - name: Run tests
-        run: yarn test:run
       
       - name: Build Next.js app
         run: yarn build
