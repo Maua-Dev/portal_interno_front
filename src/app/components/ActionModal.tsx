@@ -154,18 +154,6 @@ export default function ActionModal({ action }: { action?: Action }) {
   const handleCreateActionSubmit = async (data: ActionModalType) => {
     console.table(data)
     try {
-      console.log({
-        startDate: dateToMilliseconds(data.startDate),
-        title: data.title,
-        description: data.description,
-        endDate: dateToMilliseconds(data.endDate),
-        duration: hoursToMilliseconds(data.duration),
-        projectCode: data.projectCode,
-        storyId: parseInt(data.storyId),
-        associatedMembersUserIds: data.associatedMembersUserIds,
-        stackTags: data.stackTags,
-        actionTypeTag: data.actionTypeTag
-      })
       const createdAction = await createAction(
         dateToMilliseconds(data.startDate),
         data.title,
@@ -180,6 +168,10 @@ export default function ActionModal({ action }: { action?: Action }) {
       )
 
       console.log(createdAction)
+      if (createdAction) {
+        closeModal()
+        alert('Atividade criada com sucesso!')
+      }
     } catch (error: any) {
       console.error(error)
     }

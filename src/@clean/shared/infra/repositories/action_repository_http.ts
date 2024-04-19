@@ -341,17 +341,18 @@ export class ActionRepositoryHttp implements IActionRepository {
           Authorization: 'Bearer ' + token
         }
       })
+
       const member = Member.fromJSON(response.data)
       return member
     } catch (error: any) {
       throw new Error('Error Getting All Members: ' + error.message)
     }
   }
-  
+
   getAction(actionId: string): Promise<Action> {
     throw new Error('Method not implemented.' + actionId)
   }
-  
+
   createAssociatedAction(
     associatedAction: AssociatedAction
   ): Promise<AssociatedAction> {
