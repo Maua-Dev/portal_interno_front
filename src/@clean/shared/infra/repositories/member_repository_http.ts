@@ -88,11 +88,10 @@ export class MemberRepositoryHttp implements IMemberRepository {
           Authorization: 'Bearer ' + token
         }
       })
-
       const member = Member.fromJSON(response.data)
       return member
     } catch (error: any) {
-      throw new Error('Error Getting All Members: ' + error.message)
+      throw new Error('Error Getting Member: ' + error.message)
     }
   }
 

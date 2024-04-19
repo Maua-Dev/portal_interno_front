@@ -14,7 +14,7 @@ import { DeleteMemberUsecase } from '../../@clean/modules/member/usecases/delete
 import { ACTIVE } from '../../@clean/shared/domain/enums/active_enum'
 import { CreateMemberUsecase } from '../../@clean/modules/member/usecases/create_member_usecase'
 
-export type MemberContextType = {
+export interface MemberContextInterface {
   getMember: () => Promise<Member | undefined>
 
   getAllMembers: () => Promise<Member[] | undefined>
@@ -46,7 +46,7 @@ export type MemberContextType = {
   setMemberError: (memberError: string) => void
 }
 
-const defaultContext: MemberContextType = {
+const defaultContext: MemberContextInterface = {
   getMember: async () => {
     return undefined
   },

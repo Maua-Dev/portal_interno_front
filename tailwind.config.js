@@ -51,5 +51,7 @@ module.exports = {
     }
   },
   // eslint-disable-next-line no-undef
-  plugins: [require('tailwind-scrollbar-hide')]
+  plugins: [
+    //require('tailwind-scrollbar-hide')
+  ]
 }

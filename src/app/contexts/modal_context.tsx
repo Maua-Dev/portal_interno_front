@@ -1,9 +1,10 @@
 import { ReactElement, ReactNode, createContext, useState } from 'react'
+import Historic from '../components/Historic'
 
 interface modalContextInterface {
   modalContent: ReactNode
   isModalOpen: boolean
-  closeModal: () => void
+  closeModal: (isEdit?: boolean) => void
   changeModalContent: (modal: ReactElement) => void
 }
 
@@ -30,8 +31,9 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
-  const closeModal = () => {
-    setModalContent(undefined)
+  const closeModal = (isEdit?: boolean) => {
+    if (isEdit) setModalContent(<Historic />)
+    else setModalContent(undefined)
   }
 
   return (

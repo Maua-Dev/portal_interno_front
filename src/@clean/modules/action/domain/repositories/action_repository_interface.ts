@@ -10,8 +10,6 @@ export interface IActionRepository {
     startDate: number,
     title: string,
     description: string,
-    actionId: string,
-    isValid: boolean,
     endDate: number,
     duration: number,
     projectCode: string,
