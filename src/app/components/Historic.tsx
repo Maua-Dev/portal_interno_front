@@ -41,30 +41,17 @@ export default function Historic() {
     })
   }
 
-  const loadHistoric = async () => {
-    const { actions, lastEvaluatedKey } = await getHistory(
-      undefined,
-      undefined,
-      10,
-      undefined
-    )
-    setLastEvaluatedKey(lastEvaluatedKey)
-    setLocalHistory(actions)
-  }
-
-  const loadMoreHistoric = async () => {
-    console.log(_lastEvaluatedKey)
+  const loadHistoric = async (lastKey?: lastEvaluatedKey | undefined) => {
     try {
-      const response = await getHistory(
-        undefined,
-        undefined,
-        10,
-        _lastEvaluatedKey
-      )
+      const response = await getHistory(undefined, undefined, 10, lastKey)
+      if (lastKey) {
+        setLocalHistory((prev) => prev.concat(response.actions))
+      } else {
+        setLocalHistory(response.actions)
+      }
       setLastEvaluatedKey(response.lastEvaluatedKey)
-      setLocalHistory((prev) => prev.concat(response.actions))
     } catch (error) {
-      console.log(error)
+      console.log('Error: ' + error)
     }
   }
 
@@ -160,7 +147,9 @@ export default function Historic() {
             })}
           <h1
             className="cursor-pointer pb-8 pt-8 text-skin-muted duration-150 hover:text-skin-base"
-            onClick={loadMoreHistoric}
+            onClick={() => {
+              loadHistoric(_lastEvaluatedKey)
+            }}
           >
             Mostrar Mais
           </h1>
