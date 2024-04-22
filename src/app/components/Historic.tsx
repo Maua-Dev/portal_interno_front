@@ -21,10 +21,10 @@ interface lastEvaluatedKey {
 }
 
 export default function Historic() {
-  const [history, setHistory] = useState<Action[]>([])
+  const [localHistory, setLocalHistory] = useState<Action[]>([])
   const [_lastEvaluatedKey, setLastEvaluatedKey] = useState<lastEvaluatedKey>()
   const [searchText, setSearchText] = useState<string>('')
-  const { getHistory } = useContext(ActionContext)
+  const { getHistory, history } = useContext(ActionContext)
   const [filterProps, setFilterProps] = useState<FilterProps>({
     searchText: '',
     project: '',
@@ -42,14 +42,30 @@ export default function Historic() {
   }
 
   const loadHistoric = async () => {
-    const response = await getHistory(
+    const { actions, lastEvaluatedKey } = await getHistory(
       undefined,
       undefined,
-      undefined,
+      10,
       undefined
     )
-    setLastEvaluatedKey(response.lastEvaluatedKey)
-    setHistory(response.actions)
+    setLastEvaluatedKey(lastEvaluatedKey)
+    setLocalHistory(actions)
+  }
+
+  const loadMoreHistoric = async () => {
+    console.log(_lastEvaluatedKey)
+    try {
+      const response = await getHistory(
+        undefined,
+        undefined,
+        10,
+        _lastEvaluatedKey
+      )
+      setLastEvaluatedKey(response.lastEvaluatedKey)
+      setLocalHistory((prev) => prev.concat(response.actions))
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const filteredActions = useMemo(() => {
@@ -58,10 +74,10 @@ export default function Historic() {
       filterProps.area === '' &&
       filterProps.orderBy === ''
     ) {
-      return history
+      return localHistory
     }
 
-    let currentActions: Action[] = [...(history || [])]
+    let currentActions: Action[] = localHistory
 
     if (filterProps.project) {
       currentActions = currentActions.filter(
@@ -99,11 +115,11 @@ export default function Historic() {
     }
 
     return currentActions
-  }, [history, filterProps])
+  }, [localHistory, filterProps])
 
   useEffect(() => {
     clearFilter()
-    if (history.length === 0) {
+    if (localHistory.length === 0) {
       loadHistoric()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -142,12 +158,12 @@ export default function Historic() {
                 />
               )
             })}
-          {/* <h1
+          <h1
             className="cursor-pointer pb-8 pt-8 text-skin-muted duration-150 hover:text-skin-base"
             onClick={loadMoreHistoric}
           >
             Mostrar Mais
-          </h1> */}
+          </h1>
         </div>
       ) : (
         <Loader />

@@ -250,27 +250,25 @@ export function ActionProvider({ children }: PropsWithChildren) {
       startDate: number
     }
   ) {
-    console.log(amount)
     try {
-      const { actions, lastEvaluatedKey } = await getHistoryUsecase.execute(
+      const response = await getHistoryUsecase.execute(
         start,
         end,
         amount,
         exclusiveStartKey
       )
-      setFullHistory({ actions, lastEvaluatedKey })
-      setHistory(actions)
-      setFirstEvaluatedKey(
-        actions[(activitiesPaginationCounter - 1) * 20].actionId
-      )
-      setLastEvaluatedKeyResponse(lastEvaluatedKey)
-      setStartDate(lastEvaluatedKey.startDate)
 
-      return fullHistory
+      return response
     } catch (error: any) {
       console.error('Something went wrong on get history: ', error)
     }
-    return fullHistory
+    return {
+      actions: [],
+      lastEvaluatedKey: {
+        actionId: '',
+        startDate: 0
+      }
+    }
   }
 
   async function updateAction(
