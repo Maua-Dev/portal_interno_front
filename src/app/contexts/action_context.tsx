@@ -191,13 +191,6 @@ export function ActionProvider({ children }: PropsWithChildren) {
     useState<lastEvaluatedKeyResponse>()
   const [firstEvaluatedKey, setFirstEvaluatedKey] = useState<string>()
   const [startDate, setStartDate] = useState<number>()
-  const [fullHistory, setFullHistory] = useState<historyResponse>({
-    actions: [],
-    lastEvaluatedKey: {
-      actionId: '',
-      startDate: 0
-    }
-  })
 
   async function createAction(
     startDate: number,

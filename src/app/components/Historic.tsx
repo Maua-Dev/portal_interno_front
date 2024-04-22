@@ -24,7 +24,7 @@ export default function Historic() {
   const [localHistory, setLocalHistory] = useState<Action[]>([])
   const [_lastEvaluatedKey, setLastEvaluatedKey] = useState<lastEvaluatedKey>()
   const [searchText, setSearchText] = useState<string>('')
-  const { getHistory, history } = useContext(ActionContext)
+  const { getHistory } = useContext(ActionContext)
   const [filterProps, setFilterProps] = useState<FilterProps>({
     searchText: '',
     project: '',
