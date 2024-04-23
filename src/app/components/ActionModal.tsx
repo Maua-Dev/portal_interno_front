@@ -13,11 +13,10 @@ import {
 } from '../utils/functions/timeStamp'
 import { useContext, useEffect, useState } from 'react'
 import { ActionContext } from '../contexts/action_context'
-import { Member } from '../../@clean/shared/domain/entities/member'
 import ListRow from './ListRow'
 import { ModalContext } from '../contexts/modal_context'
-import { plainTextToRa } from '../utils/functions/formatters'
-import { MemberContext } from '../contexts/member_context'
+import Historic from './Historic'
+import { Selector } from './Selector'
 
 const actionSchema = z.object({
   title: z.string().min(1, { message: 'Título é obrigatório' }),
@@ -66,22 +65,14 @@ export default function ActionModal({ action }: { action?: Action }) {
   const { darkMode } = useDarkMode()
 
   // Contexts
-  const {
-    getAllMembers
-    //getMember
-  } = useContext(MemberContext)
-  const { closeModal } = useContext(ModalContext)
-  const {
-    updateAction,
-    createAction
-    // getHistory
-  } = useContext(ActionContext)
+  const { closeModal, changeModalContent } = useContext(ModalContext)
+  const { updateAction, createAction } = useContext(ActionContext)
 
   // Use state
-  const [allMembers, setAllMembers] = useState<Member[] | undefined>()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [fade, setFade] = useState<boolean>(false)
   const [stackTags, setStackTags] = useState<STACK[]>(action?.stackTags || [])
-  const [members, setMembers] = useState<string[]>(
+  const [associatedUserIds, setAssociatedUserIds] = useState<string[]>(
     action?.associatedMembersUserIds || []
   )
 
@@ -93,13 +84,6 @@ export default function ActionModal({ action }: { action?: Action }) {
   if (action) {
     isUpdateModal = true
   }
-
-  // Fetch all members
-  useEffect(() => {
-    getAllMembers()
-      .then((members) => setAllMembers(members))
-      .catch((error) => console.log(error))
-  }, [getAllMembers])
 
   useEffect(() => {
     setTimeout(() => {
@@ -114,30 +98,17 @@ export default function ActionModal({ action }: { action?: Action }) {
     list: string[] | STACK[],
     setValue: any
   ): void => {
+    console.log('Item ' + item + ' removed from ' + field)
+    console.log(list)
     setValue(
       field,
       list.filter((itemInList) => itemInList !== item)
     )
     if (field === 'associatedMembersUserIds') {
-      setMembers(getValues('associatedMembersUserIds'))
+      setAssociatedUserIds(getValues('associatedMembersUserIds'))
     }
-
     if (field === 'stackTags') {
       setStackTags(getValues('stackTags'))
-    }
-  }
-
-  const validateAndAddMember = (userId: string) => {
-    if (
-      userId &&
-      getValues('associatedMembersUserIds').indexOf(userId) === -1
-    ) {
-      setValue('associatedMembersUserIds', [
-        ...getValues('associatedMembersUserIds'),
-        userId
-      ])
-      setMembers(getValues('associatedMembersUserIds'))
-      console.log(getValues('associatedMembersUserIds'))
     }
   }
 
@@ -153,6 +124,7 @@ export default function ActionModal({ action }: { action?: Action }) {
 
   const handleCreateActionSubmit = async (data: ActionModalType) => {
     console.table(data)
+    setIsLoading(true)
     try {
       const createdAction = await createAction(
         dateToMilliseconds(data.startDate),
@@ -161,7 +133,7 @@ export default function ActionModal({ action }: { action?: Action }) {
         dateToMilliseconds(data.endDate),
         hoursToMilliseconds(data.duration),
         data.projectCode,
-        parseInt(data.storyId),
+        data?.storyId ? parseInt(data.storyId) : undefined,
         data.associatedMembersUserIds,
         data.stackTags,
         data.actionTypeTag
@@ -174,27 +146,41 @@ export default function ActionModal({ action }: { action?: Action }) {
       }
     } catch (error: any) {
       console.error(error)
+      alert('Erro ao criar atividade: ' + error.message)
+    } finally {
+      setIsLoading(false)
     }
   }
 
   const handleUpdateActionSubmit = async (data: ActionModalType) => {
+    setIsLoading(true)
     console.log('Update Action')
     console.table(data)
-    const updatedAction = await updateAction(
-      data.actionId!,
-      dateToMilliseconds(data.startDate),
-      dateToMilliseconds(data.endDate),
-      hoursToMilliseconds(data.duration),
-      parseInt(data.storyId),
-      data.title,
-      data.description,
-      data.projectCode,
-      data.associatedMembersUserIds,
-      data.stackTags,
-      data.actionTypeTag
-    )
-
-    console.log(updatedAction)
+    try {
+      const updatedAction = await updateAction(
+        data.actionId!,
+        dateToMilliseconds(data.startDate),
+        dateToMilliseconds(data.endDate),
+        hoursToMilliseconds(data.duration),
+        data?.storyId ? parseInt(data.storyId) : undefined,
+        data.title,
+        data.description,
+        data.projectCode,
+        data.associatedMembersUserIds,
+        data.stackTags,
+        data.actionTypeTag
+      )
+      console.log(updatedAction)
+      if (updatedAction) {
+        alert('Atividade atualizada com sucesso!')
+        changeModalContent(<Historic />)
+      }
+    } catch (error: any) {
+      alert('Erro ao atualizar atividade: ' + error.message)
+      console.error(error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleConfirmCloseModal = () => {
@@ -232,7 +218,9 @@ export default function ActionModal({ action }: { action?: Action }) {
       storyId: action?.storyId.toString() || '',
       startDate: action?.startDate ? timeStampToDate(action!.startDate) : '',
       endDate: action?.endDate ? timeStampToDate(action!.endDate) : '',
-      duration: action?.duration ? millisecondsToHours(action!.duration) : 0,
+      duration: action?.duration
+        ? millisecondsToHours(action!.duration)
+        : undefined,
       associatedMembersUserIds: action?.associatedMembersUserIds || [],
       actionTypeTag: action?.actionTypeTag || undefined,
       stackTags: action?.stackTags || [],
@@ -299,7 +287,6 @@ export default function ActionModal({ action }: { action?: Action }) {
                     <option value="PI">Portal Interno</option>
                     <option value="SM">Smile</option>
                     <option value="MF">Mauá Food</option>
-                    <option value="MF">Outros</option>
                   </select>
                   <span className="text-red-600">
                     {errors.projectCode?.message}
@@ -364,17 +351,6 @@ export default function ActionModal({ action }: { action?: Action }) {
                   <input
                     type="datetime-local"
                     {...register('endDate')}
-                    // Old onChange function
-                    // onChange={(e) => {
-                    //   const startDate = dateToMilliseconds(
-                    //     getValues('startDate')
-                    //   )
-                    //   const endDate = dateToMilliseconds(e.target.value)
-                    //   setValue(
-                    //     'duration',
-                    //     millisecondsToHours(endDate - startDate)
-                    //   )
-                    // }}
                     className={`rounded ${
                       darkMode ? 'bg-gray-600' : 'bg-gray-300'
                     } px-2 py-1 outline-none`}
@@ -386,7 +362,7 @@ export default function ActionModal({ action }: { action?: Action }) {
 
                 {/* Duration */}
                 <div className="flex flex-col gap-2">
-                  <p className="text-lg">Duração</p>
+                  <p className="text-lg">Duração da atividade</p>
                   <input
                     type="text"
                     {...register('duration', {
@@ -421,44 +397,11 @@ export default function ActionModal({ action }: { action?: Action }) {
           <div className="flex w-full flex-col justify-between gap-4 md:w-2/5 lg:w-1/5">
             {/* Associated Members */}
             <div className="flex h-1/2 flex-col gap-4">
-              <p className="text-2xl font-bold">Membros</p>
-              <select
-                className={`rounded ${
-                  darkMode ? 'bg-gray-600' : 'bg-gray-300'
-                } px-2 py-1 outline-none`}
-                onChange={(e) => {
-                  if (e.target.value !== '') {
-                    validateAndAddMember(e.target.value)
-                  }
-                }}
-              >
-                <option value="">Selecione</option>
-                {allMembers &&
-                  allMembers.map((member) => (
-                    <option key={member.email} value={member.userId}>
-                      {`${member.name} | ${member.ra}`}
-                    </option>
-                  ))}
-              </select>
-              <p className="text-xl font-bold">Membros associados</p>
-              <div className="h-24 overflow-y-scroll rounded-md border-[1px] border-gray-400 p-2">
-                {members?.map((member) => (
-                  <ListRow
-                    text={plainTextToRa(member)}
-                    onClick={() => {
-                      removeItemFromList(
-                        'associatedMembersUserIds',
-                        member,
-                        getValues('associatedMembersUserIds'),
-                        setValue
-                      )
-                    }}
-                  />
-                ))}
-              </div>
-              <span className="text-red-600">
-                {errors.associatedMembersUserIds?.message}
-              </span>
+              <Selector
+                members={associatedUserIds}
+                setValue={setValue}
+                getValues={getValues}
+              />
             </div>
 
             {/* Stack Tag Selector */}
@@ -501,13 +444,15 @@ export default function ActionModal({ action }: { action?: Action }) {
             <div className="flex w-full flex-col items-center gap-8 sm:flex-row lg:flex-col">
               <button
                 type="submit"
-                className="w-full rounded-lg border-2 border-blue-600 px-2 py-1 text-blue-600 sm:w-1/2"
+                disabled={isLoading}
+                className="flex w-full justify-center rounded-lg border-2 border-blue-600 px-2 py-1 text-blue-600 disabled:cursor-not-allowed disabled:opacity-50 sm:w-1/2"
               >
                 {isUpdateModal ? 'Salvar' : 'Enviar'}
               </button>
               <button
                 type="button"
-                className="w-full rounded-lg bg-red-500 px-2 py-1 text-white sm:w-1/2"
+                disabled={isLoading}
+                className="w-full rounded-lg bg-red-500 px-2 py-1 text-white disabled:cursor-not-allowed disabled:opacity-50 sm:w-1/2"
                 onClick={handleConfirmCloseModal}
               >
                 Cancelar
