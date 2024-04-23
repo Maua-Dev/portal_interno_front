@@ -243,6 +243,7 @@ export function ActionProvider({ children }: PropsWithChildren) {
       startDate: number
     }
   ) {
+    console.log(exclusiveStartKey)
     try {
       const response = await getHistoryUsecase.execute(
         start,
@@ -250,6 +251,13 @@ export function ActionProvider({ children }: PropsWithChildren) {
         amount,
         exclusiveStartKey
       )
+
+      setHistory(response.actions)
+      setFirstEvaluatedKey(
+        response.actions[(activitiesPaginationCounter - 1) * 20].actionId
+      )
+      setLastEvaluatedKeyResponse(response.lastEvaluatedKey)
+      setStartDate(response.lastEvaluatedKey.startDate)
 
       return response
     } catch (error: any) {

@@ -24,6 +24,7 @@ export default function Historic() {
   const [localHistory, setLocalHistory] = useState<Action[]>([])
   const [_lastEvaluatedKey, setLastEvaluatedKey] = useState<lastEvaluatedKey>()
   const [searchText, setSearchText] = useState<string>('')
+  // const [isLoading, setLoading] = useState<boolean>(false)
   const { getHistory } = useContext(ActionContext)
   const [filterProps, setFilterProps] = useState<FilterProps>({
     searchText: '',
@@ -54,6 +55,12 @@ export default function Historic() {
       console.log('Error: ' + error)
     }
   }
+
+  // const observer = useRef()
+  // const lastActionOnHistory = useCallback((node) => {
+  //   if (isLoading) return
+  //   if (observer.current) observer.current.disconnect()
+  // }, [])
 
   const filteredActions = useMemo(() => {
     if (
@@ -136,11 +143,21 @@ export default function Historic() {
                       .includes(searchTextLowerCase) ||
                     actionUnit.storyId.toString().includes(searchTextLowerCase)
             })
-            .map((actionUnit, key) => {
+            .map((actionUnit, index) => {
+              if (filteredActions.length === index) {
+                return (
+                  <HistoricActionCard
+                    // ref={lastActionOnHistory}
+                    className="z-10 hover:z-20"
+                    key={index}
+                    action={actionUnit}
+                  />
+                )
+              }
               return (
                 <HistoricActionCard
                   className="z-10 hover:z-20"
-                  key={key}
+                  key={index}
                   action={actionUnit}
                 />
               )
