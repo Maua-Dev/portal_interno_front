@@ -29,6 +29,27 @@ export function stackToEnum(value: string): STACK {
   }
 }
 
+export function translateStackTag(stack: string): string {
+  switch (stack) {
+    case 'BACKEND':
+      return 'Back-End'
+    case 'FRONTEND':
+      return 'Front-End'
+    case 'INFRA':
+      return 'Infra'
+    case 'UX_UI':
+      return 'UX/UI'
+    case 'PO':
+      return 'PO'
+    case 'INTERNAL':
+      return 'Interno'
+    case 'DATA_SCIENCE':
+      return 'Data Science'
+    default:
+      return 'Invalid value'
+  }
+}
+
 export function stackFormatter(stackArray: STACK[]): string[] {
   const stackFormatted: string[] = []
   stackArray.forEach((stack) => {
