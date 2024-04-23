@@ -1,6 +1,7 @@
 import { FormEvent, useState } from 'react'
 import { Member } from '../../../../@clean/shared/domain/entities/member'
 import { plainTextToRa } from '../../../utils/functions/formatters'
+import useDarkMode from '../../../utils/functions/useDarkMode'
 
 interface SelectorModalProps {
   members: string[]
@@ -17,8 +18,13 @@ export function SelectorModal({
   allMembers,
   setSelectedMembersModal
 }: SelectorModalProps) {
-  const [selectedMembers, setSelectedMembers] = useState<Member[]>([])
+  const [selectedMembers, setSelectedMembers] = useState<Member[]>(
+    allMembers?.filter((m) => members.some((member) => member === m.userId)) ||
+      []
+  )
   const [search, setSearch] = useState<string>('')
+
+  const { darkMode } = useDarkMode()
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
@@ -28,6 +34,7 @@ export function SelectorModal({
     )
     setSelectedMembersModal(selectedMembers.map((m) => m.userId))
     setIsSelectorModalOpen(false)
+    console.log(selectedMembers)
   }
 
   const handleCancel = () => {
@@ -35,13 +42,19 @@ export function SelectorModal({
   }
 
   return (
-    <div className="absolute left-0 top-0 z-[160] flex h-screen w-full items-center justify-center bg-black bg-opacity-40">
-      <section className="flex h-4/5 w-1/4 flex-col rounded-lg bg-white">
+    <div className="absolute left-0 top-0 z-[160] flex h-full w-full items-center justify-center bg-black bg-opacity-40 md:h-screen">
+      <section
+        className={`flex h-2/5 w-4/5 flex-col rounded-lg ${
+          darkMode ? 'bg-skin-secundary' : 'bg-white'
+        } sm:w-1/2 md:h-4/5 xl:w-1/4`}
+      >
         <header className="flex justify-between gap-4 px-6 pt-6">
           <h1 className="text-xl font-bold">Membros</h1>
           <input
             type="text"
-            className="w-full rounded-md bg-gray-200 px-2 py-1 text-black outline-none"
+            className={`w-full rounded-md ${
+              darkMode ? 'bg-gray-600' : 'bg-gray-200'
+            } px-2 py-1 outline-none`}
             placeholder="Buscar membro 🔎"
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -66,10 +79,10 @@ export function SelectorModal({
                 </div>
                 <input
                   type="checkbox"
-                  // checked={
-                  //   oldMembers.length !== 0 &&
-                  //   oldMembers.some((m) => m === member.userId)
-                  // }
+                  checked={
+                    selectedMembers &&
+                    selectedMembers.some((m) => m.userId === member.userId)
+                  }
                   onChange={(e) => {
                     setSelectedMembers(
                       e.target.checked
