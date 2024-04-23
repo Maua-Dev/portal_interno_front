@@ -2,9 +2,16 @@ import useDarkMode from '../utils/functions/useDarkMode'
 import { Action } from '../../@clean/shared/domain/entities/action'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { ACTION_TYPE } from '../../@clean/shared/domain/enums/action_type_enum'
+import {
+  ACTION_TYPE,
+  translateActionTypeTag
+} from '../../@clean/shared/domain/enums/action_type_enum'
 import { useForm } from 'react-hook-form'
-import { STACK, stackToEnum } from '../../@clean/shared/domain/enums/stack_enum'
+import {
+  STACK,
+  stackToEnum,
+  translateStackTag
+} from '../../@clean/shared/domain/enums/stack_enum'
 import {
   millisecondsToHours,
   timeStampToDate,
@@ -72,9 +79,6 @@ export default function ActionModal({ action }: { action?: Action }) {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [fade, setFade] = useState<boolean>(false)
   const [stackTags, setStackTags] = useState<STACK[]>(action?.stackTags || [])
-  // const [associatedUserIds, setAssociatedUserIds] = useState<string[]>(
-  //   action?.associatedMembersUserIds || []
-  // )
 
   // Constants
   const actionTypes: string[] = Object.values(ACTION_TYPE)
@@ -208,6 +212,7 @@ export default function ActionModal({ action }: { action?: Action }) {
     },
     mode: 'onBlur'
   })
+
   return (
     <div
       className={`flex h-auto w-full transform items-center justify-center overflow-hidden py-24 transition-all duration-300 md:h-screen md:overflow-hidden md:py-0 ${
@@ -298,9 +303,9 @@ export default function ActionModal({ action }: { action?: Action }) {
                     } px-2 py-1 outline-none`}
                   >
                     <option value="">Selecione uma opção</option>
-                    {actionTypes.map((actionType) => (
-                      <option key={actionType} value={actionType}>
-                        {actionType}
+                    {actionTypes.map((actionType, index) => (
+                      <option key={index} value={actionType}>
+                        {translateActionTypeTag(actionType)}
                       </option>
                     ))}
                   </select>
@@ -386,7 +391,7 @@ export default function ActionModal({ action }: { action?: Action }) {
 
             {/* Stack Tag Selector */}
             <div className="flex h-1/2 flex-col gap-4">
-              <p className="text-2xl font-bold">Ações</p>
+              <p className="text-2xl font-bold">Áreas</p>
               <select
                 className={`rounded ${
                   darkMode ? 'bg-gray-600' : 'bg-gray-300'
@@ -400,14 +405,14 @@ export default function ActionModal({ action }: { action?: Action }) {
                 <option value="">Selecione uma opção</option>
                 {allStackTags.map((stackTag, index) => (
                   <option key={index} value={stackTag}>
-                    {stackTag}
+                    {translateStackTag(stackTag)}
                   </option>
                 ))}
               </select>
               <div className="flex h-32 flex-col gap-2 overflow-y-scroll rounded-md border-gray-400">
                 {stackTags.map((stackRow) => (
                   <Row
-                    text={stackRow}
+                    text={translateStackTag(stackRow)}
                     onClick={() => {
                       setValue(
                         'stackTags',
