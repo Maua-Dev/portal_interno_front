@@ -68,7 +68,7 @@ export function Selector({ members, setValue, getValues }: SelectorProps) {
       </div>
       {isSelectorModalOpen && (
         <SelectorModal
-          members={members}
+          members={selectedMembersModal}
           setValue={setValue}
           setIsSelectorModalOpen={setIsSelectorModalOpen}
           allMembers={allMembers}
