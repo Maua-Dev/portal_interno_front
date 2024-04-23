@@ -13,10 +13,10 @@ import {
 } from '../utils/functions/timeStamp'
 import { useContext, useEffect, useState } from 'react'
 import { ActionContext } from '../contexts/action_context'
-import ListRow from './ListRow'
 import { ModalContext } from '../contexts/modal_context'
 import Historic from './Historic'
 import { Selector } from './Selector'
+import { Row } from './Selector/components/Row'
 
 const actionSchema = z.object({
   title: z.string().min(1, { message: 'Título é obrigatório' }),
@@ -72,9 +72,9 @@ export default function ActionModal({ action }: { action?: Action }) {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [fade, setFade] = useState<boolean>(false)
   const [stackTags, setStackTags] = useState<STACK[]>(action?.stackTags || [])
-  const [associatedUserIds, setAssociatedUserIds] = useState<string[]>(
-    action?.associatedMembersUserIds || []
-  )
+  // const [associatedUserIds, setAssociatedUserIds] = useState<string[]>(
+  //   action?.associatedMembersUserIds || []
+  // )
 
   // Constants
   const actionTypes: string[] = Object.values(ACTION_TYPE)
@@ -92,26 +92,6 @@ export default function ActionModal({ action }: { action?: Action }) {
   }, [])
 
   // Functions
-  const removeItemFromList = (
-    field: string,
-    item: string | STACK,
-    list: string[] | STACK[],
-    setValue: any
-  ): void => {
-    console.log('Item ' + item + ' removed from ' + field)
-    console.log(list)
-    setValue(
-      field,
-      list.filter((itemInList) => itemInList !== item)
-    )
-    if (field === 'associatedMembersUserIds') {
-      setAssociatedUserIds(getValues('associatedMembersUserIds'))
-    }
-    if (field === 'stackTags') {
-      setStackTags(getValues('stackTags'))
-    }
-  }
-
   const validateAndAddStackTag = (stackTag: string) => {
     if (stackTag) {
       const stackFormatted: STACK = stackToEnum(stackTag)
@@ -398,7 +378,7 @@ export default function ActionModal({ action }: { action?: Action }) {
             {/* Associated Members */}
             <div className="flex h-1/2 flex-col gap-4">
               <Selector
-                members={associatedUserIds}
+                members={action?.associatedMembersUserIds || []}
                 setValue={setValue}
                 getValues={getValues}
               />
@@ -418,24 +398,25 @@ export default function ActionModal({ action }: { action?: Action }) {
                 }}
               >
                 <option value="">Selecione uma opção</option>
-                {allStackTags.map((stackTag) => (
-                  <option key={stackTag} value={stackTag}>
+                {allStackTags.map((stackTag, index) => (
+                  <option key={index} value={stackTag}>
                     {stackTag}
                   </option>
                 ))}
               </select>
-              <div className="h-20 overflow-y-scroll rounded-md border-[1px] border-gray-400 p-2">
-                {stackTags.map((stack) => (
-                  <ListRow
-                    text={stack}
-                    onClick={() =>
-                      removeItemFromList(
+              <div className="flex h-32 flex-col gap-2 overflow-y-scroll rounded-md border-gray-400">
+                {stackTags.map((stackRow) => (
+                  <Row
+                    text={stackRow}
+                    onClick={() => {
+                      setValue(
                         'stackTags',
-                        stack,
-                        getValues('stackTags'),
-                        setValue
+                        getValues('stackTags').filter(
+                          (stack: string) => stack !== stackRow
+                        )
                       )
-                    }
+                      setStackTags(getValues('stackTags'))
+                    }}
                   />
                 ))}
               </div>
