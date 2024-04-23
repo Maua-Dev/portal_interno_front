@@ -21,9 +21,10 @@ interface lastEvaluatedKey {
 }
 
 export default function Historic() {
-  const [history, setHistory] = useState<Action[]>([])
+  const [localHistory, setLocalHistory] = useState<Action[]>([])
   const [_lastEvaluatedKey, setLastEvaluatedKey] = useState<lastEvaluatedKey>()
   const [searchText, setSearchText] = useState<string>('')
+  // const [isLoading, setLoading] = useState<boolean>(false)
   const { getHistory } = useContext(ActionContext)
   const [filterProps, setFilterProps] = useState<FilterProps>({
     searchText: '',
@@ -41,16 +42,25 @@ export default function Historic() {
     })
   }
 
-  const loadHistoric = async () => {
-    const response = await getHistory(
-      undefined,
-      undefined,
-      undefined,
-      undefined
-    )
-    setLastEvaluatedKey(response.lastEvaluatedKey)
-    setHistory(response.actions)
+  const loadHistoric = async (lastKey?: lastEvaluatedKey | undefined) => {
+    try {
+      const response = await getHistory(undefined, undefined, 10, lastKey)
+      if (lastKey) {
+        setLocalHistory((prev) => prev.concat(response.actions))
+      } else {
+        setLocalHistory(response.actions)
+      }
+      setLastEvaluatedKey(response.lastEvaluatedKey)
+    } catch (error) {
+      console.log('Error: ' + error)
+    }
   }
+
+  // const observer = useRef()
+  // const lastActionOnHistory = useCallback((node) => {
+  //   if (isLoading) return
+  //   if (observer.current) observer.current.disconnect()
+  // }, [])
 
   const filteredActions = useMemo(() => {
     if (
@@ -58,10 +68,10 @@ export default function Historic() {
       filterProps.area === '' &&
       filterProps.orderBy === ''
     ) {
-      return history
+      return localHistory
     }
 
-    let currentActions: Action[] = [...(history || [])]
+    let currentActions: Action[] = localHistory
 
     if (filterProps.project) {
       currentActions = currentActions.filter(
@@ -99,11 +109,11 @@ export default function Historic() {
     }
 
     return currentActions
-  }, [history, filterProps])
+  }, [localHistory, filterProps])
 
   useEffect(() => {
     clearFilter()
-    if (history.length === 0) {
+    if (localHistory.length === 0) {
       loadHistoric()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -133,21 +143,33 @@ export default function Historic() {
                       .includes(searchTextLowerCase) ||
                     actionUnit.storyId.toString().includes(searchTextLowerCase)
             })
-            .map((actionUnit, key) => {
+            .map((actionUnit, index) => {
+              if (filteredActions.length === index) {
+                return (
+                  <HistoricActionCard
+                    // ref={lastActionOnHistory}
+                    className="z-10 hover:z-20"
+                    key={index}
+                    action={actionUnit}
+                  />
+                )
+              }
               return (
                 <HistoricActionCard
                   className="z-10 hover:z-20"
-                  key={key}
+                  key={index}
                   action={actionUnit}
                 />
               )
             })}
-          {/* <h1
+          <h1
             className="cursor-pointer pb-8 pt-8 text-skin-muted duration-150 hover:text-skin-base"
-            onClick={loadMoreHistoric}
+            onClick={() => {
+              loadHistoric(_lastEvaluatedKey)
+            }}
           >
             Mostrar Mais
-          </h1> */}
+          </h1>
         </div>
       ) : (
         <Loader />
