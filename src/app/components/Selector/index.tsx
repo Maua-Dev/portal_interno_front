@@ -18,7 +18,8 @@ export function Selector({ members, setValue, getValues }: SelectorProps) {
 
   const [isSelectorModalOpen, setIsSelectorModalOpen] = useState<boolean>(false)
   const [allMembers, setAllMembers] = useState<Member[] | undefined>()
-  const [selectedMembersModal, setSelectedMembersModal] = useState<string[]>([])
+  const [selectedMembersModal, setSelectedMembersModal] =
+    useState<string[]>(members)
 
   useEffect(() => {
     getMember().then((member) => {
