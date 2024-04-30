@@ -1,9 +1,4 @@
-import React, {
-  HTMLAttributes,
-  ReactElement,
-  useContext,
-  useState
-} from 'react'
+import { HTMLAttributes, ReactElement, useContext, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { ThemeContext } from '../../contexts/theme_context'
 import Text from './Text'
