@@ -33,9 +33,23 @@ function plainTextToRa(text: string): string {
   return `${first}.${second}-${third}`
 }
 
+function ProjectCodeToProjectName(projectCode: string): string {
+  switch (projectCode) {
+    case 'PI':
+      return 'Portal Interno'
+    case 'SM':
+      return 'Smile'
+    case 'MF':
+      return 'Mauá Food'
+    default:
+      return projectCode
+  }
+}
+
 export {
   raFormatterToJson,
   raFormatterFromJson,
   associatedMembersRaFormatter,
-  plainTextToRa
+  plainTextToRa,
+  ProjectCodeToProjectName
 }
