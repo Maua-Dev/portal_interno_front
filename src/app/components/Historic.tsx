@@ -6,6 +6,7 @@ import HistoricActionCard from './HistoricActionCard'
 import { ActionContext } from '../contexts/action_context'
 import Loader from './little_components/Loader'
 import { stackToEnum } from '../../@clean/shared/domain/enums/stack_enum'
+import ActionDialog from './ActionDialog'
 
 interface FilterProps {
   [key: string]: string

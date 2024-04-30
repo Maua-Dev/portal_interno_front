@@ -1,8 +1,23 @@
-import { HTMLAttributes, useContext, useState } from 'react'
+import React, {
+  HTMLAttributes,
+  ReactElement,
+  useContext,
+  useState
+} from 'react'
 import { twMerge } from 'tailwind-merge'
 import { ThemeContext } from '../../contexts/theme_context'
 import Text from './Text'
-import { X } from 'lucide-react'
+import {
+  X,
+  Code2,
+  Presentation,
+  SearchCode,
+  Speech,
+  GraduationCap,
+  PencilRuler,
+  Palette,
+  Briefcase
+} from 'lucide-react'
 
 interface TagProps {
   variant: string
@@ -11,6 +26,7 @@ interface TagProps {
 interface VariantsProps {
   label: string
   style: string
+  icon?: ReactElement
 }
 
 export function Tag({ variant }: TagProps) {
@@ -44,19 +60,69 @@ export function Tag({ variant }: TagProps) {
     DATA_SCIENCE: {
       label: 'DATA',
       style: `bg-teal-500 text-teal-${DARKNESS}`
+    },
+    CODE: {
+      label: 'Código'.toUpperCase(),
+      style:
+        'border border-skin-muted text-skin-muted text-md hover:no-underline',
+      icon: <Code2 className="h-5 w-5" />
+    },
+    MEETING: {
+      label: 'Reunião'.toUpperCase(),
+      style:
+        'border border-skin-muted text-skin-muted text-md hover:no-underline',
+      icon: <Speech className="h-5 w-5" />
+    },
+    CODEREVIEW: {
+      label: 'Revisão de Código'.toUpperCase(),
+      style:
+        'border border-skin-muted text-skin-muted text-md hover:no-underline',
+      icon: <SearchCode className="h-5 w-5" />
+    },
+    LEARN: {
+      label: 'Aprendizado'.toUpperCase(),
+      style:
+        'border border-skin-muted text-skin-muted text-md hover:no-underline',
+      icon: <GraduationCap className="h-5 w-5" />
+    },
+    PRESENTATION: {
+      label: 'Apresentação'.toUpperCase(),
+      style:
+        'border border-skin-muted text-skin-muted text-md hover:no-underline',
+      icon: <Presentation className="h-5 w-5" />
+    },
+    DESIGN: {
+      label: 'Design'.toUpperCase(),
+      style:
+        'border border-skin-muted text-skin-muted text-md hover:no-underline',
+      icon: <Palette className="h-5 w-5" />
+    },
+    ARCHITECT: {
+      label: 'Arquitetura'.toUpperCase(),
+      style:
+        'border border-skin-muted text-skin-muted text-md hover:no-underline',
+      icon: <PencilRuler className="h-5 w-5" />
+    },
+    WORK: {
+      label: 'Trabalho'.toUpperCase(),
+      style:
+        'border border-skin-muted text-skin-muted text-md hover:no-underline',
+      icon: <Briefcase className="h-5 w-5" />
     }
   }
 
   const label = variants[variant].label
   const style = variants[variant].style
+  const icon = variants[variant].icon
 
   return (
     <p
       className={twMerge(
-        'h-fit w-fit rounded-md bg-opacity-40 p-0.5 px-1.5 text-xs underline-offset-1 hover:underline',
+        'flex h-fit w-fit flex-row items-center gap-2 rounded-md bg-opacity-40 p-0.5 px-1.5 text-xs underline-offset-1 hover:underline',
         style
       )}
     >
+      {icon ? icon : null}
       {label}
     </p>
   )
