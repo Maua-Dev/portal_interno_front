@@ -47,6 +47,7 @@ export default function ActionDialog({ action, children }: ActionDialogProps) {
 
   useEffect(() => {
     loadMember(action.associatedMembersUserIds)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
