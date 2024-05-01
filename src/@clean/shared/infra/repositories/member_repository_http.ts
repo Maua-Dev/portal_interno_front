@@ -47,7 +47,6 @@ export class MemberRepositoryHttp implements IMemberRepository {
       if (!token) {
         throw new Error('Token not found')
       }
-
       const response = await this.http.post<JsonProps>(
         '/create-member',
         {
@@ -83,7 +82,6 @@ export class MemberRepositoryHttp implements IMemberRepository {
       if (!token) {
         throw new Error('Token not found')
       }
-
       const response = await this.http.get<JsonProps>('/get-member', {
         headers: {
           Authorization: 'Bearer ' + token
