@@ -25,14 +25,17 @@ type actionStates = 'rejected' | 'waiting' | 'approved'
 
 interface HistoricActionCardProps extends HTMLAttributes<HTMLDivElement> {
   action: Action
+  setHistory: React.Dispatch<React.SetStateAction<Action[]>>
 }
 
 export default function HistoricActionCard({
   action,
+  setHistory,
   ...props
 }: HistoricActionCardProps) {
   const [actionState] = useState<actionStates>('approved')
   const [isPopUpOpen, setPopUpOpen] = useState<boolean>(false)
+  const [isVisble, setVisibility] = useState<boolean>(true)
   const { changeModalContent } = useContext(ModalContext)
   const { deleteAction } = useContext(ActionContext)
 
@@ -52,10 +55,8 @@ export default function HistoricActionCard({
   }
 
   const handleDeleteAction = (actionId: string) => {
-    const response = deleteAction(actionId)
-    response.then((_res: any) => {
-      window.location.reload()
-    })
+    setHistory((prev) => prev.filter((item) => item.actionId !== actionId))
+    deleteAction(actionId)
   }
 
   return (
@@ -126,16 +127,21 @@ export default function HistoricActionCard({
                 >
                   <Button
                     variant="default"
-                    onClick={() => {
+                    onClick={(event) => {
                       changeModalContent(<ActionModal action={action} />)
                       setPopUpOpen(false)
+                      event.stopPropagation()
                     }}
                   >
                     <PenBox className="w-4" />
                     Editar
                   </Button>
-                  <Button 
-                    onClick={() => handleDeleteAction(action.actionId)}
+                  <Button
+                    onClick={(event) => {
+                      handleDeleteAction(action.actionId)
+                      setPopUpOpen(false)
+                      event.stopPropagation()
+                    }}
                     variant="default"
                   >
                     <Trash2 className="w-4" />

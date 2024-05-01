@@ -263,12 +263,12 @@ export function ActionProvider({ children }: PropsWithChildren) {
         exclusiveStartKey
       )
 
-      setHistory(response.actions)
-      setFirstEvaluatedKey(
-        response.actions[(activitiesPaginationCounter - 1) * 20].actionId
-      )
-      setLastEvaluatedKeyResponse(response.lastEvaluatedKey)
-      setStartDate(response.lastEvaluatedKey.startDate)
+      // setHistory(response.actions)
+      // setFirstEvaluatedKey(
+      //   response.actions[(activitiesPaginationCounter - 1) * 20].actionId
+      // )
+      // setLastEvaluatedKeyResponse(response.lastEvaluatedKey)
+      // setStartDate(response.lastEvaluatedKey.startDate)
 
       return response
     } catch (error: any) {
