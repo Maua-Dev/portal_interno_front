@@ -477,6 +477,10 @@ export class ActionRepositoryMock implements IActionRepository {
     throw new NoItemsFoundError(`actionId: ${actionId}`)
   }
 
+  async deleteAction(actionId: string): Promise<void> {
+    this.actions = this.actions.filter((action) => action.actionId !== actionId)
+  }
+
   async batchUpdateAssociatedActionMembers(
     actionId: string,
     members: string[]

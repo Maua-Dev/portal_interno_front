@@ -401,6 +401,27 @@ export class ActionRepositoryHttp implements IActionRepository {
       throw new Error(error.response.data)
     }
   }
+
+  async deleteAction(actionId: string): Promise<void> {
+    try {
+      const token = localStorage.getItem('idToken')
+
+      if (!token) {
+        throw new Error('Token not found')
+      }
+
+      await this.http.delete('/delete-action', {
+        headers: {
+          Authorization: 'Bearer ' + token
+        },
+        data: {
+          action_id: actionId
+        }
+      })
+    } catch (error: any) {
+      throw new Error('Error deleting action: ' + error.message)
+    }
+  }
 }
 
 decorate(injectable(), ActionRepositoryHttp)

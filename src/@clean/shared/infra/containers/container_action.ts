@@ -8,6 +8,7 @@ import { CreateAssociatedActionUsecase } from '../../../modules/action/usecases/
 import { GetHistoryUsecase } from '../../../modules/action/usecases/get_history_usecase'
 import { UpdateActionUsecase } from '../../../modules/action/usecases/update_action_usecase'
 import { UpdateActionValidationUsecase } from '../../../modules/action/usecases/update_action_validation'
+import { DeleteActionUsecase } from '../../../modules/action/usecases/delete_action_usecase'
 
 export const RegistryAction = {
   // Axios Adapter
@@ -22,7 +23,8 @@ export const RegistryAction = {
   CreateAssociatedActionUsecase: Symbol.for('CreateAssociatedActionUsecase'),
   GetHistoryUsecase: Symbol.for('GetHistoryUsecase'),
   UpdateActionUsecase: Symbol.for('UpdateActionUsecase'),
-  UpdateActionValidationUsecase: Symbol.for('UpdateActionValidationUsecase')
+  UpdateActionValidationUsecase: Symbol.for('UpdateActionValidationUsecase'),
+  DeleteActionUsecase: Symbol.for('DeleteActionUsecase')
 }
 
 export const containerAction = new Container()
@@ -143,6 +145,27 @@ containerAction
       )
     } else {
       return new UpdateActionValidationUsecase(
+        context.container.get(RegistryAction.ActionRepositoryMock)
+      )
+    }
+  })
+
+containerAction
+  .bind(RegistryAction.DeleteActionUsecase)
+  .toDynamicValue((context) => {
+    if (import.meta.env.VITE_STAGE === 'TEST') {
+      return new DeleteActionUsecase(
+        context.container.get(RegistryAction.ActionRepositoryMock)
+      )
+    } else if (
+      import.meta.env.VITE_STAGE === 'DEV' ||
+      import.meta.env.VITE_STAGE === 'PROD'
+    ) {
+      return new DeleteActionUsecase(
+        context.container.get(RegistryAction.ActionRepositoryHttp)
+      )
+    } else {
+      return new DeleteActionUsecase(
         context.container.get(RegistryAction.ActionRepositoryMock)
       )
     }

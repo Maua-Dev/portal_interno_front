@@ -19,6 +19,7 @@ import { ACTION_TYPE } from '../../@clean/shared/domain/enums/action_type_enum'
 import { UpdateActionUsecase } from '../../@clean/modules/action/usecases/update_action_usecase'
 import { historyResponse } from '../../@clean/shared/infra/repositories/action_repository_http'
 import { UpdateActionValidationUsecase } from '../../@clean/modules/action/usecases/update_action_validation'
+import { DeleteActionUsecase } from '../../@clean/modules/action/usecases/delete_action_usecase'
 
 interface lastEvaluatedKeyResponse {
   actionId: string
@@ -83,6 +84,8 @@ export interface ActionContextInterface {
     actionId: string,
     isValid: boolean
   ) => Promise<Action | undefined>
+
+  deleteAction: (actionId: string) => Promise<void>
 }
 
 const defaultContext: ActionContextInterface = {
@@ -154,6 +157,10 @@ const defaultContext: ActionContextInterface = {
 
   updateActionValidation: async (_actionId: string, _isValid: boolean) => {
     return undefined
+  },
+
+  deleteAction: async (_actionId: string) => {
+    return undefined
   }
 }
 
@@ -180,6 +187,10 @@ const updateActionValidationUsecase =
   containerAction.get<UpdateActionValidationUsecase>(
     RegistryAction.UpdateActionValidationUsecase
   )
+
+const deleteActionUsecase = containerAction.get<DeleteActionUsecase>(
+  RegistryAction.DeleteActionUsecase
+)
 
 export function ActionProvider({ children }: PropsWithChildren) {
   const [createdActions, setCreatedActions] = useState<Action[]>([])
@@ -320,6 +331,15 @@ export function ActionProvider({ children }: PropsWithChildren) {
     }
   }
 
+  async function deleteAction(actionId: string) {
+    try {
+      const deletedAction = await deleteActionUsecase.execute(actionId)
+      return deletedAction
+    } catch (error: any) {
+      console.log('Something went wrong on delete action: ', error)
+    }
+  }
+
   return (
     <ActionContext.Provider
       value={{
@@ -335,7 +355,8 @@ export function ActionProvider({ children }: PropsWithChildren) {
         lastEvaluatedKeyResponse,
         startDate,
         updateAction,
-        updateActionValidation
+        updateActionValidation,
+        deleteAction
       }}
     >
       {children}
