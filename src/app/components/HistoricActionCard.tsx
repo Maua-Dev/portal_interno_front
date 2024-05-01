@@ -35,7 +35,6 @@ export default function HistoricActionCard({
 }: HistoricActionCardProps) {
   const [actionState] = useState<actionStates>('approved')
   const [isPopUpOpen, setPopUpOpen] = useState<boolean>(false)
-  const [isVisble, setVisibility] = useState<boolean>(true)
   const { changeModalContent } = useContext(ModalContext)
   const { deleteAction } = useContext(ActionContext)
 
