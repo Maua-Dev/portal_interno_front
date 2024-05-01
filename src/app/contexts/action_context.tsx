@@ -21,10 +21,10 @@ import { historyResponse } from '../../@clean/shared/infra/repositories/action_r
 import { UpdateActionValidationUsecase } from '../../@clean/modules/action/usecases/update_action_validation'
 import { DeleteActionUsecase } from '../../@clean/modules/action/usecases/delete_action_usecase'
 
-interface lastEvaluatedKeyResponse {
-  actionId: string
-  startDate: number
-}
+// interface lastEvaluatedKeyResponse {
+//   actionId: string
+//   startDate: number
+// }
 
 export interface ActionContextInterface {
   createAction: (
@@ -58,13 +58,6 @@ export interface ActionContextInterface {
     }
   ) => Promise<historyResponse>
 
-  history: Action[]
-  activitiesPaginationCounter: number
-  setActivitiesPaginationCounter: (counter: number) => void
-  firstEvaluatedKey?: string
-  lastEvaluatedKeyResponse?: lastEvaluatedKeyResponse
-  startDate?: number
-
   updateAction: (
     actionId: string,
     newStartDate?: number,
@@ -89,7 +82,6 @@ export interface ActionContextInterface {
 }
 
 const defaultContext: ActionContextInterface = {
-  history: [],
   createAction: async (
     _startDate: number,
     _title: string,
@@ -132,11 +124,6 @@ const defaultContext: ActionContextInterface = {
       }
     }
   },
-
-  activitiesPaginationCounter: 1,
-  setActivitiesPaginationCounter: () => {},
-  lastEvaluatedKeyResponse: undefined,
-  firstEvaluatedKey: undefined,
 
   updateAction: async (
     _actionId: string,
@@ -195,13 +182,6 @@ const deleteActionUsecase = containerAction.get<DeleteActionUsecase>(
 export function ActionProvider({ children }: PropsWithChildren) {
   const [createdActions, setCreatedActions] = useState<Action[]>([])
   const [action, setAction] = useState<Action | undefined>(undefined)
-  const [history, setHistory] = useState<Action[]>([])
-  const [activitiesPaginationCounter, setActivitiesPaginationCounter] =
-    useState<number>(1)
-  const [lastEvaluatedKeyResponse, setLastEvaluatedKeyResponse] =
-    useState<lastEvaluatedKeyResponse>()
-  const [firstEvaluatedKey, setFirstEvaluatedKey] = useState<string>()
-  const [startDate, setStartDate] = useState<number>()
 
   async function createAction(
     startDate: number,
@@ -263,12 +243,12 @@ export function ActionProvider({ children }: PropsWithChildren) {
         exclusiveStartKey
       )
 
-      setHistory(response.actions)
-      setFirstEvaluatedKey(
-        response.actions[(activitiesPaginationCounter - 1) * 20].actionId
-      )
-      setLastEvaluatedKeyResponse(response.lastEvaluatedKey)
-      setStartDate(response.lastEvaluatedKey.startDate)
+      // setHistory(response.actions)
+      // setFirstEvaluatedKey(
+      //   response.actions[(activitiesPaginationCounter - 1) * 20].actionId
+      // )
+      // setLastEvaluatedKeyResponse(response.lastEvaluatedKey)
+      // setStartDate(response.lastEvaluatedKey.startDate)
 
       return response
     } catch (error: any) {
@@ -348,12 +328,6 @@ export function ActionProvider({ children }: PropsWithChildren) {
         setAction,
         createAssociatedAction,
         getHistory,
-        history,
-        activitiesPaginationCounter,
-        setActivitiesPaginationCounter,
-        firstEvaluatedKey,
-        lastEvaluatedKeyResponse,
-        startDate,
         updateAction,
         updateActionValidation,
         deleteAction

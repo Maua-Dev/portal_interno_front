@@ -44,7 +44,12 @@ export default function Historic() {
 
   const loadHistoric = async (lastKey?: lastEvaluatedKey | undefined) => {
     try {
-      const response = await getHistory(undefined, undefined, 10, lastKey)
+      const response = await getHistory(
+        undefined,
+        undefined,
+        undefined,
+        lastKey
+      )
       if (lastKey) {
         setLocalHistory((prev) => prev.concat(response.actions))
       } else {
@@ -55,12 +60,6 @@ export default function Historic() {
       console.log('Error: ' + error)
     }
   }
-
-  // const observer = useRef()
-  // const lastActionOnHistory = useCallback((node) => {
-  //   if (isLoading) return
-  //   if (observer.current) observer.current.disconnect()
-  // }, [])
 
   const filteredActions = useMemo(() => {
     if (
@@ -151,6 +150,7 @@ export default function Historic() {
                     className="z-10 hover:z-20"
                     key={index}
                     action={actionUnit}
+                    setHistory={setLocalHistory}
                   />
                 )
               }
@@ -159,6 +159,7 @@ export default function Historic() {
                   className="z-10 hover:z-20"
                   key={index}
                   action={actionUnit}
+                  setHistory={setLocalHistory}
                 />
               )
             })}
