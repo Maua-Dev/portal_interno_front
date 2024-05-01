@@ -17,6 +17,7 @@ import {
 import Button from './little_components/Button'
 import ActionModal from './ActionModal'
 import { ModalContext } from '../contexts/modal_context'
+import { ActionContext } from '../contexts/action_context'
 
 type actionStates = 'rejected' | 'waiting' | 'approved'
 
@@ -31,6 +32,7 @@ export default function HistoricActionCard({
   const [actionState] = useState<actionStates>('approved')
   const [isPopUpOpen, setPopUpOpen] = useState<boolean>(false)
   const { changeModalContent } = useContext(ModalContext)
+  const { deleteAction } = useContext(ActionContext)
 
   const title = `${action.projectCode}: ${action?.title} `
 
@@ -44,6 +46,13 @@ export default function HistoricActionCard({
 
   const closeSettingsPopUp = () => {
     setPopUpOpen(false)
+  }
+
+  const handleDeleteAction = (actionId: string) => {
+    const response = deleteAction(actionId)
+    response.then((_res: any) => {
+      window.location.reload()
+    })
   }
 
   return (
@@ -106,7 +115,10 @@ export default function HistoricActionCard({
                   <PenBox className="w-4" />
                   Editar
                 </Button>
-                <Button variant="default">
+                <Button
+                  onClick={() => handleDeleteAction(action.actionId)}
+                  variant="default"
+                >
                   <Trash2 className="w-4" />
                   Excluir
                 </Button>

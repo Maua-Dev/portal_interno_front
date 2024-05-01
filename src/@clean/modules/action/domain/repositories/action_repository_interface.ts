@@ -52,4 +52,6 @@ export interface IActionRepository {
   ): Promise<Action>
 
   updateActionValidation(actionId: string, isValid: boolean): Promise<Action>
+
+  deleteAction(actionId: string): Promise<void>
 }
