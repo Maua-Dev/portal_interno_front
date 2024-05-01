@@ -5,6 +5,7 @@ import { ACTIVE, activeToEnum } from '../../domain/enums/active_enum'
 import { COURSE, courseToEnum } from '../../domain/enums/course_enum'
 import { ROLE, roleToEnum } from '../../domain/enums/role_enum'
 import { STACK, stackToEnum } from '../../domain/enums/stack_enum'
+import { decorate, injectable } from 'inversify'
 
 interface memberRawResponse {
   member: {
@@ -206,3 +207,5 @@ export class MemberRepositoryHttp implements IMemberRepository {
     }
   }
 }
+
+decorate(injectable(), MemberRepositoryHttp)

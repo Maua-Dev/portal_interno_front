@@ -1,6 +1,7 @@
 import { AxiosInstance } from 'axios'
 import { IProjectRepository } from '../../../modules/project/domain/repositories/project_repository_interface'
 import { JsonProps, Project } from '../../domain/entities/project'
+import { decorate, injectable } from 'inversify'
 
 interface getAllProjectsResponse {
   projects: JsonProps[]
@@ -173,3 +174,5 @@ export class ProjectRepositoryHttp implements IProjectRepository {
     }
   }
 }
+
+decorate(injectable(), ProjectRepositoryHttp)

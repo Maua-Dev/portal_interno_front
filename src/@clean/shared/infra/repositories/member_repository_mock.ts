@@ -1,3 +1,4 @@
+import { decorate, injectable } from 'inversify'
 import { IMemberRepository } from '../../../modules/member/domain/repositories/member_repository_interface'
 import { Member } from '../../domain/entities/member'
 import { ACTIVE } from '../../domain/enums/active_enum'
@@ -189,3 +190,5 @@ export class MemberRepositoryMock implements IMemberRepository {
     return member
   }
 }
+
+decorate(injectable(), MemberRepositoryMock)
