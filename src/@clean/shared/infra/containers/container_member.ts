@@ -46,11 +46,15 @@ containerMember
 containerMember
   .bind(RegistryMember.CreateMemberUsecase)
   .toDynamicValue((context) => {
-    if (import.meta.env.VITE_STAGE === 'TEST') {
+    if (import.meta.env.VITE_STAGE === 'test') {
       return new CreateMemberUsecase(
         context.container.get(RegistryMember.MemberRepositoryMock)
       )
-    } else if (import.meta.env.VITE_STAGE === 'DEV') {
+    } else if (
+      import.meta.env.VITE_STAGE === 'dev' ||
+      import.meta.env.VITE_STAGE === 'homolog' ||
+      import.meta.env.VITE_STAGE === 'prod'
+    ) {
       return new CreateMemberUsecase(
         context.container.get(RegistryMember.MemberRepositoryHttp)
       )
@@ -64,13 +68,13 @@ containerMember
 containerMember
   .bind(RegistryMember.GetAllMembersUsecase)
   .toDynamicValue((context) => {
-    if (import.meta.env.VITE_STAGE === 'TEST') {
+    if (import.meta.env.VITE_STAGE === 'test') {
       return new GetAllMembersUsecase(
         context.container.get(RegistryMember.MemberRepositoryMock)
       )
     } else if (
-      import.meta.env.VITE_STAGE === 'DEV' ||
-      import.meta.env.VITE_STAGE === 'PROD'
+      import.meta.env.VITE_STAGE === 'dev' ||
+      import.meta.env.VITE_STAGE === 'prod'
     ) {
       return new GetAllMembersUsecase(
         context.container.get(RegistryMember.MemberRepositoryHttp)
@@ -85,13 +89,13 @@ containerMember
 containerMember
   .bind(RegistryMember.GetMemberUsecase)
   .toDynamicValue((context) => {
-    if (import.meta.env.VITE_STAGE === 'TEST') {
+    if (import.meta.env.VITE_STAGE === 'test') {
       return new GetMemberUsecase(
         context.container.get(RegistryMember.MemberRepositoryMock)
       )
     } else if (
-      import.meta.env.VITE_STAGE === 'DEV' ||
-      import.meta.env.VITE_STAGE === 'PROD'
+      import.meta.env.VITE_STAGE === 'dev' ||
+      import.meta.env.VITE_STAGE === 'prod'
     ) {
       return new GetMemberUsecase(
         context.container.get(RegistryMember.MemberRepositoryHttp)
@@ -106,13 +110,13 @@ containerMember
 containerMember
   .bind(RegistryMember.UpdateMemberUsecase)
   .toDynamicValue((context) => {
-    if (import.meta.env.VITE_STAGE === 'TEST') {
+    if (import.meta.env.VITE_STAGE === 'test') {
       return new UpdateMemberUsecase(
         context.container.get(RegistryMember.MemberRepositoryMock)
       )
     } else if (
-      import.meta.env.VITE_STAGE === 'DEV' ||
-      import.meta.env.VITE_STAGE === 'PROD'
+      import.meta.env.VITE_STAGE === 'dev' ||
+      import.meta.env.VITE_STAGE === 'prod'
     ) {
       return new UpdateMemberUsecase(
         context.container.get(RegistryMember.MemberRepositoryHttp)
@@ -127,13 +131,13 @@ containerMember
 containerMember
   .bind(RegistryMember.DeleteMemberUsecase)
   .toDynamicValue((context) => {
-    if (import.meta.env.VITE_STAGE === 'TEST') {
+    if (import.meta.env.VITE_STAGE === 'test') {
       return new DeleteMemberUsecase(
         context.container.get(RegistryMember.MemberRepositoryMock)
       )
     } else if (
-      import.meta.env.VITE_STAGE === 'DEV' ||
-      import.meta.env.VITE_STAGE === 'PROD'
+      import.meta.env.VITE_STAGE === 'dev' ||
+      import.meta.env.VITE_STAGE === 'prod'
     ) {
       return new DeleteMemberUsecase(
         context.container.get(RegistryMember.MemberRepositoryHttp)

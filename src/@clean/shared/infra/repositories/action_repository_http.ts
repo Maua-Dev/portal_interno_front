@@ -84,6 +84,7 @@ interface updateActionRawResponse {
 
 export class ActionRepositoryHttp implements IActionRepository {
   constructor(private http: AxiosInstance) {}
+
   async updateAction(
     actionId: string,
     newStartDate?: number,
