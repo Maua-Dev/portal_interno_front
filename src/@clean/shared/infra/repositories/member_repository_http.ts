@@ -91,6 +91,12 @@ export class MemberRepositoryHttp implements IMemberRepository {
       const member = Member.fromJSON(response.data)
       return member
     } catch (error: any) {
+      if (error.responde.status === 404) {
+        throw new Error('Membro não encontrado!')
+      }
+      if (error.response.status === 401) {
+        throw new Error('Usuário não autorizado!')
+      }
       throw new Error('Error Getting Member: ' + error.message)
     }
   }

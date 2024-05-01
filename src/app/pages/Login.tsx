@@ -13,7 +13,11 @@ export default function Login() {
   const decoded = decodeURIComponent(location.hash.slice(1))
   const param = new URLSearchParams(decoded)
   const token = param.get('id_token')
-  if (token) localStorage.setItem('idToken', token)
+  const refreshToken = param.get('refresh_token')
+  if (token && refreshToken) {
+    localStorage.setItem('idToken', token)
+    localStorage.setItem('refreshToken', refreshToken)
+  }
 
   // Check if there's a Token in the local storage
   useEffect(() => {
@@ -26,9 +30,15 @@ export default function Login() {
   }, [navigate])
 
   const handleRedirect = () => {
-    window.location.replace(
-      `https://auth-dev.devmaua.com/?redirect_uri=${window.origin}/login`
-    )
+    if (import.meta.env.VITE_STAGE === 'prod') {
+      window.location.replace(
+        `https://auth.devmaua.com/?redirect_uri=${window.origin}/login`
+      )
+    } else {
+      window.location.replace(
+        `https://auth-dev.devmaua.com/?redirect_uri=${window.origin}/login`
+      )
+    }
   }
 
   return (
