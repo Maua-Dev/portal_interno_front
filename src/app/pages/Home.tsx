@@ -18,7 +18,7 @@ export default function Home() {
   const getMember = async () => {
     const token = localStorage.getItem('idToken')
     if (!token) {
-      throw new Error('Token not found')
+      navigate('/login')
     }
 
     try {
