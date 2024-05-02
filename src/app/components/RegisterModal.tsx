@@ -117,8 +117,11 @@ export default function RegisterModal() {
       )
 
       console.log(response.data)
+      alert('Membro cadastrado com sucesso!')
+      window.location.reload()
     } catch (error: any) {
       console.error(error)
+      alert('Erro ao cadastrar membro!')
     }
 
     // const memberResponse = await createMember(
@@ -261,7 +264,7 @@ export default function RegisterModal() {
           <button
             type="submit"
             disabled={isLoading}
-            className="rounded-lg border-2 border-blue-600 px-2 py-1 text-blue-600 sm:w-1/2"
+            className="rounded-lg border-2 border-blue-600 px-2 py-1 text-blue-600 disabled:cursor-not-allowed disabled:opacity-50 sm:w-1/2"
           >
             Enviar
           </button>
