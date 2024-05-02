@@ -17,9 +17,10 @@ import {
 import Button from './little_components/Button'
 import ActionModal from './ActionModal'
 import { ModalContext } from '../contexts/modal_context'
-import { ActionContext } from '../contexts/action_context'
+// import { ActionContext } from '../contexts/action_context'
 import ActionDialog from './ActionDialog'
 import { millisecondsToHours } from '../utils/functions/timeStamp'
+import { http } from '../../@clean/shared/infra/http'
 
 type actionStates = 'rejected' | 'waiting' | 'approved'
 
@@ -36,7 +37,7 @@ export default function HistoricActionCard({
   const [actionState] = useState<actionStates>('approved')
   const [isPopUpOpen, setPopUpOpen] = useState<boolean>(false)
   const { changeModalContent } = useContext(ModalContext)
-  const { deleteAction } = useContext(ActionContext)
+  // const { deleteAction } = useContext(ActionContext)
 
   const title = `${action.projectCode}: ${action?.title} `
 
@@ -53,9 +54,26 @@ export default function HistoricActionCard({
     setPopUpOpen(false)
   }
 
-  const handleDeleteAction = (actionId: string) => {
+  const handleDeleteAction = async (actionId: string) => {
     setHistory((prev) => prev.filter((item) => item.actionId !== actionId))
-    deleteAction(actionId)
+
+    const token = localStorage.getItem('idToken')
+
+    if (!token) {
+      console.log('Token not found')
+      return
+    }
+
+    if (confirm('Deseja excluir a sua ação?')) {
+      await http.delete('/delete-action', {
+        headers: {
+          Authorization: 'Bearer ' + token
+        },
+        data: {
+          action_id: actionId
+        }
+      })
+    }
   }
 
   return (
