@@ -14,7 +14,6 @@ export class GetHistoryUsecase {
       startDate: number
     }
   ): Promise<historyResponse> {
-    console.log(exclusiveStartKey)
     if (
       start !== undefined &&
       end !== undefined &&
