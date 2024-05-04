@@ -48,14 +48,18 @@ export default function Historic() {
         undefined,
         undefined,
         undefined,
-        lastKey
+        undefined
       )
       if (lastKey) {
         setLocalHistory((prev) => prev.concat(response.actions))
       } else {
         setLocalHistory(response.actions)
       }
-      setLastEvaluatedKey(response.lastEvaluatedKey)
+      if (response.lastEvaluatedKey) {
+        setLastEvaluatedKey(response.lastEvaluatedKey)
+      } else {
+        setLastEvaluatedKey(undefined)
+      }
     } catch (error) {
       console.log('Error: ' + error)
     }
