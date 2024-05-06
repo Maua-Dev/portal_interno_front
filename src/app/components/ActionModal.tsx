@@ -381,7 +381,7 @@ export default function ActionModal({ action }: { action?: Action }) {
 
           <div className="flex w-full flex-col justify-between gap-4 md:w-2/5 lg:w-1/5">
             {/* Associated Members */}
-            <div className="flex h-1/2 flex-col gap-4">
+            <div className="flex h-72 flex-col gap-4 sm:h-[40%]">
               <Selector
                 members={action?.associatedMembersUserIds || []}
                 setValue={setValue}
