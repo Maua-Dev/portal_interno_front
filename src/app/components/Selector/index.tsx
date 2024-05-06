@@ -43,7 +43,7 @@ export function Selector({ members, setValue, getValues }: SelectorProps) {
           onClick={() => setIsSelectorModalOpen(!isSelectorModalOpen)}
         />
       </div>
-      <div className="flex h-4/5 flex-col gap-4 overflow-y-scroll px-2">
+      <div className="flex h-4/5 flex-col gap-4 overflow-y-scroll rounded-lg border-[1px] border-gray-200 px-2 py-2">
         {selectedMembersModal.map((userId: string) => {
           const member = allMembers?.find((m) => m.userId === userId)
           if (member)
