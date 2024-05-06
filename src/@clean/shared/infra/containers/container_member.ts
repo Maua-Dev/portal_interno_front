@@ -74,7 +74,8 @@ containerMember
       )
     } else if (
       import.meta.env.VITE_STAGE === 'dev' ||
-      import.meta.env.VITE_STAGE === 'prod'
+      import.meta.env.VITE_STAGE === 'prod' ||
+      import.meta.env.VITE_STAGE === 'homolog'
     ) {
       return new GetAllMembersUsecase(
         context.container.get(RegistryMember.MemberRepositoryHttp)
@@ -95,7 +96,8 @@ containerMember
       )
     } else if (
       import.meta.env.VITE_STAGE === 'dev' ||
-      import.meta.env.VITE_STAGE === 'prod'
+      import.meta.env.VITE_STAGE === 'prod' ||
+      import.meta.env.VITE_STAGE === 'homolog'
     ) {
       return new GetMemberUsecase(
         context.container.get(RegistryMember.MemberRepositoryHttp)
@@ -116,7 +118,8 @@ containerMember
       )
     } else if (
       import.meta.env.VITE_STAGE === 'dev' ||
-      import.meta.env.VITE_STAGE === 'prod'
+      import.meta.env.VITE_STAGE === 'prod' ||
+      import.meta.env.VITE_STAGE === 'homolog'
     ) {
       return new UpdateMemberUsecase(
         context.container.get(RegistryMember.MemberRepositoryHttp)
@@ -137,7 +140,8 @@ containerMember
       )
     } else if (
       import.meta.env.VITE_STAGE === 'dev' ||
-      import.meta.env.VITE_STAGE === 'prod'
+      import.meta.env.VITE_STAGE === 'prod' ||
+      import.meta.env.VITE_STAGE === 'homolog'
     ) {
       return new DeleteMemberUsecase(
         context.container.get(RegistryMember.MemberRepositoryHttp)

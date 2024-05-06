@@ -158,13 +158,14 @@ containerAction
 containerAction
   .bind(RegistryAction.DeleteActionUsecase)
   .toDynamicValue((context) => {
-    if (import.meta.env.VITE_STAGE === 'TEST') {
+    if (import.meta.env.VITE_STAGE === 'test') {
       return new DeleteActionUsecase(
         context.container.get(RegistryAction.ActionRepositoryMock)
       )
     } else if (
-      import.meta.env.VITE_STAGE === 'DEV' ||
-      import.meta.env.VITE_STAGE === 'PROD'
+      import.meta.env.VITE_STAGE === 'dev' ||
+      import.meta.env.VITE_STAGE === 'prod' ||
+      import.meta.env.VITE_STAGE === 'homolog'
     ) {
       return new DeleteActionUsecase(
         context.container.get(RegistryAction.ActionRepositoryHttp)
