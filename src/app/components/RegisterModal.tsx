@@ -1,8 +1,5 @@
-import {
-  // useContext,
-  useState
-} from 'react'
-// import { MemberContext } from '../contexts/member_context'
+import { useContext, useState } from 'react'
+import { MemberContext } from '../contexts/member_context'
 import {
   STACK,
   translateStackTag
@@ -15,7 +12,6 @@ import {
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { http } from '../../@clean/shared/infra/http'
 
 const registerSchema = z.object({
   name: z.string().min(1, { message: 'Nome é obrigatório' }),
@@ -81,7 +77,7 @@ type RegisterModalType = z.infer<typeof registerSchema>
 
 export default function RegisterModal() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  // const { createMember } = useContext(MemberContext)
+  const { createMember } = useContext(MemberContext)
   const allStackTags: string[] = Object.values(STACK)
   const allRoles: string[] = Object.values(ROLE)
   const allCourses: string[] = Object.values(COURSE)
@@ -90,58 +86,24 @@ export default function RegisterModal() {
     console.log(data)
     setIsLoading(true)
 
-    try {
-      const token = localStorage.getItem('idToken')
-
-      if (!token) {
-        throw new Error('Token not found')
-      }
-
-      const response = await http.post(
-        `${import.meta.env.VITE_MSS_API_URL}/create-member`,
-        {
-          ra: data.ra,
-          email_dev: data.emailDev,
-          role: data.role,
-          stack: data.stack,
-          year: parseInt(data.year),
-          cellphone: data.phone,
-          course: data.course,
-          hired_date: 1713141151000
-        },
-        {
-          headers: {
-            Authorization: 'Bearer ' + token
-          }
-        }
-      )
-
-      console.log(response.data)
-      alert('Membro cadastrado com sucesso!')
-      window.location.reload()
-    } catch (error: any) {
-      console.error(error)
-      alert('Erro ao cadastrar membro!')
-    }
-
-    // const memberResponse = await createMember(
-    //   data.ra,
-    //   data.emailDev,
-    //   data.role,
-    //   data.stack,
-    //   parseInt(data.year),
-    //   data.phone,
-    //   data.course
-    // )
+    const memberResponse = await createMember(
+      data.ra,
+      data.emailDev,
+      data.role,
+      data.stack,
+      parseInt(data.year),
+      data.phone,
+      data.course
+    )
 
     setIsLoading(false)
 
-    // if (memberResponse) {
-    //   alert('Membro cadastrado com sucesso!')
-    //   window.location.reload()
-    // } else {
-    //   alert('Erro ao cadastrar membro!')
-    // }
+    if (memberResponse) {
+      alert('Membro cadastrado com sucesso!')
+      window.location.reload()
+    } else {
+      alert('Erro ao cadastrar membro!')
+    }
   }
 
   const {
