@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import { Member } from '../../../../@clean/shared/domain/entities/member'
 import { plainTextToRa } from '../../../utils/functions/formatters'
 import useDarkMode from '../../../utils/functions/useDarkMode'
@@ -33,6 +33,13 @@ export function SelectorModal({
   )
   const [selectedStacks, setSelectedStacks] = useState<STACK[]>(stackTags || [])
   const [search, setSearch] = useState<string>('')
+  const [fade, setFade] = useState<boolean>(true)
+
+  useEffect(() => {
+    setTimeout(() => {
+      setFade(false)
+    })
+  }, [])
 
   // Dark Mode
   const { darkMode } = useDarkMode()
@@ -43,7 +50,6 @@ export function SelectorModal({
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
     if (members) {
-      console.log('MEMBERS')
       setValue(
         'associatedMembersUserIds',
         selectedMembers.map((m) => m.userId)
@@ -51,7 +57,6 @@ export function SelectorModal({
       setSelectedMembersModal!(selectedMembers.map((m) => m.userId))
       console.log(selectedMembers)
     } else {
-      console.log('STACKS')
       setValue('stackTags', selectedStacks)
       setSelectedStacksModal!(selectedStacks)
       console.log(selectedStacks)
@@ -64,7 +69,11 @@ export function SelectorModal({
   }
 
   return (
-    <div className="absolute left-0 top-0 z-[160] flex h-full w-full items-center justify-center bg-black bg-opacity-40 md:h-screen">
+    <div
+      className={`absolute left-0 top-0 z-[160] flex h-full w-full items-center justify-center bg-black bg-opacity-40 md:h-screen ${
+        fade ? 'opacity-0' : 'opacity-100 transition-opacity duration-300'
+      }`}
+    >
       <section
         className={`flex h-2/5 w-4/5 flex-col rounded-lg ${
           darkMode ? 'bg-skin-secundary' : 'bg-white'
