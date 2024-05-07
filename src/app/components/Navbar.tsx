@@ -25,7 +25,7 @@ export default function Navbar() {
   const [hover, setHover] = useState<boolean>(false)
   const { darkMode, toggleDarkMode } = useDarkMode()
   const [windowSize, setWindowSize] = useState<window>(getWindowSize())
-  const maximumWidth: number = 768
+  const maximumWidth: number = 1024
   const navigate = useNavigate()
   const { changeModalContent } = useContext(ModalContext)
 

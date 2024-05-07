@@ -53,7 +53,7 @@ export default function Login() {
         className="absolute h-screen w-full object-cover"
       />
       <div
-        className={`z-10 flex h-2/6 w-3/5 flex-col items-center justify-between gap-12 rounded-lg sm:w-2/5 sm:gap-6 sm:py-12 ${
+        className={`z-10 flex h-[40%] w-3/5 flex-col items-center justify-between gap-12 rounded-lg sm:w-2/5 sm:gap-6 sm:py-12 ${
           darkMode
             ? 'sm:bg-dev-gray sm:shadow-[1px_1px_0px_9px_rgba(255,255,255,0.34)]'
             : 'sm:bg-white sm:shadow-[1px_1px_0px_9px_rgba(176,173,173,0.74)]'

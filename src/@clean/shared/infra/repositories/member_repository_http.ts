@@ -47,6 +47,7 @@ export class MemberRepositoryHttp implements IMemberRepository {
       if (!token) {
         throw new Error('Token not found')
       }
+
       const response = await this.http.post<JsonProps>(
         '/create-member',
         {
@@ -82,6 +83,7 @@ export class MemberRepositoryHttp implements IMemberRepository {
       if (!token) {
         throw new Error('Token not found')
       }
+
       const response = await this.http.get<JsonProps>('/get-member', {
         headers: {
           Authorization: 'Bearer ' + token
@@ -90,13 +92,10 @@ export class MemberRepositoryHttp implements IMemberRepository {
       const member = Member.fromJSON(response.data)
       return member
     } catch (error: any) {
-      if (error.responde.status === 404) {
+      if (error.code === 'ERR_NETWORK') {
         throw new Error('Membro não encontrado!')
       }
-      if (error.response.status === 401) {
-        throw new Error('Usuário não autorizado!')
-      }
-      throw new Error('Error Getting Member: ' + error.message)
+      throw new Error(error)
     }
   }
 

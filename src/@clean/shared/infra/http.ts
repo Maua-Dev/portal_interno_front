@@ -15,16 +15,18 @@ http.interceptors.response.use(
   },
   async (error) => {
     const originalRequest = error.config
-    if (error.response.status === 401 && !originalRequest._retry) {
+    if (error.code === 'ERR_NETWORK') {
       originalRequest._retry = true
       try {
         // Faça a solicitação para renovar o token usando o refresh token salvo
         const refreshToken = localStorage.getItem('refreshToken')
-        const response = await http.post(import.meta.env.VITE_MSS_API_URL, {
-          refresh_token: refreshToken,
-          stage
-        })
-
+        const response = await axios.post(
+          `${import.meta.env.VITE_REFRESH_TOKEN_URL}/refresh_token`,
+          {
+            refresh_token: refreshToken,
+            stage
+          }
+        )
         // Atualize o token de acesso com o novo token recebido
         const newToken = response.data.id_token
         localStorage.setItem('idToken', newToken)

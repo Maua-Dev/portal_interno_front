@@ -122,7 +122,7 @@ export function MemberProvider({ children }: PropsWithChildren) {
 
       return member
     } catch (error: any) {
-      console.log('Something went wrong on get member: ', error)
+      throw new Error(error)
     }
   }
 
