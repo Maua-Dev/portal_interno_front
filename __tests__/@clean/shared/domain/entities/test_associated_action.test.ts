@@ -1,30 +1,15 @@
-import { Action } from '../../../../../src/@clean/shared/domain/entities/action'
+import { uuid } from 'uuidv4'
 import { AssociatedAction } from '../../../../../src/@clean/shared/domain/entities/associated_action'
-import { ACTION_TYPE } from '../../../../../src/@clean/shared/domain/enums/action_type_enum'
-import { STACK } from '../../../../../src/@clean/shared/domain/enums/stack_enum'
 import { EntityError } from '../../../../../src/@clean/shared/domain/helpers/errors/domain_error'
-import '@testing-library/jest-dom'
+import { test, expect } from 'vitest'
 
 // Instance Test
 
 test('Test Associated Action entity', () => {
-  const action = new Action({
-    ownerRa: '21.00210-0',
-    startDate: 1000,
-    endDate: 2000,
-    duration: 1000,
-    actionId: '4000',
-    storyId: 1000,
-    title: 'Test Action Entity',
-    description: 'Testing',
-    projectCode: '76',
-    associatedMembersRa: ['21.00833-7'],
-    stackTags: [STACK.FRONTEND, STACK.BACKEND],
-    actionTypeTag: ACTION_TYPE.CODE
-  })
   const associatedAction = new AssociatedAction({
-    member_ra: '20.02194-0',
-    action: action
+    userId: '0693b74b-5cb0-406b-851b-b58075cfb346',
+    startDate: 1000,
+    actionId: 'a879c273-86de-4d49-b049-b7cb6ef9a763'
   })
 
   expect(associatedAction).toBeInstanceOf(AssociatedAction)
@@ -32,111 +17,50 @@ test('Test Associated Action entity', () => {
 
 // Properties Tests
 
-test('Test Associated Action entity member_ra', () => {
-  const action = new Action({
-    ownerRa: '21.00210-0',
-    startDate: 1000,
-    endDate: 2000,
-    duration: 1000,
-    actionId: '4000',
-    storyId: 1000,
-    title: 'Test Action Entity',
-    description: 'Testing',
-    projectCode: '76',
-    associatedMembersRa: ['21.00833-7'],
-    stackTags: [STACK.FRONTEND, STACK.BACKEND],
-    actionTypeTag: ACTION_TYPE.CODE
-  })
+test('Test Associated Action entity userId', () => {
   const associatedAction = new AssociatedAction({
-    member_ra: '20.02194-0',
-    action: action
+    userId: '0693b74b-5cb0-406b-851b-b58075cfb346',
+    startDate: 1000,
+    actionId: 'a879c273-86de-4d49-b049-b7cb6ef9a763'
   })
 
-  expect(associatedAction.member_ra).toBe('20.02194-0')
+  expect(associatedAction.userId).toBe('0693b74b-5cb0-406b-851b-b58075cfb346')
 })
 
-test('Test Associated Action entity action', () => {
-  const action = new Action({
-    ownerRa: '21.00210-0',
-    startDate: 1000,
-    endDate: 2000,
-    duration: 1000,
-    actionId: '4000',
-    storyId: 1000,
-    title: 'Test Action Entity',
-    description: 'Testing',
-    projectCode: '76',
-    associatedMembersRa: ['21.00833-7'],
-    stackTags: [STACK.FRONTEND, STACK.BACKEND],
-    actionTypeTag: ACTION_TYPE.CODE
-  })
+test('Test Associated Action entity actionId', () => {
   const associatedAction = new AssociatedAction({
-    member_ra: '20.02194-0',
-    action: action
+    userId: '0693b74b-5cb0-406b-851b-b58075cfb346',
+    startDate: 1000,
+    actionId: 'a879c273-86de-4d49-b049-b7cb6ef9a763'
   })
 
-  expect(associatedAction.action).toEqual(
-    new Action({
-      ownerRa: '21.00210-0',
-      startDate: 1000,
-      endDate: 2000,
-      duration: 1000,
-      actionId: '4000',
-      storyId: 1000,
-      title: 'Test Action Entity',
-      description: 'Testing',
-      projectCode: '76',
-      associatedMembersRa: ['21.00833-7'],
-      stackTags: [STACK.FRONTEND, STACK.BACKEND],
-      actionTypeTag: ACTION_TYPE.CODE
-    })
-  )
+  expect(associatedAction.actionId).toBe('a879c273-86de-4d49-b049-b7cb6ef9a763')
 })
 
 // From JSON and to JSON tests
 
 test('Test Associated Action entity to JSON', () => {
-  const action = new Action({
-    ownerRa: '21.00210-0',
-    startDate: 1000,
-    endDate: 2000,
-    duration: 1000,
-    actionId: '4000',
-    storyId: 1000,
-    title: 'Test Action Entity',
-    description: 'Testing',
-    projectCode: '76',
-    associatedMembersRa: ['21.00833-7'],
-    stackTags: [STACK.FRONTEND, STACK.BACKEND],
-    actionTypeTag: ACTION_TYPE.CODE
-  })
   const associatedAction = new AssociatedAction({
-    member_ra: '20.02194-0',
-    action: action
+    userId: '0693b74b-5cb0-406b-851b-b58075cfb346',
+    startDate: 1000,
+    actionId: 'a879c273-86de-4d49-b049-b7cb6ef9a763'
+  })
+
+  expect(associatedAction.toJSON()).toEqual({
+    user_id: '0693b74b-5cb0-406b-851b-b58075cfb346',
+    start_date: 1000,
+    action_id: 'a879c273-86de-4d49-b049-b7cb6ef9a763'
   })
 
   expect(associatedAction.toJSON()).toBeInstanceOf(Object)
 })
 
 test('Test Associated Action entity from JSON', () => {
-  const action = new Action({
-    ownerRa: '21.00210-0',
-    startDate: 1000,
-    endDate: 2000,
-    duration: 1000,
-    actionId: '4000',
-    storyId: 1000,
-    title: 'Test Action Entity',
-    description: 'Testing',
-    projectCode: '76',
-    associatedMembersRa: ['21.00833-7'],
-    stackTags: [STACK.FRONTEND, STACK.BACKEND],
-    actionTypeTag: ACTION_TYPE.CODE
-  })
-  const associatedAction = new AssociatedAction({
-    member_ra: '20.02194-0',
-    action: action
-  })
+  const associatedAction = {
+    user_id: uuid(),
+    start_date: 1000,
+    action_id: uuid()
+  }
 
   expect(AssociatedAction.fromJSON(associatedAction)).toBeInstanceOf(
     AssociatedAction
@@ -145,33 +69,20 @@ test('Test Associated Action entity from JSON', () => {
 
 // Invalid attributes tests
 
-test('Test Associated Action entity error member_ra', () => {
-  const action = new Action({
-    ownerRa: '21.00210-0',
-    startDate: 1000,
-    endDate: 2000,
-    duration: 1000,
-    actionId: '4000',
-    storyId: 1000,
-    title: 'Test Action Entity',
-    description: 'Testing',
-    projectCode: '76',
-    associatedMembersRa: ['21.00833-7'],
-    stackTags: [STACK.FRONTEND, STACK.BACKEND],
-    actionTypeTag: ACTION_TYPE.CODE
-  })
-
+test('Test Associated Action entity error userId', () => {
   expect(() => {
     new AssociatedAction({
-      member_ra: '20021940',
-      action: action
+      userId: '',
+      startDate: 1000,
+      actionId: uuid()
     })
   }).toThrowError(EntityError)
 
   expect(() => {
     new AssociatedAction({
-      member_ra: '20021940',
-      action: action
+      userId: '',
+      startDate: 1000,
+      actionId: uuid()
     })
-  }).toThrowError('Field props.member_ra is not valid')
+  }).toThrowError('Field props.userId is not valid')
 })

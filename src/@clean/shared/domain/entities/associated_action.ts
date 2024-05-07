@@ -1,92 +1,113 @@
 import { EntityError } from '../helpers/errors/domain_error'
-import { Action, ActionProps } from './action'
+import { validate } from 'uuid'
 
 export type AssociatedActionProps = {
-  member_ra: string
-  action: ActionProps
+  actionId: string
+  startDate: number
+  userId: string
 }
 
-export type JsonProps = {
-  member_ra: string
-  action: {
-    ownerRa: string
-    startDate: number
-    endDate: number
-    duration: number
-    actionId: string
-    storyId?: number
-    title: string
-    description?: string
-    projectCode: string
-    associatedMembersRa?: string[]
-    stackTags: string[]
-    actionTypeTag: string
-  }
+export type AssociatedActionJsonProps = {
+  action_id: string
+  start_date: number
+  user_id: string
 }
 
 export class AssociatedAction {
   constructor(public props: AssociatedActionProps) {
-    if (!AssociatedAction.validateMemberRa(props.member_ra)) {
-      throw new EntityError('props.member_ra')
+    if (!AssociatedAction.validateActionId(props.actionId)) {
+      throw new EntityError('props.actionId')
     }
-    this.props.member_ra = props.member_ra
+    this.props.actionId = props.actionId
 
-    if (!(props.action instanceof Action)) {
-      throw new EntityError('props.action')
+    if (typeof props.startDate !== 'number') {
+      throw new EntityError('props.startDate')
     }
-    this.props.action = props.action
+    this.props.startDate = props.startDate
+
+    if (!AssociatedAction.validateUserId(props.userId)) {
+      throw new EntityError('props.userId')
+    }
+    this.props.userId = props.userId
   }
 
   // Getters and Setters
 
-  get member_ra() {
-    return this.props.member_ra
+  get actionId() {
+    return this.props.actionId
   }
 
-  get action() {
-    return this.props.action
+  get startDate() {
+    return this.props.startDate
   }
 
-  set setMemberRa(member_ra: string) {
-    if (!AssociatedAction.validateMemberRa(member_ra)) {
-      throw new EntityError('props.member_ra')
+  get userId() {
+    return this.props.userId
+  }
+
+  set actionId(actionId: string) {
+    if (!AssociatedAction.validateActionId(actionId)) {
+      throw new EntityError('props.actionId')
     }
-    this.props.member_ra = member_ra
+    this.props.actionId = actionId
   }
 
-  set setAction(action: Action) {
-    if (!(action instanceof Action)) {
-      throw new EntityError('props.action')
+  set startDate(startDate: number) {
+    if (typeof startDate !== 'number') {
+      throw new EntityError('props.startDate')
     }
-    this.props.action = action
+    this.props.startDate = startDate
+  }
+
+  set userId(userId: string) {
+    if (AssociatedAction.validateUserId(userId)) {
+      throw new EntityError('props.userId')
+    }
+    this.props.userId = userId
   }
 
   // JSON Conversion
 
-  static fromJSON(json: JsonProps): AssociatedAction {
+  static fromJSON(json: AssociatedActionJsonProps): AssociatedAction {
     return new AssociatedAction({
-      member_ra: json.member_ra,
-      action: Action.fromJSON(json.action)
+      actionId: json.action_id,
+      startDate: json.start_date,
+      userId: json.user_id
     })
   }
 
   toJSON() {
     return {
-      member_ra: this.member_ra,
-      action: this.action
+      action_id: this.actionId,
+      start_date: this.startDate,
+      user_id: this.userId
     }
   }
 
   //Validations
 
-  static validateMemberRa(member_ra: string): boolean {
-    if (member_ra == null) {
+  static validateActionId(actionId: string): boolean {
+    if (typeof actionId !== 'string') {
       return false
-    } else if (typeof member_ra != 'string') {
+    }
+    if (actionId.length !== 36) {
       return false
-    } else if (member_ra.length != 10) {
+    }
+    return true
+  }
+
+  static validateStartDate(startDate: number): boolean {
+    if (typeof startDate !== 'number') {
       return false
-    } else if (!member_ra.match(/^\d{2}\.\d{5}-\d$/)) {
+    }
+    return true
+  }
+
+  static validateUserId(userId: string): boolean {
+    if (typeof userId !== 'string') {
+      return false
+    }
+    if (!validate(userId)) {
       return false
     }
     return true
