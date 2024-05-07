@@ -31,3 +31,26 @@ export function actionTypeToEnum(value: string): ACTION_TYPE {
       throw new Error('Invalid value')
   }
 }
+
+export function translateActionTypeTag(actionType: string): string {
+  switch (actionType) {
+    case 'CODE':
+      return 'Código'
+    case 'MEETING':
+      return 'Reunião'
+    case 'CODEREVIEW':
+      return 'Revisão de Código'
+    case 'LEARN':
+      return 'Aprendizado'
+    case 'PRESENTATION':
+      return 'Apresentação'
+    case 'DESIGN':
+      return 'Design'
+    case 'ARCHITECT':
+      return 'Arquitetura'
+    case 'WORK':
+      return 'Trabalho'
+    default:
+      return 'Invalid value'
+  }
+}

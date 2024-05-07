@@ -28,3 +28,40 @@ export function stackToEnum(value: string): STACK {
       throw new Error('Invalid value')
   }
 }
+
+export function translateStackTag(stack: string): string {
+  switch (stack) {
+    case 'BACKEND':
+      return 'Back-End'
+    case 'FRONTEND':
+      return 'Front-End'
+    case 'INFRA':
+      return 'Infra'
+    case 'UX_UI':
+      return 'UX/UI'
+    case 'PO':
+      return 'PO'
+    case 'INTERNAL':
+      return 'Interno'
+    case 'DATA_SCIENCE':
+      return 'Data Science'
+    default:
+      return 'Invalid value'
+  }
+}
+
+export function stackFormatter(stackArray: STACK[]): string[] {
+  const stackFormatted: string[] = []
+  stackArray.forEach((stack) => {
+    stackFormatted.push(stack.toString())
+  })
+  return stackFormatted
+}
+
+export function stackFormatterFromJSON(stackArray: string[]): STACK[] {
+  const stackFormatted: STACK[] = []
+  stackArray.map((stack) => {
+    stackFormatted.push(stackToEnum(stack))
+  })
+  return stackFormatted
+}

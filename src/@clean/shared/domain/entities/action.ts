@@ -2,49 +2,54 @@ import { ACTION_TYPE, actionTypeToEnum } from '../enums/action_type_enum'
 import { STACK, stackToEnum } from '../enums/stack_enum'
 import { EntityError } from '../helpers/errors/domain_error'
 
-export type JsonProps = {
-  ownerRa: string
-  startDate: number
-  endDate: number
+export type ActionJsonProps = {
+  user_id: string
+  start_date: number
+  end_date: number
   duration: number
-  actionId: string
-  storyId?: number
+  action_id: string
+  is_valid: boolean
+  story_id?: number
   title: string
   description?: string
-  projectCode: string
-  associatedMembersRa?: string[]
-  stackTags: string[]
-  actionTypeTag: string
+  project_code: string
+  associated_members_user_ids?: string[]
+  stack_tags: string[]
+  action_type_tag: string
 }
 
 export type ActionProps = {
-  ownerRa: string
+  userId: string
   startDate: number
-  endDate: number
-  duration: number
-  actionId: string
-  storyId?: number
   title: string
   description?: string
+  actionId: string
+  isValid: boolean
+  endDate: number
+  duration: number
   projectCode: string
-  associatedMembersRa?: string[]
-  stackTags: STACK[]
-  actionTypeTag: ACTION_TYPE
+  storyId?: number
+  associatedMembersUserIds?: string[]
+  stackTags?: STACK[]
+  actionTypeTag?: ACTION_TYPE
 }
 
 export class Action {
   constructor(public props: ActionProps) {
-    if (!Action.validateOwnerRa(props.ownerRa)) {
-      throw new EntityError('props.ownerRa')
+    if (!props.userId) {
+      throw new EntityError('props.userId')
     }
-    this.props.ownerRa = props.ownerRa
+    if (typeof props.userId !== 'string') {
+      throw new EntityError('props.userId')
+    }
+    this.props.userId = props.userId
 
-    if (!Action.validatestartDate(props.startDate)) {
+    if (!Action.validateStartDate(props.startDate)) {
       throw new EntityError('props.startDate')
     }
     this.props.startDate = props.startDate
 
-    if (!Action.validateendDate(props.endDate, props.startDate)) {
+    if (!Action.validateEndDate(props.endDate)) {
       throw new EntityError('props.endDate')
     }
     this.props.endDate = props.endDate
@@ -60,6 +65,11 @@ export class Action {
       throw new EntityError('props.actionId')
     }
     this.props.actionId = props.actionId
+
+    if (typeof props.isValid !== 'boolean') {
+      throw new EntityError('props.isValid')
+    }
+    this.props.isValid = props.isValid
 
     if (props.storyId != null) {
       if (!Action.validateStoryId(props.storyId)) {
@@ -89,21 +99,24 @@ export class Action {
     }
     this.props.projectCode = props.projectCode
 
-    if (props.associatedMembersRa != null) {
-      if (!Action.validateAssociatedMembersRa(props.associatedMembersRa)) {
-        throw new EntityError('props.associatedMembersRa')
+    if (props.associatedMembersUserIds != null) {
+      if (
+        !Action.validateAssociatedMembersUserIds(props.associatedMembersUserIds)
+      ) {
+        throw new EntityError('props.associatedMembersUserIds')
       }
-      this.props.associatedMembersRa = props.associatedMembersRa
-    } else {
-      this.props.associatedMembersRa = []
+      this.props.associatedMembersUserIds = props.associatedMembersUserIds
     }
 
-    if (!Action.validateStackTags(props.stackTags)) {
+    if (props.stackTags && !Action.validateStackTags(props.stackTags)) {
       throw new EntityError('props.stackTags')
     }
     this.props.stackTags = props.stackTags
 
-    if (!Action.validateActionTypeTag(props.actionTypeTag)) {
+    if (
+      props.actionTypeTag &&
+      !Action.validateActionTypeTag(props.actionTypeTag)
+    ) {
       throw new EntityError('props.actionTypeTag')
     }
     this.props.actionTypeTag = props.actionTypeTag
@@ -111,23 +124,23 @@ export class Action {
 
   // Getters and Setters
 
-  get ownerRa() {
-    return this.props.ownerRa
+  get userId() {
+    return this.props.userId
   }
 
-  set setOwnerRa(ownerRa: string) {
-    if (!Action.validateOwnerRa(ownerRa)) {
-      throw new EntityError('props.ownerRa')
+  set userId(userId: string) {
+    if (!Action.validateUserId(userId)) {
+      throw new EntityError('props.userId')
     }
-    this.props.ownerRa = ownerRa
+    this.props.userId = userId
   }
 
   get startDate() {
     return this.props.startDate
   }
 
-  set setstartDate(startDate: number) {
-    if (!Action.validatestartDate(startDate)) {
+  set startDate(startDate: number) {
+    if (!Action.validateStartDate(startDate)) {
       throw new EntityError('props.startDate')
     }
     this.props.startDate = startDate
@@ -137,8 +150,8 @@ export class Action {
     return this.props.endDate
   }
 
-  set setendDate(endDate: number) {
-    if (!Action.validateendDate(endDate, this.startDate)) {
+  set endDate(endDate: number) {
+    if (!Action.validateEndDate(endDate)) {
       throw new EntityError('props.endDate')
     }
     this.props.endDate = endDate
@@ -148,7 +161,7 @@ export class Action {
     return this.props.duration
   }
 
-  set setDuration(duration: number) {
+  set duration(duration: number) {
     if (!Action.validateDuration(duration, this.startDate, this.endDate)) {
       throw new EntityError('props.duration')
     }
@@ -159,7 +172,7 @@ export class Action {
     return this.props.actionId
   }
 
-  set setActionId(actionId: string) {
+  set actionId(actionId: string) {
     if (!Action.validateActionId(actionId)) {
       throw new EntityError('props.actionId')
     }
@@ -167,21 +180,35 @@ export class Action {
   }
 
   get storyId() {
+    if (this.props.storyId == null) {
+      return -1
+    }
     return this.props.storyId
   }
 
-  set setStoryId(storyId: number) {
+  set storyId(storyId: number) {
     if (!Action.validateStoryId(storyId)) {
       throw new EntityError('props.storyId')
     }
     this.props.storyId = storyId
   }
 
+  get isValid() {
+    return this.props.isValid
+  }
+
+  set isValid(isValid: boolean) {
+    if (typeof isValid !== 'boolean') {
+      throw new EntityError('props.isValid')
+    }
+    this.props.isValid = isValid
+  }
+
   get title() {
     return this.props.title
   }
 
-  set setTitle(title: string) {
+  set title(title: string) {
     if (!Action.validateTitle(title)) {
       throw new EntityError('props.title')
     }
@@ -189,10 +216,13 @@ export class Action {
   }
 
   get description() {
+    if (this.props.description == null) {
+      return ''
+    }
     return this.props.description
   }
 
-  set setDescription(description: string) {
+  set description(description: string) {
     if (!Action.validateDescription(description)) {
       throw new EntityError('props.description')
     }
@@ -203,29 +233,32 @@ export class Action {
     return this.props.projectCode
   }
 
-  set setProjectCode(projectCode: string) {
+  set projectCode(projectCode: string) {
     if (!Action.validateProjectCode(projectCode)) {
       throw new EntityError('props.projectCode')
     }
     this.props.projectCode = projectCode
   }
 
-  get associatedMembersRa() {
-    return this.props.associatedMembersRa
+  get associatedMembersUserIds() {
+    if (this.props.associatedMembersUserIds == null) {
+      return []
+    }
+    return this.props.associatedMembersUserIds
   }
 
-  set setAssociatedMembersRa(associatedMembersRa: string[]) {
-    if (!Action.validateAssociatedMembersRa(associatedMembersRa)) {
-      throw new EntityError('props.associatedMembersRa')
+  set associatedMembersUserIds(associatedMembersUserIds: string[]) {
+    if (!Action.validateAssociatedMembersUserIds(associatedMembersUserIds)) {
+      throw new EntityError('props.associatedMembersUserIds')
     }
-    this.props.associatedMembersRa = associatedMembersRa
+    this.props.associatedMembersUserIds = associatedMembersUserIds
   }
 
   get stackTags() {
-    return this.props.stackTags
+    return this.props.stackTags || []
   }
 
-  set setStackTags(stackTags: STACK[]) {
+  set stackTags(stackTags: STACK[]) {
     if (!Action.validateStackTags(stackTags)) {
       throw new EntityError('props.stackTags')
     }
@@ -233,10 +266,10 @@ export class Action {
   }
 
   get actionTypeTag() {
-    return this.props.actionTypeTag
+    return this.props.actionTypeTag as ACTION_TYPE
   }
 
-  set setactionTypeTag(actionTypeTag: ACTION_TYPE) {
+  set actionTypeTag(actionTypeTag: ACTION_TYPE) {
     if (!Action.validateActionTypeTag(actionTypeTag)) {
       throw new EntityError('props.actionTypeTag')
     }
@@ -247,52 +280,52 @@ export class Action {
 
   toJSON() {
     return {
-      ownerRa: this.ownerRa,
-      startDate: this.startDate,
-      endDate: this.endDate,
+      user_id: this.userId,
+      start_date: this.startDate,
+      end_date: this.endDate,
       duration: this.duration,
-      actionId: this.actionId,
-      storyId: this.storyId,
+      action_id: this.actionId,
+      is_valid: this.isValid,
+      story_id: this.storyId,
       title: this.title,
       description: this.description,
-      projectCode: this.projectCode,
-      associatedMembersRa: this.associatedMembersRa,
-      stackTags: this.stackTags,
-      actionTypeTag: this.actionTypeTag
+      project_code: this.projectCode,
+      associated_members_user_ids: this.associatedMembersUserIds,
+      stack_tags: this.stackTags,
+      action_type_tag: this.actionTypeTag
     }
   }
 
-  static fromJSON(json: JsonProps) {
+  static fromJSON(json: ActionJsonProps) {
     return new Action({
-      ownerRa: json.ownerRa,
-      startDate: json.startDate,
-      endDate: json.endDate,
+      userId: json.user_id,
+      startDate: json.start_date,
+      endDate: json.end_date,
       duration: json.duration,
-      actionId: json.actionId,
-      storyId: json.storyId,
+      actionId: json.action_id,
+      isValid: json.is_valid,
+      storyId: json.story_id,
       title: json.title,
-      description: json.description,
-      projectCode: json.projectCode,
-      associatedMembersRa: json.associatedMembersRa,
-      stackTags: json.stackTags.map((stackTag) => stackToEnum(stackTag)),
-      actionTypeTag: actionTypeToEnum(json.actionTypeTag)
+      description: json.description || '',
+      projectCode: json.project_code,
+      associatedMembersUserIds: json.associated_members_user_ids,
+      stackTags: json.stack_tags.map((stackTag) => stackToEnum(stackTag)),
+      actionTypeTag: actionTypeToEnum(json.action_type_tag)
     })
   }
 
   // Validate functions
-  static validateOwnerRa(ra: string) {
-    const regexRa = /^\d{2}\.\d{5}-\d$/
-    if (ra == null) {
-      return false
-    } else if (typeof ra !== 'string') {
-      return false
-    } else if (!ra.match(regexRa)) {
-      return false
-    }
+  static validateUserId(_userId: string) {
+    // if (typeof userId !== 'string') {
+    //   return false
+    // }
+    // if (!validate(userId)) {
+    //   return false
+    // }
     return true
   }
 
-  static validatestartDate(startDate: number) {
+  static validateStartDate(startDate: number) {
     if (startDate == null) {
       return false
     } else if (typeof startDate !== 'number') {
@@ -301,12 +334,12 @@ export class Action {
     return true
   }
 
-  static validateendDate(endDate: number, startDate: number) {
+  static validateEndDate(endDate: number) {
     if (endDate == null) {
       return false
     } else if (typeof endDate !== 'number') {
       return false
-    } else if (endDate < startDate) {
+    } else if (endDate <= 0) {
       return false
     }
     return true
@@ -314,14 +347,12 @@ export class Action {
 
   static validateDuration(
     duration: number,
-    startDate: number,
-    endDate: number
+    _startDate: number,
+    _endDate: number
   ) {
     if (typeof duration !== 'number') {
       return false
     } else if (duration <= 0) {
-      return false
-    } else if (duration !== endDate - startDate) {
       return false
     }
     return true
@@ -342,7 +373,7 @@ export class Action {
     if (storyId !== null) {
       if (typeof storyId !== 'number') {
         return false
-      } else if (storyId < 100 || storyId > 9999) {
+      } else if (storyId < 1 || storyId > 999999) {
         return false
       }
     }
@@ -382,14 +413,14 @@ export class Action {
     return true
   }
 
-  static validateAssociatedMembersRa(associatedMembersRa: string[]) {
-    if (associatedMembersRa != null) {
-      if (Array.isArray(associatedMembersRa) === false) {
-        return false
-      } else if (associatedMembersRa.length === 0) {
+  static validateAssociatedMembersUserIds(associatedMembersUsersIds: string[]) {
+    if (associatedMembersUsersIds != null) {
+      if (Array.isArray(associatedMembersUsersIds) === false) {
         return false
       } else if (
-        associatedMembersRa.every((ra) => this.validateOwnerRa(ra)) === false
+        associatedMembersUsersIds.every((userId) =>
+          this.validateUserId(userId)
+        ) === false
       ) {
         return false
       }
