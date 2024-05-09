@@ -13,41 +13,13 @@ export default function Home() {
   const navigate = useNavigate()
   const [isRegister, setIsRegister] = useState(false)
 
-  // const getMember = async () => {
-  //   const token = localStorage.getItem('idToken')
-  //   if (!token) {
-  //     navigate('/login')
-  //   }
-
-  //   try {
-  //     const response = await http.get<JsonProps>('/get-member', {
-  //       headers: {
-  //         Authorization: 'Bearer ' + token
-  //       }
-  //     })
-  //     console.log(response.data)
-  //   } catch (error: any) {
-  //     console.error(error.response.status)
-  //     if (error.response.status === 404) {
-  //       setIsRegister(true)
-  //     }
-  //     if (error.response.status === 401) {
-  //       localStorage.removeItem('idToken')
-  //       navigate('/login')
-  //     }
-  //   }
-  // }
-
   const handleMember = async () => {
     try {
       await getMember()
     } catch (error: any) {
       if (error.message.endsWith('404')) {
         setIsRegister(true)
-      } else if (
-        !error.message.endsWith('401') ||
-        !error.message.endsWith('404')
-      ) {
+      } else {
         navigate('/login')
       }
     }
