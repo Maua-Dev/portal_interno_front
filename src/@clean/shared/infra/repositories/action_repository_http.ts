@@ -401,6 +401,26 @@ export class ActionRepositoryHttp implements IActionRepository {
       throw new Error(error.response.data)
     }
   }
+
+  async getAllProjects(): Promise<any> {
+    try {
+      const token = localStorage.getItem('idToken')
+
+      if (!token) {
+        throw new Error('Token not found')
+      }
+
+      const response = await this.http.get<any>('/get-all-projects', {
+        headers: {
+          Authorization: 'Bearer ' + token
+        }
+      })
+
+      return response.data
+    } catch (error: any) {
+      throw new Error('Error getting all projects: ' + error.message)
+    }
+  }
 }
 
 decorate(injectable(), ActionRepositoryHttp)

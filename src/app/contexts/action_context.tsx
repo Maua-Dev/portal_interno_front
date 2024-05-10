@@ -19,6 +19,7 @@ import { ACTION_TYPE } from '../../@clean/shared/domain/enums/action_type_enum'
 import { UpdateActionUsecase } from '../../@clean/modules/action/usecases/update_action_usecase'
 import { historyResponse } from '../../@clean/shared/infra/repositories/action_repository_http'
 import { UpdateActionValidationUsecase } from '../../@clean/modules/action/usecases/update_action_validation'
+import { GetAllProjectsUsecase } from '../../@clean/modules/action/usecases/get_all_projects_usecase'
 
 interface lastEvaluatedKeyResponse {
   actionId: string
@@ -83,6 +84,8 @@ export interface ActionContextInterface {
     actionId: string,
     isValid: boolean
   ) => Promise<Action | undefined>
+
+  getAllProjects: () => Promise<{}>
 }
 
 const defaultContext: ActionContextInterface = {
@@ -154,6 +157,10 @@ const defaultContext: ActionContextInterface = {
 
   updateActionValidation: async (_actionId: string, _isValid: boolean) => {
     return undefined
+  },
+
+  getAllProjects: async () => {
+    return {}
   }
 }
 
@@ -180,6 +187,10 @@ const updateActionValidationUsecase =
   containerAction.get<UpdateActionValidationUsecase>(
     RegistryAction.UpdateActionValidationUsecase
   )
+
+const getAllProjectsUsecase = containerAction.get<GetAllProjectsUsecase>(
+  RegistryAction.GetAllProjectsUsecase
+)
 
 export function ActionProvider({ children }: PropsWithChildren) {
   const [createdActions, setCreatedActions] = useState<Action[]>([])
@@ -320,6 +331,15 @@ export function ActionProvider({ children }: PropsWithChildren) {
     }
   }
 
+  async function getAllProjects() {
+    try {
+      const projects = await getAllProjectsUsecase.execute()
+      return projects
+    } catch (error: any) {
+      console.error('Something went wrong on get all projects: ', error)
+    }
+  }
+
   return (
     <ActionContext.Provider
       value={{
@@ -335,7 +355,8 @@ export function ActionProvider({ children }: PropsWithChildren) {
         lastEvaluatedKeyResponse,
         startDate,
         updateAction,
-        updateActionValidation
+        updateActionValidation,
+        getAllProjects
       }}
     >
       {children}
