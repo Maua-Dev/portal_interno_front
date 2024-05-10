@@ -79,8 +79,6 @@ export class GetHistoryUsecase {
 
       return response
     } else if (exclusiveStartKey !== undefined && amount !== undefined) {
-      console.log('here')
-      console.log(exclusiveStartKey)
       const response = await this.actionRepo.getHistoryActions(
         undefined,
         undefined,
@@ -92,7 +90,6 @@ export class GetHistoryUsecase {
         throw new NoItemsFoundError('No actions found')
       }
 
-      console.log(response)
       return response
     } else if (amount !== undefined) {
       const response = await this.actionRepo.getHistoryActions(
