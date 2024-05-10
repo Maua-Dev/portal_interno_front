@@ -73,12 +73,14 @@ export default function ActionModal({ action }: { action?: Action }) {
 
   // Contexts
   const { closeModal, changeModalContent } = useContext(ModalContext)
-  const { updateAction, createAction } = useContext(ActionContext)
+  const { updateAction, createAction, getAllProjects } =
+    useContext(ActionContext)
 
   // Use state
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [fade, setFade] = useState<boolean>(false)
   const [stackTags, setStackTags] = useState<STACK[]>(action?.stackTags || [])
+  const [dataProjects, setDataProjects] = useState([])
 
   // Constants
   const actionTypes: string[] = Object.values(ACTION_TYPE)
@@ -90,6 +92,7 @@ export default function ActionModal({ action }: { action?: Action }) {
   }
 
   useEffect(() => {
+    allProjects()
     setTimeout(() => {
       setFade(true)
     })
@@ -213,6 +216,13 @@ export default function ActionModal({ action }: { action?: Action }) {
     mode: 'onBlur'
   })
 
+  const allProjects = () => {
+    const response = getAllProjects()
+    response.then((res: any) => {
+      setDataProjects(res.projects)
+    })
+  }
+
   return (
     <div
       className={`flex h-auto w-full transform items-center justify-center overflow-hidden py-24 transition-all duration-300 md:h-screen md:overflow-hidden md:py-0 ${
@@ -269,9 +279,16 @@ export default function ActionModal({ action }: { action?: Action }) {
                     value={action?.projectCode}
                   >
                     <option value="">Selecione uma opção</option>
-                    <option value="PI">Portal Interno</option>
-                    <option value="SM">Smile</option>
-                    <option value="MF">Mauá Food</option>
+                    {dataProjects.map(
+                      (
+                        data: { project: { code: string; name: string } },
+                        index: number
+                      ) => (
+                        <option key={index} value={data.project.code}>
+                          {data.project.name}
+                        </option>
+                      )
+                    )}
                   </select>
                   <span className="text-red-600">
                     {errors.projectCode?.message}
