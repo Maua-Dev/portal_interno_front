@@ -47,7 +47,7 @@ export interface historyResponse {
 interface createActionBodyRequest {
   start_date: number
   title: string
-  description: string | ''
+  description?: string
   end_date: number
   duration: number
   project_code: string
@@ -294,10 +294,10 @@ export class ActionRepositoryHttp implements IActionRepository {
   async createAction(
     startDate: number,
     title: string,
-    description: string,
     endDate: number,
     duration: number,
     projectCode: string,
+    description?: string,
     storyId?: number,
     associatedMembersUserIds?: string[],
     stackTags?: STACK[],
@@ -313,7 +313,7 @@ export class ActionRepositoryHttp implements IActionRepository {
       start_date: startDate,
       story_id: storyId,
       title: title,
-      description: description,
+      description,
       end_date: endDate,
       duration: duration,
       project_code: projectCode,

@@ -9,10 +9,10 @@ export class CreateActionUsecase {
   async execute(
     startDate: number,
     title: string,
-    description: string,
     endDate: number,
     duration: number,
     projectCode: string,
+    description?: string,
     storyId?: number,
     associatedMembersUserIds?: string[],
     stackTags?: STACK[],
@@ -21,10 +21,10 @@ export class CreateActionUsecase {
     const actionCreated = await this.actionRepo.createAction(
       startDate,
       title,
-      description,
       endDate,
       duration,
       projectCode,
+      description,
       storyId,
       associatedMembersUserIds,
       stackTags,
