@@ -5,13 +5,18 @@ import useDarkMode from '../utils/functions/useDarkMode'
 import { useNavigate } from 'react-router-dom'
 import RegisterModal from '../components/RegisterModal'
 import { MemberContext } from '../contexts/member_context'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import { ActionContext } from '../contexts/action_context'
 
 export default function Home() {
   const { darkMode } = useDarkMode()
   const { modalContent } = useContext(ModalContext)
-  const { getMember } = useContext(MemberContext)
+  const { getMember, memberError } = useContext(MemberContext)
+  const { actionError, actionSuccess, setActionError, setActionSuccess } =
+    useContext(ActionContext)
   const navigate = useNavigate()
-  const [isRegister, setIsRegister] = useState<boolean>(true)
+  const [isRegister, setIsRegister] = useState<boolean>(false)
 
   const handleMember = async () => {
     try {
@@ -27,7 +32,53 @@ export default function Home() {
 
   useEffect(() => {
     handleMember()
-  })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    if (actionSuccess) {
+      toast.success(actionSuccess, {
+        position: 'top-right',
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored'
+      })
+      setActionSuccess('')
+    }
+
+    if (actionError) {
+      toast.error(actionError, {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored'
+      })
+      setActionError('')
+    }
+  }, [actionSuccess, setActionSuccess, actionError, setActionError])
+
+  useEffect(() => {
+    if (memberError) {
+      toast.error(memberError, {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored'
+      })
+    }
+  }, [memberError])
 
   return (
     <>
@@ -45,6 +96,18 @@ export default function Home() {
       >
         {isRegister ? <RegisterModal /> : null}
         {modalContent}
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+        />
       </main>
     </>
   )
