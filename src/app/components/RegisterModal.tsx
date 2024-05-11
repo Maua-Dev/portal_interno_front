@@ -116,10 +116,10 @@ export default function RegisterModal() {
   })
 
   return (
-    <div className="absolute left-0 top-0 z-[150] flex h-full w-full items-center justify-center bg-black bg-opacity-80">
+    <div className="absolute left-0 top-0 z-[150] flex h-screen w-full items-center justify-center overflow-y-auto bg-black bg-opacity-80 py-12">
       <form
         onSubmit={handleSubmit(handleRegisterMember)}
-        className="flex h-[95%] w-4/5 flex-col justify-center gap-3 overflow-y-auto rounded-lg bg-white p-8 md:w-1/2"
+        className="flex h-auto w-4/5 flex-col justify-center gap-3 overflow-y-auto rounded-lg bg-white p-8 md:w-1/2"
       >
         <h1 className="text-2xl font-bold">Ficha de cadastro de usuário</h1>
         <div className="flex flex-col gap-1">
