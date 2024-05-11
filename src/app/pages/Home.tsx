@@ -11,7 +11,7 @@ export default function Home() {
   const { modalContent } = useContext(ModalContext)
   const { getMember } = useContext(MemberContext)
   const navigate = useNavigate()
-  const [isRegister, setIsRegister] = useState<boolean>(false)
+  const [isRegister, setIsRegister] = useState<boolean>(true)
 
   const handleMember = async () => {
     try {
@@ -33,9 +33,15 @@ export default function Home() {
     <>
       <Navbar />
       <main
-        className={`flex  w-full items-center justify-center overflow-x-hidden overflow-y-hidden scrollbar-hide lg:h-screen ${
+        className={`flex  w-full items-center justify-center overflow-hidden scrollbar-hide ${
           darkMode ? 'bg-skin-fill' : 'theme-white bg-sky-200'
-        } ${isRegister || modalContent ? 'h-full' : 'h-screen'}`}
+        } ${
+          modalContent
+            ? 'h-full lg:h-screen'
+            : isRegister
+            ? 'h-auto'
+            : 'h-screen'
+        }`}
       >
         {isRegister ? <RegisterModal /> : null}
         {modalContent}

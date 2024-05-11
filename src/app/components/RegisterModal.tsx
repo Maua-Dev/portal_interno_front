@@ -116,7 +116,7 @@ export default function RegisterModal() {
   })
 
   return (
-    <div className="absolute left-0 top-0 z-[150] flex h-screen w-full items-center justify-center overflow-y-auto bg-black bg-opacity-80 py-12">
+    <div className="absolute left-0 top-0 z-[150] flex h-auto w-full items-center justify-center overflow-y-auto bg-black bg-opacity-60 py-12 pt-24">
       <form
         onSubmit={handleSubmit(handleRegisterMember)}
         className="flex h-auto w-4/5 flex-col justify-center gap-3 overflow-y-auto rounded-lg bg-white p-8 md:w-1/2"
