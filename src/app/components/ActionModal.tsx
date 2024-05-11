@@ -108,11 +108,9 @@ export default function ActionModal({ action }: { action?: Action }) {
       console.log(createdAction)
       if (createdAction) {
         closeModal()
-        alert('Atividade criada com sucesso!')
       }
     } catch (error: any) {
       console.error(error)
-      alert('Erro ao criar atividade: ' + error.message)
     } finally {
       setIsLoading(false)
     }
@@ -138,11 +136,9 @@ export default function ActionModal({ action }: { action?: Action }) {
       )
       console.log(updatedAction)
       if (updatedAction) {
-        alert('Atividade atualizada com sucesso!')
         changeModalContent(<Historic />)
       }
     } catch (error: any) {
-      alert('Erro ao atualizar atividade: ' + error.message)
       console.error(error)
     } finally {
       setIsLoading(false)

@@ -12,6 +12,8 @@ import {
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const registerSchema = z.object({
   name: z.string().min(1, { message: 'Nome é obrigatório' }),
@@ -77,7 +79,7 @@ type RegisterModalType = z.infer<typeof registerSchema>
 
 export default function RegisterModal() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const { createMember } = useContext(MemberContext)
+  const { createMember, memberError } = useContext(MemberContext)
   const allStackTags: string[] = Object.values(STACK)
   const allRoles: string[] = Object.values(ROLE)
   const allCourses: string[] = Object.values(COURSE)
@@ -96,13 +98,32 @@ export default function RegisterModal() {
       data.course
     )
 
-    setIsLoading(false)
-
     if (memberResponse) {
-      alert('Membro cadastrado com sucesso!')
-      window.location.reload()
+      toast.success('Membro cadastrado com sucesso! Página atualizando...', {
+        position: 'top-right',
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored'
+      })
+      setTimeout(() => {
+        window.location.reload()
+      }, 4000)
     } else {
-      alert('Erro ao cadastrar membro!')
+      toast.error(memberError, {
+        position: 'top-right',
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored'
+      })
+      setIsLoading(false)
     }
   }
 
@@ -116,7 +137,7 @@ export default function RegisterModal() {
   })
 
   return (
-    <div className="absolute left-0 top-0 z-[150] flex h-auto w-full items-center justify-center overflow-y-auto bg-black bg-opacity-60 py-12 pt-24">
+    <div className="absolute left-0 top-0 z-[150] flex h-dvh w-full items-center justify-center overflow-y-auto bg-black bg-opacity-60 py-12 pt-24 lg:h-full">
       <form
         onSubmit={handleSubmit(handleRegisterMember)}
         className="flex h-auto w-4/5 flex-col justify-center gap-3 overflow-y-auto rounded-lg bg-white p-8 md:w-1/2"
@@ -232,6 +253,18 @@ export default function RegisterModal() {
           </button>
         </div>
       </form>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </div>
   )
 }
