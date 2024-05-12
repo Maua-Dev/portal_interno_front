@@ -13,7 +13,11 @@ export default function Login() {
   const decoded = decodeURIComponent(location.hash.slice(1))
   const param = new URLSearchParams(decoded)
   const token = param.get('id_token')
-  if (token) localStorage.setItem('idToken', token)
+  const refreshToken = param.get('refresh_token')
+  if (token && refreshToken) {
+    localStorage.setItem('idToken', token)
+    localStorage.setItem('refreshToken', refreshToken)
+  }
 
   // Check if there's a Token in the local storage
   useEffect(() => {
@@ -26,9 +30,15 @@ export default function Login() {
   }, [navigate])
 
   const handleRedirect = () => {
-    window.location.replace(
-      `https://auth-dev.devmaua.com/?redirect_uri=${window.origin}/login`
-    )
+    if (import.meta.env.VITE_STAGE === 'prod') {
+      window.location.replace(
+        `https://auth.devmaua.com/?redirect_uri=${window.origin}/login`
+      )
+    } else {
+      window.location.replace(
+        `https://auth-dev.devmaua.com/?redirect_uri=${window.origin}/login`
+      )
+    }
   }
 
   return (
@@ -43,7 +53,7 @@ export default function Login() {
         className="absolute h-screen w-full object-cover"
       />
       <div
-        className={`z-10 flex h-2/6 w-3/5 flex-col items-center justify-between gap-12 rounded-lg sm:w-2/5 sm:gap-6 sm:py-12 ${
+        className={`z-10 flex h-[40%] w-3/5 flex-col items-center justify-between gap-12 rounded-lg sm:w-2/5 sm:gap-6 sm:py-12 ${
           darkMode
             ? 'sm:bg-dev-gray sm:shadow-[1px_1px_0px_9px_rgba(255,255,255,0.34)]'
             : 'sm:bg-white sm:shadow-[1px_1px_0px_9px_rgba(176,173,173,0.74)]'

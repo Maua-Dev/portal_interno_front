@@ -20,11 +20,12 @@ import { UpdateActionUsecase } from '../../@clean/modules/action/usecases/update
 import { historyResponse } from '../../@clean/shared/infra/repositories/action_repository_http'
 import { UpdateActionValidationUsecase } from '../../@clean/modules/action/usecases/update_action_validation'
 import { GetAllProjectsUsecase } from '../../@clean/modules/action/usecases/get_all_projects_usecase'
+import { DeleteActionUsecase } from '../../@clean/modules/action/usecases/delete_action_usecase'
 
-interface lastEvaluatedKeyResponse {
-  actionId: string
-  startDate: number
-}
+// interface lastEvaluatedKeyResponse {
+//   actionId: string
+//   startDate: number
+// }
 
 export interface ActionContextInterface {
   createAction: (
@@ -58,13 +59,6 @@ export interface ActionContextInterface {
     }
   ) => Promise<historyResponse>
 
-  history: Action[]
-  activitiesPaginationCounter: number
-  setActivitiesPaginationCounter: (counter: number) => void
-  firstEvaluatedKey?: string
-  lastEvaluatedKeyResponse?: lastEvaluatedKeyResponse
-  startDate?: number
-
   updateAction: (
     actionId: string,
     newStartDate?: number,
@@ -84,12 +78,11 @@ export interface ActionContextInterface {
     actionId: string,
     isValid: boolean
   ) => Promise<Action | undefined>
-
   getAllProjects: () => Promise<{}>
+  deleteAction: (actionId: string) => Promise<void>
 }
 
 const defaultContext: ActionContextInterface = {
-  history: [],
   createAction: async (
     _startDate: number,
     _title: string,
@@ -133,11 +126,6 @@ const defaultContext: ActionContextInterface = {
     }
   },
 
-  activitiesPaginationCounter: 1,
-  setActivitiesPaginationCounter: () => {},
-  lastEvaluatedKeyResponse: undefined,
-  firstEvaluatedKey: undefined,
-
   updateAction: async (
     _actionId: string,
     _newStartDate?: number,
@@ -158,9 +146,11 @@ const defaultContext: ActionContextInterface = {
   updateActionValidation: async (_actionId: string, _isValid: boolean) => {
     return undefined
   },
-
   getAllProjects: async () => {
     return {}
+  }
+  deleteAction: async (_actionId: string) => {
+    return undefined
   }
 }
 
@@ -187,21 +177,16 @@ const updateActionValidationUsecase =
   containerAction.get<UpdateActionValidationUsecase>(
     RegistryAction.UpdateActionValidationUsecase
   )
-
 const getAllProjectsUsecase = containerAction.get<GetAllProjectsUsecase>(
   RegistryAction.GetAllProjectsUsecase
+)
+const deleteActionUsecase = containerAction.get<DeleteActionUsecase>(
+  RegistryAction.DeleteActionUsecase
 )
 
 export function ActionProvider({ children }: PropsWithChildren) {
   const [createdActions, setCreatedActions] = useState<Action[]>([])
   const [action, setAction] = useState<Action | undefined>(undefined)
-  const [history, setHistory] = useState<Action[]>([])
-  const [activitiesPaginationCounter, setActivitiesPaginationCounter] =
-    useState<number>(1)
-  const [lastEvaluatedKeyResponse, setLastEvaluatedKeyResponse] =
-    useState<lastEvaluatedKeyResponse>()
-  const [firstEvaluatedKey, setFirstEvaluatedKey] = useState<string>()
-  const [startDate, setStartDate] = useState<number>()
 
   async function createAction(
     startDate: number,
@@ -254,7 +239,6 @@ export function ActionProvider({ children }: PropsWithChildren) {
       startDate: number
     }
   ) {
-    console.log(exclusiveStartKey)
     try {
       const response = await getHistoryUsecase.execute(
         start,
@@ -262,13 +246,6 @@ export function ActionProvider({ children }: PropsWithChildren) {
         amount,
         exclusiveStartKey
       )
-
-      setHistory(response.actions)
-      setFirstEvaluatedKey(
-        response.actions[(activitiesPaginationCounter - 1) * 20].actionId
-      )
-      setLastEvaluatedKeyResponse(response.lastEvaluatedKey)
-      setStartDate(response.lastEvaluatedKey.startDate)
 
       return response
     } catch (error: any) {
@@ -330,13 +307,20 @@ export function ActionProvider({ children }: PropsWithChildren) {
       console.error('Something went wrong on update action: ', error)
     }
   }
-
   async function getAllProjects() {
     try {
       const projects = await getAllProjectsUsecase.execute()
       return projects
     } catch (error: any) {
       console.error('Something went wrong on get all projects: ', error)
+    }
+  }
+  async function deleteAction(actionId: string) {
+    try {
+      const deletedAction = await deleteActionUsecase.execute(actionId)
+      return deletedAction
+    } catch (error: any) {
+      console.log('Something went wrong on delete action: ', error)
     }
   }
 
@@ -348,15 +332,10 @@ export function ActionProvider({ children }: PropsWithChildren) {
         setAction,
         createAssociatedAction,
         getHistory,
-        history,
-        activitiesPaginationCounter,
-        setActivitiesPaginationCounter,
-        firstEvaluatedKey,
-        lastEvaluatedKeyResponse,
-        startDate,
         updateAction,
         updateActionValidation,
         getAllProjects
+        deleteAction
       }}
     >
       {children}

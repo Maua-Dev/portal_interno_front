@@ -45,13 +45,14 @@ module.exports = {
       }
     },
     keyframes: {
-      shimmer: {
+      shimmerX: {
         '100%': { transform: 'translateX(100%)' }
+      },
+      shimmerY: {
+        '100%': { transform: 'translateY(100%)' }
       }
     }
   },
   // eslint-disable-next-line no-undef
-  plugins: [
-    //require('tailwind-scrollbar-hide')
-  ]
+  plugins: [require('tailwind-scrollbar-hide')]
 }

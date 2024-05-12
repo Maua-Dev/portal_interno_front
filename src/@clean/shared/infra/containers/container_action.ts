@@ -9,6 +9,7 @@ import { GetHistoryUsecase } from '../../../modules/action/usecases/get_history_
 import { UpdateActionUsecase } from '../../../modules/action/usecases/update_action_usecase'
 import { UpdateActionValidationUsecase } from '../../../modules/action/usecases/update_action_validation'
 import { GetAllProjectsUsecase } from '../../../modules/action/usecases/get_all_projects_usecase'
+import { DeleteActionUsecase } from '../../../modules/action/usecases/delete_action_usecase'
 
 export const RegistryAction = {
   // Axios Adapter
@@ -24,7 +25,8 @@ export const RegistryAction = {
   GetHistoryUsecase: Symbol.for('GetHistoryUsecase'),
   UpdateActionUsecase: Symbol.for('UpdateActionUsecase'),
   UpdateActionValidationUsecase: Symbol.for('UpdateActionValidationUsecase'),
-  GetAllProjectsUsecase: Symbol.for('GetAllProjectsUsecase')
+  GetAllProjectsUsecase: Symbol.for('GetAllProjectsUsecase'),
+  DeleteActionUsecase: Symbol.for('DeleteActionUsecase')
 }
 
 export const containerAction = new Container()
@@ -48,13 +50,14 @@ containerAction
 containerAction
   .bind(RegistryAction.CreateActionUsecase)
   .toDynamicValue((context) => {
-    if (import.meta.env.VITE_STAGE === 'TEST') {
+    if (import.meta.env.VITE_STAGE === 'test') {
       return new CreateActionUsecase(
         context.container.get(RegistryAction.ActionRepositoryMock)
       )
     } else if (
-      import.meta.env.VITE_STAGE === 'DEV' ||
-      import.meta.env.VITE_STAGE === 'PROD'
+      import.meta.env.VITE_STAGE === 'dev' ||
+      import.meta.env.VITE_STAGE === 'homolog' ||
+      import.meta.env.VITE_STAGE === 'prod'
     ) {
       return new CreateActionUsecase(
         context.container.get(RegistryAction.ActionRepositoryHttp)
@@ -69,13 +72,14 @@ containerAction
 containerAction
   .bind(RegistryAction.CreateAssociatedActionUsecase)
   .toDynamicValue((context) => {
-    if (import.meta.env.VITE_STAGE === 'TEST') {
+    if (import.meta.env.VITE_STAGE === 'test') {
       return new CreateAssociatedActionUsecase(
         context.container.get(RegistryAction.ActionRepositoryMock)
       )
     } else if (
-      import.meta.env.VITE_STAGE === 'DEV' ||
-      import.meta.env.VITE_STAGE === 'PROD'
+      import.meta.env.VITE_STAGE === 'dev' ||
+      import.meta.env.VITE_STAGE === 'homolog' ||
+      import.meta.env.VITE_STAGE === 'prod'
     ) {
       return new CreateAssociatedActionUsecase(
         context.container.get(RegistryAction.ActionRepositoryHttp)
@@ -90,13 +94,14 @@ containerAction
 containerAction
   .bind(RegistryAction.GetHistoryUsecase)
   .toDynamicValue((context) => {
-    if (import.meta.env.VITE_STAGE === 'TEST') {
+    if (import.meta.env.VITE_STAGE === 'test') {
       return new GetHistoryUsecase(
         context.container.get(RegistryAction.ActionRepositoryMock)
       )
     } else if (
-      import.meta.env.VITE_STAGE === 'DEV' ||
-      import.meta.env.VITE_STAGE === 'PROD'
+      import.meta.env.VITE_STAGE === 'dev' ||
+      import.meta.env.VITE_STAGE === 'homolog' ||
+      import.meta.env.VITE_STAGE === 'prod'
     ) {
       return new GetHistoryUsecase(
         context.container.get(RegistryAction.ActionRepositoryHttp)
@@ -111,13 +116,14 @@ containerAction
 containerAction
   .bind(RegistryAction.UpdateActionUsecase)
   .toDynamicValue((context) => {
-    if (import.meta.env.VITE_STAGE === 'TEST') {
+    if (import.meta.env.VITE_STAGE === 'test') {
       return new UpdateActionUsecase(
         context.container.get(RegistryAction.ActionRepositoryMock)
       )
     } else if (
-      import.meta.env.VITE_STAGE === 'DEV' ||
-      import.meta.env.VITE_STAGE === 'PROD'
+      import.meta.env.VITE_STAGE === 'dev' ||
+      import.meta.env.VITE_STAGE === 'homolog' ||
+      import.meta.env.VITE_STAGE === 'prod'
     ) {
       return new UpdateActionUsecase(
         context.container.get(RegistryAction.ActionRepositoryHttp)
@@ -132,13 +138,14 @@ containerAction
 containerAction
   .bind(RegistryAction.UpdateActionValidationUsecase)
   .toDynamicValue((context) => {
-    if (import.meta.env.VITE_STAGE === 'TEST') {
+    if (import.meta.env.VITE_STAGE === 'test') {
       return new UpdateActionValidationUsecase(
         context.container.get(RegistryAction.ActionRepositoryMock)
       )
     } else if (
-      import.meta.env.VITE_STAGE === 'DEV' ||
-      import.meta.env.VITE_STAGE === 'PROD'
+      import.meta.env.VITE_STAGE === 'dev' ||
+      import.meta.env.VITE_STAGE === 'homolog' ||
+      import.meta.env.VITE_STAGE === 'prod'
     ) {
       return new UpdateActionValidationUsecase(
         context.container.get(RegistryAction.ActionRepositoryHttp)
@@ -166,6 +173,28 @@ containerAction
       )
     } else {
       return new GetAllProjectsUsecase(
+        context.container.get(RegistryAction.ActionRepositoryMock)
+      )
+    }
+  })
+
+containerAction
+  .bind(RegistryAction.DeleteActionUsecase)
+  .toDynamicValue((context) => {
+    if (import.meta.env.VITE_STAGE === 'test') {
+      return new DeleteActionUsecase(
+        context.container.get(RegistryAction.ActionRepositoryMock)
+      )
+    } else if (
+      import.meta.env.VITE_STAGE === 'dev' ||
+      import.meta.env.VITE_STAGE === 'prod' ||
+      import.meta.env.VITE_STAGE === 'homolog'
+    ) {
+      return new DeleteActionUsecase(
+        context.container.get(RegistryAction.ActionRepositoryHttp)
+      )
+    } else {
+      return new DeleteActionUsecase(
         context.container.get(RegistryAction.ActionRepositoryMock)
       )
     }

@@ -3,8 +3,8 @@ import Navbar from '../components/Navbar'
 import { ModalContext } from '../contexts/modal_context'
 import useDarkMode from '../utils/functions/useDarkMode'
 import { useNavigate } from 'react-router-dom'
-import { MemberContext } from '../contexts/member_context'
 import RegisterModal from '../components/RegisterModal'
+import { MemberContext } from '../contexts/member_context'
 
 export default function Home() {
   const { darkMode } = useDarkMode()
@@ -13,24 +13,55 @@ export default function Home() {
   const navigate = useNavigate()
   const [isRegister, setIsRegister] = useState(false)
 
-  useEffect(() => {
-    getMember().then((res) => {
-      const member = res?.props
-      if (!member && localStorage.getItem('idToken')?.startsWith('ey')) {
-        setIsRegister(!isRegister)
-      } else if (!member) {
-        console.log(localStorage.getItem('idToken'))
-        localStorage.removeItem('idToken')
+  // const getMember = async () => {
+  //   const token = localStorage.getItem('idToken')
+  //   if (!token) {
+  //     navigate('/login')
+  //   }
+
+  //   try {
+  //     const response = await http.get<JsonProps>('/get-member', {
+  //       headers: {
+  //         Authorization: 'Bearer ' + token
+  //       }
+  //     })
+  //     console.log(response.data)
+  //   } catch (error: any) {
+  //     console.error(error.response.status)
+  //     if (error.response.status === 404) {
+  //       setIsRegister(true)
+  //     }
+  //     if (error.response.status === 401) {
+  //       localStorage.removeItem('idToken')
+  //       navigate('/login')
+  //     }
+  //   }
+  // }
+
+  const handleMember = async () => {
+    try {
+      await getMember()
+    } catch (error: any) {
+      if (error.message.endsWith('404')) {
+        setIsRegister(true)
+      } else if (
+        !error.message.endsWith('401') ||
+        !error.message.endsWith('404')
+      ) {
         navigate('/login')
       }
-    })
-  }, [getMember, navigate])
+    }
+  }
+
+  useEffect(() => {
+    handleMember()
+  })
 
   return (
     <>
       <Navbar />
       <main
-        className={`scrollbar-hide h-screen w-full overflow-x-hidden ${
+        className={`h-screen w-full overflow-x-hidden scrollbar-hide ${
           darkMode ? 'bg-skin-fill' : 'theme-white bg-sky-200'
         }`}
       >

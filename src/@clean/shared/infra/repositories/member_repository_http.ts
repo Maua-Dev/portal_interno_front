@@ -5,6 +5,7 @@ import { ACTIVE, activeToEnum } from '../../domain/enums/active_enum'
 import { COURSE, courseToEnum } from '../../domain/enums/course_enum'
 import { ROLE, roleToEnum } from '../../domain/enums/role_enum'
 import { STACK, stackToEnum } from '../../domain/enums/stack_enum'
+import { decorate, injectable } from 'inversify'
 
 interface memberRawResponse {
   member: {
@@ -91,7 +92,10 @@ export class MemberRepositoryHttp implements IMemberRepository {
       const member = Member.fromJSON(response.data)
       return member
     } catch (error: any) {
-      throw new Error('Error Getting Member: ' + error.message)
+      if (error.code === 'ERR_NETWORK') {
+        throw new Error('Membro não encontrado!')
+      }
+      throw new Error(error)
     }
   }
 
@@ -200,3 +204,5 @@ export class MemberRepositoryHttp implements IMemberRepository {
     }
   }
 }
+
+decorate(injectable(), MemberRepositoryHttp)

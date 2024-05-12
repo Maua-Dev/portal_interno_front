@@ -30,7 +30,7 @@ interface getHistoryRawResponse {
   last_evaluated_key: {
     action_id: string
     start_date: number
-  }
+  } | null
   message: string
 }
 
@@ -41,7 +41,7 @@ export interface lastEvaluatedKey {
 
 export interface historyResponse {
   actions: Action[]
-  lastEvaluatedKey: lastEvaluatedKey
+  lastEvaluatedKey: lastEvaluatedKey | null
 }
 
 interface createActionBodyRequest {
@@ -84,6 +84,7 @@ interface updateActionRawResponse {
 
 export class ActionRepositoryHttp implements IActionRepository {
   constructor(private http: AxiosInstance) {}
+
   async updateAction(
     actionId: string,
     newStartDate?: number,
@@ -189,9 +190,13 @@ export class ActionRepositoryHttp implements IActionRepository {
         for (let i = 0; i < firstCase.data.actions.length; i++) {
           response.actions.push(Action.fromJSON(firstCase.data.actions[i]))
         }
-        response.lastEvaluatedKey = {
-          actionId: firstCase.data.last_evaluated_key.action_id,
-          startDate: firstCase.data.last_evaluated_key.start_date
+        if (firstCase.data.last_evaluated_key !== null) {
+          response.lastEvaluatedKey = {
+            actionId: firstCase.data.last_evaluated_key.action_id,
+            startDate: firstCase.data.last_evaluated_key.start_date
+          }
+        } else {
+          response.lastEvaluatedKey = null
         }
       } else if (
         amount !== undefined &&
@@ -212,9 +217,14 @@ export class ActionRepositoryHttp implements IActionRepository {
         for (let i = 0; i < secondCase.data.actions.length; i++) {
           response.actions.push(Action.fromJSON(secondCase.data.actions[i]))
         }
-        response.lastEvaluatedKey = {
-          actionId: secondCase.data.last_evaluated_key.action_id,
-          startDate: secondCase.data.last_evaluated_key.start_date
+
+        if (secondCase.data.last_evaluated_key !== null) {
+          response.lastEvaluatedKey = {
+            actionId: secondCase.data.last_evaluated_key.action_id,
+            startDate: secondCase.data.last_evaluated_key.start_date
+          }
+        } else {
+          response.lastEvaluatedKey = null
         }
       } else if (amount !== undefined && exclusiveStartKey !== undefined) {
         console.log('here')
@@ -240,10 +250,16 @@ export class ActionRepositoryHttp implements IActionRepository {
         for (let i = 0; i < thirdCase.data.actions.length; i++) {
           response.actions.push(Action.fromJSON(thirdCase.data.actions[i]))
         }
-        response.lastEvaluatedKey = {
-          actionId: thirdCase.data.last_evaluated_key.action_id,
-          startDate: thirdCase.data.last_evaluated_key.start_date
+
+        if (thirdCase.data.last_evaluated_key !== null) {
+          response.lastEvaluatedKey = {
+            actionId: thirdCase.data.last_evaluated_key.action_id,
+            startDate: thirdCase.data.last_evaluated_key.start_date
+          }
+        } else {
+          response.lastEvaluatedKey = null
         }
+
         console.log(response)
         return response
       } else if (amount !== undefined) {
@@ -263,9 +279,14 @@ export class ActionRepositoryHttp implements IActionRepository {
         for (let i = 0; i < fourthCase.data.actions.length; i++) {
           response.actions.push(Action.fromJSON(fourthCase.data.actions[i]))
         }
-        response.lastEvaluatedKey = {
-          actionId: fourthCase.data.last_evaluated_key.action_id,
-          startDate: fourthCase.data.last_evaluated_key.start_date
+
+        if (fourthCase.data.last_evaluated_key !== null) {
+          response.lastEvaluatedKey = {
+            actionId: fourthCase.data.last_evaluated_key.action_id,
+            startDate: fourthCase.data.last_evaluated_key.start_date
+          }
+        } else {
+          response.lastEvaluatedKey = null
         }
         return response
       } else {
@@ -401,7 +422,7 @@ export class ActionRepositoryHttp implements IActionRepository {
       throw new Error(error.response.data)
     }
   }
-
+  
   async getAllProjects(): Promise<any> {
     try {
       const token = localStorage.getItem('idToken')
@@ -419,6 +440,26 @@ export class ActionRepositoryHttp implements IActionRepository {
       return response.data
     } catch (error: any) {
       throw new Error('Error getting all projects: ' + error.message)
+    }
+  }
+
+  async deleteAction(actionId: string): Promise<void> {
+    try {
+      const token = localStorage.getItem('idToken')
+
+      if (!token) {
+        throw new Error('Token not found')
+      }
+      await this.http.delete('/delete-action', {
+        headers: {
+          Authorization: 'Bearer ' + token
+        },
+        data: {
+          action_id: actionId
+        }
+      })
+    } catch (error: any) {
+      throw new Error('Error deleting action: ' + error.message)
     }
   }
 }
