@@ -81,7 +81,13 @@ export default function ActionDialog({ action, children }: ActionDialogProps) {
               <div className="flex flex-col items-start justify-normal gap-2 text-2xl font-bold sm:w-fit sm:flex-row sm:items-center sm:gap-5 sm:text-3xl md:text-4xl">
                 <h1>{action.title}</h1>
                 <div className="flex flex-row items-center gap-2">
-                  <h1 className="text-skin-muted">#{action.storyId}</h1>
+                  <h1
+                    className={`text-skin-muted ${
+                      action.storyId === -1 ? 'hidden' : null
+                    }`}
+                  >
+                    #{action.storyId}
+                  </h1>
                   <PenIcon
                     onClick={() => {
                       changeModalContent(<ActionModal action={action} />)
