@@ -19,6 +19,8 @@ import { ActionContext } from '../contexts/action_context'
 import { ModalContext } from '../contexts/modal_context'
 import Historic from './Historic'
 import { Selector } from './Selector'
+import { ProjectContext } from '../contexts/project_context'
+import { ProjectType } from '../../@clean/shared/infra/repositories/project_repository_http'
 
 const actionSchema = z.object({
   title: z.string().min(1, { message: 'Título é obrigatório' }),
@@ -69,10 +71,12 @@ export default function ActionModal({ action }: { action?: Action }) {
   // Contexts
   const { closeModal, changeModalContent } = useContext(ModalContext)
   const { updateAction, createAction } = useContext(ActionContext)
+  const { getAllProjects } = useContext(ProjectContext)
 
   // Use state
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [fade, setFade] = useState<boolean>(false)
+  const [projects, setProjects] = useState<ProjectType[]>([])
 
   // Constants
   const actionTypes: string[] = Object.values(ACTION_TYPE)
@@ -82,11 +86,22 @@ export default function ActionModal({ action }: { action?: Action }) {
     isUpdateModal = true
   }
 
+  const handleProjects = async () => {
+    try {
+      const response = await getAllProjects()
+      setProjects(response)
+    } catch (error: any) {
+      console.error(error)
+    }
+  }
+
   // Fade animation on mount
   useEffect(() => {
+    handleProjects()
     setTimeout(() => {
       setFade(true)
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleCreateActionSubmit = async (data: ActionModalType) => {
@@ -196,7 +211,7 @@ export default function ActionModal({ action }: { action?: Action }) {
     <div
       className={`flex h-full w-full transform items-center justify-center overflow-x-hidden overflow-y-scroll py-24 pt-24 transition-all duration-300 lg:h-dvh lg:py-12 lg:pt-24 ${
         isUpdateModal
-          ? 'absolute left-0 top-0 z-50 bg-black bg-opacity-80'
+          ? 'absolute left-0 top-0 z-50 bg-black bg-opacity-80 pt-[32rem] lg:pt-0'
           : 'lg:pl-14'
       } ${
         isUpdateModal
@@ -248,9 +263,11 @@ export default function ActionModal({ action }: { action?: Action }) {
                     value={action?.projectCode}
                   >
                     <option value="">Selecione uma opção</option>
-                    <option value="PI">Portal Interno</option>
-                    <option value="SM">Smile</option>
-                    <option value="MF">Mauá Food</option>
+                    {projects.map((project, index) => (
+                      <option key={index} value={project.code}>
+                        {project.name}
+                      </option>
+                    ))}
                   </select>
                   <span className="text-red-600">
                     {errors.projectCode?.message}
