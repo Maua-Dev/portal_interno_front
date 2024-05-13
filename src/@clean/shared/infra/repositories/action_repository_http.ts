@@ -410,7 +410,6 @@ export class ActionRepositoryHttp implements IActionRepository {
       if (!token) {
         throw new Error('Token not found')
       }
-
       await this.http.delete('/delete-action', {
         headers: {
           Authorization: 'Bearer ' + token

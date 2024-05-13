@@ -72,7 +72,6 @@ export interface ActionContextInterface {
     actionId: string,
     isValid: boolean
   ) => Promise<Action | undefined>
-
   deleteAction: (actionId: string) => Promise<void>
 
   actionError: string
@@ -148,7 +147,6 @@ const defaultContext: ActionContextInterface = {
   updateActionValidation: async (_actionId: string, _isValid: boolean) => {
     return undefined
   },
-
   deleteAction: async (_actionId: string) => {
     return undefined
   },
@@ -186,7 +184,6 @@ const updateActionValidationUsecase =
   containerAction.get<UpdateActionValidationUsecase>(
     RegistryAction.UpdateActionValidationUsecase
   )
-
 const deleteActionUsecase = containerAction.get<DeleteActionUsecase>(
   RegistryAction.DeleteActionUsecase
 )
@@ -321,7 +318,6 @@ export function ActionProvider({ children }: PropsWithChildren) {
       console.error('Something went wrong on update action: ', error)
     }
   }
-
   async function deleteAction(actionId: string) {
     try {
       const deletedAction = await deleteActionUsecase.execute(actionId)
