@@ -28,7 +28,7 @@ export type ActionProps = {
   endDate: number
   duration: number
   projectCode: string
-  storyId?: number | null
+  storyId?: number
   associatedMembersUserIds?: string[]
   stackTags?: STACK[]
   actionTypeTag?: ACTION_TYPE
