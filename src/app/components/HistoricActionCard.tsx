@@ -20,6 +20,7 @@ import { ModalContext } from '../contexts/modal_context'
 import { ActionContext } from '../contexts/action_context'
 import ActionDialog from './ActionDialog'
 import { millisecondsToHours } from '../utils/functions/timeStamp'
+import { v4 as uuidv4 } from 'uuid'
 
 type actionStates = 'rejected' | 'waiting' | 'approved'
 
@@ -90,7 +91,7 @@ export default function HistoricActionCard({
             if (index < 4) {
               return (
                 <>
-                  <Tag key={stack} variant={stack} />
+                  <Tag key={uuidv4()} variant={stack} />
                   {index === 3 && stackStringArray.length > 4 ? (
                     <p className="text-skin-muted">...</p>
                   ) : null}
