@@ -4,13 +4,5 @@
   "endOfLine": "auto",
   "trailingComma": "none",
   "tabWidth": 2,
-  "overrides": [
-    {
-      "files": ["*.tsx", "*.ts", "*.js", "*.jsx"],
-      "options": {
-        "parser": "typescript"
-      }
-    }
-  ]
-  
+  "plugins": ["prettier-plugin-tailwindcss"]
 }
