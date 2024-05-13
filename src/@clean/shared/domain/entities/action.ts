@@ -395,7 +395,7 @@ export class Action {
     if (description != null) {
       if (typeof description !== 'string') {
         return false
-      } else if (description.length < 4 || description.length > 500) {
+      } else if (description.length > 500) {
         return false
       }
     }
