@@ -82,6 +82,7 @@ export default function ActionModal({ action }: { action?: Action }) {
     isUpdateModal = true
   }
 
+  // Fade animation on mount
   useEffect(() => {
     setTimeout(() => {
       setFade(true)
@@ -193,7 +194,7 @@ export default function ActionModal({ action }: { action?: Action }) {
 
   return (
     <div
-      className={`flex h-full w-full transform items-center justify-center overflow-x-hidden overflow-y-scroll py-24 pt-24 transition-all duration-300 lg:py-12 lg:pt-24 ${
+      className={`flex h-full w-full transform items-center justify-center overflow-x-hidden overflow-y-scroll py-24 pt-24 transition-all duration-300 lg:h-dvh lg:py-12 lg:pt-24 ${
         isUpdateModal
           ? 'absolute left-0 top-0 z-50 bg-black bg-opacity-80'
           : 'lg:pl-14'
