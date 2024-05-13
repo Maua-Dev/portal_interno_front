@@ -92,7 +92,7 @@ export function SelectorModal({
             onChange={(e) => setSearch(e.target.value)}
           />
         </header>
-        <body className="mt-5 flex h-full flex-col gap-3 overflow-y-scroll px-6 pb-4">
+        <div className="mt-5 flex h-full flex-col gap-3 overflow-y-scroll px-6 pb-4">
           {allMembers
             ? allMembers
                 ?.filter((member) => {
@@ -160,7 +160,7 @@ export function SelectorModal({
                     </div>
                   )
                 })}
-        </body>
+        </div>
         <footer className="flex justify-between">
           <button
             onClick={handleSubmit}
