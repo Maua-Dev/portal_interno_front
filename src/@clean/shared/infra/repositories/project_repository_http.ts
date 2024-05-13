@@ -3,10 +3,6 @@ import { IProjectRepository } from '../../../modules/project/domain/repositories
 import { JsonProps, Project } from '../../domain/entities/project'
 import { decorate, injectable } from 'inversify'
 
-interface getAllProjectsResponse {
-  projects: JsonProps[]
-}
-
 export class ProjectRepositoryHttp implements IProjectRepository {
   constructor(private readonly http: AxiosInstance) {}
 
@@ -79,28 +75,21 @@ export class ProjectRepositoryHttp implements IProjectRepository {
   }
   async getAllProjects() {
     try {
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem('idToken')
 
       if (!token) {
         throw new Error('Token not found')
       }
 
-      const response = await this.http.get<getAllProjectsResponse>(
-        '/get-all-projects',
-        {
-          headers: {
-            Authorization: 'Bearer ' + token
-          }
+      const response = await this.http.get('/get-all-projects', {
+        headers: {
+          Authorization: 'Bearer ' + token
         }
-      )
+      })
 
-      const projects = response.data.projects.map((project) =>
-        Project.fromJSON(project)
-      )
-
-      return projects
+      return response.data
     } catch (error: any) {
-      return error.response.data
+      throw new Error('Error getting all projects: ' + error.message)
     }
   }
   async getProject(code: string) {
@@ -127,7 +116,6 @@ export class ProjectRepositoryHttp implements IProjectRepository {
       return error.response.data
     }
   }
-
   async updateProject(
     code: string,
     newCode?: string | undefined,
