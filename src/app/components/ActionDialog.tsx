@@ -56,12 +56,12 @@ export default function ActionDialog({ action, children }: ActionDialogProps) {
   }, [])
 
   return (
-    <div className="flex w-full justify-center">
+    <div className="static flex w-full justify-center">
       <DialogPrimitive.Root>
         <DialogPrimitive.Trigger asChild>{children}</DialogPrimitive.Trigger>
         <DialogPrimitive.Overlay className="fixed inset-0 z-40 opacity-70 backdrop-blur-sm" />
         <DialogPrimitive.DialogContent
-          className={`scrollbar-hide-default absolute top-[9%] z-50 my-auto flex h-[80%] w-5/6 flex-col gap-16 overflow-x-hidden overflow-y-scroll rounded-md border border-skin-muted px-4 py-10 text-skin-base outline-none sm:w-4/6 md:px-10 lg:h-4/6 xl:w-6/12 xl:scrollbar-hide ${
+          className={`scrollbar-hide-default fixed bottom-0 top-0 z-50 my-auto flex h-4/6 w-5/6 flex-col gap-16 overflow-x-hidden overflow-y-scroll rounded-md border border-skin-muted px-4 py-10 text-skin-base outline-none sm:w-4/6 md:h-fit md:px-10 md:py-20 xl:w-6/12 xl:scrollbar-hide ${
             theme ? 'bg-skin-fill' : 'bg-skin-secundary'
           }`}
         >
@@ -81,7 +81,13 @@ export default function ActionDialog({ action, children }: ActionDialogProps) {
               <div className="flex flex-col items-start justify-normal gap-2 text-2xl font-bold sm:w-fit sm:flex-row sm:items-center sm:gap-5 sm:text-3xl md:text-4xl">
                 <h1>{action.title}</h1>
                 <div className="flex flex-row items-center gap-2">
-                  <h1 className="text-skin-muted">#{action.storyId}</h1>
+                  <h1
+                    className={`text-skin-muted ${
+                      action.storyId === -1 ? 'hidden' : null
+                    }`}
+                  >
+                    #{action.storyId}
+                  </h1>
                   <PenIcon
                     onClick={() => {
                       changeModalContent(<ActionModal action={action} />)
@@ -96,7 +102,7 @@ export default function ActionDialog({ action, children }: ActionDialogProps) {
             </div>
           </div>
           <div
-            className={`flex h-full flex-col justify-evenly gap-5 ${
+            className={`flex h-fit flex-col justify-evenly gap-5 ${
               ONE_DAY_ACTION ? 'lg:flex-row' : 'lg:flex-row'
             }`}
           >
@@ -156,16 +162,18 @@ export default function ActionDialog({ action, children }: ActionDialogProps) {
                   Membros
                 </h1>
                 {associatedMembers.map((member) => {
-                  const [firstName, lastName] = member.name.split(' ')
+                  const memberSplited = member.name.split(' ')
                   return (
                     <div
-                      key={lastName}
+                      key={memberSplited[0]}
                       className="flex w-fit flex-row items-center gap-2 pl-10 sm:pl-0"
                     >
                       <UserCircle className="h-4 w-4" />
                       <p>
-                        {firstName}
-                        {lastName ? ' ' + lastName : null}
+                        {memberSplited[0]}
+                        {memberSplited.length > 1
+                          ? ' ' + memberSplited[memberSplited.length - 1]
+                          : null}
                       </p>
                     </div>
                   )
@@ -197,9 +205,7 @@ function SameDayTimeLine({ action }: TimeLinesProps) {
         <Timer className="h-4 w-4" />
         Duração:{' '}
         <span className="font-semibold text-skin-base">
-          {millisecondsToHours(action.duration) > 1
-            ? millisecondsToHours(action.duration) + ' horas'
-            : millisecondsToHours(action.duration) + ' hora'}
+          {millisecondsToHours(action.duration)} hrs
         </span>
       </h1>
     </div>
