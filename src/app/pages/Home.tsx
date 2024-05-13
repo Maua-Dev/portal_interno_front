@@ -84,15 +84,9 @@ export default function Home() {
     <>
       <Navbar />
       <main
-        className={`flex  w-full items-center justify-center overflow-hidden scrollbar-hide ${
+        className={`flex w-full items-center justify-center scrollbar-hide ${
           darkMode ? 'bg-skin-fill' : 'theme-white bg-sky-200'
-        } ${
-          modalContent
-            ? 'h-full lg:h-screen'
-            : isRegister
-            ? 'h-auto'
-            : 'h-screen'
-        }`}
+        } ${modalContent ? 'h-full' : isRegister ? 'h-auto' : 'h-screen'}`}
       >
         {isRegister ? <RegisterModal /> : null}
         {modalContent}
