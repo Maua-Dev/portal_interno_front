@@ -5,7 +5,6 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "build:tailwind": "tailwindcss build -o src/output.css",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
     "test": "vitest",
