@@ -114,7 +114,7 @@ export default function Historic() {
       loadHistoric()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getHistory])
+  }, [])
 
   return (
     <div className="flex h-fit w-full flex-col items-center justify-center gap-2 py-20 pl-0 md:py-10 md:pl-14">
@@ -162,7 +162,7 @@ export default function Historic() {
               )
             })}
           <h1
-            className={`pb-8 pt-8 text-skin-muted duration-150 
+            className={`pb-8 pt-8 text-skin-muted duration-150
             ${
               _lastEvaluatedKey !== null
                 ? 'cursor-pointer hover:text-skin-base'
