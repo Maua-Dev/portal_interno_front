@@ -193,7 +193,7 @@ export default function ActionModal({ action }: { action?: Action }) {
       title: action?.title || '',
       projectCode: action?.projectCode || '',
       description: action?.description || '',
-      storyId: action?.storyId.toString() || '',
+      storyId: action?.storyId === -1 ? '' : action?.storyId.toString() || '',
       startDate: action?.startDate ? timeStampToDate(action!.startDate) : '',
       endDate: action?.endDate ? timeStampToDate(action!.endDate) : '',
       duration: action?.duration
