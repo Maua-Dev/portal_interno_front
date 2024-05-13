@@ -20,6 +20,14 @@ http.interceptors.response.use(
       try {
         // Faça a solicitação para renovar o token usando o refresh token salvo
         const refreshToken = localStorage.getItem('refreshToken')
+
+        if (!refreshToken) {
+          localStorage.removeItem('accessToken')
+          localStorage.removeItem('refreshToken')
+          localStorage.removeItem('idToken')
+          return Promise.reject(error)
+        }
+
         const response = await axios.post(
           `${import.meta.env.VITE_REFRESH_TOKEN_URL}/refresh_token`,
           {

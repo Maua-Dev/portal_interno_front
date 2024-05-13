@@ -9,10 +9,10 @@ export interface IActionRepository {
   createAction(
     startDate: number,
     title: string,
-    description: string,
     endDate: number,
     duration: number,
     projectCode: string,
+    description?: string,
     storyId?: number,
     associatedMembersUserIds?: string[],
     stackTags?: STACK[],
@@ -52,6 +52,5 @@ export interface IActionRepository {
   ): Promise<Action>
 
   updateActionValidation(actionId: string, isValid: boolean): Promise<Action>
-
   deleteAction(actionId: string): Promise<void>
 }

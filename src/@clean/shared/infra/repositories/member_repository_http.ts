@@ -93,7 +93,7 @@ export class MemberRepositoryHttp implements IMemberRepository {
       return member
     } catch (error: any) {
       if (error.code === 'ERR_NETWORK') {
-        throw new Error('Membro não encontrado!')
+        throw new Error('Membro não encontrado! ' + error.response.data)
       }
       throw new Error(error)
     }
@@ -142,7 +142,7 @@ export class MemberRepositoryHttp implements IMemberRepository {
 
       return membersArray
     } catch (error: any) {
-      throw new Error('Error Getting All Members: ' + error.message)
+      throw new Error('Error Getting All Members: ' + error.response.data)
     }
   }
 

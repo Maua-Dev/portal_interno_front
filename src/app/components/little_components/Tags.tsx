@@ -44,8 +44,8 @@ export function Tag({ variant }: TagProps) {
       label: 'UX/UI',
       style: `bg-purple-500 text-purple-${DARKNESS}`
     },
-    PO: {
-      label: 'PO',
+    BUSINESS: {
+      label: 'BUSINESS',
       style: `bg-green-600 text-green-${DARKNESS}`
     },
     INTERNAL: {

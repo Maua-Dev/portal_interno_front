@@ -22,9 +22,9 @@ interface lastEvaluatedKey {
 
 export default function Historic() {
   const [localHistory, setLocalHistory] = useState<Action[]>([])
-  const [_lastEvaluatedKey, setLastEvaluatedKey] = useState<lastEvaluatedKey>()
+  const [_lastEvaluatedKey, setLastEvaluatedKey] =
+    useState<lastEvaluatedKey | null>()
   const [searchText, setSearchText] = useState<string>('')
-  // const [isLoading, setLoading] = useState<boolean>(false)
   const { getHistory } = useContext(ActionContext)
   const [filterProps, setFilterProps] = useState<FilterProps>({
     searchText: '',
@@ -43,23 +43,17 @@ export default function Historic() {
   }
 
   const loadHistoric = async (lastKey?: lastEvaluatedKey | undefined) => {
+    const AMOUNT = 10
     try {
-      const response = await getHistory(
-        undefined,
-        undefined,
-        undefined,
-        undefined
-      )
+      const response = await getHistory(undefined, undefined, AMOUNT, lastKey)
+
       if (lastKey) {
         setLocalHistory((prev) => prev.concat(response.actions))
       } else {
         setLocalHistory(response.actions)
       }
-      if (response.lastEvaluatedKey) {
-        setLastEvaluatedKey(response.lastEvaluatedKey)
-      } else {
-        setLastEvaluatedKey(undefined)
-      }
+
+      setLastEvaluatedKey(response.lastEvaluatedKey)
     } catch (error) {
       console.log('Error: ' + error)
     }
@@ -168,12 +162,19 @@ export default function Historic() {
               )
             })}
           <h1
-            className="cursor-pointer pb-8 pt-8 text-skin-muted duration-150 hover:text-skin-base"
+            className={`pb-8 pt-8 text-skin-muted duration-150 
+            ${
+              _lastEvaluatedKey !== null
+                ? 'cursor-pointer hover:text-skin-base'
+                : null
+            }`}
             onClick={() => {
-              loadHistoric(_lastEvaluatedKey)
+              if (_lastEvaluatedKey !== null) {
+                loadHistoric(_lastEvaluatedKey)
+              }
             }}
           >
-            Mostrar Mais
+            {_lastEvaluatedKey === null ? 'Sem Mais Itens' : 'Ver Mais'}
           </h1>
         </div>
       ) : (

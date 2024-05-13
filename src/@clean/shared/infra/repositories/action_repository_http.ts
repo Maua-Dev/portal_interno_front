@@ -7,7 +7,6 @@ import { IActionRepository } from '../../../modules/action/domain/repositories/a
 import { ACTION_TYPE } from '../../domain/enums/action_type_enum'
 import { STACK } from '../../domain/enums/stack_enum'
 import { stackFormatter } from '../../domain/enums/stack_enum'
-import { JsonProps, Member } from '../../domain/entities/member'
 
 interface getHistoryRawResponse {
   actions: [
@@ -30,7 +29,7 @@ interface getHistoryRawResponse {
   last_evaluated_key: {
     action_id: string
     start_date: number
-  }
+  } | null
   message: string
 }
 
@@ -41,13 +40,13 @@ export interface lastEvaluatedKey {
 
 export interface historyResponse {
   actions: Action[]
-  lastEvaluatedKey: lastEvaluatedKey
+  lastEvaluatedKey: lastEvaluatedKey | null
 }
 
 interface createActionBodyRequest {
   start_date: number
   title: string
-  description: string | ''
+  description?: string
   end_date: number
   duration: number
   project_code: string
@@ -137,7 +136,7 @@ export class ActionRepositoryHttp implements IActionRepository {
 
       return response.data.action
     } catch (error: any) {
-      throw new Error('Error updating action: ' + error.message)
+      throw new Error('Error updating action: ' + error.response.data)
     }
   }
 
@@ -190,9 +189,13 @@ export class ActionRepositoryHttp implements IActionRepository {
         for (let i = 0; i < firstCase.data.actions.length; i++) {
           response.actions.push(Action.fromJSON(firstCase.data.actions[i]))
         }
-        response.lastEvaluatedKey = {
-          actionId: firstCase.data.last_evaluated_key.action_id,
-          startDate: firstCase.data.last_evaluated_key.start_date
+        if (firstCase.data.last_evaluated_key !== null) {
+          response.lastEvaluatedKey = {
+            actionId: firstCase.data.last_evaluated_key.action_id,
+            startDate: firstCase.data.last_evaluated_key.start_date
+          }
+        } else {
+          response.lastEvaluatedKey = null
         }
       } else if (
         amount !== undefined &&
@@ -213,9 +216,14 @@ export class ActionRepositoryHttp implements IActionRepository {
         for (let i = 0; i < secondCase.data.actions.length; i++) {
           response.actions.push(Action.fromJSON(secondCase.data.actions[i]))
         }
-        response.lastEvaluatedKey = {
-          actionId: secondCase.data.last_evaluated_key.action_id,
-          startDate: secondCase.data.last_evaluated_key.start_date
+
+        if (secondCase.data.last_evaluated_key !== null) {
+          response.lastEvaluatedKey = {
+            actionId: secondCase.data.last_evaluated_key.action_id,
+            startDate: secondCase.data.last_evaluated_key.start_date
+          }
+        } else {
+          response.lastEvaluatedKey = null
         }
       } else if (amount !== undefined && exclusiveStartKey !== undefined) {
         console.log('here')
@@ -241,10 +249,16 @@ export class ActionRepositoryHttp implements IActionRepository {
         for (let i = 0; i < thirdCase.data.actions.length; i++) {
           response.actions.push(Action.fromJSON(thirdCase.data.actions[i]))
         }
-        response.lastEvaluatedKey = {
-          actionId: thirdCase.data.last_evaluated_key.action_id,
-          startDate: thirdCase.data.last_evaluated_key.start_date
+
+        if (thirdCase.data.last_evaluated_key !== null) {
+          response.lastEvaluatedKey = {
+            actionId: thirdCase.data.last_evaluated_key.action_id,
+            startDate: thirdCase.data.last_evaluated_key.start_date
+          }
+        } else {
+          response.lastEvaluatedKey = null
         }
+
         console.log(response)
         return response
       } else if (amount !== undefined) {
@@ -264,9 +278,14 @@ export class ActionRepositoryHttp implements IActionRepository {
         for (let i = 0; i < fourthCase.data.actions.length; i++) {
           response.actions.push(Action.fromJSON(fourthCase.data.actions[i]))
         }
-        response.lastEvaluatedKey = {
-          actionId: fourthCase.data.last_evaluated_key.action_id,
-          startDate: fourthCase.data.last_evaluated_key.start_date
+
+        if (fourthCase.data.last_evaluated_key !== null) {
+          response.lastEvaluatedKey = {
+            actionId: fourthCase.data.last_evaluated_key.action_id,
+            startDate: fourthCase.data.last_evaluated_key.start_date
+          }
+        } else {
+          response.lastEvaluatedKey = null
         }
         return response
       } else {
@@ -294,10 +313,10 @@ export class ActionRepositoryHttp implements IActionRepository {
   async createAction(
     startDate: number,
     title: string,
-    description: string,
     endDate: number,
     duration: number,
     projectCode: string,
+    description?: string,
     storyId?: number,
     associatedMembersUserIds?: string[],
     stackTags?: STACK[],
@@ -313,7 +332,7 @@ export class ActionRepositoryHttp implements IActionRepository {
       start_date: startDate,
       story_id: storyId,
       title: title,
-      description: description,
+      description,
       end_date: endDate,
       duration: duration,
       project_code: projectCode,
@@ -337,26 +356,7 @@ export class ActionRepositoryHttp implements IActionRepository {
       console.log(response.data.message)
       return response.data.action
     } catch (error: any) {
-      throw new Error('Error creating action: ' + error.message)
-    }
-  }
-
-  async getMember(): Promise<Member> {
-    try {
-      const token = localStorage.getItem('idToken')
-      if (!token) {
-        throw new Error('Token not found')
-      }
-      const response = await this.http.get<JsonProps>('/get-member', {
-        headers: {
-          Authorization: 'Bearer ' + token
-        }
-      })
-
-      const member = Member.fromJSON(response.data)
-      return member
-    } catch (error: any) {
-      throw new Error('Error Getting All Members: ' + error.message)
+      throw new Error('Error creating action: ' + error.response.data)
     }
   }
 
@@ -410,7 +410,6 @@ export class ActionRepositoryHttp implements IActionRepository {
       if (!token) {
         throw new Error('Token not found')
       }
-
       await this.http.delete('/delete-action', {
         headers: {
           Authorization: 'Bearer ' + token
@@ -420,7 +419,7 @@ export class ActionRepositoryHttp implements IActionRepository {
         }
       })
     } catch (error: any) {
-      throw new Error('Error deleting action: ' + error.message)
+      throw new Error('Error deleting action: ' + error.response.data)
     }
   }
 }

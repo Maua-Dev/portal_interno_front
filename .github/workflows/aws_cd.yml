@@ -42,6 +42,7 @@ jobs:
           env: 
             VITE_STAGE: ${{ github.ref_name }}
             VITE_MSS_API_URL: ${{ vars.MSS_ACTION }}
+            VITE_REFRESH_TOKEN_URL: ${{ vars.VITE_REFRESH_TOKEN_URL }}
         - name: Setup envs
           run: |
             echo AWS_REGION=${{ vars.AWS_REGION }} >> $GITHUB_ENV
