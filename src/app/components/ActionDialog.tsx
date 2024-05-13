@@ -61,7 +61,7 @@ export default function ActionDialog({ action, children }: ActionDialogProps) {
         <DialogPrimitive.Trigger asChild>{children}</DialogPrimitive.Trigger>
         <DialogPrimitive.Overlay className="fixed inset-0 z-40 opacity-70 backdrop-blur-sm" />
         <DialogPrimitive.DialogContent
-          className={`scrollbar-hide-default top-[9%] h-[80%] absolute z-50 my-auto flex w-5/6 flex-col gap-16 overflow-x-hidden overflow-y-scroll rounded-md border border-skin-muted px-4 py-10 text-skin-base outline-none sm:w-4/6 md:px-10 lg:h-4/6 xl:w-6/12 xl:scrollbar-hide ${
+          className={`scrollbar-hide-default absolute top-[9%] z-50 my-auto flex h-[80%] w-5/6 flex-col gap-16 overflow-x-hidden overflow-y-scroll rounded-md border border-skin-muted px-4 py-10 text-skin-base outline-none sm:w-4/6 md:px-10 lg:h-4/6 xl:w-6/12 xl:scrollbar-hide ${
             theme ? 'bg-skin-fill' : 'bg-skin-secundary'
           }`}
         >
@@ -222,7 +222,7 @@ function DiferentDaysTimeLine({ action }: TimeLinesProps) {
               .slice(3, 10)}
           </p>
         </div>
-        <div className="h-[80%] sm:w-[90%] flex flex-row-reverse items-center gap-2 sm:flex-col sm:gap-1 md:w-5/6">
+        <div className="flex h-[80%] flex-row-reverse items-center gap-2 sm:w-[90%] sm:flex-col sm:gap-1 md:w-5/6">
           <div className="absolute left-10 flex flex-col sm:relative sm:left-auto sm:flex-row sm:gap-2">
             <p className="font-light text-skin-muted">Duração: </p>
             <p className="text-base font-semibold">
@@ -231,7 +231,7 @@ function DiferentDaysTimeLine({ action }: TimeLinesProps) {
                 : millisecondsToHours(action.duration) + ' hora'}
             </p>
           </div>
-          <div className="before:animate-[shimmerY_1.5s_infinite] sm:before:animate-[shimmerX_1.5s_infinite] relative h-full w-3 overflow-hidden rounded-xl bg-skin-skeleton-foreground before:absolute before:inset-0 before:-translate-y-full before:bg-gradient-to-b before:from-transparent before:via-white/20 hover:opacity-100 sm:h-3 sm:w-full sm:before:-translate-x-full sm:before:bg-gradient-to-r">
+          <div className="relative h-full w-3 overflow-hidden rounded-xl bg-skin-skeleton-foreground before:absolute before:inset-0 before:-translate-y-full before:animate-[shimmerY_1.5s_infinite] before:bg-gradient-to-b before:from-transparent before:via-white/20 hover:opacity-100 sm:h-3 sm:w-full sm:before:-translate-x-full sm:before:animate-[shimmerX_1.5s_infinite] sm:before:bg-gradient-to-r">
             <div className="absolute top-0 h-3 w-full rounded-lg bg-skin-base-foreground sm:left-0 sm:h-full sm:w-3" />
             <div className="absolute bottom-0 h-3 w-full rounded-lg bg-skin-base-foreground sm:right-0 sm:h-full sm:w-3" />
           </div>
