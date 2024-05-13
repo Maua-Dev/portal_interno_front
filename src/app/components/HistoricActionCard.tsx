@@ -96,11 +96,11 @@ export default function HistoricActionCard({
 
         <div className="hidden w-1/5 flex-row justify-start gap-2 lg:flex">
           {stackStringArray.map((stack, index) => {
-            if (index < 4) {
+            if (index < 3) {
               return (
                 <div className="flex flex-row gap-2" key={uuidv4()}>
                   <Tag variant={stack} />
-                  {index === 3 && stackStringArray.length > 3 ? (
+                  {index === 2 && stackStringArray.length > 2 ? (
                     <p className="text-skin-muted">...</p>
                   ) : null}
                 </div>
