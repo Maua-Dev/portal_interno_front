@@ -162,16 +162,18 @@ export default function ActionDialog({ action, children }: ActionDialogProps) {
                   Membros
                 </h1>
                 {associatedMembers.map((member) => {
-                  const [firstName, lastName] = member.name.split(' ')
+                  const memberSplited = member.name.split(' ')
                   return (
                     <div
-                      key={lastName}
+                      key={memberSplited[0]}
                       className="flex w-fit flex-row items-center gap-2 pl-10 sm:pl-0"
                     >
                       <UserCircle className="h-4 w-4" />
                       <p>
-                        {firstName}
-                        {lastName ? ' ' + lastName : null}
+                        {memberSplited[0]}
+                        {memberSplited.length > 1
+                          ? ' ' + memberSplited[memberSplited.length - 1]
+                          : null}
                       </p>
                     </div>
                   )
