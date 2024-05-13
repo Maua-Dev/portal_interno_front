@@ -5,15 +5,15 @@ import { ProjectRepositoryHttp } from '../repositories/project_repository_http'
 import { GetAllProjectsUsecase } from '../../../modules/project/usecases/get_all_projects_usecase'
 
 export const RegistryProject = {
-    // Axios Adapter
-    AxiosAdapter: Symbol.for('AxiosAdapter'),
+  // Axios Adapter
+  AxiosAdapter: Symbol.for('AxiosAdapter'),
 
-    // Repositories
-    ProjectRepositoryHttp: Symbol.for('ProjectRepositoryHttp'),
-    ProjectRepositoryMock: Symbol.for('ProjectRepositoryMock'),
+  // Repositories
+  ProjectRepositoryHttp: Symbol.for('ProjectRepositoryHttp'),
+  ProjectRepositoryMock: Symbol.for('ProjectRepositoryMock'),
 
-    // Usecases
-    getAllProjectsUsecase: Symbol.for('GetAllProjectsUsecase')
+  // Usecases
+  getAllProjectsUsecase: Symbol.for('GetAllProjectsUsecase')
 }
 
 export const containerProject = new Container()
@@ -23,12 +23,12 @@ containerProject.bind(RegistryProject.AxiosAdapter).toConstantValue(http)
 
 // Repositories
 containerProject
-    .bind(RegistryProject.ProjectRepositoryHttp)
-    .toDynamicValue((context) => {
-        return new ProjectRepositoryHttp(
-            context.container.get(RegistryProject.AxiosAdapter)
-        )
-    })
+  .bind(RegistryProject.ProjectRepositoryHttp)
+  .toDynamicValue((context) => {
+    return new ProjectRepositoryHttp(
+      context.container.get(RegistryProject.AxiosAdapter)
+    )
+  })
 
 // Usecases
 containerProject
