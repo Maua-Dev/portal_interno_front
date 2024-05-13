@@ -151,7 +151,7 @@ export class ActionRepositoryMock implements IActionRepository {
       email: 'ltelevision.devmaua@gmail.com',
       ra: '19017311',
       role: ROLE.DEV,
-      stack: STACK.DATA_SCIENCE,
+      stack: STACK.INFRA,
       year: 3,
       cellphone: '11911758098',
       course: COURSE.CIC,

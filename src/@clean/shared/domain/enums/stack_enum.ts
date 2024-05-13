@@ -3,9 +3,8 @@ export enum STACK {
   FRONTEND = 'FRONTEND',
   INFRA = 'INFRA',
   UX_UI = 'UX_UI',
-  PO = 'PO',
   INTERNAL = 'INTERNAL',
-  DATA_SCIENCE = 'DATA_SCIENCE'
+  BUSINESS = 'BUSINESS'
 }
 
 export function stackToEnum(value: string): STACK {
@@ -18,12 +17,10 @@ export function stackToEnum(value: string): STACK {
       return STACK.INFRA
     case 'UX_UI':
       return STACK.UX_UI
-    case 'PO':
-      return STACK.PO
     case 'INTERNAL':
       return STACK.INTERNAL
-    case 'DATA_SCIENCE':
-      return STACK.DATA_SCIENCE
+    case 'BUSINESS':
+      return STACK.BUSINESS
     default:
       throw new Error('Invalid value')
   }
@@ -39,12 +36,10 @@ export function translateStackTag(stack: string): string {
       return 'Infra'
     case 'UX_UI':
       return 'UX/UI'
-    case 'PO':
-      return 'PO'
     case 'INTERNAL':
       return 'Interno'
-    case 'DATA_SCIENCE':
-      return 'Data Science'
+    case 'BUSINESS':
+      return 'Business'
     default:
       return 'Invalid value'
   }

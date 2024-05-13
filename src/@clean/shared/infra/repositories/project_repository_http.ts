@@ -3,10 +3,16 @@ import { IProjectRepository } from '../../../modules/project/domain/repositories
 import { JsonProps, Project } from '../../domain/entities/project'
 import { decorate, injectable } from 'inversify'
 
-interface getAllProjectsResponse {
-  projects: JsonProps[]
+export type ProjectType = {
+  code: string
+  description: string
+  membersUserIds: string[]
+  name: string
+  photos: string[]
+  poUserId: string
+  scrumUserId: string
+  startDate: number
 }
-
 export class ProjectRepositoryHttp implements IProjectRepository {
   constructor(private readonly http: AxiosInstance) {}
 
@@ -77,30 +83,28 @@ export class ProjectRepositoryHttp implements IProjectRepository {
       return error.response.data
     }
   }
-  async getAllProjects() {
+
+  async getAllProjects(): Promise<ProjectType[]> {
     try {
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem('idToken')
 
       if (!token) {
         throw new Error('Token not found')
       }
 
-      const response = await this.http.get<getAllProjectsResponse>(
-        '/get-all-projects',
-        {
-          headers: {
-            Authorization: 'Bearer ' + token
-          }
+      const response = await this.http.get('/get-all-projects', {
+        headers: {
+          Authorization: 'Bearer ' + token
+        }
+      })
+      const responseFormatted = response.data.projects.map(
+        (project: { project: ProjectType }) => {
+          return project.project
         }
       )
-
-      const projects = response.data.projects.map((project) =>
-        Project.fromJSON(project)
-      )
-
-      return projects
+      return responseFormatted
     } catch (error: any) {
-      return error.response.data
+      throw new Error('Error getting all projects: ' + error.message)
     }
   }
   async getProject(code: string) {
@@ -127,7 +131,6 @@ export class ProjectRepositoryHttp implements IProjectRepository {
       return error.response.data
     }
   }
-
   async updateProject(
     code: string,
     newCode?: string | undefined,
