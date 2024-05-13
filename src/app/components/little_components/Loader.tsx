@@ -2,7 +2,7 @@ import HistoricActionCardSkeleton from './HistoricActionCardSkeleton'
 
 export default function Loader() {
   return (
-    <div className="flex w-full flex-col items-center gap-2 text-skin-base">
+    <div className="flex h-screen w-full flex-col items-center gap-2 text-skin-base">
       <HistoricActionCardSkeleton />
       <HistoricActionCardSkeleton className="opacity-80" />
       <HistoricActionCardSkeleton className="opacity-60" />
