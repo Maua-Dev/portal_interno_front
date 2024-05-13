@@ -76,7 +76,7 @@ export default function ActionModal({ action }: { action?: Action }) {
   // Use state
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [fade, setFade] = useState<boolean>(false)
-  const [stackTags, setStackTags] = useState<STACK[]>(action?.stackTags || [])
+  // const [stackTags, setStackTags] = useState<STACK[]>(action?.stackTags || [])
   const [dataProjects, setDataProjects] = useState([])
 
   // Constants
