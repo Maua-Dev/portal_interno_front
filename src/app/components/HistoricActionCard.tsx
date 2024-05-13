@@ -1,3 +1,4 @@
+/* eslint-disable react/no-children-prop */
 import { HTMLAttributes, useContext, useState } from 'react'
 import Card from './little_components/Card'
 import { StateIcon, IconText } from './little_components/Icon'
@@ -90,12 +91,12 @@ export default function HistoricActionCard({
           {stackStringArray.map((stack, index) => {
             if (index < 4) {
               return (
-                <>
-                  <Tag key={uuidv4()} variant={stack} />
+                <div key={uuidv4()}>
+                  <Tag variant={stack} />
                   {index === 3 && stackStringArray.length > 4 ? (
                     <p className="text-skin-muted">...</p>
                   ) : null}
-                </>
+                </div>
               )
             }
           })}
