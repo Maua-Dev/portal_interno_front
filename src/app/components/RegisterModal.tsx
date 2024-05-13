@@ -137,7 +137,20 @@ export default function RegisterModal() {
   })
 
   return (
-    <div className="absolute left-0 top-0 z-[150] flex h-dvh w-full items-center justify-center overflow-y-auto bg-black bg-opacity-60 py-12 pt-24 lg:h-full">
+    <div
+      className={`absolute left-0 top-0 z-[150] flex h-dvh w-full items-center justify-center overflow-y-auto bg-black bg-opacity-60 py-12 lg:h-full ${
+        errors.name ||
+        errors.course ||
+        errors.emailDev ||
+        errors.phone ||
+        errors.ra ||
+        errors.role ||
+        errors.stack ||
+        errors.year
+          ? 'pt-64'
+          : 'pt-24'
+      }`}
+    >
       <form
         onSubmit={handleSubmit(handleRegisterMember)}
         className="flex h-auto w-4/5 flex-col justify-center gap-3 overflow-y-auto rounded-lg bg-white p-8 md:w-1/2"
