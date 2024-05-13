@@ -43,7 +43,6 @@ export interface MemberContextInterface {
   deleteMember: () => Promise<Member | undefined>
 
   memberError: string
-  setMemberError: (memberError: string) => void
 }
 
 const defaultContext: MemberContextInterface = {
@@ -84,11 +83,7 @@ const defaultContext: MemberContextInterface = {
     return undefined
   },
 
-  memberError: '',
-
-  setMemberError: (_memberError: string) => {
-    return ''
-  }
+  memberError: ''
 }
 
 export const MemberContext = createContext(defaultContext)
@@ -119,10 +114,11 @@ export function MemberProvider({ children }: PropsWithChildren) {
   async function getMember() {
     try {
       const member = await getMembersUsecase.execute()
-
       return member
     } catch (error: any) {
-      throw new Error(error)
+      console.error('Error on get member: ', error.message)
+      setMemberError(error.message)
+      throw new Error('Something went wrong on get member: ' + error.message)
     }
   }
 
@@ -132,7 +128,10 @@ export function MemberProvider({ children }: PropsWithChildren) {
 
       return members.members
     } catch (error: any) {
-      console.log('Something went wrong on get all members: ', error)
+      setMemberError(error.message)
+      throw new Error(
+        'Something went wrong on get all members: ' + error.message
+      )
     }
   }
 
@@ -158,7 +157,7 @@ export function MemberProvider({ children }: PropsWithChildren) {
       return createdMember
     } catch (error: any) {
       setMemberError(error.message)
-      console.error('Something went wrong on create member: ', error.message)
+      throw new Error('Something went wrong on create member: ' + error.message)
     }
   }
 
@@ -209,8 +208,7 @@ export function MemberProvider({ children }: PropsWithChildren) {
         createMember,
         updateMember,
         deleteMember,
-        memberError,
-        setMemberError
+        memberError
       }}
     >
       {children}

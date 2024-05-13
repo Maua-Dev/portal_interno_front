@@ -25,7 +25,7 @@ const actionSchema = z.object({
   projectCode: z
     .string()
     .min(1, { message: 'Código de Projeto é obrigatório' }),
-  description: z.string(),
+  description: z.string().optional(),
   storyId: z.string().refine(
     (storyId) => {
       if (storyId === '') return true
@@ -95,10 +95,10 @@ export default function ActionModal({ action }: { action?: Action }) {
       const createdAction = await createAction(
         dateToMilliseconds(data.startDate),
         data.title,
-        data.description,
         dateToMilliseconds(data.endDate),
         hoursToMilliseconds(data.duration),
         data.projectCode,
+        data?.description || undefined,
         data?.storyId ? parseInt(data.storyId) : undefined,
         data.associatedMembersUserIds,
         data.stackTags,
@@ -108,11 +108,9 @@ export default function ActionModal({ action }: { action?: Action }) {
       console.log(createdAction)
       if (createdAction) {
         closeModal()
-        alert('Atividade criada com sucesso!')
       }
     } catch (error: any) {
       console.error(error)
-      alert('Erro ao criar atividade: ' + error.message)
     } finally {
       setIsLoading(false)
     }
@@ -138,11 +136,9 @@ export default function ActionModal({ action }: { action?: Action }) {
       )
       console.log(updatedAction)
       if (updatedAction) {
-        alert('Atividade atualizada com sucesso!')
         changeModalContent(<Historic />)
       }
     } catch (error: any) {
-      alert('Erro ao atualizar atividade: ' + error.message)
       console.error(error)
     } finally {
       setIsLoading(false)
@@ -197,7 +193,7 @@ export default function ActionModal({ action }: { action?: Action }) {
 
   return (
     <div
-      className={`flex h-auto w-full transform items-center justify-center overflow-hidden py-24 transition-all duration-300 lg:h-screen lg:overflow-hidden lg:py-0 ${
+      className={`flex h-full w-full transform items-center justify-center overflow-x-hidden overflow-y-scroll py-24 pt-24 transition-all duration-300 lg:py-12 lg:pt-24 ${
         isUpdateModal
           ? 'absolute left-0 top-0 z-50 bg-black bg-opacity-80'
           : 'lg:pl-14'
@@ -209,11 +205,11 @@ export default function ActionModal({ action }: { action?: Action }) {
       `}
     >
       <div
-        className="absolute z-[60] h-screen w-full"
+        className="absolute left-0 top-0 z-[60] h-full w-full"
         onClick={isUpdateModal ? handleConfirmCloseModal : undefined}
       ></div>
       <div
-        className={`z-[70] h-auto w-4/5 rounded-2xl lg:h-4/5 ${
+        className={`z-[70] h-auto w-4/5 rounded-2xl ${
           darkMode ? 'bg-skin-secundary text-white' : 'bg-white'
         }`}
       >
@@ -223,9 +219,9 @@ export default function ActionModal({ action }: { action?: Action }) {
               ? handleSubmit(handleUpdateActionSubmit)
               : handleSubmit(handleCreateActionSubmit)
           }
-          className="flex h-auto flex-col gap-6 px-12 py-12 lg:h-full lg:flex-row"
+          className="flex h-auto flex-col gap-6 px-12 py-12 lg:flex-row"
         >
-          <div className="flex w-full flex-col justify-between gap-8 lg:w-3/5 xl:w-4/5">
+          <div className="flex w-full flex-col justify-between gap-8 lg:w-4/5">
             <div className="flex flex-col gap-4">
               {/* Title */}
               <h1 className="text-2xl font-bold">Título da atividade</h1>
@@ -361,9 +357,9 @@ export default function ActionModal({ action }: { action?: Action }) {
             </div>
           </div>
 
-          <div className="flex w-full flex-col justify-between gap-4 lg:w-2/5 xl:w-1/5">
+          <div className="flex w-full flex-col justify-between gap-4 lg:w-1/5">
             {/* Associated Members */}
-            <div className="flex h-72 flex-col gap-4 sm:h-[40%]">
+            <div className="flex flex-col gap-4 sm:h-[40%]">
               <Selector
                 members={action?.associatedMembersUserIds || []}
                 setValue={setValue}
@@ -372,7 +368,7 @@ export default function ActionModal({ action }: { action?: Action }) {
             </div>
 
             {/* Stack Tag Selector */}
-            <div className="flex h-72 flex-col gap-4 sm:h-[40%]">
+            <div className="flex flex-col gap-4 sm:h-[40%]">
               <Selector
                 stackTags={action?.stackTags || []}
                 isStackTagSelector={true}

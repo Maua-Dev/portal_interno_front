@@ -21,19 +21,14 @@ import { historyResponse } from '../../@clean/shared/infra/repositories/action_r
 import { UpdateActionValidationUsecase } from '../../@clean/modules/action/usecases/update_action_validation'
 import { DeleteActionUsecase } from '../../@clean/modules/action/usecases/delete_action_usecase'
 
-// interface lastEvaluatedKeyResponse {
-//   actionId: string
-//   startDate: number
-// }
-
 export interface ActionContextInterface {
   createAction: (
     startDate: number,
     title: string,
-    description: string,
     endDate: number,
     duration: number,
     projectCode: string,
+    description?: string,
     storyId?: number,
     associatedMembersUserIds?: string[],
     stackTags?: STACK[],
@@ -79,16 +74,24 @@ export interface ActionContextInterface {
   ) => Promise<Action | undefined>
 
   deleteAction: (actionId: string) => Promise<void>
+
+  actionError: string
+
+  actionSuccess: string
+
+  setActionError: Dispatch<SetStateAction<string>>
+
+  setActionSuccess: Dispatch<SetStateAction<string>>
 }
 
 const defaultContext: ActionContextInterface = {
   createAction: async (
     _startDate: number,
     _title: string,
-    _description: string,
     _endDate: number,
     _duration: number,
     _projectCode: string,
+    _description?: string,
     _storyId?: number,
     _associatedMembersUserIds?: string[],
     _stackTags?: STACK[],
@@ -148,6 +151,15 @@ const defaultContext: ActionContextInterface = {
 
   deleteAction: async (_actionId: string) => {
     return undefined
+  },
+
+  actionError: '',
+  actionSuccess: '',
+  setActionError: (_actionError: SetStateAction<string>) => {
+    return undefined
+  },
+  setActionSuccess: (_actionSuccess: SetStateAction<string>) => {
+    return undefined
   }
 }
 
@@ -182,14 +194,16 @@ const deleteActionUsecase = containerAction.get<DeleteActionUsecase>(
 export function ActionProvider({ children }: PropsWithChildren) {
   const [createdActions, setCreatedActions] = useState<Action[]>([])
   const [action, setAction] = useState<Action | undefined>(undefined)
+  const [actionError, setActionError] = useState<string>('')
+  const [actionSuccess, setActionSuccess] = useState<string>('')
 
   async function createAction(
     startDate: number,
     title: string,
-    description: string,
     endDate: number,
     duration: number,
     projectCode: string,
+    description?: string,
     storyId?: number,
     associatedMembersUserIds?: string[],
     stackTags?: STACK[],
@@ -199,19 +213,21 @@ export function ActionProvider({ children }: PropsWithChildren) {
       const createdAction = await createActionUsecase.execute(
         startDate,
         title,
-        description,
         endDate,
         duration,
         projectCode,
+        description,
         storyId,
         associatedMembersUserIds,
         stackTags,
         actionTypeTag
       )
       setCreatedActions([...createdActions, createdAction])
+      setActionSuccess('Atividade criada com sucesso!')
       return createdAction
     } catch (error: any) {
-      console.error('Something went wrong on create action: ', error)
+      setActionError(error.message)
+      throw new Error('Something went wrong on create action: ' + error.message)
     }
   }
 
@@ -221,7 +237,7 @@ export function ActionProvider({ children }: PropsWithChildren) {
         await createAssociatedActionUsecase.execute(associatedAction)
       return createdAssociatedAction
     } catch (error: any) {
-      console.error('Something went wrong on create associated action: ', error)
+      console.log('Something went wrong on create associated action: ', error)
     }
   }
 
@@ -244,7 +260,8 @@ export function ActionProvider({ children }: PropsWithChildren) {
 
       return response
     } catch (error: any) {
-      console.error('Something went wrong on get history: ', error)
+      setActionError(error.message)
+      console.log('Something went wrong on get history: ' + error.message)
     }
     return {
       actions: [],
@@ -285,9 +302,11 @@ export function ActionProvider({ children }: PropsWithChildren) {
         newActionTypeTag
       )
       console.log(updatedAction)
+      setActionSuccess('Atividade atualizada com sucesso!')
       return updatedAction
     } catch (error: any) {
-      console.error('Something went wrong on update action: ', error)
+      setActionError(error.message)
+      throw new Error('Something went wrong on update action: ' + error.message)
     }
   }
 
@@ -306,9 +325,11 @@ export function ActionProvider({ children }: PropsWithChildren) {
   async function deleteAction(actionId: string) {
     try {
       const deletedAction = await deleteActionUsecase.execute(actionId)
+      setActionSuccess('Atividade deletada com sucesso!')
       return deletedAction
     } catch (error: any) {
-      console.log('Something went wrong on delete action: ', error)
+      setActionError(error.message)
+      throw new Error('Something went wrong on delete action: ' + error.message)
     }
   }
 
@@ -322,7 +343,11 @@ export function ActionProvider({ children }: PropsWithChildren) {
         getHistory,
         updateAction,
         updateActionValidation,
-        deleteAction
+        deleteAction,
+        actionError,
+        actionSuccess,
+        setActionError,
+        setActionSuccess
       }}
     >
       {children}

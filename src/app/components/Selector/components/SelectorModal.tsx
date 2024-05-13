@@ -70,14 +70,14 @@ export function SelectorModal({
 
   return (
     <div
-      className={`absolute left-0 top-0 z-[160] flex h-full w-full items-center justify-center bg-black bg-opacity-40 md:h-screen ${
+      className={`absolute left-0 top-0 z-[160] flex h-full w-full items-center justify-center bg-black bg-opacity-40 ${
         fade ? 'opacity-0' : 'opacity-100 transition-opacity duration-300'
       }`}
     >
       <section
-        className={`flex h-2/5 w-4/5 flex-col rounded-lg ${
+        className={`flex h-1/3 w-4/5 flex-col rounded-lg sm:h-1/3 sm:w-1/2 lg:h-2/3 xl:w-1/4 ${
           darkMode ? 'bg-skin-secundary' : 'bg-white'
-        } sm:w-1/2 md:h-4/5 xl:w-1/4`}
+        }`}
       >
         <header className="flex justify-between gap-4 px-6 pt-6">
           <h1 className="text-xl font-bold">

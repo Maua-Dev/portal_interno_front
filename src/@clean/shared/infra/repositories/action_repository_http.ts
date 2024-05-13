@@ -7,7 +7,6 @@ import { IActionRepository } from '../../../modules/action/domain/repositories/a
 import { ACTION_TYPE } from '../../domain/enums/action_type_enum'
 import { STACK } from '../../domain/enums/stack_enum'
 import { stackFormatter } from '../../domain/enums/stack_enum'
-import { JsonProps, Member } from '../../domain/entities/member'
 
 interface getHistoryRawResponse {
   actions: [
@@ -47,7 +46,7 @@ export interface historyResponse {
 interface createActionBodyRequest {
   start_date: number
   title: string
-  description: string | ''
+  description?: string
   end_date: number
   duration: number
   project_code: string
@@ -137,7 +136,7 @@ export class ActionRepositoryHttp implements IActionRepository {
 
       return response.data.action
     } catch (error: any) {
-      throw new Error('Error updating action: ' + error.message)
+      throw new Error('Error updating action: ' + error.response.data)
     }
   }
 
@@ -314,10 +313,10 @@ export class ActionRepositoryHttp implements IActionRepository {
   async createAction(
     startDate: number,
     title: string,
-    description: string,
     endDate: number,
     duration: number,
     projectCode: string,
+    description?: string,
     storyId?: number,
     associatedMembersUserIds?: string[],
     stackTags?: STACK[],
@@ -333,7 +332,7 @@ export class ActionRepositoryHttp implements IActionRepository {
       start_date: startDate,
       story_id: storyId,
       title: title,
-      description: description,
+      description,
       end_date: endDate,
       duration: duration,
       project_code: projectCode,
@@ -357,26 +356,7 @@ export class ActionRepositoryHttp implements IActionRepository {
       console.log(response.data.message)
       return response.data.action
     } catch (error: any) {
-      throw new Error('Error creating action: ' + error.message)
-    }
-  }
-
-  async getMember(): Promise<Member> {
-    try {
-      const token = localStorage.getItem('idToken')
-      if (!token) {
-        throw new Error('Token not found')
-      }
-      const response = await this.http.get<JsonProps>('/get-member', {
-        headers: {
-          Authorization: 'Bearer ' + token
-        }
-      })
-
-      const member = Member.fromJSON(response.data)
-      return member
-    } catch (error: any) {
-      throw new Error('Error Getting All Members: ' + error.message)
+      throw new Error('Error creating action: ' + error.response.data)
     }
   }
 
@@ -440,7 +420,7 @@ export class ActionRepositoryHttp implements IActionRepository {
         }
       })
     } catch (error: any) {
-      throw new Error('Error deleting action: ' + error.message)
+      throw new Error('Error deleting action: ' + error.response.data)
     }
   }
 }
