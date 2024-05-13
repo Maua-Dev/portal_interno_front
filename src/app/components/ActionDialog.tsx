@@ -61,7 +61,7 @@ export default function ActionDialog({ action, children }: ActionDialogProps) {
         <DialogPrimitive.Trigger asChild>{children}</DialogPrimitive.Trigger>
         <DialogPrimitive.Overlay className="fixed inset-0 z-40 opacity-70 backdrop-blur-sm" />
         <DialogPrimitive.DialogContent
-          className={`scrollbar-hide-default absolute top-0 z-50 m-auto my-auto flex h-2/6 w-5/6 flex-col gap-16 overflow-x-hidden overflow-y-scroll rounded-md border border-skin-muted px-4 py-10 text-skin-base outline-none sm:h-fit sm:w-4/6 sm:py-20 md:px-10 xl:w-6/12 xl:scrollbar-hide ${
+          className={`scrollbar-hide-default fixed bottom-0 top-0 z-50 my-auto flex h-4/6 w-5/6 flex-col gap-16 overflow-x-hidden overflow-y-scroll rounded-md border border-skin-muted px-4 py-10 text-skin-base outline-none sm:w-4/6 md:h-fit md:px-10 md:py-20 xl:w-6/12 xl:scrollbar-hide ${
             theme ? 'bg-skin-fill' : 'bg-skin-secundary'
           }`}
         >
@@ -203,9 +203,7 @@ function SameDayTimeLine({ action }: TimeLinesProps) {
         <Timer className="h-4 w-4" />
         Duração:{' '}
         <span className="font-semibold text-skin-base">
-          {millisecondsToHours(action.duration) > 1
-            ? millisecondsToHours(action.duration) + ' horas'
-            : millisecondsToHours(action.duration) + ' hora'}
+          {millisecondsToHours(action.duration)} hrs
         </span>
       </h1>
     </div>
