@@ -7,15 +7,7 @@ export const http = axios.create({
   baseURL: import.meta.env.VITE_MSS_API_URL
 })
 
-let stage: string;
-
-if (import.meta.env.VITE_STAGE == 'prod'){
-  stage = 'prod'
-}
-else{
-  stage = 'dev'
-}
-
+const stage = import.meta.env.VITE_STAGE === 'prod' ? 'prod' : 'dev'
 
 http.interceptors.response.use(
   (response) => {
