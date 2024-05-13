@@ -129,14 +129,20 @@ export default function ActionDialog({ action, children }: ActionDialogProps) {
                   className={`flex gap-2 pl-2 sm:w-fit ${
                     action.stackTags.length > 5
                       ? 'flex-col items-start '
-                      : 'flex-row items-start sm:items-center'
-                  } ${ONE_DAY_ACTION ? 'lg:pt-5' : null}`}
+                      : 'flex-row items-start'
+                  }`}
                 >
                   <h1 className="flex flex-row items-center gap-2 font-light text-skin-muted">
                     <Building2 className="h-4 w-4" />
                     Áreas:
                   </h1>
-                  <div className="flex w-44 flex-col gap-2 sm:flex-row">
+                  <div
+                    className={`w-full gap-2 sm:flex-row ${
+                      ONE_DAY_ACTION
+                        ? 'flex flex-col sm:col-auto sm:grid sm:grid-cols-2 sm:pt-1'
+                        : 'flex flex-col'
+                    }`}
+                  >
                     {action.stackTags.map((stack, key) => {
                       return <Tag key={key} variant={stack} />
                     })}
