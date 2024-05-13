@@ -8,7 +8,6 @@ import { CreateAssociatedActionUsecase } from '../../../modules/action/usecases/
 import { GetHistoryUsecase } from '../../../modules/action/usecases/get_history_usecase'
 import { UpdateActionUsecase } from '../../../modules/action/usecases/update_action_usecase'
 import { UpdateActionValidationUsecase } from '../../../modules/action/usecases/update_action_validation'
-import { GetAllProjectsUsecase } from '../../../modules/action/usecases/get_all_projects_usecase'
 import { DeleteActionUsecase } from '../../../modules/action/usecases/delete_action_usecase'
 
 export const RegistryAction = {
@@ -25,7 +24,6 @@ export const RegistryAction = {
   GetHistoryUsecase: Symbol.for('GetHistoryUsecase'),
   UpdateActionUsecase: Symbol.for('UpdateActionUsecase'),
   UpdateActionValidationUsecase: Symbol.for('UpdateActionValidationUsecase'),
-  GetAllProjectsUsecase: Symbol.for('GetAllProjectsUsecase'),
   DeleteActionUsecase: Symbol.for('DeleteActionUsecase')
 }
 
@@ -152,27 +150,6 @@ containerAction
       )
     } else {
       return new UpdateActionValidationUsecase(
-        context.container.get(RegistryAction.ActionRepositoryMock)
-      )
-    }
-  })
-
-containerAction
-  .bind(RegistryAction.GetAllProjectsUsecase)
-  .toDynamicValue((context) => {
-    if (import.meta.env.VITE_STAGE === 'TEST') {
-      return new GetAllProjectsUsecase(
-        context.container.get(RegistryAction.ActionRepositoryMock)
-      )
-    } else if (
-      import.meta.env.VITE_STAGE === 'DEV' ||
-      import.meta.env.VITE_STAGE === 'PROD'
-    ) {
-      return new GetAllProjectsUsecase(
-        context.container.get(RegistryAction.ActionRepositoryHttp)
-      )
-    } else {
-      return new GetAllProjectsUsecase(
         context.container.get(RegistryAction.ActionRepositoryMock)
       )
     }

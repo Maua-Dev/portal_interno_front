@@ -19,6 +19,7 @@ import { ActionContext } from '../contexts/action_context'
 import { ModalContext } from '../contexts/modal_context'
 import Historic from './Historic'
 import { Selector } from './Selector'
+import { ProjectContext } from '../contexts/project_context'
 
 const actionSchema = z.object({
   title: z.string().min(1, { message: 'Título é obrigatório' }),
@@ -68,8 +69,9 @@ export default function ActionModal({ action }: { action?: Action }) {
 
   // Contexts
   const { closeModal, changeModalContent } = useContext(ModalContext)
-  const { updateAction, createAction, getAllProjects } =
+  const { updateAction, createAction } =
     useContext(ActionContext)
+  const { getAllProjects } = useContext(ProjectContext)
 
   // Use state
   const [isLoading, setIsLoading] = useState<boolean>(false)
