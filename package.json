@@ -7,7 +7,7 @@
     "build": "tsc && vite build",
     "build:tailwind": "tailwindcss build -o src/output.css",
     "lint": "eslint src",
-    "lint --fix": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix",
+    "lint:fix": "eslint src --fix",
     "test": "vitest",
     "test:debug": "vitest --debug",
     "test:run": "vitest run"
