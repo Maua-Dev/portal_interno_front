@@ -1,4 +1,5 @@
 import { Project } from '../../../../shared/domain/entities/project'
+import { ProjectType } from '../../../../shared/infra/repositories/project_repository_http'
 
 export interface IProjectRepository {
   createProject(
@@ -14,7 +15,7 @@ export interface IProjectRepository {
 
   deleteProject(code: string): Promise<Project>
 
-  getAllProjects(): Promise<Project[]>
+  getAllProjects(): Promise<ProjectType[]>
 
   getProject(code: string): Promise<Project>
 

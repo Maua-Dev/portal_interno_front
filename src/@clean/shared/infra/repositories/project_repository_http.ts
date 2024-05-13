@@ -3,6 +3,16 @@ import { IProjectRepository } from '../../../modules/project/domain/repositories
 import { JsonProps, Project } from '../../domain/entities/project'
 import { decorate, injectable } from 'inversify'
 
+export type ProjectType = {
+  code: string
+  description: string
+  membersUserIds: string[]
+  name: string
+  photos: string[]
+  poUserId: string
+  scrumUserId: string
+  startDate: number
+}
 export class ProjectRepositoryHttp implements IProjectRepository {
   constructor(private readonly http: AxiosInstance) {}
 
@@ -73,7 +83,8 @@ export class ProjectRepositoryHttp implements IProjectRepository {
       return error.response.data
     }
   }
-  async getAllProjects() {
+
+  async getAllProjects(): Promise<ProjectType[]> {
     try {
       const token = localStorage.getItem('idToken')
 
@@ -86,8 +97,12 @@ export class ProjectRepositoryHttp implements IProjectRepository {
           Authorization: 'Bearer ' + token
         }
       })
-
-      return response.data
+      const responseFormatted = response.data.projects.map(
+        (project: { project: ProjectType }) => {
+          return project.project
+        }
+      )
+      return responseFormatted
     } catch (error: any) {
       throw new Error('Error getting all projects: ' + error.message)
     }
