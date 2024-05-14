@@ -67,8 +67,6 @@ export class MemberRepositoryHttp implements IMemberRepository {
         }
       )
 
-      console.log(response.data)
-
       const member = Member.fromJSON(response.data)
 
       return member

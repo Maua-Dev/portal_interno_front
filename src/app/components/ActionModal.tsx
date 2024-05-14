@@ -121,7 +121,6 @@ export default function ActionModal({ action }: { action?: Action }) {
         data.actionTypeTag
       )
 
-      console.log(createdAction)
       if (createdAction) {
         closeModal()
       }
@@ -134,7 +133,6 @@ export default function ActionModal({ action }: { action?: Action }) {
 
   const handleUpdateActionSubmit = async (data: ActionModalType) => {
     setIsLoading(true)
-    console.log('Update Action')
     console.table(data)
     try {
       const updatedAction = await updateAction(
@@ -150,7 +148,6 @@ export default function ActionModal({ action }: { action?: Action }) {
         data.stackTags,
         data.actionTypeTag
       )
-      console.log(updatedAction)
       if (updatedAction) {
         changeModalContent(<Historic />)
       }

@@ -298,7 +298,6 @@ export function ActionProvider({ children }: PropsWithChildren) {
         newStackTags,
         newActionTypeTag
       )
-      console.log(updatedAction)
       setActionSuccess('Atividade atualizada com sucesso!')
       return updatedAction
     } catch (error: any) {
