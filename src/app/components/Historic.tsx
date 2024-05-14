@@ -6,6 +6,7 @@ import HistoricActionCard from './HistoricActionCard'
 import { ActionContext } from '../contexts/action_context'
 import Loader from './little_components/Loader'
 import { stackToEnum } from '../../@clean/shared/domain/enums/stack_enum'
+import { SearchX } from 'lucide-react'
 
 interface FilterProps {
   [key: string]: string
@@ -21,10 +22,11 @@ interface lastEvaluatedKey {
 }
 
 export default function Historic() {
-  const [localHistory, setLocalHistory] = useState<Action[]>([])
+  const [localHistory, setLocalHistory] = useState<Action[] | undefined>(
+    undefined
+  )
   const [_lastEvaluatedKey, setLastEvaluatedKey] =
     useState<lastEvaluatedKey | null>()
-  const [searchText, setSearchText] = useState<string>('')
   const { getHistory } = useContext(ActionContext)
   const [filterProps, setFilterProps] = useState<FilterProps>({
     searchText: '',
@@ -48,7 +50,9 @@ export default function Historic() {
       const response = await getHistory(undefined, undefined, AMOUNT, lastKey)
 
       if (lastKey) {
-        setLocalHistory((prev) => prev.concat(response.actions))
+        setLocalHistory((prev) =>
+          prev ? prev.concat(response.actions) : response.actions
+        )
       } else {
         setLocalHistory(response.actions)
       }
@@ -59,8 +63,13 @@ export default function Historic() {
     }
   }
 
-  const filteredActions = useMemo(() => {
+  const filteredActions: Action[] = useMemo(() => {
+    if (!localHistory) {
+      return []
+    }
+
     if (
+      filterProps.searchText === '' &&
       filterProps.project === '' &&
       filterProps.area === '' &&
       filterProps.orderBy === ''
@@ -69,6 +78,16 @@ export default function Historic() {
     }
 
     let currentActions: Action[] = localHistory
+
+    if (filterProps.searchText !== '') {
+      const searchTextLowerCase = filterProps.searchText.toLowerCase()
+      currentActions = currentActions.filter(
+        (action) =>
+          action.title.toLowerCase().includes(searchTextLowerCase) ||
+          action.description.toLowerCase().includes(searchTextLowerCase) ||
+          action.storyId.toString().includes(searchTextLowerCase)
+      )
+    }
 
     if (filterProps.project) {
       currentActions = currentActions.filter(
@@ -110,7 +129,7 @@ export default function Historic() {
 
   useEffect(() => {
     clearFilter()
-    if (localHistory.length === 0) {
+    if (!localHistory) {
       loadHistoric()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -122,52 +141,30 @@ export default function Historic() {
         setFilterProps={setFilterProps}
         filterProps={filterProps}
         className="z-30"
-        setSearchText={setSearchText}
       />
       {filteredActions.length !== 0 ? (
-        <div className="flex h-fit w-full flex-col items-center gap-2 ">
-          {filteredActions
-            .filter((actionUnit) => {
-              const searchTextLowerCase = searchText.toLowerCase()
-
-              return searchTextLowerCase === ''
-                ? actionUnit
-                : actionUnit.title
-                    .toLowerCase()
-                    .includes(searchTextLowerCase) ||
-                    actionUnit.description
-                      .toLowerCase()
-                      .includes(searchTextLowerCase) ||
-                    actionUnit.storyId.toString().includes(searchTextLowerCase)
-            })
-            .map((actionUnit, index) => {
-              if (filteredActions.length === index) {
-                return (
-                  <HistoricActionCard
-                    // ref={lastActionOnHistory}
-                    className="z-10 hover:z-20"
-                    key={index}
-                    action={actionUnit}
-                    setHistory={setLocalHistory}
-                  />
-                )
-              }
-              return (
-                <HistoricActionCard
-                  className="z-10 hover:z-20"
-                  key={index}
-                  action={actionUnit}
-                  setHistory={setLocalHistory}
-                />
-              )
-            })}
+        <div
+          className={`flex h-fit w-full flex-col items-center gap-2 ${
+            filteredActions.length < 10 ? 'h-screen' : null
+          } `}
+        >
+          {filteredActions.map((actionUnit, index) => {
+            return (
+              <HistoricActionCard
+                className="z-10 hover:z-20"
+                key={index + '' + actionUnit.actionId}
+                action={actionUnit}
+                setHistory={setLocalHistory}
+              />
+            )
+          })}
           <h1
             className={`pb-8 pt-8 text-skin-muted duration-150
-            ${
-              _lastEvaluatedKey !== null
-                ? 'cursor-pointer hover:text-skin-base'
-                : null
-            }`}
+              ${
+                _lastEvaluatedKey !== null
+                  ? 'cursor-pointer hover:text-skin-base'
+                  : null
+              }`}
             onClick={() => {
               if (_lastEvaluatedKey !== null) {
                 loadHistoric(_lastEvaluatedKey)
@@ -177,9 +174,22 @@ export default function Historic() {
             {_lastEvaluatedKey === null ? 'Sem Mais Itens' : 'Ver Mais'}
           </h1>
         </div>
+      ) : localHistory ? (
+        <NoActionsFoundComponent />
       ) : (
         <Loader />
       )}
+    </div>
+  )
+}
+
+function NoActionsFoundComponent() {
+  return (
+    <div className="flex h-screen w-4/5 items-start justify-center">
+      <div className="flex h-44 w-full flex-row items-center justify-center gap-2 border border-skin-muted bg-skin-secundary text-2xl font-bold text-skin-muted">
+        <SearchX className="w-7w h-7" />
+        <p>Ações não encontradas.</p>
+      </div>
     </div>
   )
 }
