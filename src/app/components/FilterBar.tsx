@@ -1,3 +1,4 @@
+/* eslint-disable react/no-children-prop */
 /* eslint-disable prettier/prettier */
 import Card from './little_components/Card'
 import SearchField from './little_components/SearchField'
@@ -18,7 +19,6 @@ import { SlidersHorizontal } from 'lucide-react'
 import { FilterTag } from './little_components/Tags'
 
 interface FilterBarProps extends HTMLAttributes<HTMLDivElement> {
-  setSearchText: (search: string) => void
   setFilterProps: (props: React.SetStateAction<FilterProps>) => void
   filterProps: FilterProps
 }
@@ -32,7 +32,6 @@ interface FilterProps {
 }
 
 export default function FilterBar({
-  setSearchText,
   setFilterProps,
   filterProps,
   ...props
@@ -59,7 +58,15 @@ export default function FilterBar({
     setLocalFilterProps(emptyFilterProps)
   }
 
-  function handleFilterData(event: React.ChangeEvent<HTMLSelectElement>) {
+  function handleInputFilterData(event: React.ChangeEvent<HTMLInputElement>) {
+    const { value } = event.target
+    setFilterProps((prev) => ({
+      ...prev,
+      searchText: value
+    }))
+  }
+
+  function handleSelectFilterData(event: React.ChangeEvent<HTMLSelectElement>) {
     const { name, value } = event.target
     setLocalFilterProps((prev) => ({
       ...prev,
@@ -79,7 +86,7 @@ export default function FilterBar({
     value: any,
     index: number
   ): JSX.Element {
-    if (value !== '') {
+    if (value !== '' && key !== 'searchText') {
       return (
         <FilterTag
           key={index}
@@ -111,45 +118,73 @@ export default function FilterBar({
     >
       <div className="flex flex-row items-center gap-5">
         <div className="flex flex-row items-center gap-2">
-          {searchOpen ? <HoverCard placeholder={'Voltar'}><Button variant='icon' onClick={() => {setSearchOpen(false)}}><MoveLeft /></Button></HoverCard> : <><History className="h-8 w-8" />
-            <Text size="2xl" className='font-semibold'>Histórico</Text></>}
+          {searchOpen ? (
+            <HoverCard placeholder={'Voltar'}>
+              <Button
+                variant="icon"
+                onClick={() => {
+                  setSearchOpen(false)
+                }}
+              >
+                <MoveLeft />
+              </Button>
+            </HoverCard>
+          ) : (
+            <>
+              <History className="h-8 w-8" />
+              <Text size="2xl" className="font-semibold">
+                Histórico
+              </Text>
+            </>
+          )}
         </div>
         <div>
           <SearchField
             placeholder="Pesquisar"
-            className={`${searchOpen ? 'block' : 'hidden'} w-4/5 sm:w-64 md:block lg:w-72`}
-            onChange={(event) => {
-              setSearchText(event.currentTarget.value)
-            }}
-          /></div>
+            className={`${
+              searchOpen ? 'block' : 'hidden'
+            } w-4/5 sm:w-64 md:block lg:w-72`}
+            onChange={handleInputFilterData}
+          />
+        </div>
         <div className="hidden min-w-full flex-row gap-4 lg:flex">
           {filterProps !== emptyFilterProps
             ? Object.entries(filterProps).map(([key, value], index) => {
-              return renderFilterTags(key, value, index)
-            })
+                return (
+                  <div key={key + '' + index}>
+                    {renderFilterTags(key, value, index)}
+                  </div>
+                )
+              })
             : null}
         </div>
       </div>
       <div className="flex h-full flex-row">
-        <HoverCard placeholder='Pesquisar'>
-          <Button variant='default' className={`h-fit w-fit p-2 md:hidden ${searchOpen ? 'hidden' : ''}`} onClick={() => {
-            setSearchOpen(true)
-          }}>
-            <Search className='text-skin-base h-5' />
+        <HoverCard placeholder="Pesquisar">
+          <Button
+            variant="default"
+            className={`h-fit w-fit p-2 md:hidden ${
+              searchOpen ? 'hidden' : ''
+            }`}
+            onClick={() => {
+              setSearchOpen(true)
+            }}
+          >
+            <Search className="h-5 text-skin-base" />
           </Button>
         </HoverCard>
         <Popover open={popUpOpen}>
           <PopoverTrigger>
-            <HoverCard placeholder='Filtrar' className='md:hidden'>
+            <HoverCard placeholder="Filtrar" className="md:hidden">
               <Button
                 variant="default"
-                className='p-2 md:px-4'
+                className="p-2 md:px-4"
                 onClick={() => {
                   clearFilters()
                   setPopUpOpen((prev) => !prev)
                 }}
               >
-                <p className='md:block hidden'>Filtro</p>
+                <p className="hidden md:block">Filtro</p>
                 <SlidersHorizontal className="h-5 w-5" />
               </Button>
             </HoverCard>
@@ -166,7 +201,7 @@ export default function FilterBar({
                 label="Projetos"
                 name="project"
                 variant="withTextLabel"
-                onChange={handleFilterData}
+                onChange={handleSelectFilterData}
               >
                 <Select.Content value="PI">Portal Interno</Select.Content>
                 <Select.Content value="MF">Mauá Food</Select.Content>
@@ -179,7 +214,7 @@ export default function FilterBar({
                 label="Área"
                 name="area"
                 variant="withTextLabel"
-                onChange={handleFilterData}
+                onChange={handleSelectFilterData}
               >
                 <Select.Content value="FRONTEND">FRONT</Select.Content>
                 <Select.Content value="BACKEND">BACK</Select.Content>
@@ -191,7 +226,7 @@ export default function FilterBar({
                 label="Ordenar Por"
                 name="orderBy"
                 variant="withTextLabel"
-                onChange={handleFilterData}
+                onChange={handleSelectFilterData}
               >
                 <Select.Content value="NEW">Mais Recente</Select.Content>
                 <Select.Content value="OLD">Mais Antigo</Select.Content>
