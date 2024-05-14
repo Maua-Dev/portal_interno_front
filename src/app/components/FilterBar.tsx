@@ -19,7 +19,6 @@ import { SlidersHorizontal } from 'lucide-react'
 import { FilterTag } from './little_components/Tags'
 
 interface FilterBarProps extends HTMLAttributes<HTMLDivElement> {
-  setSearchText: (search: string) => void
   setFilterProps: (props: React.SetStateAction<FilterProps>) => void
   filterProps: FilterProps
 }
@@ -33,7 +32,6 @@ interface FilterProps {
 }
 
 export default function FilterBar({
-  setSearchText,
   setFilterProps,
   filterProps,
   ...props
@@ -60,7 +58,15 @@ export default function FilterBar({
     setLocalFilterProps(emptyFilterProps)
   }
 
-  function handleFilterData(event: React.ChangeEvent<HTMLSelectElement>) {
+  function handleInputFilterData(event: React.ChangeEvent<HTMLInputElement>) {
+    const { value } = event.target
+    setFilterProps((prev) => ({
+      ...prev,
+      searchText: value
+    }))
+  }
+
+  function handleSelectFilterData(event: React.ChangeEvent<HTMLSelectElement>) {
     const { name, value } = event.target
     setLocalFilterProps((prev) => ({
       ...prev,
@@ -80,7 +86,7 @@ export default function FilterBar({
     value: any,
     index: number
   ): JSX.Element {
-    if (value !== '') {
+    if (value !== '' && key !== 'searchText') {
       return (
         <FilterTag
           key={index}
@@ -138,9 +144,7 @@ export default function FilterBar({
             className={`${
               searchOpen ? 'block' : 'hidden'
             } w-4/5 sm:w-64 md:block lg:w-72`}
-            onChange={(event) => {
-              setSearchText(event.currentTarget.value)
-            }}
+            onChange={handleInputFilterData}
           />
         </div>
         <div className="hidden min-w-full flex-row gap-4 lg:flex">
@@ -197,7 +201,7 @@ export default function FilterBar({
                 label="Projetos"
                 name="project"
                 variant="withTextLabel"
-                onChange={handleFilterData}
+                onChange={handleSelectFilterData}
               >
                 <Select.Content value="PI">Portal Interno</Select.Content>
                 <Select.Content value="MF">Mauá Food</Select.Content>
@@ -210,7 +214,7 @@ export default function FilterBar({
                 label="Área"
                 name="area"
                 variant="withTextLabel"
-                onChange={handleFilterData}
+                onChange={handleSelectFilterData}
               >
                 <Select.Content value="FRONTEND">FRONT</Select.Content>
                 <Select.Content value="BACKEND">BACK</Select.Content>
@@ -222,7 +226,7 @@ export default function FilterBar({
                 label="Ordenar Por"
                 name="orderBy"
                 variant="withTextLabel"
-                onChange={handleFilterData}
+                onChange={handleSelectFilterData}
               >
                 <Select.Content value="NEW">Mais Recente</Select.Content>
                 <Select.Content value="OLD">Mais Antigo</Select.Content>

@@ -24,7 +24,6 @@ export default function Historic() {
   const [localHistory, setLocalHistory] = useState<Action[]>([])
   const [_lastEvaluatedKey, setLastEvaluatedKey] =
     useState<lastEvaluatedKey | null>()
-  const [searchText, setSearchText] = useState<string>('')
   const { getHistory } = useContext(ActionContext)
   const [filterProps, setFilterProps] = useState<FilterProps>({
     searchText: '',
@@ -61,6 +60,7 @@ export default function Historic() {
 
   const filteredActions = useMemo(() => {
     if (
+      filterProps.searchText === '' &&
       filterProps.project === '' &&
       filterProps.area === '' &&
       filterProps.orderBy === ''
@@ -69,6 +69,16 @@ export default function Historic() {
     }
 
     let currentActions: Action[] = localHistory
+
+    if (filterProps.searchText !== '') {
+      const searchTextLowerCase = filterProps.searchText.toLowerCase()
+      currentActions = currentActions.filter(
+        (action) =>
+          action.title.toLowerCase().includes(searchTextLowerCase) ||
+          action.description.toLowerCase().includes(searchTextLowerCase) ||
+          action.storyId.toString().includes(searchTextLowerCase)
+      )
+    }
 
     if (filterProps.project) {
       currentActions = currentActions.filter(
@@ -116,51 +126,29 @@ export default function Historic() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  useEffect(() => {
+    console.log(filterProps)
+  }, [filterProps])
+
   return (
     <div className="flex h-fit w-full flex-col items-center justify-center gap-2 py-20 pl-0 md:py-10 md:pl-14">
       <FilterBar
         setFilterProps={setFilterProps}
         filterProps={filterProps}
         className="z-30"
-        setSearchText={setSearchText}
       />
       {filteredActions.length !== 0 ? (
         <div className="flex h-fit w-full flex-col items-center gap-2 ">
-          {filteredActions
-            .filter((actionUnit) => {
-              const searchTextLowerCase = searchText.toLowerCase()
-
-              return searchTextLowerCase === ''
-                ? actionUnit
-                : actionUnit.title
-                    .toLowerCase()
-                    .includes(searchTextLowerCase) ||
-                    actionUnit.description
-                      .toLowerCase()
-                      .includes(searchTextLowerCase) ||
-                    actionUnit.storyId.toString().includes(searchTextLowerCase)
-            })
-            .map((actionUnit, index) => {
-              if (filteredActions.length === index) {
-                return (
-                  <HistoricActionCard
-                    // ref={lastActionOnHistory}
-                    className="z-10 hover:z-20"
-                    key={index}
-                    action={actionUnit}
-                    setHistory={setLocalHistory}
-                  />
-                )
-              }
-              return (
-                <HistoricActionCard
-                  className="z-10 hover:z-20"
-                  key={index}
-                  action={actionUnit}
-                  setHistory={setLocalHistory}
-                />
-              )
-            })}
+          {filteredActions.map((actionUnit, index) => {
+            return (
+              <HistoricActionCard
+                className="z-10 hover:z-20"
+                key={index + '' + actionUnit.actionId}
+                action={actionUnit}
+                setHistory={setLocalHistory}
+              />
+            )
+          })}
           <h1
             className={`pb-8 pt-8 text-skin-muted duration-150
             ${
