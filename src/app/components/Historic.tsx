@@ -6,6 +6,7 @@ import HistoricActionCard from './HistoricActionCard'
 import { ActionContext } from '../contexts/action_context'
 import Loader from './little_components/Loader'
 import { stackToEnum } from '../../@clean/shared/domain/enums/stack_enum'
+import { SearchX } from 'lucide-react'
 
 interface FilterProps {
   [key: string]: string
@@ -126,10 +127,6 @@ export default function Historic() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  useEffect(() => {
-    console.log(filterProps)
-  }, [filterProps])
-
   return (
     <div className="flex h-fit w-full flex-col items-center justify-center gap-2 py-20 pl-0 md:py-10 md:pl-14">
       <FilterBar
@@ -138,7 +135,11 @@ export default function Historic() {
         className="z-30"
       />
       {filteredActions.length !== 0 ? (
-        <div className="flex h-fit w-full flex-col items-center gap-2 ">
+        <div
+          className={`flex h-fit w-full flex-col items-center gap-2 ${
+            filteredActions.length < 10 ? 'h-screen' : null
+          } `}
+        >
           {filteredActions.map((actionUnit, index) => {
             return (
               <HistoricActionCard
@@ -165,9 +166,22 @@ export default function Historic() {
             {_lastEvaluatedKey === null ? 'Sem Mais Itens' : 'Ver Mais'}
           </h1>
         </div>
+      ) : localHistory.length !== 0 ? (
+        <NoActionsFoundComponent />
       ) : (
         <Loader />
       )}
+    </div>
+  )
+}
+
+function NoActionsFoundComponent() {
+  return (
+    <div className="flex h-screen w-4/5 items-start justify-center">
+      <div className="flex h-44 w-full flex-row items-center justify-center gap-2 border border-skin-muted bg-skin-secundary text-2xl font-bold text-skin-muted">
+        <SearchX className="w-7w h-7" />
+        <p>Ações não encontradas.</p>
+      </div>
     </div>
   )
 }
