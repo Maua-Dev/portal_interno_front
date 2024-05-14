@@ -27,7 +27,7 @@ type actionStates = 'rejected' | 'waiting' | 'approved'
 
 interface HistoricActionCardProps extends HTMLAttributes<HTMLDivElement> {
   action: Action
-  setHistory: React.Dispatch<React.SetStateAction<Action[]>>
+  setHistory: React.Dispatch<React.SetStateAction<Action[] | undefined>>
 }
 
 export default function HistoricActionCard({
@@ -56,7 +56,9 @@ export default function HistoricActionCard({
   }
 
   const handleDeleteAction = async (actionId: string) => {
-    setHistory((prev) => prev.filter((item) => item.actionId !== actionId))
+    setHistory((prev) =>
+      prev ? prev.filter((item) => item.actionId !== actionId) : []
+    )
 
     if (confirm('Deseja excluir a sua ação?')) {
       await deleteAction(actionId)
