@@ -22,7 +22,9 @@ interface lastEvaluatedKey {
 }
 
 export default function Historic() {
-  const [localHistory, setLocalHistory] = useState<Action[]>([])
+  const [localHistory, setLocalHistory] = useState<Action[] | undefined>(
+    undefined
+  )
   const [_lastEvaluatedKey, setLastEvaluatedKey] =
     useState<lastEvaluatedKey | null>()
   const { getHistory } = useContext(ActionContext)
@@ -48,7 +50,9 @@ export default function Historic() {
       const response = await getHistory(undefined, undefined, AMOUNT, lastKey)
 
       if (lastKey) {
-        setLocalHistory((prev) => prev.concat(response.actions))
+        setLocalHistory((prev) =>
+          prev ? prev.concat(response.actions) : response.actions
+        )
       } else {
         setLocalHistory(response.actions)
       }
@@ -59,7 +63,11 @@ export default function Historic() {
     }
   }
 
-  const filteredActions = useMemo(() => {
+  const filteredActions: Action[] = useMemo(() => {
+    if (!localHistory) {
+      return []
+    }
+
     if (
       filterProps.searchText === '' &&
       filterProps.project === '' &&
@@ -121,7 +129,7 @@ export default function Historic() {
 
   useEffect(() => {
     clearFilter()
-    if (localHistory.length === 0) {
+    if (!localHistory) {
       loadHistoric()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -152,11 +160,11 @@ export default function Historic() {
           })}
           <h1
             className={`pb-8 pt-8 text-skin-muted duration-150
-            ${
-              _lastEvaluatedKey !== null
-                ? 'cursor-pointer hover:text-skin-base'
-                : null
-            }`}
+              ${
+                _lastEvaluatedKey !== null
+                  ? 'cursor-pointer hover:text-skin-base'
+                  : null
+              }`}
             onClick={() => {
               if (_lastEvaluatedKey !== null) {
                 loadHistoric(_lastEvaluatedKey)
@@ -166,7 +174,7 @@ export default function Historic() {
             {_lastEvaluatedKey === null ? 'Sem Mais Itens' : 'Ver Mais'}
           </h1>
         </div>
-      ) : localHistory.length !== 0 ? (
+      ) : localHistory ? (
         <NoActionsFoundComponent />
       ) : (
         <Loader />
