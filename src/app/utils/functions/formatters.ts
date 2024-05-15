@@ -1,6 +1,5 @@
 function raFormatterToJson(input: string): string {
   const raFormated = input.replace(/[^\d]/g, '')
-  // console.log(raFormated)
   return raFormated
 }
 
@@ -9,7 +8,6 @@ function associatedMembersRaFormatter(raArray: string[]): string[] {
   raArray.forEach((raMember) => {
     associatedMembersRaFormatted.push(raFormatterToJson(raMember))
   })
-  // console.log(associatedMembersRaFormatted)
   return associatedMembersRaFormatted
 }
 
