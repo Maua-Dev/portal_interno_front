@@ -58,7 +58,9 @@ export default function Historic() {
       }
 
       setLastEvaluatedKey(response.lastEvaluatedKey)
-    } catch (error) {}
+    } catch (error) {
+      console.log('Error: ' + error)
+    }
   }
 
   const filteredActions: Action[] = useMemo(() => {
