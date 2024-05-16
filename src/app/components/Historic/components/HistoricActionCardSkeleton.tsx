@@ -1,4 +1,4 @@
-import Card from './Card'
+import Card from '../../Card'
 import { BsThreeDots } from 'react-icons/bs'
 import { HTMLAttributes } from 'react'
 import { twMerge } from 'tailwind-merge'

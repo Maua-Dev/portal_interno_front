@@ -1,7 +1,7 @@
 import { HTMLAttributes, ReactElement, useContext, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
-import { ThemeContext } from '../../contexts/theme_context'
-import Text from './Text'
+import { ThemeContext } from '../contexts/theme_context'
+import Text from './FilterBar/components/Text'
 import {
   X,
   Code2,
