@@ -1,11 +1,11 @@
 /* eslint-disable indent */
 import { useContext, useEffect, useMemo, useState } from 'react'
-import { Action } from '../../@clean/shared/domain/entities/action'
-import FilterBar from './FilterBar'
-import HistoricActionCard from './HistoricActionCard'
-import { ActionContext } from '../contexts/action_context'
-import Loader from './little_components/Loader'
-import { stackToEnum } from '../../@clean/shared/domain/enums/stack_enum'
+import { Action } from '../../../@clean/shared/domain/entities/action'
+import FilterBar from '../FilterBar'
+import HistoricActionCard from '../HistoricActionCard'
+import { ActionContext } from '../../contexts/action_context'
+import Loader from './components/Loader'
+import { stackToEnum } from '../../../@clean/shared/domain/enums/stack_enum'
 import { SearchX } from 'lucide-react'
 
 interface FilterProps {
