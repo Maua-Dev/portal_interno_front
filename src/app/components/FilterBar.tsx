@@ -1,6 +1,6 @@
 /* eslint-disable react/no-children-prop */
 /* eslint-disable prettier/prettier */
-import Card from './little_components/Card'
+import Card from './Card'
 import SearchField from './little_components/SearchField'
 import Text from './little_components/Text'
 import { MoveLeft, History, Search, X } from 'lucide-react'
@@ -10,13 +10,13 @@ import {
   PopoverContent,
   PopoverTrigger,
   PopoverArrow
-} from '../components/little_components/Popover'
+} from './Historic/components/Popover'
 import * as Select from '../components/little_components/Select'
-import Button from './little_components/Button'
+import Button from './Historic/components/Button'
 import React, { HTMLAttributes, useEffect, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { SlidersHorizontal } from 'lucide-react'
-import { FilterTag } from './little_components/Tags'
+import { FilterTag } from './Tags'
 
 interface FilterBarProps extends HTMLAttributes<HTMLDivElement> {
   setFilterProps: (props: React.SetStateAction<FilterProps>) => void

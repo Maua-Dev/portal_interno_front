@@ -2,7 +2,7 @@
 import { useContext, useEffect, useMemo, useState } from 'react'
 import { Action } from '../../../@clean/shared/domain/entities/action'
 import FilterBar from '../FilterBar'
-import HistoricActionCard from '../HistoricActionCard'
+import HistoricActionCard from './components/HistoricActionCard'
 import { ActionContext } from '../../contexts/action_context'
 import Loader from './components/Loader'
 import { stackToEnum } from '../../../@clean/shared/domain/enums/stack_enum'

@@ -1,4 +1,4 @@
-import HistoricActionCardSkeleton from '../../little_components/HistoricActionCardSkeleton'
+import HistoricActionCardSkeleton from './HistoricActionCardSkeleton'
 
 export default function Loader() {
   return (
