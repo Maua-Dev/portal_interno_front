@@ -55,11 +55,9 @@ export function SelectorModal({
         selectedMembers.map((m) => m.userId)
       )
       setSelectedMembersModal!(selectedMembers.map((m) => m.userId))
-      console.log(selectedMembers)
     } else {
       setValue('stackTags', selectedStacks)
       setSelectedStacksModal!(selectedStacks)
-      console.log(selectedStacks)
     }
     setIsSelectorModalOpen(false)
   }
