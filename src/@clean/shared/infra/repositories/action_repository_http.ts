@@ -163,8 +163,6 @@ export class ActionRepositoryHttp implements IActionRepository {
       }
     }
 
-    console.log(exclusiveStartKey)
-
     try {
       if (
         amount !== undefined &&
@@ -226,8 +224,6 @@ export class ActionRepositoryHttp implements IActionRepository {
           response.lastEvaluatedKey = null
         }
       } else if (amount !== undefined && exclusiveStartKey !== undefined) {
-        console.log('here')
-        console.log(exclusiveStartKey)
         const thirdCase = await this.http.post<getHistoryRawResponse>(
           '/get-history',
           {
@@ -244,8 +240,6 @@ export class ActionRepositoryHttp implements IActionRepository {
           }
         )
 
-        console.log(thirdCase)
-
         for (let i = 0; i < thirdCase.data.actions.length; i++) {
           response.actions.push(Action.fromJSON(thirdCase.data.actions[i]))
         }
@@ -259,11 +253,8 @@ export class ActionRepositoryHttp implements IActionRepository {
           response.lastEvaluatedKey = null
         }
 
-        console.log(response)
         return response
       } else if (amount !== undefined) {
-        console.log('here')
-        console.log(exclusiveStartKey)
         const fourthCase = await this.http.post<getHistoryRawResponse>(
           '/get-history',
           {
@@ -341,8 +332,6 @@ export class ActionRepositoryHttp implements IActionRepository {
       action_type_tag: actionTypeTag?.toString() || undefined
     }
 
-    console.log(bodyRequest)
-
     try {
       const response = await this.http.post<createActionRawResponse>(
         '/create-action',
@@ -353,7 +342,6 @@ export class ActionRepositoryHttp implements IActionRepository {
           }
         }
       )
-      console.log(response.data.message)
       return response.data.action
     } catch (error: any) {
       throw new Error('Error creating action: ' + error.response.data)
@@ -393,7 +381,6 @@ export class ActionRepositoryHttp implements IActionRepository {
           }
         }
       )
-      // console.log(response.data)
 
       // const member = Member.fromJSON(response.data)
 

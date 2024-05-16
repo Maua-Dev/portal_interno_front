@@ -174,7 +174,7 @@ export default function FilterBar({
           </Button>
         </HoverCard>
         <Popover open={popUpOpen}>
-          <PopoverTrigger>
+          <PopoverTrigger asChild>
             <HoverCard placeholder="Filtrar" className="md:hidden">
               <Button
                 variant="default"

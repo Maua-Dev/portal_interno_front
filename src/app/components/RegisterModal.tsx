@@ -85,7 +85,6 @@ export default function RegisterModal() {
   const allCourses: string[] = Object.values(COURSE)
 
   const handleRegisterMember = async (data: RegisterModalType) => {
-    console.log(data)
     setIsLoading(true)
 
     const memberResponse = await createMember(
