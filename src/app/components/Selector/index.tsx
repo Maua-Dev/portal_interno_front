@@ -24,7 +24,6 @@ export function Selector({
   stackTags,
   isStackTagSelector
 }: SelectorProps) {
-  // const { darkMode } = useDarkMode()
   const { getMember, getAllMembers } = useContext(MemberContext)
 
   const [isSelectorModalOpen, setIsSelectorModalOpen] = useState<boolean>(false)

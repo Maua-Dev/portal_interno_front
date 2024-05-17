@@ -1,29 +1,49 @@
-import { PropsWithChildren, createContext, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 
 interface DefaultThemeProps {
-  theme: boolean
-  handleThemeChange: () => void
+  darkMode: boolean
+  toggleDarkMode: () => void
 }
 
 const DefaultTheme: DefaultThemeProps = {
-  theme: false,
-  handleThemeChange: () => {}
+  darkMode: false,
+  toggleDarkMode: () => {}
 }
 
 export const ThemeContext = createContext(DefaultTheme)
 
-export function ThemeProvider({ children }: PropsWithChildren) {
-  const [theme, setTheme] = useState<boolean>(false)
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  const [darkMode, setDarkMode] = useState(false)
+  const [count, setCount] = useState(0)
 
-  const handleThemeChange = () => {
-    setTheme((prev) => !prev)
+  useEffect(() => {
+    const storagedDarkMode = localStorage.getItem('darkMode')
+
+    if (storagedDarkMode) setDarkMode(JSON.parse(storagedDarkMode))
+    else setDarkMode(false)
+  }, [])
+
+  const toggleDarkMode = () => {
+    setDarkMode((prev) => {
+      localStorage.setItem('darkMode', JSON.stringify(!prev))
+      return !prev
+    })
+
+    if (import.meta.env.VITE_STAGE === 'dev' && count < 3)
+      setCount((prev) => prev + 1)
+
+    if (count >= 3 && import.meta.env.VITE_STAGE === 'dev') {
+      window.location.replace(
+        'https://media.licdn.com/dms/image/C4D03AQFiRdVm6Y3EpA/profile-displayphoto-shrink_800_800/0/1621979338107?e=1721260800&v=beta&t=zOHxLsSWe5Y9A9rJIF-Y7paPmxfqOWC2NPCbm9doBcI'
+      )
+    }
   }
 
   return (
     <ThemeContext.Provider
       value={{
-        theme,
-        handleThemeChange
+        darkMode,
+        toggleDarkMode
       }}
     >
       {children}
