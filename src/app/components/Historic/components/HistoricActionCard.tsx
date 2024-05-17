@@ -1,26 +1,26 @@
 /* eslint-disable react/no-children-prop */
 import { HTMLAttributes, useContext, useState } from 'react'
-import Card from './little_components/Card'
-import { StateIcon, IconText } from './little_components/Icon'
+import Card from '../../Card'
+import { StateIcon, IconText } from './Icon'
 import { AiOutlineCalendar } from 'react-icons/ai'
 import { BsClockHistory, BsThreeDots } from 'react-icons/bs'
 import { Trash2, PenBox } from 'lucide-react'
-import { Action } from '../../@clean/shared/domain/entities/action'
-import { stackFormatter } from '../../@clean/shared/domain/enums/stack_enum'
-import { Tag } from './little_components/Tags'
+import { Action } from '../../../../@clean/shared/domain/entities/action'
+import { stackFormatter } from '../../../../@clean/shared/domain/enums/stack_enum'
+import { Tag } from '../../Tags'
 import { twMerge } from 'tailwind-merge'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
   PopoverArrow
-} from '../components/little_components/Popover'
-import Button from './little_components/Button'
-import ActionModal from './ActionModal'
-import { ModalContext } from '../contexts/modal_context'
-import { ActionContext } from '../contexts/action_context'
-import ActionDialog from './ActionDialog'
-import { millisecondsToHours } from '../utils/functions/timeStamp'
+} from './Popover'
+import Button from './Button'
+import ActionModal from '../../ActionModal'
+import { ModalContext } from '../../../contexts/modal_context'
+import { ActionContext } from '../../../contexts/action_context'
+import ActionDialog from '../../ActionDialog'
+import { millisecondsToHours } from '../../../utils/functions/timeStamp'
 import { v4 as uuidv4 } from 'uuid'
 
 type actionStates = 'rejected' | 'waiting' | 'approved'

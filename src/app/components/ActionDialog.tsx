@@ -18,7 +18,7 @@ import {
 } from '../utils/functions/timeStamp'
 import { MemberContext } from '../contexts/member_context'
 import { Member } from '../../@clean/shared/domain/entities/member'
-import { Tag } from './little_components/Tags'
+import { Tag } from './Tags'
 import { ThemeContext } from '../contexts/theme_context'
 import { ProjectCodeToProjectName } from '../utils/functions/formatters'
 import { ModalContext } from '../contexts/modal_context'
