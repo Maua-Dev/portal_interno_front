@@ -119,16 +119,14 @@ export default function FilterBar({
       <div className="flex flex-row items-center gap-5">
         <div className="flex flex-row items-center gap-2">
           {searchOpen ? (
-            <HoverCard placeholder={'Voltar'}>
-              <Button
-                variant="icon"
-                onClick={() => {
-                  setSearchOpen(false)
-                }}
-              >
-                <MoveLeft />
-              </Button>
-            </HoverCard>
+            <Button
+              variant="icon"
+              onClick={() => {
+                setSearchOpen(false)
+              }}
+            >
+              <MoveLeft />
+            </Button>
           ) : (
             <>
               <History className="h-8 w-8" />
@@ -160,34 +158,29 @@ export default function FilterBar({
         </div>
       </div>
       <div className="flex h-full flex-row">
-        <HoverCard placeholder="Pesquisar">
-          <Button
-            variant="default"
-            className={`h-fit w-fit p-2 md:hidden ${
-              searchOpen ? 'hidden' : ''
-            }`}
-            onClick={() => {
-              setSearchOpen(true)
-            }}
-          >
-            <Search className="h-5 text-skin-base" />
-          </Button>
-        </HoverCard>
+        <Button
+          variant="default"
+          className={`h-fit w-fit p-2 md:hidden ${searchOpen ? 'hidden' : ''}`}
+          onClick={() => {
+            setSearchOpen(true)
+          }}
+        >
+          <Search className="h-5 text-skin-base" />
+        </Button>
+
         <Popover open={popUpOpen}>
           <PopoverTrigger asChild>
-            <HoverCard placeholder="Filtrar" className="md:hidden">
-              <Button
-                variant="default"
-                className="p-2 md:px-4"
-                onClick={() => {
-                  clearFilters()
-                  setPopUpOpen((prev) => !prev)
-                }}
-              >
-                <p className="hidden md:block">Filtro</p>
-                <SlidersHorizontal className="h-5 w-5" />
-              </Button>
-            </HoverCard>
+            <Button
+              variant="default"
+              className="p-2 md:px-4"
+              onClick={() => {
+                clearFilters()
+                setPopUpOpen((prev) => !prev)
+              }}
+            >
+              <p className="hidden md:block">Filtro</p>
+              <SlidersHorizontal className="h-5 w-5" />
+            </Button>
           </PopoverTrigger>
           <PopoverContent>
             <form
