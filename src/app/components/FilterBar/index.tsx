@@ -51,6 +51,7 @@ export default function FilterBar({
 
   function filter() {
     setFilterProps(localFilterProps)
+    setPopUpOpen(false)
   }
 
   function clearFilters() {
@@ -174,21 +175,19 @@ export default function FilterBar({
           </Button>
         </Tooltip>
         <Popover open={popUpOpen}>
-          <Tooltip placeholder="Filtrar">
-            <PopoverTrigger asChild>
-              <Button
-                variant="default"
-                className="p-2 md:px-4"
-                onClick={() => {
-                  clearFilters()
-                  setPopUpOpen((prev) => !prev)
-                }}
-              >
-                <p className="hidden md:block">Filtro</p>
-                <SlidersHorizontal className="h-5 w-5" />
-              </Button>
-            </PopoverTrigger>
-          </Tooltip>
+          <PopoverTrigger asChild>
+            <Button
+              variant="default"
+              className="p-2 md:px-4"
+              onClick={() => {
+                clearFilters()
+                setPopUpOpen((prev) => !prev)
+              }}
+            >
+              <p className="hidden md:block">Filtro</p>
+              <SlidersHorizontal className="h-5 w-5" />
+            </Button>
+          </PopoverTrigger>
           <PopoverContent>
             <form
               onSubmit={(event) => {
@@ -242,7 +241,6 @@ export default function FilterBar({
                 className="absolute right-2.5 top-3 h-5 cursor-pointer"
                 onClick={() => {
                   setPopUpOpen(false)
-                  clearFilters()
                 }}
               />
             </form>
