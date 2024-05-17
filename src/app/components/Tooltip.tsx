@@ -1,5 +1,6 @@
 import { HTMLAttributes } from 'react'
 import * as TooltipPrimitive from '@radix-ui/react-tooltip'
+import { twMerge } from 'tailwind-merge'
 
 interface TooltipProps extends HTMLAttributes<HTMLDivElement> {
   placeholder: string
@@ -12,7 +13,10 @@ export const Tooltip = ({ placeholder, children, ...props }: TooltipProps) => {
         <TooltipPrimitive.Trigger asChild>{children}</TooltipPrimitive.Trigger>
         <TooltipPrimitive.Content
           {...props}
-          className="rounded-md bg-skin-fill p-2 opacity-85"
+          className={twMerge(
+            'rounded-md bg-skin-fill p-2 opacity-85',
+            props.className
+          )}
           sideOffset={5}
           side="bottom"
         >
