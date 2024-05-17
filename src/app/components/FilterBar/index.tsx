@@ -4,7 +4,6 @@ import Card from '../Card'
 import SearchField from './components/SearchField'
 import Text from './components/Text'
 import { MoveLeft, History, Search, X } from 'lucide-react'
-import HoverCard from '../HoverCard'
 import {
   Popover,
   PopoverContent,
@@ -17,6 +16,7 @@ import React, { HTMLAttributes, useEffect, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { SlidersHorizontal } from 'lucide-react'
 import { FilterTag } from '../Tags'
+import { Tooltip } from '../Tooltip'
 
 interface FilterBarProps extends HTMLAttributes<HTMLDivElement> {
   setFilterProps: (props: React.SetStateAction<FilterProps>) => void
@@ -51,6 +51,7 @@ export default function FilterBar({
 
   function filter() {
     setFilterProps(localFilterProps)
+    setPopUpOpen(false)
   }
 
   function clearFilters() {
@@ -119,7 +120,7 @@ export default function FilterBar({
       <div className="flex flex-row items-center gap-5">
         <div className="flex flex-row items-center gap-2">
           {searchOpen ? (
-            <HoverCard placeholder={'Voltar'}>
+            <Tooltip placeholder="Voltar">
               <Button
                 variant="icon"
                 onClick={() => {
@@ -128,7 +129,7 @@ export default function FilterBar({
               >
                 <MoveLeft />
               </Button>
-            </HoverCard>
+            </Tooltip>
           ) : (
             <>
               <History className="h-8 w-8" />
@@ -160,7 +161,7 @@ export default function FilterBar({
         </div>
       </div>
       <div className="flex h-full flex-row">
-        <HoverCard placeholder="Pesquisar">
+        <Tooltip placeholder="Pesquisar">
           <Button
             variant="default"
             className={`h-fit w-fit p-2 md:hidden ${
@@ -172,22 +173,20 @@ export default function FilterBar({
           >
             <Search className="h-5 text-skin-base" />
           </Button>
-        </HoverCard>
+        </Tooltip>
         <Popover open={popUpOpen}>
           <PopoverTrigger asChild>
-            <HoverCard placeholder="Filtrar" className="md:hidden">
-              <Button
-                variant="default"
-                className="p-2 md:px-4"
-                onClick={() => {
-                  clearFilters()
-                  setPopUpOpen((prev) => !prev)
-                }}
-              >
-                <p className="hidden md:block">Filtro</p>
-                <SlidersHorizontal className="h-5 w-5" />
-              </Button>
-            </HoverCard>
+            <Button
+              variant="default"
+              className="p-2 md:px-4"
+              onClick={() => {
+                clearFilters()
+                setPopUpOpen((prev) => !prev)
+              }}
+            >
+              <p className="hidden md:block">Filtro</p>
+              <SlidersHorizontal className="h-5 w-5" />
+            </Button>
           </PopoverTrigger>
           <PopoverContent>
             <form
@@ -242,7 +241,6 @@ export default function FilterBar({
                 className="absolute right-2.5 top-3 h-5 cursor-pointer"
                 onClick={() => {
                   setPopUpOpen(false)
-                  clearFilters()
                 }}
               />
             </form>
