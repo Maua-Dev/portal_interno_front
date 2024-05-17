@@ -4,7 +4,6 @@ import Card from '../Card'
 import SearchField from './components/SearchField'
 import Text from './components/Text'
 import { MoveLeft, History, Search, X } from 'lucide-react'
-import HoverCard from '../HoverCard'
 import {
   Popover,
   PopoverContent,
@@ -17,6 +16,7 @@ import React, { HTMLAttributes, useEffect, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { SlidersHorizontal } from 'lucide-react'
 import { FilterTag } from '../Tags'
+import { Tooltip } from '../ToolTip'
 
 interface FilterBarProps extends HTMLAttributes<HTMLDivElement> {
   setFilterProps: (props: React.SetStateAction<FilterProps>) => void
@@ -119,14 +119,16 @@ export default function FilterBar({
       <div className="flex flex-row items-center gap-5">
         <div className="flex flex-row items-center gap-2">
           {searchOpen ? (
-            <Button
-              variant="icon"
-              onClick={() => {
-                setSearchOpen(false)
-              }}
-            >
-              <MoveLeft />
-            </Button>
+            <Tooltip placeholder="Voltar">
+              <Button
+                variant="icon"
+                onClick={() => {
+                  setSearchOpen(false)
+                }}
+              >
+                <MoveLeft />
+              </Button>
+            </Tooltip>
           ) : (
             <>
               <History className="h-8 w-8" />
@@ -158,30 +160,35 @@ export default function FilterBar({
         </div>
       </div>
       <div className="flex h-full flex-row">
-        <Button
-          variant="default"
-          className={`h-fit w-fit p-2 md:hidden ${searchOpen ? 'hidden' : ''}`}
-          onClick={() => {
-            setSearchOpen(true)
-          }}
-        >
-          <Search className="h-5 text-skin-base" />
-        </Button>
-
+        <Tooltip placeholder="Pesquisar">
+          <Button
+            variant="default"
+            className={`h-fit w-fit p-2 md:hidden ${
+              searchOpen ? 'hidden' : ''
+            }`}
+            onClick={() => {
+              setSearchOpen(true)
+            }}
+          >
+            <Search className="h-5 text-skin-base" />
+          </Button>
+        </Tooltip>
         <Popover open={popUpOpen}>
-          <PopoverTrigger asChild>
-            <Button
-              variant="default"
-              className="p-2 md:px-4"
-              onClick={() => {
-                clearFilters()
-                setPopUpOpen((prev) => !prev)
-              }}
-            >
-              <p className="hidden md:block">Filtro</p>
-              <SlidersHorizontal className="h-5 w-5" />
-            </Button>
-          </PopoverTrigger>
+          <Tooltip placeholder="Filtrar">
+            <PopoverTrigger asChild>
+              <Button
+                variant="default"
+                className="p-2 md:px-4"
+                onClick={() => {
+                  clearFilters()
+                  setPopUpOpen((prev) => !prev)
+                }}
+              >
+                <p className="hidden md:block">Filtro</p>
+                <SlidersHorizontal className="h-5 w-5" />
+              </Button>
+            </PopoverTrigger>
+          </Tooltip>
           <PopoverContent>
             <form
               onSubmit={(event) => {
