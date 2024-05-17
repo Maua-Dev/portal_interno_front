@@ -16,7 +16,7 @@ import React, { HTMLAttributes, useEffect, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { SlidersHorizontal } from 'lucide-react'
 import { FilterTag } from '../Tags'
-import { Tooltip } from '../ToolTip'
+import { Tooltip } from '../Tooltip'
 
 interface FilterBarProps extends HTMLAttributes<HTMLDivElement> {
   setFilterProps: (props: React.SetStateAction<FilterProps>) => void
