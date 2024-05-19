@@ -147,14 +147,14 @@ export class IacStack extends cdk.Stack {
     if (stage === 'dev') {
       const zone = route53.HostedZone.fromHostedZoneAttributes(
         this,
-        'PortalInternoFrontHostedZone-' + stage,
+        'PortalInternoFrontHostedZone-alternative-' + stage,
         {
           hostedZoneId: hostedZoneIdValue,
           zoneName: alternativeDomain2
         }
       )
 
-      new route53.ARecord(this, 'PortalInternoFrontAliasRecord-' + stage, {
+      new route53.ARecord(this, 'PortalInternoFrontAliasRecord-alternative-' + stage, {
         zone: zone,
         recordName: alternativeDomain2,
         target: route53.RecordTarget.fromAlias(
