@@ -1,13 +1,13 @@
 import { useContext, useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
 import { ModalContext } from '../contexts/modal_context'
-import useDarkMode from '../utils/functions/useDarkMode'
 import { useNavigate } from 'react-router-dom'
 import RegisterModal from '../components/RegisterModal'
 import { MemberContext } from '../contexts/member_context'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { ActionContext } from '../contexts/action_context'
+import { useDarkMode } from '../@hooks/useDarkMode'
 
 export default function Home() {
   const { darkMode } = useDarkMode()

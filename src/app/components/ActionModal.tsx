@@ -1,4 +1,3 @@
-import useDarkMode from '../utils/functions/useDarkMode'
 import { Action } from '../../@clean/shared/domain/entities/action'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -21,6 +20,7 @@ import Historic from './Historic'
 import { Selector } from './Selector'
 import { ProjectContext } from '../contexts/project_context'
 import { ProjectType } from '../../@clean/shared/infra/repositories/project_repository_http'
+import { useDarkMode } from '../@hooks/useDarkMode'
 
 const actionSchema = z.object({
   title: z.string().min(1, { message: 'Título é obrigatório' }),
@@ -222,7 +222,7 @@ export default function ActionModal({ action }: { action?: Action }) {
         onClick={isUpdateModal ? handleConfirmCloseModal : undefined}
       ></div>
       <div
-        className={`z-[70] h-auto w-4/5 rounded-2xl ${
+        className={`z-[70] h-auto w-4/5 rounded-2xl transition-all duration-200 ${
           darkMode ? 'bg-skin-secundary text-white' : 'bg-white'
         }`}
       >
