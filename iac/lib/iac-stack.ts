@@ -49,10 +49,8 @@ export class IacStack extends cdk.Stack {
     // });
 
     let viewerCertificate =
-      cloudfront.ViewerCertificate.fromCloudFrontDefaultCertificate()
-    let viewerCertificateAlternative =
-      cloudfront.ViewerCertificate.fromCloudFrontDefaultCertificate()  
-    if (stage === 'prod' || stage === 'homolog' || stage === 'dev') {
+      cloudfront.ViewerCertificate.fromCloudFrontDefaultCertificate() 
+    if (stage === 'prod' || stage === 'homolog') {
       viewerCertificate = cloudfront.ViewerCertificate.fromAcmCertificate(
         Certificate.fromCertificateArn(
           this,
@@ -67,14 +65,14 @@ export class IacStack extends cdk.Stack {
     }
 
     if (stage === 'dev') {
-      viewerCertificateAlternative = cloudfront.ViewerCertificate.fromAcmCertificate(
+      viewerCertificate = cloudfront.ViewerCertificate.fromAcmCertificate(
         Certificate.fromCertificateArn(
           this,
           'PortalInternoFrontCertificate-' + stage,
           acmCertificateArn
         ),
         {
-          aliases: [alternativeDomain2],
+          aliases: [alternativeDomain,alternativeDomain2],
           securityPolicy: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021
         }
       )
@@ -128,58 +126,6 @@ export class IacStack extends cdk.Stack {
       .defaultChild as cloudfront.CfnDistribution
 
     cfnDistribution.addPropertyOverride(
-      'DistributionConfig.Origins.0.OriginAccessControlId',
-      oac.getAtt('Id')
-    )
-
-    const cloudFrontWebDistributionAlternative = new cloudfront.CloudFrontWebDistribution(
-      this,
-      'CDN',
-      {
-        comment: 'Portal Interno Front Distribution Alternative ' + stage,
-        originConfigs: [
-          {
-            s3OriginSource: {
-              s3BucketSource: s3Bucket
-            },
-            behaviors: [
-              {
-                isDefaultBehavior: true,
-                allowedMethods: cloudfront.CloudFrontAllowedMethods.GET_HEAD,
-                compress: true,
-                cachedMethods:
-                  cloudfront.CloudFrontAllowedCachedMethods.GET_HEAD,
-                viewerProtocolPolicy:
-                  cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-                minTtl: cdk.Duration.seconds(0),
-                maxTtl: cdk.Duration.seconds(86400),
-                defaultTtl: cdk.Duration.seconds(3600)
-                // lambdaFunctionAssociations: [
-                //   {
-                //     eventType: cloudfront.LambdaEdgeEventType.VIEWER_REQUEST,
-                //     lambdaFunction: myFunc.currentVersion,
-                //   },
-                // ],
-              }
-            ]
-          }
-        ],
-        viewerCertificate: viewerCertificateAlternative,
-        errorConfigurations: [
-          {
-            errorCode: 403,
-            responseCode: 200,
-            responsePagePath: '/index.html',
-            errorCachingMinTtl: 0
-          }
-        ]
-      }
-    )
-
-    const cfnDistributionAlternative = cloudFrontWebDistributionAlternative.node
-      .defaultChild as cloudfront.cfnDistributionAlternative
-
-    cfnDistributionAlternative.addPropertyOverride(
       'DistributionConfig.Origins.0.OriginAccessControlId',
       oac.getAtt('Id')
     )
