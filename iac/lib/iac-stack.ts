@@ -50,6 +50,8 @@ export class IacStack extends cdk.Stack {
 
     let viewerCertificate =
       cloudfront.ViewerCertificate.fromCloudFrontDefaultCertificate()
+    let viewerCertificateAlternative =
+      cloudfront.ViewerCertificate.fromCloudFrontDefaultCertificate()  
     if (stage === 'prod' || stage === 'homolog' || stage === 'dev') {
       viewerCertificate = cloudfront.ViewerCertificate.fromAcmCertificate(
         Certificate.fromCertificateArn(
@@ -65,7 +67,7 @@ export class IacStack extends cdk.Stack {
     }
 
     if (stage === 'dev') {
-      viewerCertificate = cloudfront.ViewerCertificate.fromAcmCertificate(
+      viewerCertificateAlternative = cloudfront.ViewerCertificate.fromAcmCertificate(
         Certificate.fromCertificateArn(
           this,
           'PortalInternoFrontCertificate-' + stage,
@@ -110,7 +112,7 @@ export class IacStack extends cdk.Stack {
             ]
           }
         ],
-        viewerCertificate: viewerCertificate,
+        viewerCertificate: viewerCertificate,viewerCertificateAlternative,
         errorConfigurations: [
           {
             errorCode: 403,
