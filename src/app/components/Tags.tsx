@@ -1,6 +1,5 @@
-import { HTMLAttributes, ReactElement, useContext, useState } from 'react'
+import { HTMLAttributes, ReactElement, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
-import { ThemeContext } from '../contexts/theme_context'
 import Text from './FilterBar/components/Text'
 import {
   X,
@@ -13,6 +12,7 @@ import {
   Palette,
   Briefcase
 } from 'lucide-react'
+import { useDarkMode } from '../@hooks/useDarkMode'
 
 interface TagProps {
   variant: string
@@ -25,8 +25,8 @@ interface VariantsProps {
 }
 
 export function Tag({ variant }: TagProps) {
-  const { theme } = useContext(ThemeContext)
-  const DARKNESS = theme ? '900' : '400'
+  const { darkMode } = useDarkMode()
+  const DARKNESS = darkMode ? '900' : '400'
   const variants: Record<string, VariantsProps> = {
     BACKEND: {
       label: 'BACK',

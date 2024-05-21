@@ -1,11 +1,11 @@
 import { FormEvent, useEffect, useState } from 'react'
 import { Member } from '../../../../@clean/shared/domain/entities/member'
 import { plainTextToRa } from '../../../utils/functions/formatters'
-import useDarkMode from '../../../utils/functions/useDarkMode'
 import {
   STACK,
   translateStackTag
 } from '../../../../@clean/shared/domain/enums/stack_enum'
+import { useDarkMode } from '../../../@hooks/useDarkMode'
 
 interface SelectorModalProps {
   members?: string[]

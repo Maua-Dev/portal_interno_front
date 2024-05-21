@@ -20,6 +20,8 @@ export class IacStack extends cdk.Stack {
       'arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-123456789012'
     const alternativeDomain =
       process.env.ALTERNATIVE_DOMAIN_NAME || 'onlydevs-dev.devmaua.com'
+    const alternativeDomain2 =
+      process.env.ALTERNATIVE_DOMAIN_NAME2 || 'portalinterno.devmaua.com'
     const hostedZoneIdValue = process.env.HOSTED_ZONE_ID || 'Z1UJRXOUMOOFQ8'
     const projectName = process.env.PROJECT_NAME || 'PortalInternoFront'
 
@@ -47,8 +49,8 @@ export class IacStack extends cdk.Stack {
     // });
 
     let viewerCertificate =
-      cloudfront.ViewerCertificate.fromCloudFrontDefaultCertificate()
-    if (stage === 'prod' || stage === 'homolog' || stage === 'dev') {
+      cloudfront.ViewerCertificate.fromCloudFrontDefaultCertificate() 
+    if (stage === 'dev' || stage === 'homolog') {
       viewerCertificate = cloudfront.ViewerCertificate.fromAcmCertificate(
         Certificate.fromCertificateArn(
           this,
@@ -57,6 +59,20 @@ export class IacStack extends cdk.Stack {
         ),
         {
           aliases: [alternativeDomain],
+          securityPolicy: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021
+        }
+      )
+    }
+
+    if (stage === 'prod') {
+      viewerCertificate = cloudfront.ViewerCertificate.fromAcmCertificate(
+        Certificate.fromCertificateArn(
+          this,
+          'PortalInternoFrontCertificate-' + stage,
+          acmCertificateArn
+        ),
+        {
+          aliases: [alternativeDomain,alternativeDomain2],
           securityPolicy: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021
         }
       )
@@ -136,6 +152,25 @@ export class IacStack extends cdk.Stack {
       new route53.ARecord(this, 'PortalInternoFrontAliasRecord-' + stage, {
         zone: zone,
         recordName: alternativeDomain,
+        target: route53.RecordTarget.fromAlias(
+          new route53Targets.CloudFrontTarget(cloudFrontWebDistribution)
+        )
+      })
+    }
+
+    if (stage === 'prod') {
+      const zone = route53.HostedZone.fromHostedZoneAttributes(
+        this,
+        'PortalInternoFrontHostedZone-alternative-' + stage,
+        {
+          hostedZoneId: hostedZoneIdValue,
+          zoneName: alternativeDomain2
+        }
+      )
+
+      new route53.ARecord(this, 'PortalInternoFrontAliasRecord-alternative-' + stage, {
+        zone: zone,
+        recordName: alternativeDomain2,
         target: route53.RecordTarget.fromAlias(
           new route53Targets.CloudFrontTarget(cloudFrontWebDistribution)
         )

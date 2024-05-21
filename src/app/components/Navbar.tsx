@@ -10,11 +10,11 @@ import {
   BsClipboard
 } from 'react-icons/bs'
 import { useContext, useEffect, useState } from 'react'
-import useDarkMode from '../utils/functions/useDarkMode'
 import { useNavigate } from 'react-router-dom'
 import Historic from './Historic'
 import { ModalContext } from '../contexts/modal_context'
 import ActionModal from './ActionModal'
+import { useDarkMode } from '../@hooks/useDarkMode'
 
 interface window {
   innerWidth: number
@@ -163,7 +163,7 @@ export default function Navbar() {
       ) : (
         <>
           <div
-            className={`fixed z-40 flex w-full justify-center py-2 ${
+            className={`fixed z-40 flex w-full justify-center py-2 transition-all duration-200 ${
               darkMode
                 ? 'border-b-2 border-white bg-dev-gray'
                 : 'bg-white drop-shadow-md'
@@ -172,11 +172,11 @@ export default function Navbar() {
             <img
               src={darkMode ? logo_white : logo}
               alt="Logo da Dev. Community Mauá"
-              className="h-10 w-12"
+              className="h-10 w-12 select-none"
             />
           </div>
           <div
-            className={`fixed bottom-0 z-40 flex w-full justify-center py-4 text-3xl ${
+            className={`fixed bottom-0 z-40 flex w-full justify-center py-4 text-3xl transition-all duration-200 ${
               darkMode
                 ? 'border-t-2 border-white bg-dev-gray'
                 : 'bg-white drop-shadow-md'

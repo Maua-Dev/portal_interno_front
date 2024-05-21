@@ -19,10 +19,10 @@ import {
 import { MemberContext } from '../contexts/member_context'
 import { Member } from '../../@clean/shared/domain/entities/member'
 import { Tag } from './Tags'
-import { ThemeContext } from '../contexts/theme_context'
 import { ProjectCodeToProjectName } from '../utils/functions/formatters'
 import { ModalContext } from '../contexts/modal_context'
 import ActionModal from './ActionModal'
+import { useDarkMode } from '../@hooks/useDarkMode'
 
 interface ActionDialogProps extends HTMLAttributes<HTMLDivElement> {
   action: Action
@@ -31,7 +31,7 @@ interface ActionDialogProps extends HTMLAttributes<HTMLDivElement> {
 export default function ActionDialog({ action, children }: ActionDialogProps) {
   const [associatedMembers, setAssociatedMembers] = useState<Member[]>([])
   const { getAllMembers } = useContext(MemberContext)
-  const { theme } = useContext(ThemeContext)
+  const { darkMode } = useDarkMode()
   const { changeModalContent } = useContext(ModalContext)
 
   const ONE_DAY_ACTION =
@@ -62,7 +62,7 @@ export default function ActionDialog({ action, children }: ActionDialogProps) {
         <DialogPrimitive.Overlay className="fixed inset-0 z-40 opacity-70 backdrop-blur-sm" />
         <DialogPrimitive.DialogContent
           className={`scrollbar-hide-default fixed bottom-0 top-0 z-50 my-auto flex h-4/6 w-5/6 flex-col gap-16 overflow-x-hidden overflow-y-scroll rounded-md border border-skin-muted px-4 py-10 text-skin-base outline-none sm:w-4/6 md:h-fit md:px-10 md:py-20 xl:w-6/12 xl:scrollbar-hide ${
-            theme ? 'bg-skin-fill' : 'bg-skin-secundary'
+            darkMode ? 'bg-skin-fill' : 'bg-skin-secundary'
           }`}
         >
           <div className="flex flex-col gap-8">
