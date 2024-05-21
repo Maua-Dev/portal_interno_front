@@ -58,7 +58,21 @@ export class IacStack extends cdk.Stack {
           acmCertificateArn
         ),
         {
-          aliases: [alternativeDomain,alternativeDomain2],
+          aliases: [alternativeDomain],
+          securityPolicy: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021
+        }
+      )
+    }
+
+    if (stage === 'prod') {
+      viewerCertificate = cloudfront.ViewerCertificate.fromAcmCertificate(
+        Certificate.fromCertificateArn(
+          this,
+          'PortalInternoFrontCertificate-' + stage,
+          acmCertificateArn
+        ),
+        {
+          aliases: [alternativeDomain2],
           securityPolicy: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021
         }
       )
@@ -144,7 +158,7 @@ export class IacStack extends cdk.Stack {
       })
     }
 
-    if (stage === 'prod') {
+    if (stage === 'dev') {
       const zone = route53.HostedZone.fromHostedZoneAttributes(
         this,
         'PortalInternoFrontHostedZone-alternative-' + stage,
