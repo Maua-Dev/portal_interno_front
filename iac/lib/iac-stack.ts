@@ -49,8 +49,22 @@ export class IacStack extends cdk.Stack {
     // });
 
     let viewerCertificate =
-      cloudfront.ViewerCertificate.fromCloudFrontDefaultCertificate()
-    if (stage === 'prod' || stage === 'homolog' || stage === 'dev') {
+      cloudfront.ViewerCertificate.fromCloudFrontDefaultCertificate() 
+    if (stage === 'dev' || stage === 'homolog') {
+      viewerCertificate = cloudfront.ViewerCertificate.fromAcmCertificate(
+        Certificate.fromCertificateArn(
+          this,
+          'PortalInternoFrontCertificate-' + stage,
+          acmCertificateArn
+        ),
+        {
+          aliases: [alternativeDomain],
+          securityPolicy: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021
+        }
+      )
+    }
+
+    if (stage === 'prod') {
       viewerCertificate = cloudfront.ViewerCertificate.fromAcmCertificate(
         Certificate.fromCertificateArn(
           this,
