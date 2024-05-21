@@ -172,7 +172,7 @@ export class IacStack extends cdk.Stack {
         zone: zone,
         recordName: alternativeDomain2,
         target: route53.RecordTarget.fromAlias(
-          new route53Targets.CloudFrontTarget(cloudFrontWebDistributionAlternative)
+          new route53Targets.CloudFrontTarget(cloudFrontWebDistribution)
         )
       })
     }
