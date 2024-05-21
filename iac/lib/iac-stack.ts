@@ -50,7 +50,7 @@ export class IacStack extends cdk.Stack {
 
     let viewerCertificate =
       cloudfront.ViewerCertificate.fromCloudFrontDefaultCertificate() 
-    if (stage === 'prod' || stage === 'homolog') {
+    if (stage === 'dev' || stage === 'homolog') {
       viewerCertificate = cloudfront.ViewerCertificate.fromAcmCertificate(
         Certificate.fromCertificateArn(
           this,
@@ -64,7 +64,7 @@ export class IacStack extends cdk.Stack {
       )
     }
 
-    if (stage === 'dev') {
+    if (stage === 'prod') {
       viewerCertificate = cloudfront.ViewerCertificate.fromAcmCertificate(
         Certificate.fromCertificateArn(
           this,
@@ -158,7 +158,7 @@ export class IacStack extends cdk.Stack {
       })
     }
 
-    if (stage === 'dev') {
+    if (stage === 'prod') {
       const zone = route53.HostedZone.fromHostedZoneAttributes(
         this,
         'PortalInternoFrontHostedZone-alternative-' + stage,
