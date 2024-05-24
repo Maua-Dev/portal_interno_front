@@ -9,18 +9,14 @@ import { useForm } from 'react-hook-form'
 import { STACK } from '../../@clean/shared/domain/enums/stack_enum'
 import {
   millisecondsToHours,
-  timeStampToDate,
-  dateToMilliseconds,
-  hoursToMilliseconds
+  timeStampToDate
 } from '../utils/functions/timeStamp'
-import { useContext, useEffect, useState } from 'react'
-import { ActionContext } from '../contexts/action_context'
-import { ModalContext } from '../contexts/modal_context'
-import Historic from './Historic'
+import { useEffect, useState } from 'react'
 import { Selector } from './Selector'
-import { ProjectContext } from '../contexts/project_context'
-import { ProjectType } from '../../@clean/shared/infra/repositories/project_repository_http'
-import { useDarkMode } from '../@hooks/useDarkMode'
+import { useDarkMode } from '../hooks/useDarkMode'
+import { useModal } from '../hooks/useModal'
+import { useAction } from '../hooks/useAction'
+import { useProject } from '../hooks/useProject'
 
 const actionSchema = z.object({
   title: z.string().min(1, { message: 'Título é obrigatório' }),
@@ -62,21 +58,20 @@ const actionSchema = z.object({
     .min(1, { message: 'Action type tag é obrigatória' })
 })
 
-type ActionModalType = z.infer<typeof actionSchema>
+export type ActionModalType = z.infer<typeof actionSchema>
 
 export default function ActionModal({ action }: { action?: Action }) {
   // Local State
   const { darkMode } = useDarkMode()
 
-  // Contexts
-  const { closeModal, changeModalContent } = useContext(ModalContext)
-  const { updateAction, createAction } = useContext(ActionContext)
-  const { getAllProjects } = useContext(ProjectContext)
+  // Hooks
+  const { closeModal } = useModal()
+  const { handleCreateActionSubmit, handleUpdateActionSubmit, isLoading } =
+    useAction()
+  const { handleProjects, projects } = useProject()
 
   // Use state
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [fade, setFade] = useState<boolean>(false)
-  const [projects, setProjects] = useState<ProjectType[]>([])
+  const [fade, setFade] = useState(false)
 
   // Constants
   const actionTypes: string[] = Object.values(ACTION_TYPE)
@@ -84,15 +79,6 @@ export default function ActionModal({ action }: { action?: Action }) {
 
   if (action) {
     isUpdateModal = true
-  }
-
-  const handleProjects = async () => {
-    try {
-      const response = await getAllProjects()
-      setProjects(response)
-    } catch (error: any) {
-      console.error(error)
-    }
   }
 
   // Fade animation on mount
@@ -103,60 +89,6 @@ export default function ActionModal({ action }: { action?: Action }) {
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  const handleCreateActionSubmit = async (data: ActionModalType) => {
-    console.table(data)
-    setIsLoading(true)
-    try {
-      const createdAction = await createAction(
-        dateToMilliseconds(data.startDate),
-        data.title,
-        dateToMilliseconds(data.endDate),
-        hoursToMilliseconds(data.duration),
-        data.projectCode,
-        data?.description || undefined,
-        data?.storyId ? parseInt(data.storyId) : undefined,
-        data.associatedMembersUserIds,
-        data.stackTags,
-        data.actionTypeTag
-      )
-
-      if (createdAction) {
-        closeModal()
-      }
-    } catch (error: any) {
-      console.error(error)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const handleUpdateActionSubmit = async (data: ActionModalType) => {
-    setIsLoading(true)
-    console.table(data)
-    try {
-      const updatedAction = await updateAction(
-        data.actionId!,
-        dateToMilliseconds(data.startDate),
-        dateToMilliseconds(data.endDate),
-        hoursToMilliseconds(data.duration),
-        data?.storyId ? parseInt(data.storyId) : undefined,
-        data.title,
-        data.description,
-        data.projectCode,
-        data.associatedMembersUserIds,
-        data.stackTags,
-        data.actionTypeTag
-      )
-      if (updatedAction) {
-        changeModalContent(<Historic />)
-      }
-    } catch (error: any) {
-      console.error(error)
-    } finally {
-      setIsLoading(false)
-    }
-  }
 
   const handleConfirmCloseModal = () => {
     let isEmpty = true
@@ -190,7 +122,7 @@ export default function ActionModal({ action }: { action?: Action }) {
       title: action?.title || '',
       projectCode: action?.projectCode || '',
       description: action?.description || '',
-      storyId: action?.storyId === -1 ? '' : action?.storyId.toString() || '',
+      storyId: action?.storyId ? action?.storyId.toString() : '',
       startDate: action?.startDate ? timeStampToDate(action!.startDate) : '',
       endDate: action?.endDate ? timeStampToDate(action!.endDate) : '',
       duration: action?.duration
@@ -206,7 +138,7 @@ export default function ActionModal({ action }: { action?: Action }) {
 
   return (
     <div
-      className={`flex h-full w-full transform items-center justify-center overflow-x-hidden overflow-y-scroll py-24 pt-24 transition-all duration-300 lg:h-dvh lg:py-12 lg:pt-24 ${
+      className={`flex h-full w-full transform items-center justify-center overflow-x-hidden overflow-y-scroll py-24 pt-24 transition-all duration-200 lg:h-dvh lg:py-12 lg:pt-24 ${
         isUpdateModal
           ? 'absolute left-0 top-0 z-50 bg-black bg-opacity-80 pt-[32rem] lg:pt-0'
           : 'lg:pl-14'
