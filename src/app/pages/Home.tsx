@@ -1,34 +1,19 @@
-import { useContext, useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import Navbar from '../components/Navbar'
-import { ModalContext } from '../contexts/modal_context'
-import { useNavigate } from 'react-router-dom'
 import RegisterModal from '../components/RegisterModal'
-import { MemberContext } from '../contexts/member_context'
 import { ToastContainer, toast } from 'react-toastify'
+import { useDarkMode } from '../hooks/useDarkMode'
+import { useMember } from '../hooks/useMember'
+import { useAction } from '../hooks/useAction'
+import { useModal } from '../hooks/useModal'
 import 'react-toastify/dist/ReactToastify.css'
-import { ActionContext } from '../contexts/action_context'
-import { useDarkMode } from '../@hooks/useDarkMode'
 
 export default function Home() {
   const { darkMode } = useDarkMode()
-  const { modalContent } = useContext(ModalContext)
-  const { getMember, memberError } = useContext(MemberContext)
+  const { memberError, handleMember, isRegister } = useMember()
   const { actionError, actionSuccess, setActionError, setActionSuccess } =
-    useContext(ActionContext)
-  const navigate = useNavigate()
-  const [isRegister, setIsRegister] = useState<boolean>(false)
-
-  const handleMember = async () => {
-    try {
-      await getMember()
-    } catch (error: any) {
-      if (error.message.endsWith('404')) {
-        setIsRegister(true)
-      } else {
-        navigate('/login')
-      }
-    }
-  }
+    useAction()
+  const { modalContent } = useModal()
 
   useEffect(() => {
     handleMember()
@@ -63,7 +48,7 @@ export default function Home() {
       })
       setActionError('')
     }
-  }, [actionSuccess, setActionSuccess, actionError, setActionError])
+  }, [actionSuccess, actionError, setActionSuccess, setActionError])
 
   useEffect(() => {
     if (memberError) {
@@ -84,7 +69,7 @@ export default function Home() {
     <>
       <Navbar />
       <main
-        className={`flex w-full items-center justify-center scrollbar-hide ${
+        className={`flex w-full items-center justify-center transition-all duration-200 scrollbar-hide ${
           darkMode ? 'bg-skin-fill' : 'theme-white bg-sky-200'
         } ${modalContent ? 'h-full' : isRegister ? 'h-auto' : 'h-screen'}`}
       >
