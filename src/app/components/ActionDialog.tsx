@@ -22,7 +22,7 @@ import { Tag } from './Tags'
 import { ProjectCodeToProjectName } from '../utils/functions/formatters'
 import { ModalContext } from '../contexts/modal_context'
 import ActionModal from './ActionModal'
-import { useDarkMode } from '../@hooks/useDarkMode'
+import { useDarkMode } from '../hooks/useDarkMode'
 
 interface ActionDialogProps extends HTMLAttributes<HTMLDivElement> {
   action: Action

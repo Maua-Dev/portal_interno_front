@@ -5,7 +5,7 @@ import {
   STACK,
   translateStackTag
 } from '../../../../@clean/shared/domain/enums/stack_enum'
-import { useDarkMode } from '../../../@hooks/useDarkMode'
+import { useDarkMode } from '../../../hooks/useDarkMode'
 
 interface SelectorModalProps {
   members?: string[]

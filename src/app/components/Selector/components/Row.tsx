@@ -1,6 +1,6 @@
 import { IoMdClose } from 'react-icons/io'
 import { useEffect, useState } from 'react'
-import { useDarkMode } from '../../../@hooks/useDarkMode'
+import { useDarkMode } from '../../../hooks/useDarkMode'
 
 export function Row({ text, onClick }: { text: string; onClick: () => void }) {
   const { darkMode } = useDarkMode()
