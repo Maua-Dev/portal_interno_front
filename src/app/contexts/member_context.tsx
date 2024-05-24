@@ -15,9 +15,9 @@ import { ACTIVE } from '../../@clean/shared/domain/enums/active_enum'
 import { CreateMemberUsecase } from '../../@clean/modules/member/usecases/create_member_usecase'
 
 export interface MemberContextInterface {
-  getMember: () => Promise<Member | undefined>
+  getMember: () => Promise<Member>
 
-  getAllMembers: () => Promise<Member[] | undefined>
+  getAllMembers: () => Promise<Member[]>
 
   createMember: (
     ra: string,
@@ -27,7 +27,7 @@ export interface MemberContextInterface {
     year: number,
     cellphone: string,
     course: COURSE
-  ) => Promise<Member | undefined>
+  ) => Promise<Member>
 
   updateMember: (
     newName?: string,
@@ -38,52 +38,39 @@ export interface MemberContextInterface {
     newCellphone?: string,
     newCourse?: COURSE,
     newActive?: ACTIVE
-  ) => Promise<Member | undefined>
+  ) => Promise<Member>
 
-  deleteMember: () => Promise<Member | undefined>
+  deleteMember: () => Promise<Member>
 
   memberError: string
+
+  isAdmin: boolean
 }
 
 const defaultContext: MemberContextInterface = {
   getMember: async () => {
-    return undefined
+    return {} as Member
   },
 
   getAllMembers: async () => {
-    return []
+    return [] as Member[]
   },
 
-  createMember: async (
-    _ra: string,
-    _emailDev: string,
-    _role: ROLE,
-    _stack: STACK,
-    _year: number,
-    _cellphone: string,
-    _course: COURSE
-  ) => {
-    return undefined
+  createMember: async () => {
+    return {} as Member
   },
 
-  updateMember: async (
-    _newName?: string,
-    _newEmailDev?: string,
-    _newRole?: ROLE,
-    _newStack?: STACK,
-    _newYear?: number,
-    _newCellphone?: string,
-    _newCourse?: COURSE,
-    _newActive?: ACTIVE
-  ) => {
-    return undefined
+  updateMember: async () => {
+    return {} as Member
   },
 
   deleteMember: async () => {
-    return undefined
+    return {} as Member
   },
 
-  memberError: ''
+  memberError: '',
+
+  isAdmin: false
 }
 
 export const MemberContext = createContext(defaultContext)
@@ -109,20 +96,31 @@ const deleteMemberUsecase = containerMember.get<DeleteMemberUsecase>(
 )
 
 export function MemberProvider({ children }: PropsWithChildren) {
-  const [memberError, setMemberError] = useState<string>('')
+  const [memberError, setMemberError] = useState('')
+  const [isAdmin, setIsAdmin] = useState(false)
 
-  async function getMember() {
+  const handleAdmin = (role: string) => {
+    return ['HEAD', 'DIRECTOR'].includes(role)
+  }
+
+  async function getMember(): Promise<Member> {
     try {
       const member = await getMembersUsecase.execute()
+
+      if (handleAdmin(member.role)) {
+        setIsAdmin(true)
+      } else {
+        setIsAdmin(false)
+      }
+
       return member
     } catch (error: any) {
-      console.error('Error on get member: ', error.message)
       setMemberError(error.message)
       throw new Error('Something went wrong on get member: ' + error.message)
     }
   }
 
-  async function getAllMembers(): Promise<Member[] | undefined> {
+  async function getAllMembers(): Promise<Member[]> {
     try {
       const members = await getAllMembersUsecase.execute()
 
@@ -185,7 +183,7 @@ export function MemberProvider({ children }: PropsWithChildren) {
       return updatedMember
     } catch (error: any) {
       setMemberError(error.message)
-      console.error('Something went wrong on update member: ', error.message)
+      throw new Error('Something went wrong on update member: ' + error.message)
     }
   }
 
@@ -196,7 +194,7 @@ export function MemberProvider({ children }: PropsWithChildren) {
       return deletedMember
     } catch (error: any) {
       setMemberError(error.message)
-      console.error('Something went wrong on delete member: ', error.message)
+      throw new Error('Something went wrong on delete member: ' + error.message)
     }
   }
 
@@ -208,7 +206,8 @@ export function MemberProvider({ children }: PropsWithChildren) {
         createMember,
         updateMember,
         deleteMember,
-        memberError
+        memberError,
+        isAdmin
       }}
     >
       {children}
