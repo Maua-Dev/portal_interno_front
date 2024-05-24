@@ -1,6 +1,7 @@
 import logo from '../assets/logo_dev.png'
 import logo_white from '../assets/logo_dev_white.png'
 import { BiSolidUser } from 'react-icons/bi'
+import { IoPeople } from 'react-icons/io5'
 import { AiOutlineHistory, AiOutlineDoubleRight } from 'react-icons/ai'
 import { IoMdExit } from 'react-icons/io'
 import {
@@ -9,12 +10,13 @@ import {
   BsSun,
   BsClipboard
 } from 'react-icons/bs'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Historic from './Historic'
-import { ModalContext } from '../contexts/modal_context'
 import ActionModal from './ActionModal'
-import { useDarkMode } from '../@hooks/useDarkMode'
+import { useDarkMode } from '../hooks/useDarkMode'
+import { useModal } from '../hooks/useModal'
+import { useMember } from '../hooks/useMember'
 
 interface window {
   innerWidth: number
@@ -22,12 +24,18 @@ interface window {
 }
 
 export default function Navbar() {
-  const [hover, setHover] = useState<boolean>(false)
-  const { darkMode, toggleDarkMode } = useDarkMode()
-  const [windowSize, setWindowSize] = useState<window>(getWindowSize())
+  // Constant
   const maximumWidth: number = 1024
+
+  // Hooks
   const navigate = useNavigate()
-  const { changeModalContent } = useContext(ModalContext)
+  const { darkMode, toggleDarkMode } = useDarkMode()
+  const { changeModalContent } = useModal()
+  const { isAdmin } = useMember()
+
+  // States
+  const [hover, setHover] = useState(false)
+  const [windowSize, setWindowSize] = useState<window>(getWindowSize())
 
   useEffect(() => {
     function handleWindowResize() {
@@ -55,7 +63,7 @@ export default function Navbar() {
     <div>
       {windowSize.innerWidth > maximumWidth ? (
         <div
-          className={`fixed z-40 flex h-screen transform flex-col items-center justify-between gap-12 overflow-x-hidden px-4 py-10 transition-all duration-200 ease-in-out ${
+          className={`fixed z-40 flex h-screen transform flex-col items-center justify-between gap-12 overflow-x-hidden px-4 py-10 transition-all duration-200 ${
             !darkMode
               ? 'bg-white drop-shadow-md'
               : 'border-r-2 border-white bg-dev-gray text-white'
@@ -132,6 +140,46 @@ export default function Navbar() {
                   Histórico
                 </p>
               </div>
+              {isAdmin && (
+                <>
+                  <div className="flex cursor-pointer select-none gap-8 overflow-x-hidden">
+                    <BsClipboard
+                      className={`transform cursor-pointer ${
+                        !darkMode ? 'text-gray-700' : 'text-white'
+                      } transition-all duration-100 ${
+                        hover ? '-translate-x-0' : 'translate-x-0'
+                      } hover:fill-blue-600`}
+                    />
+                    <p
+                      className={`transform text-xl transition-all duration-200 ${
+                        hover
+                          ? 'relative translate-x-0 opacity-100 delay-[150ms]'
+                          : 'absolute left-40 translate-x-32 opacity-0'
+                      }`}
+                    >
+                      Projetos
+                    </p>
+                  </div>
+                  <div className="flex cursor-pointer select-none gap-8 overflow-x-hidden">
+                    <IoPeople
+                      className={`transform cursor-pointer ${
+                        !darkMode ? 'text-gray-700' : 'text-white'
+                      } transition-all duration-100 ${
+                        hover ? '-translate-x-0' : 'translate-x-0'
+                      } hover:fill-blue-600`}
+                    />
+                    <p
+                      className={`transform text-xl transition-all duration-200 ${
+                        hover
+                          ? 'relative translate-x-0 opacity-100 delay-[150ms]'
+                          : 'absolute left-40 translate-x-32 opacity-0'
+                      }`}
+                    >
+                      Membros
+                    </p>
+                  </div>
+                </>
+              )}
             </div>
           </div>
           <div className="flex flex-col gap-6 text-2xl">
@@ -208,13 +256,15 @@ export default function Navbar() {
                   changeModalContent(<Historic />)
                 }}
               />
-              <BsClipboard
-                className={`transform cursor-pointer ${
-                  !darkMode ? 'text-gray-700' : 'text-white'
-                } transition-all duration-100 ${
-                  hover ? '-translate-x-0' : 'translate-x-0'
-                } hover:fill-blue-600`}
-              />
+              {isAdmin && (
+                <BsClipboard
+                  className={`transform cursor-pointer ${
+                    !darkMode ? 'text-gray-700' : 'text-white'
+                  } transition-all duration-100 ${
+                    hover ? '-translate-x-0' : 'translate-x-0'
+                  } hover:fill-blue-600`}
+                />
+              )}
               {!darkMode ? (
                 <BsMoonStars
                   className="cursor-pointer text-gray-700 transition-all duration-100 hover:text-black"
