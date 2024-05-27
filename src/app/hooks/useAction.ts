@@ -8,6 +8,7 @@ import {
 } from '../utils/functions/timeStamp'
 import Historic from '../components/Historic'
 import React from 'react'
+import { useActionModal } from '../components/ActionModal/hooks/useActionModal'
 
 export const useAction = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -23,6 +24,8 @@ export const useAction = () => {
     actionSuccess,
     setActionSuccess
   } = useContext(ActionContext)
+
+  const { setCurrentMembers, setCurrentStackTags } = useActionModal()
 
   const { closeModal, changeModalContent } = useModal()
 
@@ -43,6 +46,8 @@ export const useAction = () => {
       )
 
       if (createdAction) {
+        setCurrentMembers([])
+        setCurrentStackTags([])
         closeModal()
       }
     } catch (error: any) {
@@ -69,6 +74,8 @@ export const useAction = () => {
         data.actionTypeTag
       )
       if (updatedAction) {
+        setCurrentMembers([])
+        setCurrentStackTags([])
         changeModalContent(React.createElement(Historic))
       }
     } catch (error: any) {
