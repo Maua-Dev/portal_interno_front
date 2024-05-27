@@ -29,10 +29,10 @@ const actionSchema = z.object({
   storyId: z.string().refine(
     (storyId) => {
       if (storyId === '') return true
-      return /^\d{4}$/.test(storyId)
+      return /^\d{3,4}$/.test(storyId)
     },
     {
-      message: 'Story Id deve ter 4 dígitos'
+      message: 'Story Id deve ter 3 a 4 dígitos'
     }
   ),
   actionId: z.string().optional(),
