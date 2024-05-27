@@ -65,7 +65,7 @@ export const useAction = () => {
         dateToMilliseconds(data.startDate),
         dateToMilliseconds(data.endDate),
         hoursToMilliseconds(data.duration),
-        data?.storyId ? parseInt(data.storyId) : undefined,
+        data?.storyId ? parseInt(data.storyId) : 0,
         data.title,
         data.description,
         data.projectCode,
