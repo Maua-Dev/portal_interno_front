@@ -1,14 +1,14 @@
 import { ReactElement, ReactNode, createContext, useState } from 'react'
 import Historic from '../components/Historic'
 
-interface modalContextInterface {
+interface ModalContextInterface {
   modalContent: ReactNode
   isModalOpen: boolean
   closeModal: (isEdit?: boolean) => void
   changeModalContent: (modal: ReactElement) => void
 }
 
-export const ModalContext = createContext<modalContextInterface>({
+export const ModalContext = createContext<ModalContextInterface>({
   modalContent: undefined,
   isModalOpen: false,
   closeModal: () => {},
@@ -16,7 +16,7 @@ export const ModalContext = createContext<modalContextInterface>({
 })
 
 export const ModalProvider = ({ children }: { children: ReactNode }) => {
-  const [isModalOpen, setModalOpen] = useState<boolean>(false)
+  const [isModalOpen, setModalOpen] = useState(false)
   const [modalContent, setModalContent] = useState<ReactElement | undefined>(
     undefined
   )
