@@ -42,6 +42,10 @@ export interface MemberContextInterface {
 
   deleteMember: () => Promise<Member>
 
+  handleAllMembers: () => Promise<void>
+
+  allMembers: Member[] | undefined
+
   memberError: string
 
   isAdmin: boolean
@@ -67,6 +71,10 @@ const defaultContext: MemberContextInterface = {
   deleteMember: async () => {
     return {} as Member
   },
+
+  handleAllMembers: async () => {},
+
+  allMembers: [],
 
   memberError: '',
 
@@ -98,6 +106,23 @@ const deleteMemberUsecase = containerMember.get<DeleteMemberUsecase>(
 export function MemberProvider({ children }: PropsWithChildren) {
   const [memberError, setMemberError] = useState('')
   const [isAdmin, setIsAdmin] = useState(false)
+  const [allMembers, setAllMembers] = useState<Member[] | undefined>([])
+
+  const handleAllMembers = async () => {
+    try {
+      const allMembers = await getAllMembers()
+      const member = await getMember()
+
+      if (allMembers && member) {
+        const members = allMembers
+          .filter((m) => m.userId !== member?.userId)
+          .sort((a, b) => a.name.localeCompare(b.name))
+        setAllMembers(members)
+      }
+    } catch (error: any) {
+      console.log(error.message)
+    }
+  }
 
   const handleAdmin = (role: string) => {
     return ['HEAD', 'DIRECTOR'].includes(role)
@@ -207,7 +232,9 @@ export function MemberProvider({ children }: PropsWithChildren) {
         updateMember,
         deleteMember,
         memberError,
-        isAdmin
+        isAdmin,
+        handleAllMembers,
+        allMembers
       }}
     >
       {children}

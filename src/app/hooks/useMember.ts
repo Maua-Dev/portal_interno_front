@@ -3,8 +3,8 @@ import { MemberContext } from '../contexts/member_context'
 import { useNavigate } from 'react-router-dom'
 
 export const useMember = () => {
-  const [isRegister, setIsRegister] = useState(false)
   const navigate = useNavigate()
+  const [isRegister, setIsRegister] = useState(false)
 
   const {
     getMember,
@@ -13,7 +13,9 @@ export const useMember = () => {
     createMember,
     updateMember,
     deleteMember,
-    isAdmin
+    isAdmin,
+    allMembers,
+    handleAllMembers
   } = useContext(MemberContext)
 
   const handleMember = async () => {
@@ -32,6 +34,8 @@ export const useMember = () => {
     isRegister,
     isAdmin,
     handleMember,
+    handleAllMembers,
+    allMembers,
     getMember,
     createMember,
     updateMember,
