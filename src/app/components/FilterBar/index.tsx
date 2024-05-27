@@ -174,7 +174,7 @@ export default function FilterBar({
             <Search className="h-5 text-skin-base" />
           </Button>
         </Tooltip>
-        <Popover open={popUpOpen}>
+        <Popover open={popUpOpen} onOpenChange={setPopUpOpen}>
           <PopoverTrigger asChild>
             <Button
               variant="default"
