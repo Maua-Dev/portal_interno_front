@@ -69,7 +69,7 @@ export default function Home() {
     <>
       <Navbar />
       <main
-        className={`flex w-full items-center justify-center transition-all duration-200 scrollbar-hide ${
+        className={`flex w-full items-center justify-center overflow-x-hidden transition-all duration-200 scrollbar-hide ${
           darkMode ? 'bg-skin-fill' : 'theme-white bg-sky-200'
         } ${modalContent ? 'h-full' : isRegister ? 'h-auto' : 'h-screen'}`}
       >
