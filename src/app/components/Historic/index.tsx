@@ -7,6 +7,7 @@ import { ActionContext } from '../../contexts/action_context'
 import Loader from './components/Loader'
 import { stackToEnum } from '../../../@clean/shared/domain/enums/stack_enum'
 import { SearchX } from 'lucide-react'
+import { useMember } from '../../hooks/useMember'
 
 interface FilterProps {
   [key: string]: string
@@ -28,6 +29,7 @@ export default function Historic() {
   const [_lastEvaluatedKey, setLastEvaluatedKey] =
     useState<lastEvaluatedKey | null>()
   const { getHistory } = useContext(ActionContext)
+  const { handleAllMembers } = useMember()
   const [filterProps, setFilterProps] = useState<FilterProps>({
     searchText: '',
     project: '',
@@ -131,6 +133,7 @@ export default function Historic() {
   }, [localHistory, filterProps])
 
   useEffect(() => {
+    handleAllMembers()
     clearFilter()
     if (!localHistory) {
       loadHistoric()
