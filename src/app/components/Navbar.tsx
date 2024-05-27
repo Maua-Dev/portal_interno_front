@@ -220,11 +220,11 @@ export default function Navbar() {
             <img
               src={darkMode ? logo_white : logo}
               alt="Logo da Dev. Community Mauá"
-              className="h-10 w-12 select-none"
+              className="h-8 w-10 select-none sm:h-10 sm:w-12"
             />
           </div>
           <div
-            className={`fixed bottom-0 z-40 flex w-full justify-center py-4 text-3xl transition-all duration-200 ${
+            className={`fixed bottom-0 z-40 flex w-full justify-center py-4 text-2xl transition-all duration-200 sm:text-3xl ${
               darkMode
                 ? 'border-t-2 border-white bg-dev-gray'
                 : 'bg-white drop-shadow-md'
@@ -257,13 +257,22 @@ export default function Navbar() {
                 }}
               />
               {isAdmin && (
-                <BsClipboard
-                  className={`transform cursor-pointer ${
-                    !darkMode ? 'text-gray-700' : 'text-white'
-                  } transition-all duration-100 ${
-                    hover ? '-translate-x-0' : 'translate-x-0'
-                  } hover:fill-blue-600`}
-                />
+                <>
+                  <BsClipboard
+                    className={`transform cursor-pointer ${
+                      !darkMode ? 'text-gray-700' : 'text-white'
+                    } transition-all duration-100 ${
+                      hover ? '-translate-x-0' : 'translate-x-0'
+                    } hover:fill-blue-600`}
+                  />
+                  <IoPeople
+                    className={`transform cursor-pointer ${
+                      !darkMode ? 'text-gray-700' : 'text-white'
+                    } transition-all duration-100 ${
+                      hover ? '-translate-x-0' : 'translate-x-0'
+                    } hover:fill-blue-600`}
+                  />
+                </>
               )}
               {!darkMode ? (
                 <BsMoonStars
