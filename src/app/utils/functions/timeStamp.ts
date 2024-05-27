@@ -32,7 +32,6 @@ export function hoursToMilliseconds(hours: number): number {
 }
 
 export function dateToMilliseconds(date: string): number {
-  console.log(date)
   const newDate = new Date(date)
 
   return newDate.getTime()
