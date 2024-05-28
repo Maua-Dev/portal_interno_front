@@ -49,15 +49,17 @@ export default function Historic() {
     try {
       const response = await getHistory(undefined, undefined, AMOUNT, lastKey)
 
-      if (lastKey) {
-        setLocalHistory((prev) =>
-          prev ? prev.concat(response.actions) : response.actions
-        )
-      } else {
-        setLocalHistory(response.actions)
-      }
+      if (response) {
+        if (lastKey) {
+          setLocalHistory((prev) =>
+            prev ? prev.concat(response.actions) : response.actions
+          )
+        } else {
+          setLocalHistory(response.actions)
+        }
 
-      setLastEvaluatedKey(response.lastEvaluatedKey)
+        setLastEvaluatedKey(response.lastEvaluatedKey)
+      }
     } catch (error) {
       console.log('Error: ' + error)
     }
@@ -85,7 +87,8 @@ export default function Historic() {
         (action) =>
           action.title.toLowerCase().includes(searchTextLowerCase) ||
           action.description.toLowerCase().includes(searchTextLowerCase) ||
-          action.storyId.toString().includes(searchTextLowerCase)
+          (action.storyId &&
+            action.storyId.toString().includes(searchTextLowerCase))
       )
     }
 

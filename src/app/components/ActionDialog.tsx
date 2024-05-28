@@ -16,21 +16,22 @@ import {
   millisecondsToHours,
   timeStampToDate
 } from '../utils/functions/timeStamp'
-import { MemberContext } from '../contexts/member_context'
 import { Member } from '../../@clean/shared/domain/entities/member'
 import { Tag } from './Tags'
 import { ProjectCodeToProjectName } from '../utils/functions/formatters'
 import { ModalContext } from '../contexts/modal_context'
 import ActionModal from './ActionModal'
-import { useDarkMode } from '../@hooks/useDarkMode'
+import { useDarkMode } from '../hooks/useDarkMode'
+import { useMember } from '../hooks/useMember'
 
 interface ActionDialogProps extends HTMLAttributes<HTMLDivElement> {
   action: Action
 }
 
 export default function ActionDialog({ action, children }: ActionDialogProps) {
+  const [open, setOpen] = useState<boolean>(false)
   const [associatedMembers, setAssociatedMembers] = useState<Member[]>([])
-  const { getAllMembers } = useContext(MemberContext)
+  const { allMembers } = useMember()
   const { darkMode } = useDarkMode()
   const { changeModalContent } = useContext(ModalContext)
 
@@ -39,9 +40,7 @@ export default function ActionDialog({ action, children }: ActionDialogProps) {
     new Date(timeStampToDate(action.endDate)).toLocaleDateString()
 
   const loadMember = async (memberIds: string[]) => {
-    const response = await getAllMembers()
-
-    const members = response?.filter((member) =>
+    const members = allMembers?.filter((member) =>
       memberIds.includes(member.userId)
     )
 
@@ -51,13 +50,15 @@ export default function ActionDialog({ action, children }: ActionDialogProps) {
   }
 
   useEffect(() => {
-    loadMember(action.associatedMembersUserIds)
+    if (open) {
+      loadMember(action.associatedMembersUserIds)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [open])
 
   return (
     <div className="static flex w-full justify-center">
-      <DialogPrimitive.Root>
+      <DialogPrimitive.Root open={open} onOpenChange={setOpen}>
         <DialogPrimitive.Trigger asChild>{children}</DialogPrimitive.Trigger>
         <DialogPrimitive.Overlay className="fixed inset-0 z-40 opacity-70 backdrop-blur-sm" />
         <DialogPrimitive.DialogContent

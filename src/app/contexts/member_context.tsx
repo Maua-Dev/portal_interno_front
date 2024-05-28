@@ -13,11 +13,12 @@ import { UpdateMemberUsecase } from '../../@clean/modules/member/usecases/update
 import { DeleteMemberUsecase } from '../../@clean/modules/member/usecases/delete_member_usecase'
 import { ACTIVE } from '../../@clean/shared/domain/enums/active_enum'
 import { CreateMemberUsecase } from '../../@clean/modules/member/usecases/create_member_usecase'
+import { useNavigate } from 'react-router-dom'
 
 export interface MemberContextInterface {
-  getMember: () => Promise<Member | undefined>
+  getMember: () => Promise<Member>
 
-  getAllMembers: () => Promise<Member[] | undefined>
+  getAllMembers: () => Promise<Member[]>
 
   createMember: (
     ra: string,
@@ -27,7 +28,7 @@ export interface MemberContextInterface {
     year: number,
     cellphone: string,
     course: COURSE
-  ) => Promise<Member | undefined>
+  ) => Promise<Member>
 
   updateMember: (
     newName?: string,
@@ -38,52 +39,55 @@ export interface MemberContextInterface {
     newCellphone?: string,
     newCourse?: COURSE,
     newActive?: ACTIVE
-  ) => Promise<Member | undefined>
+  ) => Promise<Member>
 
-  deleteMember: () => Promise<Member | undefined>
+  deleteMember: () => Promise<Member>
+
+  handleAllMembers: () => Promise<void>
+
+  handleMember: () => Promise<void>
+
+  allMembers: Member[] | undefined
 
   memberError: string
+
+  isAdmin: boolean
+
+  isRegister: boolean
 }
 
 const defaultContext: MemberContextInterface = {
   getMember: async () => {
-    return undefined
+    return {} as Member
   },
 
   getAllMembers: async () => {
-    return []
+    return [] as Member[]
   },
 
-  createMember: async (
-    _ra: string,
-    _emailDev: string,
-    _role: ROLE,
-    _stack: STACK,
-    _year: number,
-    _cellphone: string,
-    _course: COURSE
-  ) => {
-    return undefined
+  createMember: async () => {
+    return {} as Member
   },
 
-  updateMember: async (
-    _newName?: string,
-    _newEmailDev?: string,
-    _newRole?: ROLE,
-    _newStack?: STACK,
-    _newYear?: number,
-    _newCellphone?: string,
-    _newCourse?: COURSE,
-    _newActive?: ACTIVE
-  ) => {
-    return undefined
+  updateMember: async () => {
+    return {} as Member
   },
 
   deleteMember: async () => {
-    return undefined
+    return {} as Member
   },
 
-  memberError: ''
+  handleMember: async () => {},
+
+  handleAllMembers: async () => {},
+
+  allMembers: [],
+
+  memberError: '',
+
+  isAdmin: false,
+
+  isRegister: false
 }
 
 export const MemberContext = createContext(defaultContext)
@@ -109,20 +113,63 @@ const deleteMemberUsecase = containerMember.get<DeleteMemberUsecase>(
 )
 
 export function MemberProvider({ children }: PropsWithChildren) {
-  const [memberError, setMemberError] = useState<string>('')
+  const [memberError, setMemberError] = useState('')
+  const [isAdmin, setIsAdmin] = useState(false)
+  const [member, setMember] = useState<Member | undefined>({} as Member)
+  const [allMembers, setAllMembers] = useState<Member[] | undefined>([])
+  const [isRegister, setIsRegister] = useState(false)
+  const navigate = useNavigate()
 
-  async function getMember() {
+  const handleAllMembers = async () => {
+    try {
+      const allMembers = await getAllMembers()
+
+      if (allMembers && member) {
+        const members = allMembers
+          .filter((m) => m.userId !== member?.userId)
+          .sort((a, b) => a.name.localeCompare(b.name))
+        setAllMembers(members)
+      }
+    } catch (error: any) {
+      console.log(error.message)
+    }
+  }
+
+  const handleMember = async () => {
+    try {
+      const member = await getMember()
+      setMember(member)
+    } catch (error: any) {
+      if (error.message.toLowerCase().includes('no items found')) {
+        setIsRegister(true)
+      } else {
+        navigate('/login')
+      }
+    }
+  }
+
+  const handleAdmin = (role: string) => {
+    return ['HEAD', 'DIRECTOR'].includes(role)
+  }
+
+  async function getMember(): Promise<Member> {
     try {
       const member = await getMembersUsecase.execute()
+
+      if (handleAdmin(member.role)) {
+        setIsAdmin(true)
+      } else {
+        setIsAdmin(false)
+      }
+
       return member
     } catch (error: any) {
-      console.error('Error on get member: ', error.message)
       setMemberError(error.message)
       throw new Error('Something went wrong on get member: ' + error.message)
     }
   }
 
-  async function getAllMembers(): Promise<Member[] | undefined> {
+  async function getAllMembers(): Promise<Member[]> {
     try {
       const members = await getAllMembersUsecase.execute()
 
@@ -185,7 +232,7 @@ export function MemberProvider({ children }: PropsWithChildren) {
       return updatedMember
     } catch (error: any) {
       setMemberError(error.message)
-      console.error('Something went wrong on update member: ', error.message)
+      throw new Error('Something went wrong on update member: ' + error.message)
     }
   }
 
@@ -196,7 +243,7 @@ export function MemberProvider({ children }: PropsWithChildren) {
       return deletedMember
     } catch (error: any) {
       setMemberError(error.message)
-      console.error('Something went wrong on delete member: ', error.message)
+      throw new Error('Something went wrong on delete member: ' + error.message)
     }
   }
 
@@ -208,7 +255,12 @@ export function MemberProvider({ children }: PropsWithChildren) {
         createMember,
         updateMember,
         deleteMember,
-        memberError
+        memberError,
+        handleMember,
+        handleAllMembers,
+        allMembers,
+        isAdmin,
+        isRegister
       }}
     >
       {children}
