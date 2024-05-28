@@ -10,13 +10,15 @@ import 'react-toastify/dist/ReactToastify.css'
 
 export default function Home() {
   const { darkMode } = useDarkMode()
-  const { memberError, handleMember, isRegister } = useMember()
+  const { memberError, handleAllMembers, isRegister, handleMember } =
+    useMember()
   const { actionError, actionSuccess, setActionError, setActionSuccess } =
     useAction()
   const { modalContent } = useModal()
 
   useEffect(() => {
     handleMember()
+    handleAllMembers()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
