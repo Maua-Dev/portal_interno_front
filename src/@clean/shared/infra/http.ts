@@ -15,7 +15,23 @@ http.interceptors.response.use(
   },
   async (error) => {
     const originalRequest = error.config
-    if (error.code === 'ERR_NETWORK') {
+
+    if (originalRequest._retry >= 2) {
+      localStorage.removeItem('accessToken')
+      localStorage.removeItem('refreshToken')
+      localStorage.removeItem('idToken')
+      return Promise.reject(error)
+    }
+
+    if (originalRequest._retry < 2) {
+      originalRequest._retry++
+    }
+
+    if (!originalRequest._retry) {
+      originalRequest._retry = 0
+    }
+
+    if (error.config.url === '/get-member' || error.code === 'ERR_NETWORK') {
       originalRequest._retry = true
       try {
         // Faça a solicitação para renovar o token usando o refresh token salvo

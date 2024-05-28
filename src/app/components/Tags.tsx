@@ -12,7 +12,7 @@ import {
   Palette,
   Briefcase
 } from 'lucide-react'
-import { useDarkMode } from '../@hooks/useDarkMode'
+import { useDarkMode } from '../hooks/useDarkMode'
 
 interface TagProps {
   variant: string

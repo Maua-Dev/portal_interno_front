@@ -79,14 +79,16 @@ export default function HistoricActionCard({
           <div className="flex flex-col overflow-hidden">
             <h1 className="text-skin-base sm:text-lg">
               {title}
-              <span
-                className={`text-skin-muted ${
-                  action.storyId === -1 ? 'hidden' : null
-                }`}
-              >
-                {' '}
-                #{action.storyId}
-              </span>
+              {action.storyId && (
+                <span
+                  className={`text-skin-muted ${
+                    action.storyId === -1 ? 'hidden' : null
+                  }`}
+                >
+                  {' '}
+                  #{action.storyId}
+                </span>
+              )}
             </h1>
             <p className="pl-1 text-sm font-light text-skin-muted">
               {action.description.length > 60

@@ -16,13 +16,13 @@ import {
   millisecondsToHours,
   timeStampToDate
 } from '../utils/functions/timeStamp'
-import { MemberContext } from '../contexts/member_context'
 import { Member } from '../../@clean/shared/domain/entities/member'
 import { Tag } from './Tags'
 import { ProjectCodeToProjectName } from '../utils/functions/formatters'
 import { ModalContext } from '../contexts/modal_context'
 import ActionModal from './ActionModal'
-import { useDarkMode } from '../@hooks/useDarkMode'
+import { useDarkMode } from '../hooks/useDarkMode'
+import { useMember } from '../hooks/useMember'
 
 interface ActionDialogProps extends HTMLAttributes<HTMLDivElement> {
   action: Action
@@ -31,7 +31,7 @@ interface ActionDialogProps extends HTMLAttributes<HTMLDivElement> {
 export default function ActionDialog({ action, children }: ActionDialogProps) {
   const [open, setOpen] = useState<boolean>(false)
   const [associatedMembers, setAssociatedMembers] = useState<Member[]>([])
-  const { getAllMembers } = useContext(MemberContext)
+  const { allMembers } = useMember()
   const { darkMode } = useDarkMode()
   const { changeModalContent } = useContext(ModalContext)
 
@@ -40,9 +40,7 @@ export default function ActionDialog({ action, children }: ActionDialogProps) {
     new Date(timeStampToDate(action.endDate)).toLocaleDateString()
 
   const loadMember = async (memberIds: string[]) => {
-    const response = await getAllMembers()
-
-    const members = response?.filter((member) =>
+    const members = allMembers?.filter((member) =>
       memberIds.includes(member.userId)
     )
 
