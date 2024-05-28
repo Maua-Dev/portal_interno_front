@@ -8,6 +8,7 @@ import { ThemeProvider } from './contexts/theme_context.tsx'
 import { ModalProvider } from './contexts/modal_context.tsx'
 import { MemberProvider } from './contexts/member_context.tsx'
 import { ProjectProvider } from './contexts/project_context.tsx'
+import { ActionModalProvider } from './components/ActionModal/contexts/action_modal_context.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -17,7 +18,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <ActionProvider>
             <MemberProvider>
               <ModalProvider>
-                <AppRouter />
+                <ActionModalProvider>
+                  <AppRouter />
+                </ActionModalProvider>
               </ModalProvider>
             </MemberProvider>
           </ActionProvider>

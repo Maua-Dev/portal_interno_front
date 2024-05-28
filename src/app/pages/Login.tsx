@@ -1,4 +1,4 @@
-import { useDarkMode } from '../@hooks/useDarkMode'
+import { useDarkMode } from '../hooks/useDarkMode'
 import background from '../assets/background_login.png'
 import logo from '../assets/logo_dev.png'
 import logo_white from '../assets/logo_dev_white.png'

@@ -6,6 +6,8 @@ import { COURSE, courseToEnum } from '../../domain/enums/course_enum'
 import { ROLE, roleToEnum } from '../../domain/enums/role_enum'
 import { STACK, stackToEnum } from '../../domain/enums/stack_enum'
 import { decorate, injectable } from 'inversify'
+import { HTTP_STATUS_CODE } from '../../domain/enums/http_status_code'
+import { NoItemsFoundError } from '../../domain/helpers/errors/domain_error'
 
 interface memberRawResponse {
   member: {
@@ -87,13 +89,14 @@ export class MemberRepositoryHttp implements IMemberRepository {
           Authorization: 'Bearer ' + token
         }
       })
+
       const member = Member.fromJSON(response.data)
       return member
     } catch (error: any) {
-      if (error.code === 'ERR_NETWORK') {
-        throw new Error('Membro não encontrado! ' + error.response.data)
+      if (error.response.status === HTTP_STATUS_CODE.NOT_FOUND) {
+        throw new NoItemsFoundError('member')
       }
-      throw new Error(error)
+      throw new Error(error.response.data)
     }
   }
 
@@ -153,7 +156,7 @@ export class MemberRepositoryHttp implements IMemberRepository {
     newCellphone?: string | undefined,
     newCourse?: COURSE | undefined,
     newActive?: ACTIVE | undefined
-  ) {
+  ): Promise<Member> {
     try {
       const token = localStorage.getItem('idToken')
 

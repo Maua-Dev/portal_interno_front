@@ -1,13 +1,13 @@
-import { useContext, useEffect, useState } from 'react'
 import { CiCirclePlus } from 'react-icons/ci'
 import { SelectorModal } from './components/SelectorModal'
-import { MemberContext } from '../../contexts/member_context'
-import { Member } from '../../../@clean/shared/domain/entities/member'
 import { Row } from './components/Row'
 import {
   STACK,
   translateStackTag
 } from '../../../@clean/shared/domain/enums/stack_enum'
+import { useMember } from '../../hooks/useMember'
+import { useActionModal } from '../ActionModal/hooks/useActionModal'
+import { useState } from 'react'
 
 interface SelectorProps {
   members?: string[]
@@ -18,39 +18,19 @@ interface SelectorProps {
 }
 
 export function Selector({
-  members,
   setValue,
   getValues,
-  stackTags,
-  isStackTagSelector
+  isStackTagSelector = false
 }: SelectorProps) {
-  const { getMember, getAllMembers } = useContext(MemberContext)
+  const [isSelectorModalOpen, setIsSelectorModalOpen] = useState(false)
 
-  const [isSelectorModalOpen, setIsSelectorModalOpen] = useState<boolean>(false)
-
-  const [allMembers, setAllMembers] = useState<Member[] | undefined>()
-  const [selectedMembersModal, setSelectedMembersModal] = useState<string[]>(
-    members || []
-  )
-
-  const [selectedStacksModal, setSelectedStacksModal] = useState<STACK[]>(
-    stackTags || []
-  )
-
-  useEffect(() => {
-    if (!isStackTagSelector) {
-      getMember().then((member) => {
-        getAllMembers().then((data) => {
-          if (data) {
-            const members = data
-              .filter((m) => m.userId !== member?.userId)
-              .sort((a, b) => a.name.localeCompare(b.name))
-            setAllMembers(members)
-          }
-        })
-      })
-    }
-  }, [getMember, getAllMembers, stackTags, isStackTagSelector])
+  const { allMembers } = useMember()
+  const {
+    currentMembers,
+    currentStackTags,
+    setCurrentMembers,
+    setCurrentStackTags
+  } = useActionModal()
 
   return (
     <>
@@ -60,12 +40,14 @@ export function Selector({
         </p>
         <CiCirclePlus
           className="cursor-pointer text-2xl"
-          onClick={() => setIsSelectorModalOpen(!isSelectorModalOpen)}
+          onClick={() => {
+            setIsSelectorModalOpen(!isSelectorModalOpen)
+          }}
         />
       </div>
       <div className="flex h-32 flex-col gap-4 overflow-x-hidden overflow-y-scroll rounded-lg border-[1px] border-gray-200 px-2 py-2 lg:h-4/5">
         {!isStackTagSelector
-          ? selectedMembersModal.map((userId: string) => {
+          ? currentMembers.map((userId: string) => {
               const member = allMembers?.find((m) => m.userId === userId)
               if (member)
                 return (
@@ -79,16 +61,14 @@ export function Selector({
                           (id: string) => id !== member.userId
                         )
                       )
-                      setSelectedMembersModal(
-                        selectedMembersModal.filter(
-                          (id) => id !== member.userId
-                        )
+                      setCurrentMembers(
+                        currentMembers.filter((id) => id !== member.userId)
                       )
                     }}
                   />
                 )
             })
-          : selectedStacksModal.map((stack: STACK) => {
+          : currentStackTags.map((stack: STACK) => {
               return (
                 <Row
                   key={stack}
@@ -98,32 +78,21 @@ export function Selector({
                       'stackTags',
                       getValues('stackTags').filter((s: STACK) => s !== stack)
                     )
-                    setSelectedStacksModal(
-                      selectedStacksModal.filter((s) => s !== stack)
+                    setCurrentStackTags(
+                      currentStackTags.filter((s) => s !== stack)
                     )
                   }}
                 />
               )
             })}
       </div>
-      {isSelectorModalOpen ? (
-        isStackTagSelector ? (
-          <SelectorModal
-            stackTags={selectedStacksModal}
-            setSelectedStacksModal={setSelectedStacksModal}
-            setIsSelectorModalOpen={setIsSelectorModalOpen}
-            setValue={setValue}
-          />
-        ) : (
-          <SelectorModal
-            members={selectedMembersModal}
-            setValue={setValue}
-            setIsSelectorModalOpen={setIsSelectorModalOpen}
-            allMembers={allMembers}
-            setSelectedMembersModal={setSelectedMembersModal}
-          />
-        )
-      ) : undefined}
+      {isSelectorModalOpen && (
+        <SelectorModal
+          setValue={setValue}
+          isStack={isStackTagSelector}
+          setIsSelectorModalOpen={setIsSelectorModalOpen}
+        />
+      )}
     </>
   )
 }

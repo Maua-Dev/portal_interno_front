@@ -29,10 +29,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       return !prev
     })
 
-    if (import.meta.env.VITE_STAGE === 'dev' && count < 3)
+    if (import.meta.env.VITE_STAGE === 'prod' && count < 14)
       setCount((prev) => prev + 1)
 
-    if (count >= 3 && import.meta.env.VITE_STAGE === 'dev') {
+    if (count >= 14 && import.meta.env.VITE_STAGE === 'prod') {
       window.location.replace(
         'https://media.licdn.com/dms/image/C4D03AQFiRdVm6Y3EpA/profile-displayphoto-shrink_800_800/0/1621979338107?e=1721260800&v=beta&t=zOHxLsSWe5Y9A9rJIF-Y7paPmxfqOWC2NPCbm9doBcI'
       )

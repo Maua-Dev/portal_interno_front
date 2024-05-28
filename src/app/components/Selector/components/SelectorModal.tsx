@@ -5,35 +5,42 @@ import {
   STACK,
   translateStackTag
 } from '../../../../@clean/shared/domain/enums/stack_enum'
-import { useDarkMode } from '../../../@hooks/useDarkMode'
+import { useDarkMode } from '../../../hooks/useDarkMode'
+import { useMember } from '../../../hooks/useMember'
+import { useActionModal } from '../../ActionModal/hooks/useActionModal'
 
 interface SelectorModalProps {
-  members?: string[]
-  allMembers?: Member[]
-  setSelectedMembersModal?: React.Dispatch<React.SetStateAction<string[]>>
-  stackTags?: STACK[]
-  setSelectedStacksModal?: React.Dispatch<React.SetStateAction<STACK[]>>
-  setIsSelectorModalOpen: React.Dispatch<React.SetStateAction<boolean>>
   setValue: any
+  isStack?: boolean
+  setIsSelectorModalOpen: (value: boolean) => void
 }
 
 export function SelectorModal({
-  members,
-  allMembers,
-  setSelectedMembersModal,
-  stackTags,
-  setSelectedStacksModal,
-  setIsSelectorModalOpen,
-  setValue
+  setValue,
+  isStack = false,
+  setIsSelectorModalOpen
 }: SelectorModalProps) {
+  // Hooks
+  const { allMembers } = useMember()
+  const {
+    currentMembers,
+    currentStackTags,
+    setCurrentMembers,
+    setCurrentStackTags
+  } = useActionModal()
+  const { darkMode } = useDarkMode()
+
   // useStates
   const [selectedMembers, setSelectedMembers] = useState<Member[]>(
-    allMembers?.filter((m) => members?.some((member) => member === m.userId)) ||
-      []
+    allMembers?.filter((m) =>
+      currentMembers?.some((member) => member === m.userId)
+    ) || []
   )
-  const [selectedStacks, setSelectedStacks] = useState<STACK[]>(stackTags || [])
-  const [search, setSearch] = useState<string>('')
-  const [fade, setFade] = useState<boolean>(true)
+  const [selectedStackTags, setSelectedStackTags] = useState<STACK[]>(
+    currentStackTags || []
+  )
+  const [search, setSearch] = useState('')
+  const [fade, setFade] = useState(true)
 
   useEffect(() => {
     setTimeout(() => {
@@ -41,23 +48,20 @@ export function SelectorModal({
     })
   }, [])
 
-  // Dark Mode
-  const { darkMode } = useDarkMode()
-
   // Constants
   const allStackTags: string[] = Object.values(STACK)
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
-    if (members) {
+    if (!isStack) {
       setValue(
         'associatedMembersUserIds',
         selectedMembers.map((m) => m.userId)
       )
-      setSelectedMembersModal!(selectedMembers.map((m) => m.userId))
+      setCurrentMembers(selectedMembers.map((m) => m.userId))
     } else {
-      setValue('stackTags', selectedStacks)
-      setSelectedStacksModal!(selectedStacks)
+      setValue('stackTags', selectedStackTags)
+      setCurrentStackTags(selectedStackTags)
     }
     setIsSelectorModalOpen(false)
   }
@@ -79,25 +83,32 @@ export function SelectorModal({
       >
         <header className="flex justify-between gap-4 px-6 pt-6">
           <h1 className="text-xl font-bold">
-            {allMembers ? 'Membros' : 'Áreas'}
+            {!isStack ? 'Membros' : 'Áreas'}
           </h1>
           <input
             type="text"
             className={`w-full rounded-md ${
               darkMode ? 'bg-gray-600' : 'bg-gray-200'
             } px-2 py-1 outline-none`}
-            placeholder={`Buscar ${allMembers ? 'membro' : 'área'} 🔎`}
+            placeholder={`Buscar ${!isStack ? 'membro' : 'área'} 🔎`}
             onChange={(e) => setSearch(e.target.value)}
           />
         </header>
         <div className="mt-5 flex h-full flex-col gap-3 overflow-y-scroll px-6 pb-4">
-          {allMembers
+          {!isStack
             ? allMembers
                 ?.filter((member) => {
-                  if (search !== '')
-                    return member.name
-                      .toLowerCase()
-                      .includes(search.toLowerCase())
+                  if (search !== '') {
+                    if (/^[a-z ]+$/.test(search)) {
+                      return member.name
+                        .toLowerCase()
+                        .includes(search.toLowerCase())
+                    } else {
+                      return member.ra.match(
+                        new RegExp(`^${search.replace(/\D/g, '')}`, 'g')
+                      )
+                    }
+                  }
                   return true
                 })
                 .map((member) => (
@@ -146,12 +157,15 @@ export function SelectorModal({
                       <p>{translateStackTag(stack)}</p>
                       <input
                         type="checkbox"
-                        checked={selectedStacks.includes(stackEnum)}
+                        checked={
+                          selectedStackTags &&
+                          selectedStackTags.some((s) => s === stackEnum)
+                        }
                         onChange={(e) => {
-                          setSelectedStacks(
+                          setSelectedStackTags(
                             e.target.checked
-                              ? [...selectedStacks, stackEnum]
-                              : selectedStacks.filter((s) => s !== stackEnum)
+                              ? [...selectedStackTags, stackEnum]
+                              : selectedStackTags.filter((s) => s !== stackEnum)
                           )
                         }}
                       />
