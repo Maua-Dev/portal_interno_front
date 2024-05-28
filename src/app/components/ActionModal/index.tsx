@@ -18,7 +18,6 @@ import { useModal } from '../../hooks/useModal'
 import { useAction } from '../../hooks/useAction'
 import { useProject } from '../../hooks/useProject'
 import { useActionModal } from './hooks/useActionModal'
-import { useMember } from '../../hooks/useMember'
 
 const actionSchema = z.object({
   title: z.string().min(1, { message: 'Título é obrigatório' }),
@@ -70,7 +69,6 @@ export default function ActionModal({ action }: { action?: Action }) {
     useAction()
   const { handleProjects, projects } = useProject()
   const { setCurrentMembers, setCurrentStackTags } = useActionModal()
-  const { handleAllMembers } = useMember()
 
   // Use state
   const [fade, setFade] = useState(false)
@@ -89,7 +87,6 @@ export default function ActionModal({ action }: { action?: Action }) {
       setCurrentMembers(action?.associatedMembersUserIds || [])
       setCurrentStackTags(action?.stackTags || [])
     }
-    handleAllMembers()
     handleProjects()
     setTimeout(() => {
       setFade(true)
