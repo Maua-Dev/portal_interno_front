@@ -1,11 +1,7 @@
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
 import { MemberContext } from '../contexts/member_context'
-import { useNavigate } from 'react-router-dom'
 
 export const useMember = () => {
-  const navigate = useNavigate()
-  const [isRegister, setIsRegister] = useState(false)
-
   const {
     getMember,
     getAllMembers,
@@ -15,20 +11,10 @@ export const useMember = () => {
     deleteMember,
     isAdmin,
     allMembers,
-    handleAllMembers
+    handleAllMembers,
+    isRegister,
+    handleMember
   } = useContext(MemberContext)
-
-  const handleMember = async () => {
-    try {
-      await getMember()
-    } catch (error: any) {
-      if (error.message.toLowerCase().includes('no items found')) {
-        setIsRegister(true)
-      } else {
-        navigate('/login')
-      }
-    }
-  }
 
   return {
     isRegister,

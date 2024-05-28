@@ -13,6 +13,7 @@ import { UpdateMemberUsecase } from '../../@clean/modules/member/usecases/update
 import { DeleteMemberUsecase } from '../../@clean/modules/member/usecases/delete_member_usecase'
 import { ACTIVE } from '../../@clean/shared/domain/enums/active_enum'
 import { CreateMemberUsecase } from '../../@clean/modules/member/usecases/create_member_usecase'
+import { useNavigate } from 'react-router-dom'
 
 export interface MemberContextInterface {
   getMember: () => Promise<Member>
@@ -44,11 +45,15 @@ export interface MemberContextInterface {
 
   handleAllMembers: () => Promise<void>
 
+  handleMember: () => Promise<void>
+
   allMembers: Member[] | undefined
 
   memberError: string
 
   isAdmin: boolean
+
+  isRegister: boolean
 }
 
 const defaultContext: MemberContextInterface = {
@@ -72,13 +77,17 @@ const defaultContext: MemberContextInterface = {
     return {} as Member
   },
 
+  handleMember: async () => {},
+
   handleAllMembers: async () => {},
 
   allMembers: [],
 
   memberError: '',
 
-  isAdmin: false
+  isAdmin: false,
+
+  isRegister: false
 }
 
 export const MemberContext = createContext(defaultContext)
@@ -106,12 +115,14 @@ const deleteMemberUsecase = containerMember.get<DeleteMemberUsecase>(
 export function MemberProvider({ children }: PropsWithChildren) {
   const [memberError, setMemberError] = useState('')
   const [isAdmin, setIsAdmin] = useState(false)
+  const [member, setMember] = useState<Member | undefined>({} as Member)
   const [allMembers, setAllMembers] = useState<Member[] | undefined>([])
+  const [isRegister, setIsRegister] = useState(false)
+  const navigate = useNavigate()
 
   const handleAllMembers = async () => {
     try {
       const allMembers = await getAllMembers()
-      const member = await getMember()
 
       if (allMembers && member) {
         const members = allMembers
@@ -121,6 +132,19 @@ export function MemberProvider({ children }: PropsWithChildren) {
       }
     } catch (error: any) {
       console.log(error.message)
+    }
+  }
+
+  const handleMember = async () => {
+    try {
+      const member = await getMember()
+      setMember(member)
+    } catch (error: any) {
+      if (error.message.toLowerCase().includes('no items found')) {
+        setIsRegister(true)
+      } else {
+        navigate('/login')
+      }
     }
   }
 
@@ -232,9 +256,11 @@ export function MemberProvider({ children }: PropsWithChildren) {
         updateMember,
         deleteMember,
         memberError,
-        isAdmin,
+        handleMember,
         handleAllMembers,
-        allMembers
+        allMembers,
+        isAdmin,
+        isRegister
       }}
     >
       {children}
