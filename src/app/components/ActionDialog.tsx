@@ -29,6 +29,7 @@ interface ActionDialogProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export default function ActionDialog({ action, children }: ActionDialogProps) {
+  const [open, setOpen] = useState<boolean>(false)
   const [associatedMembers, setAssociatedMembers] = useState<Member[]>([])
   const { getAllMembers } = useContext(MemberContext)
   const { darkMode } = useDarkMode()
@@ -51,13 +52,15 @@ export default function ActionDialog({ action, children }: ActionDialogProps) {
   }
 
   useEffect(() => {
-    loadMember(action.associatedMembersUserIds)
+    if (open) {
+      loadMember(action.associatedMembersUserIds)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [open])
 
   return (
     <div className="static flex w-full justify-center">
-      <DialogPrimitive.Root>
+      <DialogPrimitive.Root open={open} onOpenChange={setOpen}>
         <DialogPrimitive.Trigger asChild>{children}</DialogPrimitive.Trigger>
         <DialogPrimitive.Overlay className="fixed inset-0 z-40 opacity-70 backdrop-blur-sm" />
         <DialogPrimitive.DialogContent
