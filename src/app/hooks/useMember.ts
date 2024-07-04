@@ -12,15 +12,15 @@ export const useMember = () => {
     isAdmin,
     allMembers,
     handleAllMembers,
-    isRegister,
-    handleMember
+    handleMember,
+    isRegister
   } = useContext(MemberContext)
 
   return {
     isRegister,
     isAdmin,
-    handleMember,
     handleAllMembers,
+    handleMember,
     allMembers,
     getMember,
     createMember,
