@@ -43,9 +43,9 @@ export interface MemberContextInterface {
 
   deleteMember: () => Promise<Member>
 
-  handleAllMembers: () => Promise<void>
-
   handleMember: () => Promise<void>
+
+  handleAllMembers: () => Promise<void>
 
   allMembers: Member[] | undefined
 
@@ -77,9 +77,9 @@ const defaultContext: MemberContextInterface = {
     return {} as Member
   },
 
-  handleMember: async () => {},
-
   handleAllMembers: async () => {},
+
+  handleMember: async () => {},
 
   allMembers: [],
 
@@ -115,13 +115,13 @@ const deleteMemberUsecase = containerMember.get<DeleteMemberUsecase>(
 export function MemberProvider({ children }: PropsWithChildren) {
   const [memberError, setMemberError] = useState('')
   const [isAdmin, setIsAdmin] = useState(false)
-  const [member, setMember] = useState<Member | undefined>({} as Member)
   const [allMembers, setAllMembers] = useState<Member[] | undefined>([])
   const [isRegister, setIsRegister] = useState(false)
   const navigate = useNavigate()
 
-  const handleAllMembers = async () => {
+  async function handleAllMembers() {
     try {
+      const member = await getMember()
       const allMembers = await getAllMembers()
 
       if (allMembers && member) {
@@ -137,8 +137,7 @@ export function MemberProvider({ children }: PropsWithChildren) {
 
   const handleMember = async () => {
     try {
-      const member = await getMember()
-      setMember(member)
+      await getMember()
     } catch (error: any) {
       if (error.message.toLowerCase().includes('no items found')) {
         setIsRegister(true)

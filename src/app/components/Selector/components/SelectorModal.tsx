@@ -77,7 +77,7 @@ export function SelectorModal({
       }`}
     >
       <section
-        className={`flex h-1/3 w-4/5 flex-col rounded-lg sm:h-1/3 sm:w-1/2 lg:h-2/3 xl:w-1/4 ${
+        className={`flex h-[40%] w-4/5 flex-col rounded-lg sm:w-1/3 lg:h-2/3 xl:w-1/4 ${
           darkMode ? 'bg-skin-secundary' : 'bg-white'
         }`}
       >

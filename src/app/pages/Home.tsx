@@ -10,7 +10,7 @@ import 'react-toastify/dist/ReactToastify.css'
 
 export default function Home() {
   const { darkMode } = useDarkMode()
-  const { memberError, handleAllMembers, isRegister, handleMember } =
+  const { memberError, handleAllMembers, handleMember, isRegister } =
     useMember()
   const { actionError, actionSuccess, setActionError, setActionSuccess } =
     useAction()

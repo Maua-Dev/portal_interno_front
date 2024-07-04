@@ -18,7 +18,6 @@ import { useModal } from '../../hooks/useModal'
 import { useAction } from '../../hooks/useAction'
 import { useProject } from '../../hooks/useProject'
 import { useActionModal } from './hooks/useActionModal'
-import { useMember } from '../../hooks/useMember'
 
 const actionSchema = z.object({
   title: z.string().min(1, { message: 'Título é obrigatório' }),
@@ -70,7 +69,6 @@ export default function ActionModal({ action }: { action?: Action }) {
     useAction()
   const { handleProjects, projects } = useProject()
   const { setCurrentMembers, setCurrentStackTags } = useActionModal()
-  const { handleAllMembers } = useMember()
 
   // Use state
   const [fade, setFade] = useState(false)
@@ -89,7 +87,6 @@ export default function ActionModal({ action }: { action?: Action }) {
       setCurrentMembers(action?.associatedMembersUserIds || [])
       setCurrentStackTags(action?.stackTags || [])
     }
-    handleAllMembers()
     handleProjects()
     setTimeout(() => {
       setFade(true)
@@ -152,10 +149,10 @@ export default function ActionModal({ action }: { action?: Action }) {
   return (
     <>
       <div
-        className={`flex h-full w-full transform items-center justify-center overflow-x-hidden overflow-y-scroll py-24 transition-all duration-200 sm:pt-24 lg:h-dvh lg:py-12 lg:pt-24 ${
+        className={`flex  w-full transform items-center justify-center overflow-x-hidden overflow-y-scroll py-24 transition-all duration-200 sm:pt-24 lg:h-dvh lg:py-12 lg:pt-24 ${
           isUpdateModal
-            ? 'absolute left-0 top-0 z-50 bg-black bg-opacity-80 pt-[50rem] lg:pt-0'
-            : 'lg:pl-14'
+            ? 'absolute left-0  top-0 z-50 h-[100rem] bg-black bg-opacity-80 sm:h-[85rem] lg:pt-0'
+            : 'h-full lg:pl-14'
         } ${
           isUpdateModal
             ? `${fade ? 'opacity-100' : 'opacity-0'}`
