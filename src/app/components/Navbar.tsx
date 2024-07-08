@@ -17,6 +17,7 @@ import ActionModal from './ActionModal'
 import { useDarkMode } from '../hooks/useDarkMode'
 import { useModal } from '../hooks/useModal'
 import { useMember } from '../hooks/useMember'
+import Projects from './Projects'
 
 interface window {
   innerWidth: number
@@ -140,9 +141,14 @@ export default function Navbar() {
                   Histórico
                 </p>
               </div>
-              {isAdmin && (
+              {true && (
                 <>
-                  <div className="flex cursor-pointer select-none gap-8 overflow-x-hidden">
+                  <div
+                    className="flex cursor-pointer select-none gap-8 overflow-x-hidden"
+                    onClick={() => {
+                      changeModalContent(<Projects />)
+                    }}
+                  >
                     <BsClipboard
                       className={`transform cursor-pointer ${
                         !darkMode ? 'text-gray-700' : 'text-white'
