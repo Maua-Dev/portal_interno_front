@@ -3,7 +3,7 @@
 import Card from '../Card'
 import SearchField from './components/SearchField'
 import Text from './components/Text'
-import { MoveLeft, History, Search, X } from 'lucide-react'
+import { MoveLeft, Search, X, LucideIcon } from 'lucide-react'
 import {
   Popover,
   PopoverContent,
@@ -19,32 +19,39 @@ import { FilterTag } from '../Tags'
 import { Tooltip } from '../Tooltip'
 
 interface FilterBarProps extends HTMLAttributes<HTMLDivElement> {
+  label: string
+  icon: LucideIcon
   setFilterProps: (props: React.SetStateAction<FilterProps>) => void
   filterProps: FilterProps
+  filterOptions: FilterOptions[]
 }
 
-interface FilterProps {
+export interface FilterProps {
   [filterName: string]: string
-  searchText: string
-  project: string
-  area: string
-  orderBy: string
+}
+
+export interface FilterOptions {
+  name: string
+  label: string
+  type: 'text' | 'select'
+  options?: { label: string; value: string }[]
 }
 
 export default function FilterBar({
+  label,
+  icon: Icon,
   setFilterProps,
   filterProps,
+  filterOptions,
   ...props
 }: FilterBarProps) {
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false)
   const [searchOpen, setSearchOpen] = useState<boolean>(false)
 
-  const emptyFilterProps = {
-    searchText: '',
-    project: '',
-    area: '',
-    orderBy: ''
-  }
+  const emptyFilterProps = filterOptions.reduce((acc, option) => {
+    acc[option.name] = ''
+    return acc
+  }, {} as FilterProps)
 
   const [localFilterProps, setLocalFilterProps] =
     useState<FilterProps>(emptyFilterProps)
@@ -132,9 +139,9 @@ export default function FilterBar({
             </Tooltip>
           ) : (
             <>
-              <History className="h-8 w-8" />
+              <Icon className="h-8 w-8" />
               <Text size="2xl" className="font-semibold">
-                Histórico
+                {label}
               </Text>
             </>
           )}
@@ -196,42 +203,30 @@ export default function FilterBar({
               }}
               className="pt-10"
             >
-              <Select.Root
-                label="Projetos"
-                name="project"
-                variant="withTextLabel"
-                onChange={handleSelectFilterData}
-              >
-                <Select.Content value="PI">Portal Interno</Select.Content>
-                <Select.Content value="MF">Mauá Food</Select.Content>
-                <Select.Content value="PT">Portifólio</Select.Content>
-                <Select.Content value="SF">Selfie Mauá</Select.Content>
-                <Select.Content value="SM">SMILE</Select.Content>
-                <Select.Content value="GM">Gameficação</Select.Content>
-              </Select.Root>
-              <Select.Root
-                label="Área"
-                name="area"
-                variant="withTextLabel"
-                onChange={handleSelectFilterData}
-              >
-                <Select.Content value="FRONTEND">FRONT</Select.Content>
-                <Select.Content value="BACKEND">BACK</Select.Content>
-                <Select.Content value="INFRA">INFRA</Select.Content>
-                <Select.Content value="UX_UI">UX/UI</Select.Content>
-                <Select.Content value="INTERNAL">INTERNAL</Select.Content>
-              </Select.Root>
-              <Select.Root
-                label="Ordenar Por"
-                name="orderBy"
-                variant="withTextLabel"
-                onChange={handleSelectFilterData}
-              >
-                <Select.Content value="NEW">Mais Recente</Select.Content>
-                <Select.Content value="OLD">Mais Antigo</Select.Content>
-                <Select.Content value="BIGGER">Maior Duração</Select.Content>
-                <Select.Content value="SMALLER">Menor Duração</Select.Content>
-              </Select.Root>
+              {filterOptions.map((filterOption, index) => {
+                if (filterOption.type === 'select') {
+                  return (
+                    <Select.Root
+                      key={filterOption.name + index}
+                      label={filterOption.label}
+                      name={filterOption.name}
+                      variant="withTextLabel"
+                      onChange={handleSelectFilterData}
+                    >
+                      {filterOption.options?.map((option, index) => {
+                        return (
+                          <Select.Content
+                            key={option.value + index}
+                            value={option.value}
+                          >
+                            {option.label}
+                          </Select.Content>
+                        )
+                      })}
+                    </Select.Root>
+                  )
+                }
+              })}
               <Button variant="form" className="mt-4" onClick={filter}>
                 Filtrar
                 <Search className="h-4 w-4" />
