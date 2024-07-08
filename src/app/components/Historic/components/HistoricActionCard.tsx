@@ -2,7 +2,7 @@
 import { HTMLAttributes, useContext, useState } from 'react'
 import Card from '../../Card'
 import { StateIcon, IconText } from './Icon'
-import { BsClockHistory, BsThreeDots } from 'react-icons/bs'
+import { BsThreeDots } from 'react-icons/bs'
 import { Trash2, PenBox, Calendar, Clock2 } from 'lucide-react'
 import { Action } from '../../../../@clean/shared/domain/entities/action'
 import { stackFormatter } from '../../../../@clean/shared/domain/enums/stack_enum'
@@ -153,7 +153,7 @@ export default function HistoricActionCard({
                       setPopUpOpen(false)
                       event.stopPropagation()
                     }}
-                    variant="default"
+                    variant="destructive"
                   >
                     <Trash2 className="w-4" />
                     Excluir
