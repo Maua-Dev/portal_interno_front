@@ -2,9 +2,8 @@
 import { HTMLAttributes, useContext, useState } from 'react'
 import Card from '../../Card'
 import { StateIcon, IconText } from './Icon'
-import { AiOutlineCalendar } from 'react-icons/ai'
 import { BsClockHistory, BsThreeDots } from 'react-icons/bs'
-import { Trash2, PenBox } from 'lucide-react'
+import { Trash2, PenBox, Calendar, Clock2 } from 'lucide-react'
 import { Action } from '../../../../@clean/shared/domain/entities/action'
 import { stackFormatter } from '../../../../@clean/shared/domain/enums/stack_enum'
 import { Tag } from '../../Tags'
@@ -115,21 +114,18 @@ export default function HistoricActionCard({
 
         <div className="flex w-full max-w-64 flex-row items-center justify-evenly gap-3 sm:w-fit sm:justify-between">
           <div className="flex flex-col gap-1 ">
-            <IconText
-              text={endDateFormated.toString()}
-              icon={<AiOutlineCalendar className="h-4 w-4 text-skin-muted" />}
-            />
+            <IconText text={endDateFormated.toString()} icon={Calendar} />
             <IconText
               text={
                 durationFormated > 1
                   ? durationFormated + ' horas'
                   : durationFormated + ' hora'
               }
-              icon={<BsClockHistory className="h-4 w-4 text-skin-muted" />}
+              icon={Clock2}
             />
           </div>
           <div onMouseLeave={closeSettingsPopUp}>
-            <Popover open={isPopUpOpen}>
+            <Popover open={isPopUpOpen} onOpenChange={setPopUpOpen}>
               <PopoverTrigger onClick={handleSettingsPopUp}>
                 <BsThreeDots className="h-10 w-10 cursor-pointer p-2 text-skin-base" />
               </PopoverTrigger>
