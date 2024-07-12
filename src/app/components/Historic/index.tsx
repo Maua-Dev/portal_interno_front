@@ -9,6 +9,7 @@ import { stackToEnum } from '../../../@clean/shared/domain/enums/stack_enum'
 import { History } from 'lucide-react'
 import { actionsFilterOptions } from './filterOptions'
 import { NoActionsFoundComponent } from '../NoDataFoundCard'
+import { motion } from 'framer-motion'
 
 interface lastEvaluatedKey {
   actionId: string
@@ -150,12 +151,19 @@ export default function Historic() {
         >
           {filteredActions.map((actionUnit, index) => {
             return (
-              <HistoricActionCard
-                className="z-10 hover:z-20"
+              <motion.div
                 key={index + '' + actionUnit.actionId}
-                action={actionUnit}
-                setHistory={setLocalHistory}
-              />
+                initial={{ marginLeft: '50px', opacity: 0 }}
+                animate={{ marginLeft: '0px', opacity: 1 }}
+                transition={{ duration: 0.5, delay: index * 0.3 }}
+                className="w-full"
+              >
+                <HistoricActionCard
+                  className="z-10 hover:z-20"
+                  action={actionUnit}
+                  setHistory={setLocalHistory}
+                />
+              </motion.div>
             )
           })}
           <h1
