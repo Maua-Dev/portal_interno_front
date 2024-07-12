@@ -1,4 +1,4 @@
-import { HTMLAttributes, ReactElement, useState } from 'react'
+import { ReactElement, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import Text from './FilterBar/components/Text'
 import {
@@ -13,7 +13,7 @@ import {
   Briefcase
 } from 'lucide-react'
 import { useDarkMode } from '../hooks/useDarkMode'
-import { AnimatePresence, MotionProps, motion } from 'framer-motion'
+import { MotionProps, motion } from 'framer-motion'
 
 interface TagProps {
   variant: string

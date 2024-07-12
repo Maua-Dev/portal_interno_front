@@ -6,7 +6,7 @@ import HistoricActionCard from './components/HistoricActionCard'
 import { ActionContext } from '../../contexts/action_context'
 import Loader from './components/Loader'
 import { stackToEnum } from '../../../@clean/shared/domain/enums/stack_enum'
-import { SearchX, History } from 'lucide-react'
+import { History } from 'lucide-react'
 import { actionsFilterOptions } from './filterOptions'
 import { NoActionsFoundComponent } from '../NoDataFoundCard'
 
