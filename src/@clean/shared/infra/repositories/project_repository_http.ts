@@ -3,6 +3,19 @@ import { IProjectRepository } from '../../../modules/project/domain/repositories
 import { JsonProps, Project } from '../../domain/entities/project'
 import { decorate, injectable } from 'inversify'
 
+type ProjectRawResponse = {
+  project: {
+    code: string
+    description: string
+    members_user_ids: string[]
+    name: string
+    photos: string[]
+    po_user_id: string
+    scrum_user_id: string
+    start_date: number
+  }
+}
+
 export type ProjectType = {
   code: string
   description: string
@@ -97,11 +110,23 @@ export class ProjectRepositoryHttp implements IProjectRepository {
           Authorization: 'Bearer ' + token
         }
       })
-      const responseFormatted = response.data.projects.map(
-        (project: { project: ProjectType }) => {
-          return project.project
-        }
-      )
+
+      const responseFormatted: ProjectType[] = []
+
+      response.data.projects.map((project: ProjectRawResponse) => {
+        const data = project.project
+        responseFormatted.push({
+          code: data.code,
+          description: data.description,
+          membersUserIds: data.members_user_ids,
+          name: data.name,
+          photos: data.photos,
+          poUserId: data.po_user_id,
+          scrumUserId: data.scrum_user_id,
+          startDate: data.start_date
+        })
+      })
+
       return responseFormatted
     } catch (error: any) {
       throw new Error('Error getting all projects: ' + error.message)
