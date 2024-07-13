@@ -7,12 +7,12 @@ export const projectFilterOptions: FilterOptions[] = [
     type: 'text'
   },
   {
-    name: 'active',
+    name: 'activeStatus',
     label: 'Atividade',
     type: 'select',
     options: [
-      { label: 'Ativo', value: 'active' },
-      { label: 'Desativado', value: 'inactive' }
+      { label: 'Ativo', value: 'ACTIVE' },
+      { label: 'Desativado', value: 'INACTIVE' }
     ]
   },
   {

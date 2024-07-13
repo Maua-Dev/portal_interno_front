@@ -192,6 +192,12 @@ export function FilterTag({
     },
     SMALLER: {
       label: 'Menor Duração'
+    },
+    ACTIVE: {
+      label: 'Ativo'
+    },
+    INACTIVE: {
+      label: 'Desativado'
     }
   }
 
