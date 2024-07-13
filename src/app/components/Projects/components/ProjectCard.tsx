@@ -32,12 +32,16 @@ export default function ProjectCard() {
           <p className="pl-2 text-lg font-semibold">Portal Interno</p>
           <div className="flex flex-row gap-2 rounded-full bg-skin-fill pr-2 text-sm text-white ">
             <HoverCard side="top" placeholder={'PO'}>
-              <p className="rounded-full bg-skin-button-blue-accent px-2">
+              <p className="flex items-center justify-center rounded-full bg-skin-button-blue-accent px-2 text-center">
                 Fernando Azevedo
               </p>
             </HoverCard>
             <HoverCard side="top" placeholder="SCRUM">
-              <p className={`${darkMode ? 'text-white' : 'text-black'}`}>
+              <p
+                className={`flex items-center justify-center text-center ${
+                  darkMode ? 'text-white' : 'text-black'
+                }`}
+              >
                 Bernardo
               </p>
             </HoverCard>

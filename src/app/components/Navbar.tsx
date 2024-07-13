@@ -141,7 +141,7 @@ export default function Navbar() {
                   Histórico
                 </p>
               </div>
-              {true && (
+              {isAdmin && (
                 <>
                   <div
                     className="flex cursor-pointer select-none gap-8 overflow-x-hidden"
