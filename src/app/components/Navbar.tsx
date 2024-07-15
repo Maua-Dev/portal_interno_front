@@ -265,6 +265,9 @@ export default function Navbar() {
               {isAdmin && (
                 <>
                   <BsClipboard
+                    onClick={() => {
+                      changeModalContent(<Projects />)
+                    }}
                     className={`transform cursor-pointer ${
                       !darkMode ? 'text-gray-700' : 'text-white'
                     } transition-all duration-100 ${
