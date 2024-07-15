@@ -119,10 +119,10 @@ export class MemberRepositoryHttp implements IMemberRepository {
 
       const membersArray: Member[] = []
 
-      response.data.members.map((member) => {
+      response.data.members.forEach((member) => {
         const memberUnit: memberRawResponse = member
 
-        return membersArray.push(
+        membersArray.push(
           new Member({
             name: memberUnit.member.name,
             emailDev: memberUnit.member.email_dev,

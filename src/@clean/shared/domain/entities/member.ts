@@ -34,7 +34,7 @@ export type MemberProps = {
   cellphone: string
   course: COURSE // ENUM
   hiredDate: number
-  deactivatedDate?: number
+  deactivatedDate?: number | null
   active: ACTIVE // ENUM
   userId: string
 }
