@@ -11,7 +11,6 @@ import {
   BsClipboard
 } from 'react-icons/bs'
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import Historic from './Historic'
 import ActionModal from './ActionModal'
 import { useDarkMode } from '../hooks/useDarkMode'
@@ -28,10 +27,9 @@ export default function Navbar() {
   const maximumWidth: number = 1024
 
   // Hooks
-  const navigate = useNavigate()
   const { darkMode, toggleDarkMode } = useDarkMode()
   const { changeModalContent } = useModal()
-  const { isAdmin } = useMember()
+  const { isAdmin, handleLogout, isOnHold } = useMember()
 
   // States
   const [hover, setHover] = useState(false)
@@ -52,11 +50,6 @@ export default function Navbar() {
   function getWindowSize() {
     const { innerWidth, innerHeight } = window
     return { innerWidth, innerHeight }
-  }
-
-  const handleLogout = () => {
-    localStorage.removeItem('idToken')
-    navigate('/login')
   }
 
   return (
@@ -97,7 +90,7 @@ export default function Navbar() {
               <div
                 className="flex cursor-pointer select-none gap-8 overflow-x-hidden"
                 onClick={() => {
-                  changeModalContent(<ActionModal />)
+                  if (!isOnHold) changeModalContent(<ActionModal />)
                 }}
               >
                 <BsFillPlusSquareFill
@@ -120,7 +113,7 @@ export default function Navbar() {
               <div
                 className="flex cursor-pointer select-none gap-8 overflow-x-hidden"
                 onClick={() => {
-                  changeModalContent(<Historic />)
+                  if (!isOnHold) changeModalContent(<Historic />)
                 }}
               >
                 <AiOutlineHistory

@@ -13,7 +13,9 @@ export const useMember = () => {
     allMembers,
     handleAllMembers,
     handleMember,
-    isRegister
+    handleLogout,
+    isRegister,
+    isOnHold
   } = useContext(MemberContext)
 
   return {
@@ -27,6 +29,8 @@ export const useMember = () => {
     updateMember,
     deleteMember,
     getAllMembers,
-    memberError
+    memberError,
+    isOnHold,
+    handleLogout
   }
 }
