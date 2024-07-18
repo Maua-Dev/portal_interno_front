@@ -1,7 +1,8 @@
 export enum ACTIVE {
   ACTIVE = 'ACTIVE',
   FREEZE = 'FREEZE',
-  DISCONNECTED = 'DISCONNECTED'
+  DISCONNECTED = 'DISCONNECTED',
+  ON_HOLD = 'ON_HOLD'
 }
 
 export function activeToEnum(value: string): ACTIVE {
@@ -12,6 +13,8 @@ export function activeToEnum(value: string): ACTIVE {
       return ACTIVE.FREEZE
     case 'DISCONNECTED':
       return ACTIVE.DISCONNECTED
+    case 'ON_HOLD':
+      return ACTIVE.ON_HOLD
     default:
       throw new Error('Invalid value')
   }
