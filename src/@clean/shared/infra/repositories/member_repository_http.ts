@@ -143,7 +143,7 @@ export class MemberRepositoryHttp implements IMemberRepository {
 
       return membersArray
     } catch (error: any) {
-      throw new Error('Error Getting All Members: ' + error.response.data)
+      throw new Error('Error Getting All Members: ' + error.message)
     }
   }
 
