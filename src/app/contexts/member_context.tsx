@@ -46,6 +46,8 @@ export interface MemberContextInterface {
 
   handleAllMembers: () => Promise<void>
 
+  handleLogout: () => void
+
   allMembers: Member[] | undefined
 
   memberError: string
@@ -81,6 +83,8 @@ const defaultContext: MemberContextInterface = {
   handleAllMembers: async () => {},
 
   handleMember: async () => {},
+
+  handleLogout: () => {},
 
   allMembers: [],
 
@@ -157,6 +161,13 @@ export function MemberProvider({ children }: PropsWithChildren) {
 
   const handleAdmin = (role: string) => {
     return ['HEAD', 'DIRECTOR'].includes(role)
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem('idToken')
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('refreshToken')
+    window.location.replace('/login')
   }
 
   async function getMember(): Promise<Member> {
@@ -268,7 +279,8 @@ export function MemberProvider({ children }: PropsWithChildren) {
         allMembers,
         isAdmin,
         isRegister,
-        isOnHold
+        isOnHold,
+        handleLogout
       }}
     >
       {children}
