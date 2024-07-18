@@ -84,7 +84,7 @@ export default function Home() {
       >
         {isOnHold ? <OnHoldModal /> : null}
         {isRegister ? <RegisterModal /> : null}
-        {modalContent}
+        {!isOnHold && modalContent}
         <ToastContainer
           position="top-right"
           autoClose={3000}
