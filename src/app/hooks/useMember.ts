@@ -15,7 +15,8 @@ export const useMember = () => {
     handleMember,
     handleLogout,
     isRegister,
-    isOnHold
+    isOnHold,
+    member
   } = useContext(MemberContext)
 
   return {
@@ -31,6 +32,7 @@ export const useMember = () => {
     getAllMembers,
     memberError,
     isOnHold,
-    handleLogout
+    handleLogout,
+    member
   }
 }
