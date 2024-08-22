@@ -120,7 +120,7 @@ export default function FilterBar({
     <Card
       variant="lg"
       className={twMerge(
-        'flex h-fit flex-row items-center justify-between shadow-sm shadow-gray-500 duration-150 ease-in',
+        'flex h-fit flex-row items-center justify-between rounded-t-lg shadow-sm shadow-gray-500 duration-150 ease-in',
         props.className
       )}
     >
