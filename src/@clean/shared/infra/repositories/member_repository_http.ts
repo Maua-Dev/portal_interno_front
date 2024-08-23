@@ -27,8 +27,27 @@ interface memberRawResponse {
   }
 }
 
+export interface memberOfGetAllMembersRawResponse {
+  member: {
+    name: string
+    email_dev: string
+    email: string
+    ra: string
+    role: string
+    stack: string
+    year: number
+    cellphone: string
+    course: string
+    hired_date: number
+    deactivated_date?: number
+    active: string
+    user_id: string
+    hours_worked: number
+  }
+}
+
 export interface getAllMembersRawResponse {
-  members: memberRawResponse[]
+  members: memberOfGetAllMembersRawResponse[]
 }
 
 export class MemberRepositoryHttp implements IMemberRepository {
@@ -108,8 +127,9 @@ export class MemberRepositoryHttp implements IMemberRepository {
         throw new Error('Token not found')
       }
 
-      const response = await this.http.get<getAllMembersRawResponse>(
+      const response = await this.http.post<getAllMembersRawResponse>(
         '/get-all-members',
+        {},
         {
           headers: {
             Authorization: 'Bearer ' + token
