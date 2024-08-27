@@ -8,6 +8,7 @@ import { useAction } from '../hooks/useAction'
 import { useModal } from '../hooks/useModal'
 import 'react-toastify/dist/ReactToastify.css'
 import { OnHoldModal } from '../components/OnHoldModal'
+import Historic from '../components/Historic'
 
 export default function Home() {
   const { darkMode } = useDarkMode()
@@ -15,11 +16,12 @@ export default function Home() {
     useMember()
   const { actionError, actionSuccess, setActionError, setActionSuccess } =
     useAction()
-  const { modalContent } = useModal()
+  const { modalContent, changeModalContent } = useModal()
 
   useEffect(() => {
     handleMember()
     handleAllMembers()
+    changeModalContent(<Historic />)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

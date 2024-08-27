@@ -18,6 +18,7 @@ import { useModal } from '../../hooks/useModal'
 import { useAction } from '../../hooks/useAction'
 import { useProject } from '../../hooks/useProject'
 import { useActionModal } from './hooks/useActionModal'
+import React from 'react'
 
 const actionSchema = z.object({
   title: z.string().min(1, { message: 'Título é obrigatório' }),
