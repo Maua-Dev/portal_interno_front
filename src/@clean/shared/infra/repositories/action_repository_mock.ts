@@ -102,7 +102,8 @@ export class ActionRepositoryMock implements IActionRepository {
       hiredDate: 1612137600000,
       active: ACTIVE.ACTIVE,
       userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
-      emailDev: 'dsiqueira.devmaua@gmail.com'
+      emailDev: 'dsiqueira.devmaua@gmail.com',
+      hoursWorked: 3
     }),
     new Member({
       name: 'Bruno fevs',
@@ -116,7 +117,8 @@ export class ActionRepositoryMock implements IActionRepository {
       hiredDate: 1612137600000,
       active: ACTIVE.ACTIVE,
       userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee626',
-      emailDev: 'bfevs.devmaua@maua.com'
+      emailDev: 'bfevs.devmaua@maua.com',
+      hoursWorked: 3
     }),
     new Member({
       name: 'Rubicks Cube',
@@ -130,7 +132,8 @@ export class ActionRepositoryMock implements IActionRepository {
       hiredDate: 1640192165000,
       active: ACTIVE.ACTIVE,
       userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee625',
-      emailDev: 'rcube.devmaua@gmai.com'
+      emailDev: 'rcube.devmaua@gmai.com',
+      hoursWorked: 3
     }),
     new Member({
       name: 'Enzo sakas',
@@ -144,7 +147,8 @@ export class ActionRepositoryMock implements IActionRepository {
       hiredDate: 1640192165000,
       active: ACTIVE.ACTIVE,
       userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee624',
-      emailDev: 'esakas.devmaua@gmail.com'
+      emailDev: 'esakas.devmaua@gmail.com',
+      hoursWorked: 3
     }),
     new Member({
       name: 'Lounis Televisas',
@@ -158,7 +162,8 @@ export class ActionRepositoryMock implements IActionRepository {
       hiredDate: 1640192165000,
       active: ACTIVE.ACTIVE,
       userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee623',
-      emailDev: 'ltelevision.devmaua@gmail.com'
+      emailDev: 'ltelevision.devmaua@gmail.com',
+      hoursWorked: 3
     }),
     new Member({
       name: 'MAGIC WHITE HANDS',
@@ -172,7 +177,8 @@ export class ActionRepositoryMock implements IActionRepository {
       hiredDate: 1640192165000,
       active: ACTIVE.ACTIVE,
       userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee622',
-      emailDev: 'jbranco.devmaua@gmail.com'
+      emailDev: 'jbranco.devmaua@gmail.com',
+      hoursWorked: 3
     })
   ]
   private actions: Action[] = [
@@ -542,7 +548,8 @@ export class ActionRepositoryMock implements IActionRepository {
       email: 'emailformock@gmail.com',
       active: ACTIVE.ACTIVE,
       userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
-      hiredDate: 1640192165000
+      hiredDate: 1640192165000,
+      hoursWorked: 3
     })
 
     this.members.push(member)

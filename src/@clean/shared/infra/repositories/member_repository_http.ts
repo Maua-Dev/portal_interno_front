@@ -24,6 +24,7 @@ interface memberRawResponse {
     deactivated_date?: number
     active: string
     user_id: string
+    hours_worked: number
   }
 }
 
@@ -160,7 +161,8 @@ export class MemberRepositoryHttp implements IMemberRepository {
             hiredDate: memberUnit.member.hired_date,
             deactivatedDate: memberUnit.member.deactivated_date,
             active: activeToEnum(memberUnit.member.active),
-            userId: memberUnit.member.user_id
+            userId: memberUnit.member.user_id,
+            hoursWorked: memberUnit.member.hours_worked
           })
         )
       })
