@@ -66,14 +66,19 @@ export function ProfileModal() {
               new Date(member?.hiredDate).toLocaleDateString()}
           </p>
           <p className="text-lg">
-            <b>Horas totais: </b> Em elaboração
+            <b>Horas totais: </b>{' '}
+            {member?.hoursWorked ? member?.hoursWorked / 1000 / 60 / 60 : 0}{' '}
+            hora
+            {member?.hoursWorked && member?.hoursWorked / 1000 / 60 / 60 > 1
+              ? 's'
+              : ''}
           </p>
         </div>
         <Separator />
         <h2 className="text-2xl font-bold">Sobre mim</h2>
         <textarea
           readOnly
-          className={`h-full min-h-28 resize-none rounded-xl sm:text-justify ${
+          className={`h-full min-h-24 resize-none rounded-xl sm:text-justify lg:min-h-0 ${
             darkMode ? 'bg-gray-800' : 'bg-gray-100'
           } p-3 outline-none`}
           value={`Meu nome é ${member?.name}, sou do curso de ${member?.course} do ${member?.year}º ano. Atualmente estou na área de ${member?.stack}. Estou empolgado para aprender mais sobre ${member?.stack} e me tornar um desenvolvedor melhor.
