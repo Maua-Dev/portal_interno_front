@@ -62,7 +62,7 @@ export default function Projects() {
     }
 
     return currentProjects
-  }, [filterProps])
+  }, [filterProps, projects])
 
   useEffect(() => {
     loadAllProjects()
@@ -95,6 +95,7 @@ export default function Projects() {
               >
                 <ProjectCard
                   className="z-10 hover:z-20"
+                  setProjects={setProjects}
                   key={project.name + index}
                   project={project}
                 />

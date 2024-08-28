@@ -16,21 +16,41 @@ import {
 } from '../../Historic/components/Popover'
 import Button from '../../Historic/components/Button'
 import { twMerge } from 'tailwind-merge'
+import { ProjectContext } from '../../../contexts/project_context'
 
 interface ProjectCardProps extends HTMLAttributes<HTMLDivElement> {
   project: ProjectType
+  setProjects: React.Dispatch<React.SetStateAction<ProjectType[] | undefined>>
 }
 
-export default function ProjectCard({ project, ...props }: ProjectCardProps) {
+export default function ProjectCard({
+  project,
+  setProjects,
+  ...props
+}: ProjectCardProps) {
+  const startDateFormated = timeStampToDateDDMMYY(project.startDate)
   const [isPopUpOpen, setPopUpOpen] = useState<boolean>(false)
   const { darkMode } = useDarkMode()
   const { allMembers } = useContext(MemberContext)
+  const { deleteProject } = useContext(ProjectContext)
 
   const closeSettingsPopUp = () => {
     setPopUpOpen(false)
   }
 
-  const startDateFormated = timeStampToDateDDMMYY(project.startDate)
+  const openSeetingsPopUp = () => {
+    setPopUpOpen(true)
+  }
+
+  async function handleDeleteProject(code: string) {
+    setProjects((prev) =>
+      prev ? prev.filter((item) => item.code !== code) : []
+    )
+
+    if (confirm('Deseja excluir o projeto?')) {
+      await deleteProject(code)
+    }
+  }
 
   return (
     <Card
@@ -89,17 +109,12 @@ export default function ProjectCard({ project, ...props }: ProjectCardProps) {
               <BsThreeDots className="h-10 w-10 cursor-pointer p-2 text-skin-base" />
             </PopoverTrigger>
             <PopoverContent>
-              <div
-                className="z-30"
-                onMouseEnter={() => {
-                  // setPopUpOpen(true)
-                }}
-              >
+              <div className="z-30" onMouseEnter={openSeetingsPopUp}>
                 <Button
                   variant="default"
                   onClick={(event) => {
                     // changeModalContent(<ActionModal action={action} />)
-                    // setPopUpOpen(false)
+                    setPopUpOpen(false)
                     event.stopPropagation()
                   }}
                 >
@@ -108,8 +123,8 @@ export default function ProjectCard({ project, ...props }: ProjectCardProps) {
                 </Button>
                 <Button
                   onClick={(event) => {
-                    // handleDeleteAction(action.actionId)
-                    // setPopUpOpen(false)
+                    handleDeleteProject(project.code)
+                    setPopUpOpen(false)
                     event.stopPropagation()
                   }}
                   variant="destructive"
