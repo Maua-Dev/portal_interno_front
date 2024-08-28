@@ -7,6 +7,7 @@ import { Calendar } from 'lucide-react'
 import { ProjectType } from '../../../../@clean/shared/infra/repositories/project_repository_http'
 import { useContext } from 'react'
 import { MemberContext } from '../../../contexts/member_context'
+import { timeStampToDateDDMMYY } from '../../../utils/functions/timeStamp'
 
 interface ProjectCardProps {
   project: ProjectType
@@ -16,7 +17,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
   const { darkMode } = useDarkMode()
   const { allMembers } = useContext(MemberContext)
 
-  const startDateFormated = new Date(project.startDate).toLocaleDateString()
+  const startDateFormated = timeStampToDateDDMMYY(project.startDate)
 
   return (
     <Card
@@ -39,7 +40,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                     ? allMembers.find(
                         (member) => member.userId === project.poUserId
                       )?.name
-                    : 'Not Found'}
+                    : '?'}
                 </p>
               </HoverCard>
               <HoverCard side="top" placeholder="SCRUM">
@@ -54,7 +55,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                     ? allMembers.find(
                         (member) => member.userId === project.scrumUserId
                       )?.name
-                    : 'Not Found'}
+                    : '?'}
                 </p>
               </HoverCard>
             </div>

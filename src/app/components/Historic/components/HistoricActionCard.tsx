@@ -19,7 +19,10 @@ import ActionModal from '../../ActionModal'
 import { ModalContext } from '../../../contexts/modal_context'
 import { ActionContext } from '../../../contexts/action_context'
 import ActionDialog from '../../ActionDialog'
-import { millisecondsToHours } from '../../../utils/functions/timeStamp'
+import {
+  millisecondsToHours,
+  timeStampToDateDDMMYY
+} from '../../../utils/functions/timeStamp'
 import { v4 as uuidv4 } from 'uuid'
 
 type actionStates = 'rejected' | 'waiting' | 'approved'
@@ -41,7 +44,7 @@ export default function HistoricActionCard({
 
   const title = `${action.projectCode}: ${action?.title} `
 
-  const endDateFormated = new Date(action.endDate).toLocaleDateString()
+  const endDateFormated = timeStampToDateDDMMYY(action.endDate)
   const durationFormated = millisecondsToHours(action.duration)
   const stackStringArray = stackFormatter(action.stackTags)
 
