@@ -12,7 +12,7 @@ import {
 } from '../Historic/components/Popover'
 import * as Select from './components/Select'
 import Button from '../Historic/components/Button'
-import React, { HTMLAttributes, useEffect, useState } from 'react'
+import React, { HTMLAttributes, ReactNode, useEffect, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { SlidersHorizontal } from 'lucide-react'
 import { FilterTag } from '../Tags'
@@ -24,6 +24,7 @@ interface FilterBarProps extends HTMLAttributes<HTMLDivElement> {
   setFilterProps: (props: React.SetStateAction<FilterProps>) => void
   filterProps: FilterProps
   filterOptions: FilterOptions[]
+  adicinalButton?: ReactNode
 }
 
 export interface FilterProps {
@@ -43,6 +44,7 @@ export default function FilterBar({
   setFilterProps,
   filterProps,
   filterOptions,
+  adicinalButton,
   ...props
 }: FilterBarProps) {
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false)
@@ -167,7 +169,7 @@ export default function FilterBar({
             : null}
         </div>
       </div>
-      <div className="flex h-full flex-row">
+      <div className="flex h-full flex-row gap-2">
         <Tooltip placeholder="Pesquisar">
           <Button
             variant="default"
@@ -241,6 +243,7 @@ export default function FilterBar({
             </form>
           </PopoverContent>
         </Popover>
+        <div className="hidden xl:flex">{adicinalButton}</div>
       </div>
     </Card>
   )

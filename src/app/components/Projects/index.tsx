@@ -1,13 +1,14 @@
 import { useContext, useEffect, useMemo, useState } from 'react'
 import FilterBar, { FilterProps } from '../FilterBar'
 import { projectFilterOptions } from './filterOptions'
-import { Monitor } from 'lucide-react'
+import { Monitor, Plus } from 'lucide-react'
 import ProjectCard from './components/ProjectCard'
 import { ProjectContext } from '../../contexts/project_context'
 import { ProjectType } from '../../../@clean/shared/infra/repositories/project_repository_http'
 import { motion } from 'framer-motion'
 import Loader from '../Loader'
 import ProjectCardSkeleton from './components/ProjectCardSkeleton'
+import Button from '../Historic/components/Button'
 
 export default function Projects() {
   const { getAllProjects } = useContext(ProjectContext)
@@ -69,20 +70,24 @@ export default function Projects() {
   }, [])
 
   return (
-    <div className="flex h-fit w-full flex-col items-center justify-center gap-2 py-20 pl-0 md:py-10 md:pl-14">
+    <div className="flex h-fit w-full flex-col items-center justify-center gap-2 py-20 pl-0 md:pl-14 lg:py-10">
       <FilterBar
         label={'Projetos'}
         icon={Monitor}
         setFilterProps={setFilterProps}
         filterProps={filterProps}
         filterOptions={projectFilterOptions}
+        adicinalButton={<CreateProjectButton />}
         className="z-30"
       />
       <div
-        className={`z-10 flex h-fit w-full flex-col items-center gap-2 ${
+        className={`z-10 flex h-fit w-full flex-col items-center gap-2 pb-60 ${
           3 < 10 ? 'h-screen' : null
         } `}
       >
+        <div className="flex w-4/5 xl:hidden">
+          <CreateProjectButton />
+        </div>
         {filteredProjects.length !== 0 ? (
           filteredProjects.map((project, index) => {
             return (
@@ -107,5 +112,14 @@ export default function Projects() {
         )}
       </div>
     </div>
+  )
+}
+
+function CreateProjectButton() {
+  return (
+    <Button variant={'form'} className="w-full gap-2">
+      Adicinar
+      <Plus strokeWidth={2} />
+    </Button>
   )
 }
