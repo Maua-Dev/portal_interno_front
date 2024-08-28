@@ -60,11 +60,18 @@ export default function ProjectCard({
         props.className
       )}
     >
-      <div className="flex w-full flex-col items-center gap-4 sm:flex-row">
-        <div className="flex flex-row items-center justify-start gap-2 md:w-3/6">
-          <StateIcon variant={'approved'} />
+      <div className="flex w-full flex-col items-start gap-4 sm:flex-row sm:items-center">
+        <div className="flex flex-col items-center justify-start gap-2 sm:flex-row md:w-3/6">
+          <div className="hidden sm:block">
+            <StateIcon variant={'approved'} />
+          </div>
           <div className="flex flex-col gap-1">
-            <p className="pl-2 text-lg font-semibold">{project.name}</p>
+            <div className="flex flex-row items-center ">
+              <div className="sm:hidden">
+                <StateIcon variant={'approved'} />
+              </div>
+              <p className="pl-2 text-lg font-semibold">{project.name}</p>
+            </div>
             <div className="flex flex-row gap-2 rounded-full bg-skin-fill pr-2 text-sm text-white ">
               <HoverCard side="top" placeholder={'PO'}>
                 <p className="flex items-center justify-center rounded-full bg-skin-button-blue-accent px-2 text-center">
@@ -95,14 +102,14 @@ export default function ProjectCard({
             </div>
           </div>
         </div>
-        <p className="text-center sm:text-left">
+        <p>
           {project.description.length > 30
-            ? project.description.slice(0, window.innerWidth > 640 ? 30 : 60) +
+            ? project.description.slice(0, window.innerWidth > 640 ? 25 : 60) +
               ' ...'
             : project.description}
         </p>
       </div>
-      <div className="flex flex-row items-center gap-3">
+      <div className="flex w-full flex-row items-center justify-between gap-3 sm:w-fit sm:justify-normal">
         <IconText text={startDateFormated} icon={Calendar} />
         <div onMouseLeave={closeSettingsPopUp}>
           <Popover open={isPopUpOpen} onOpenChange={setPopUpOpen}>
