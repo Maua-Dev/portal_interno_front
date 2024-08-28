@@ -60,7 +60,7 @@ export default function ProjectCard({
         props.className
       )}
     >
-      <div className="flex w-full flex-row items-center gap-4">
+      <div className="flex w-full flex-col items-center gap-4 sm:flex-row">
         <div className="flex flex-row items-center justify-start gap-2 md:w-3/6">
           <StateIcon variant={'approved'} />
           <div className="flex flex-col gap-1">
@@ -95,9 +95,10 @@ export default function ProjectCard({
             </div>
           </div>
         </div>
-        <p>
-          {project.description.length > 60
-            ? project.description.slice(0, 60) + ' ...'
+        <p className="text-center sm:text-left">
+          {project.description.length > 30
+            ? project.description.slice(0, window.innerWidth > 640 ? 30 : 60) +
+              ' ...'
             : project.description}
         </p>
       </div>
