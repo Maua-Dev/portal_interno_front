@@ -5,6 +5,9 @@ import { Monitor } from 'lucide-react'
 import ProjectCard from './components/ProjectCard'
 import { ProjectContext } from '../../contexts/project_context'
 import { ProjectType } from '../../../@clean/shared/infra/repositories/project_repository_http'
+import { motion } from 'framer-motion'
+import Loader from '../Loader'
+import ProjectCardSkeleton from './components/ProjectCardSkeleton'
 
 export default function Projects() {
   const { getAllProjects } = useContext(ProjectContext)
@@ -80,10 +83,23 @@ export default function Projects() {
           3 < 10 ? 'h-screen' : null
         } `}
       >
-        {filteredProjects &&
+        {filteredProjects.length !== 0 ? (
           filteredProjects.map((project, index) => {
-            return <ProjectCard key={project.name + index} project={project} />
-          })}
+            return (
+              <motion.div
+                key={index + '' + project.code}
+                initial={{ marginLeft: '50px', opacity: 0 }}
+                animate={{ marginLeft: '0px', opacity: 1 }}
+                transition={{ duration: 0.5, delay: index * 0.3 }}
+                className="flex w-full justify-center"
+              >
+                <ProjectCard key={project.name + index} project={project} />
+              </motion.div>
+            )
+          })
+        ) : (
+          <Loader SkeletonComponent={ProjectCardSkeleton} />
+        )}
       </div>
     </div>
   )

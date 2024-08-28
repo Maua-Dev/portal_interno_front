@@ -4,12 +4,13 @@ import { Action } from '../../../@clean/shared/domain/entities/action'
 import FilterBar, { FilterProps } from '../FilterBar'
 import HistoricActionCard from './components/HistoricActionCard'
 import { ActionContext } from '../../contexts/action_context'
-import Loader from './components/Loader'
 import { stackToEnum } from '../../../@clean/shared/domain/enums/stack_enum'
 import { History } from 'lucide-react'
 import { actionsFilterOptions } from './filterOptions'
 import { NoActionsFoundComponent } from '../NoDataFoundCard'
 import { motion } from 'framer-motion'
+import Loader from '../Loader'
+import HistoricActionCardSkeleton from './components/HistoricActionCardSkeleton'
 
 interface lastEvaluatedKey {
   actionId: string
@@ -185,7 +186,7 @@ export default function Historic() {
       ) : localHistory ? (
         <NoActionsFoundComponent message={'Ações não encontradas.'} />
       ) : (
-        <Loader />
+        <Loader SkeletonComponent={HistoricActionCardSkeleton} />
       )}
     </div>
   )
