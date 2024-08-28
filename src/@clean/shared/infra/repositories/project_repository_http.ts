@@ -26,6 +26,7 @@ export type ProjectType = {
   scrumUserId: string
   startDate: number
 }
+
 export class ProjectRepositoryHttp implements IProjectRepository {
   constructor(private readonly http: AxiosInstance) {}
 
@@ -72,22 +73,23 @@ export class ProjectRepositoryHttp implements IProjectRepository {
       return error.response.data
     }
   }
-  async deleteProject(code: string) {
+
+  async deleteProject(code: string): Promise<ProjectType> {
     try {
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem('idToken')
 
       if (!token) {
         throw new Error('Token not found')
       }
 
-      const response = await this.http.delete<JsonProps>(
-        `/delete-project?code=${code}`,
-        {
-          headers: {
-            Authorization: 'Bearer ' + token
-          }
+      const response = await this.http.delete(`/delete-project`, {
+        headers: {
+          Authorization: 'Bearer ' + token
+        },
+        data: {
+          code: code
         }
-      )
+      })
 
       const project = Project.fromJSON(response.data)
 

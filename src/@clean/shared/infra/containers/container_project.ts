@@ -3,6 +3,7 @@ import { Container } from 'inversify'
 import { http } from '../http'
 import { ProjectRepositoryHttp } from '../repositories/project_repository_http'
 import { GetAllProjectsUsecase } from '../../../modules/project/usecases/get_all_projects_usecase'
+import { DeleteProjectUsecase } from '../../../modules/project/usecases/delete_project_usecase'
 
 export const RegistryProject = {
   // Axios Adapter
@@ -13,7 +14,8 @@ export const RegistryProject = {
   ProjectRepositoryMock: Symbol.for('ProjectRepositoryMock'),
 
   // Usecases
-  getAllProjectsUsecase: Symbol.for('GetAllProjectsUsecase')
+  getAllProjectsUsecase: Symbol.for('GetAllProjectsUsecase'),
+  deleteProjectUsecase: Symbol.for('DeleteProjectUsecase')
 }
 
 export const containerProject = new Container()
@@ -48,6 +50,28 @@ containerProject
       )
     } else {
       return new GetAllProjectsUsecase(
+        context.container.get(RegistryProject.ProjectRepositoryMock)
+      )
+    }
+  })
+
+containerProject
+  .bind(RegistryProject.deleteProjectUsecase)
+  .toDynamicValue((context) => {
+    if (import.meta.env.VITE_STAGE === 'test') {
+      return new DeleteProjectUsecase(
+        context.container.get(RegistryProject.ProjectRepositoryMock)
+      )
+    } else if (
+      import.meta.env.VITE_STAGE === 'dev' ||
+      import.meta.env.VITE_STAGE === 'homolog' ||
+      import.meta.env.VITE_STAGE === 'prod'
+    ) {
+      return new DeleteProjectUsecase(
+        context.container.get(RegistryProject.ProjectRepositoryHttp)
+      )
+    } else {
+      return new DeleteProjectUsecase(
         context.container.get(RegistryProject.ProjectRepositoryMock)
       )
     }
