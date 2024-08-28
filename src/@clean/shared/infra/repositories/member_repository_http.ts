@@ -103,11 +103,15 @@ export class MemberRepositoryHttp implements IMemberRepository {
         throw new Error('Token not found')
       }
 
-      const response = await this.http.get<JsonProps>('/get-member', {
-        headers: {
-          Authorization: 'Bearer ' + token
+      const response = await this.http.post<JsonProps>(
+        '/get-member',
+        {},
+        {
+          headers: {
+            Authorization: 'Bearer ' + token
+          }
         }
-      })
+      )
 
       const member = Member.fromJSON(response.data)
       return member
