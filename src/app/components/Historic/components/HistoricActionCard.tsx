@@ -23,7 +23,6 @@ import {
   millisecondsToHours,
   timeStampToDateDDMMYY
 } from '../../../utils/functions/timeStamp'
-import { v4 as uuidv4 } from 'uuid'
 
 type actionStates = 'rejected' | 'waiting' | 'approved'
 
@@ -104,7 +103,7 @@ export default function HistoricActionCard({
           {stackStringArray.map((stack, index) => {
             if (index < 3) {
               return (
-                <div className="flex flex-row gap-2" key={uuidv4()}>
+                <div className="flex flex-row gap-2" key={index + stack}>
                   <Tag variant={stack} />
                   {index === 2 && stackStringArray.length > 2 ? (
                     <p className="text-skin-muted">...</p>
