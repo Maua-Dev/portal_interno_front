@@ -3,28 +3,42 @@ import { useDarkMode } from '../../../hooks/useDarkMode'
 import Card from '../../Card'
 import { IconText, StateIcon } from '../../Historic/components/Icon'
 import HoverCard from '../../HoverCard'
-import { Calendar } from 'lucide-react'
+import { Calendar, PenBox, Trash2 } from 'lucide-react'
 import { ProjectType } from '../../../../@clean/shared/infra/repositories/project_repository_http'
-import { useContext } from 'react'
+import { HTMLAttributes, useContext, useState } from 'react'
 import { MemberContext } from '../../../contexts/member_context'
 import { timeStampToDateDDMMYY } from '../../../utils/functions/timeStamp'
+import {
+  Popover,
+  PopoverArrow,
+  PopoverContent,
+  PopoverTrigger
+} from '../../Historic/components/Popover'
+import Button from '../../Historic/components/Button'
+import { twMerge } from 'tailwind-merge'
 
-interface ProjectCardProps {
+interface ProjectCardProps extends HTMLAttributes<HTMLDivElement> {
   project: ProjectType
 }
 
-export default function ProjectCard({ project }: ProjectCardProps) {
+export default function ProjectCard({ project, ...props }: ProjectCardProps) {
+  const [isPopUpOpen, setPopUpOpen] = useState<boolean>(false)
   const { darkMode } = useDarkMode()
   const { allMembers } = useContext(MemberContext)
+
+  const closeSettingsPopUp = () => {
+    setPopUpOpen(false)
+  }
 
   const startDateFormated = timeStampToDateDDMMYY(project.startDate)
 
   return (
     <Card
       variant="lg"
-      className={
-        'static flex h-fit cursor-pointer flex-col items-center justify-between gap-5 pr-6 shadow-sm shadow-gray-500 brightness-95 duration-150 ease-in hover:brightness-100 sm:flex-row sm:gap-0'
-      }
+      className={twMerge(
+        'static flex h-fit cursor-pointer flex-col items-center justify-between gap-5 pr-6 shadow-sm shadow-gray-500 brightness-95 duration-150 ease-in hover:brightness-100 sm:flex-row sm:gap-0',
+        props.className
+      )}
     >
       <div className="flex w-full flex-row items-center gap-4">
         <div className="flex flex-row items-center justify-start gap-2 md:w-3/6">
@@ -69,7 +83,45 @@ export default function ProjectCard({ project }: ProjectCardProps) {
       </div>
       <div className="flex flex-row items-center gap-3">
         <IconText text={startDateFormated} icon={Calendar} />
-        <BsThreeDots className="h-10 w-10 cursor-pointer p-2 text-skin-base" />
+        <div onMouseLeave={closeSettingsPopUp}>
+          <Popover open={isPopUpOpen} onOpenChange={setPopUpOpen}>
+            <PopoverTrigger>
+              <BsThreeDots className="h-10 w-10 cursor-pointer p-2 text-skin-base" />
+            </PopoverTrigger>
+            <PopoverContent>
+              <div
+                className="z-30"
+                onMouseEnter={() => {
+                  // setPopUpOpen(true)
+                }}
+              >
+                <Button
+                  variant="default"
+                  onClick={(event) => {
+                    // changeModalContent(<ActionModal action={action} />)
+                    // setPopUpOpen(false)
+                    event.stopPropagation()
+                  }}
+                >
+                  <PenBox className="w-4" />
+                  Editar
+                </Button>
+                <Button
+                  onClick={(event) => {
+                    // handleDeleteAction(action.actionId)
+                    // setPopUpOpen(false)
+                    event.stopPropagation()
+                  }}
+                  variant="destructive"
+                >
+                  <Trash2 className="w-4" />
+                  Excluir
+                </Button>
+                <PopoverArrow children={undefined} />
+              </div>
+            </PopoverContent>
+          </Popover>
+        </div>
       </div>
     </Card>
   )

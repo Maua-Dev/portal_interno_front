@@ -93,7 +93,11 @@ export default function Projects() {
                 transition={{ duration: 0.5, delay: index * 0.3 }}
                 className="flex w-full justify-center"
               >
-                <ProjectCard key={project.name + index} project={project} />
+                <ProjectCard
+                  className="z-10 hover:z-20"
+                  key={project.name + index}
+                  project={project}
+                />
               </motion.div>
             )
           })
