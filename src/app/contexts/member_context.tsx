@@ -48,6 +48,8 @@ export interface MemberContextInterface {
 
   handleLogout: () => void
 
+  member: Member | undefined
+
   allMembers: Member[] | undefined
 
   memberError: string
@@ -85,6 +87,8 @@ const defaultContext: MemberContextInterface = {
   handleMember: async () => {},
 
   handleLogout: () => {},
+
+  member: undefined,
 
   allMembers: [],
 
@@ -125,6 +129,7 @@ export function MemberProvider({ children }: PropsWithChildren) {
   const [allMembers, setAllMembers] = useState<Member[] | undefined>([])
   const [isRegister, setIsRegister] = useState(false)
   const [isOnHold, setIsOnHold] = useState(false)
+  const [member, setMember] = useState<Member | undefined>()
 
   async function handleAllMembers() {
     try {
@@ -144,7 +149,8 @@ export function MemberProvider({ children }: PropsWithChildren) {
 
   const handleMember = async () => {
     try {
-      await getMember()
+      const member = await getMember()
+      setMember(member)
     } catch (error: any) {
       if (error.message.toLowerCase().includes('user is not registered')) {
         setIsRegister(true)
@@ -268,6 +274,7 @@ export function MemberProvider({ children }: PropsWithChildren) {
   return (
     <MemberContext.Provider
       value={{
+        member,
         getMember,
         getAllMembers,
         createMember,

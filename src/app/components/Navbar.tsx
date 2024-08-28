@@ -16,6 +16,7 @@ import ActionModal from './ActionModal'
 import { useDarkMode } from '../hooks/useDarkMode'
 import { useModal } from '../hooks/useModal'
 import { useMember } from '../hooks/useMember'
+import { ProfileModal } from './ProfileModal'
 
 interface window {
   innerWidth: number
@@ -69,7 +70,12 @@ export default function Navbar() {
               className="h-14 w-16"
             />
             <div className="flex flex-col gap-8 font-sans text-3xl">
-              <div className="flex cursor-pointer select-none gap-8 overflow-x-hidden">
+              <div
+                className="flex cursor-pointer select-none gap-8 overflow-x-hidden"
+                onClick={() => {
+                  if (!isOnHold) changeModalContent(<ProfileModal />)
+                }}
+              >
                 <BiSolidUser
                   className={`transform cursor-pointer ${
                     !darkMode ? 'text-gray-700' : 'text-white'
@@ -228,6 +234,9 @@ export default function Navbar() {
                 className={`transform cursor-pointer ${
                   !darkMode ? 'text-gray-700' : 'text-white'
                 } transition-all duration-100 hover:fill-blue-600`}
+                onClick={() => {
+                  if (!isOnHold) changeModalContent(<ProfileModal />)
+                }}
               />
               <BsFillPlusSquareFill
                 className={`transform cursor-pointer ${

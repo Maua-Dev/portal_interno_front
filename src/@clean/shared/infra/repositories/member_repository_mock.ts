@@ -20,7 +20,8 @@ export class MemberRepositoryMock implements IMemberRepository {
       hiredDate: 1612137600000,
       active: ACTIVE.ACTIVE,
       userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
-      emailDev: 'dsiqueira.devmaua@gmail.com'
+      emailDev: 'dsiqueira.devmaua@gmail.com',
+      hoursWorked: 3
     }),
     new Member({
       name: 'Bruno fevs',
@@ -34,7 +35,8 @@ export class MemberRepositoryMock implements IMemberRepository {
       hiredDate: 1612137600000,
       active: ACTIVE.ACTIVE,
       userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee626',
-      emailDev: 'bfevs.devmaua@maua.com'
+      emailDev: 'bfevs.devmaua@maua.com',
+      hoursWorked: 3
     }),
     new Member({
       name: 'Rubicks Cube',
@@ -48,7 +50,8 @@ export class MemberRepositoryMock implements IMemberRepository {
       hiredDate: 1640192165000,
       active: ACTIVE.ACTIVE,
       userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee625',
-      emailDev: 'rcube.devmaua@gmai.com'
+      emailDev: 'rcube.devmaua@gmai.com',
+      hoursWorked: 3
     }),
     new Member({
       name: 'Enzo sakas',
@@ -62,7 +65,8 @@ export class MemberRepositoryMock implements IMemberRepository {
       hiredDate: 1640192165000,
       active: ACTIVE.ACTIVE,
       userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee624',
-      emailDev: 'esakas.devmaua@gmail.com'
+      emailDev: 'esakas.devmaua@gmail.com',
+      hoursWorked: 3
     }),
     new Member({
       name: 'Lounis Televisas',
@@ -76,7 +80,8 @@ export class MemberRepositoryMock implements IMemberRepository {
       hiredDate: 1640192165000,
       active: ACTIVE.ACTIVE,
       userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee623',
-      emailDev: 'ltelevision.devmaua@gmail.com'
+      emailDev: 'ltelevision.devmaua@gmail.com',
+      hoursWorked: 3
     }),
     new Member({
       name: 'MAGIC WHITE HANDS',
@@ -90,7 +95,8 @@ export class MemberRepositoryMock implements IMemberRepository {
       hiredDate: 1640192165000,
       active: ACTIVE.ACTIVE,
       userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee622',
-      emailDev: 'jbranco.devmaua@gmail.com'
+      emailDev: 'jbranco.devmaua@gmail.com',
+      hoursWorked: 3
     })
   ]
 
@@ -115,7 +121,8 @@ export class MemberRepositoryMock implements IMemberRepository {
       role,
       stack,
       userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee622',
-      year
+      year,
+      hoursWorked: 3
     })
 
     this.members.push(member)
