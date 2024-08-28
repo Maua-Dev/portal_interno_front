@@ -23,6 +23,15 @@ export function timeStampToDate(timestamp: number): string {
   return toISOStringWithTimezone(date)
 }
 
+export function timeStampToDateDDMMYY(timestamp: number): string {
+  const date = new Date(timestamp)
+  const day = String(date.getDate()).padStart(2, '0')
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const year = String(date.getFullYear()).slice(-2)
+
+  return `${day}/${month}/${year}`
+}
+
 export function millisecondsToHours(milliseconds: number): number {
   return Math.floor(milliseconds / (3.6 * Math.pow(10, 6)))
 }
