@@ -24,11 +24,31 @@ interface memberRawResponse {
     deactivated_date?: number
     active: string
     user_id: string
+    hours_worked: number
+  }
+}
+
+export interface memberOfGetAllMembersRawResponse {
+  member: {
+    name: string
+    email_dev: string
+    email: string
+    ra: string
+    role: string
+    stack: string
+    year: number
+    cellphone: string
+    course: string
+    hired_date: number
+    deactivated_date?: number
+    active: string
+    user_id: string
+    hours_worked: number
   }
 }
 
 export interface getAllMembersRawResponse {
-  members: memberRawResponse[]
+  members: memberOfGetAllMembersRawResponse[]
 }
 
 export class MemberRepositoryHttp implements IMemberRepository {
@@ -84,11 +104,15 @@ export class MemberRepositoryHttp implements IMemberRepository {
         throw new Error('Token not found')
       }
 
-      const response = await this.http.get<JsonProps>('/get-member', {
-        headers: {
-          Authorization: 'Bearer ' + token
+      const response = await this.http.post<JsonProps>(
+        '/get-member',
+        {},
+        {
+          headers: {
+            Authorization: 'Bearer ' + token
+          }
         }
-      })
+      )
 
       const member = Member.fromJSON(response.data)
       return member
@@ -108,8 +132,9 @@ export class MemberRepositoryHttp implements IMemberRepository {
         throw new Error('Token not found')
       }
 
-      const response = await this.http.get<getAllMembersRawResponse>(
+      const response = await this.http.post<getAllMembersRawResponse>(
         '/get-all-members',
+        {},
         {
           headers: {
             Authorization: 'Bearer ' + token
@@ -136,7 +161,8 @@ export class MemberRepositoryHttp implements IMemberRepository {
             hiredDate: memberUnit.member.hired_date,
             deactivatedDate: memberUnit.member.deactivated_date,
             active: activeToEnum(memberUnit.member.active),
-            userId: memberUnit.member.user_id
+            userId: memberUnit.member.user_id,
+            hoursWorked: memberUnit.member.hours_worked
           })
         )
       })
