@@ -6,24 +6,24 @@ export const projectFilterOptions: FilterOptions[] = [
     label: 'Pesquisar',
     type: 'text'
   },
-  {
-    name: 'activeStatus',
-    label: 'Atividade',
-    type: 'select',
-    options: [
-      { label: 'Ativo', value: 'ACTIVE' },
-      { label: 'Desativado', value: 'INACTIVE' }
-    ]
-  },
+  // {
+  //   name: 'activeStatus',
+  //   label: 'Atividade',
+  //   type: 'select',
+  //   options: [
+  //     { label: 'Ativo', value: 'ACTIVE' },
+  //     { label: 'Desativado', value: 'INACTIVE' }
+  //   ]
+  // },
   {
     name: 'orderBy',
     label: 'Ordenar Por',
     type: 'select',
     options: [
       { label: 'Mais Recente', value: 'NEW' },
-      { label: 'Mais Antigo', value: 'OLD' },
-      { label: 'Maior Duração', value: 'BIGGER' },
-      { label: 'Menor Duração', value: 'SMALLER' }
+      { label: 'Mais Antigo', value: 'OLD' }
+      // { label: 'Maior Duração', value: 'BIGGER' },
+      // { label: 'Menor Duração', value: 'SMALLER' }
     ]
   }
 ]

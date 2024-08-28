@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import FilterBar, { FilterProps } from '../FilterBar'
 import { projectFilterOptions } from './filterOptions'
 import { Monitor } from 'lucide-react'
@@ -20,6 +20,47 @@ export default function Projects() {
     setProjects(projects)
   }
 
+  const filteredProjects: ProjectType[] = useMemo(() => {
+    if (!projects) {
+      return []
+    }
+
+    if (filterProps.searchText === '' && filterProps.orderBy === '') {
+      return projects
+    }
+
+    let currentProjects = projects
+
+    if (filterProps.searchText !== '') {
+      const searchTextLowerCase = filterProps.searchText.toLowerCase()
+      currentProjects = currentProjects.filter(
+        (project) =>
+          project.name.toLowerCase().includes(searchTextLowerCase) ||
+          project.description.toLowerCase().includes(searchTextLowerCase) ||
+          project.code.toLocaleLowerCase().includes(searchTextLowerCase)
+      )
+    }
+
+    switch (filterProps.orderBy) {
+      case 'OLD':
+        currentProjects.sort(
+          (a, b) =>
+            new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+        )
+        break
+      case 'NEW':
+        currentProjects.sort(
+          (a, b) =>
+            new Date(b.startDate).getTime() - new Date(a.startDate).getTime()
+        )
+        break
+      default:
+        break
+    }
+
+    return currentProjects
+  }, [filterProps])
+
   useEffect(() => {
     loadAllProjects()
   }, [])
@@ -39,8 +80,8 @@ export default function Projects() {
           3 < 10 ? 'h-screen' : null
         } `}
       >
-        {projects &&
-          projects.map((project, index) => {
+        {filteredProjects &&
+          filteredProjects.map((project, index) => {
             return <ProjectCard key={project.name + index} project={project} />
           })}
       </div>
