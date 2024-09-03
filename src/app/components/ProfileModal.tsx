@@ -80,13 +80,14 @@ export function ProfileModal() {
       </div>
       <div className="flex h-full w-full flex-col gap-4 lg:w-[30%]">
         <div
-          className={`flex h-1/3 w-full flex-col items-center gap-6 rounded-2xl p-6 transition-all delay-200 duration-700 md:gap-0 ${
+          className={`flex h-1/3 w-full flex-col gap-6 rounded-2xl p-6 transition-all delay-200 duration-700 md:gap-0 ${
             darkMode ? 'bg-skin-secundary text-white' : 'bg-white'
           } ${fade ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0'}`}
         >
-          <div className="flex w-full justify-start">
-            <h1 className="flex text-4xl font-bold">Horas totais:</h1>
-          </div>
+          <h1 className="flex w-full justify-start text-4xl font-bold">
+            Horas totais:
+          </h1>
+
           <div className="flex h-full items-center justify-center gap-4 text-4xl md:text-6xl">
             <FaRegClock />
             <p>
