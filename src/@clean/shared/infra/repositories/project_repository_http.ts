@@ -41,7 +41,7 @@ export class ProjectRepositoryHttp implements IProjectRepository {
     photos: string[]
   ) {
     try {
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem('idToken')
 
       if (!token) {
         throw new Error('Token not found')
@@ -136,7 +136,7 @@ export class ProjectRepositoryHttp implements IProjectRepository {
   }
   async getProject(code: string) {
     try {
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem('idToken')
 
       if (!token) {
         throw new Error('Token not found')
@@ -169,8 +169,9 @@ export class ProjectRepositoryHttp implements IProjectRepository {
     newMembersUserIds?: string[] | undefined,
     newPhotos?: string[] | undefined
   ) {
+    console.log('hereee')
     try {
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem('idToken')
 
       if (!token) {
         throw new Error('Token not found')
