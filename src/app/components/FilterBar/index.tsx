@@ -243,7 +243,7 @@ export default function FilterBar({
             </form>
           </PopoverContent>
         </Popover>
-        <div className="hidden xl:flex">{adicinalButton}</div>
+        {adicinalButton}
       </div>
     </Card>
   )
