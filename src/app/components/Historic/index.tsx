@@ -146,8 +146,8 @@ export default function Historic() {
       />
       {filteredActions.length !== 0 ? (
         <div
-          className={`flex h-fit w-full flex-col items-center gap-2 ${
-            filteredActions.length < 10 ? 'h-screen' : null
+          className={`flex h-fit w-full flex-col items-center gap-2  ${
+            filteredActions.length < 10 ? 'h-screen pb-60' : ''
           } `}
         >
           {filteredActions.map((actionUnit, index) => {
