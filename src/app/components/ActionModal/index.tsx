@@ -149,9 +149,9 @@ export default function ActionModal({ action }: { action?: Action }) {
   return (
     <>
       <div
-        className={`flex  w-full transform items-center justify-center overflow-x-hidden overflow-y-scroll py-24 transition-all duration-200 sm:pt-24 lg:h-dvh lg:py-12 lg:pt-24 ${
+        className={`flex w-full transform items-center justify-center overflow-x-hidden overflow-y-hidden py-24 transition-all duration-500 sm:pt-24 lg:h-dvh lg:py-12 lg:pt-24 ${
           isUpdateModal
-            ? 'absolute left-0  top-0 z-50 h-[100rem] bg-black bg-opacity-80 sm:h-[85rem] lg:pt-0'
+            ? 'absolute left-0 top-0 z-50 h-[100rem] bg-black bg-opacity-80 sm:h-[85rem] lg:pt-0'
             : 'h-full lg:pl-14'
         } ${
           isUpdateModal

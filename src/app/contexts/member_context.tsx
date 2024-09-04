@@ -13,7 +13,6 @@ import { UpdateMemberUsecase } from '../../@clean/modules/member/usecases/update
 import { DeleteMemberUsecase } from '../../@clean/modules/member/usecases/delete_member_usecase'
 import { ACTIVE } from '../../@clean/shared/domain/enums/active_enum'
 import { CreateMemberUsecase } from '../../@clean/modules/member/usecases/create_member_usecase'
-import { useNavigate } from 'react-router-dom'
 
 export interface MemberContextInterface {
   getMember: () => Promise<Member>
@@ -47,6 +46,10 @@ export interface MemberContextInterface {
 
   handleAllMembers: () => Promise<void>
 
+  handleLogout: () => void
+
+  member: Member | undefined
+
   allMembers: Member[] | undefined
 
   memberError: string
@@ -54,6 +57,8 @@ export interface MemberContextInterface {
   isAdmin: boolean
 
   isRegister: boolean
+
+  isOnHold: boolean
 }
 
 const defaultContext: MemberContextInterface = {
@@ -81,13 +86,19 @@ const defaultContext: MemberContextInterface = {
 
   handleMember: async () => {},
 
+  handleLogout: () => {},
+
+  member: undefined,
+
   allMembers: [],
 
   memberError: '',
 
   isAdmin: false,
 
-  isRegister: false
+  isRegister: false,
+
+  isOnHold: false
 }
 
 export const MemberContext = createContext(defaultContext)
@@ -117,7 +128,8 @@ export function MemberProvider({ children }: PropsWithChildren) {
   const [isAdmin, setIsAdmin] = useState(false)
   const [allMembers, setAllMembers] = useState<Member[] | undefined>([])
   const [isRegister, setIsRegister] = useState(false)
-  const navigate = useNavigate()
+  const [isOnHold, setIsOnHold] = useState(false)
+  const [member, setMember] = useState<Member | undefined>()
 
   async function handleAllMembers() {
     try {
@@ -137,18 +149,31 @@ export function MemberProvider({ children }: PropsWithChildren) {
 
   const handleMember = async () => {
     try {
-      await getMember()
+      const member = await getMember()
+      setMember(member)
     } catch (error: any) {
-      if (error.message.toLowerCase().includes('no items found')) {
+      if (error.message.toLowerCase().includes('user is not registered')) {
         setIsRegister(true)
+      } else if (error.message.toLowerCase().includes('user is not active')) {
+        setIsOnHold(true)
       } else {
-        navigate('/login')
+        window.location.replace('/login')
+        localStorage.removeItem('accessToken')
+        localStorage.removeItem('refreshToken')
+        localStorage.removeItem('idToken')
       }
     }
   }
 
   const handleAdmin = (role: string) => {
     return ['HEAD', 'DIRECTOR'].includes(role)
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem('idToken')
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('refreshToken')
+    window.location.replace('/login')
   }
 
   async function getMember(): Promise<Member> {
@@ -249,6 +274,7 @@ export function MemberProvider({ children }: PropsWithChildren) {
   return (
     <MemberContext.Provider
       value={{
+        member,
         getMember,
         getAllMembers,
         createMember,
@@ -259,7 +285,9 @@ export function MemberProvider({ children }: PropsWithChildren) {
         handleAllMembers,
         allMembers,
         isAdmin,
-        isRegister
+        isRegister,
+        isOnHold,
+        handleLogout
       }}
     >
       {children}

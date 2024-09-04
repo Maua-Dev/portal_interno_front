@@ -24,11 +24,31 @@ interface memberRawResponse {
     deactivated_date?: number
     active: string
     user_id: string
+    hours_worked: number
+  }
+}
+
+export interface memberOfGetAllMembersRawResponse {
+  member: {
+    name: string
+    email_dev: string
+    email: string
+    ra: string
+    role: string
+    stack: string
+    year: number
+    cellphone: string
+    course: string
+    hired_date: number
+    deactivated_date?: number
+    active: string
+    user_id: string
+    hours_worked: number
   }
 }
 
 export interface getAllMembersRawResponse {
-  members: memberRawResponse[]
+  members: memberOfGetAllMembersRawResponse[]
 }
 
 export class MemberRepositoryHttp implements IMemberRepository {
@@ -141,14 +161,15 @@ export class MemberRepositoryHttp implements IMemberRepository {
             hiredDate: memberUnit.member.hired_date,
             deactivatedDate: memberUnit.member.deactivated_date,
             active: activeToEnum(memberUnit.member.active),
-            userId: memberUnit.member.user_id
+            userId: memberUnit.member.user_id,
+            hoursWorked: memberUnit.member.hours_worked
           })
         )
       })
 
       return membersArray
     } catch (error: any) {
-      throw new Error('Error Getting All Members: ' + error.response.data)
+      throw new Error('Error Getting All Members: ' + error.message)
     }
   }
 

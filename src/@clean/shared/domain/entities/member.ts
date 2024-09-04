@@ -2,7 +2,6 @@ import { ACTIVE, activeToEnum } from '../enums/active_enum'
 import { COURSE, courseToEnum } from '../enums/course_enum'
 import { ROLE, roleToEnum } from '../enums/role_enum'
 import { STACK, stackToEnum } from '../enums/stack_enum'
-import { EntityError } from '../helpers/errors/domain_error'
 
 export type JsonProps = {
   member: {
@@ -19,6 +18,7 @@ export type JsonProps = {
     deactivated_date?: number
     active: string
     user_id: string
+    hours_worked: number
   }
   message: string
 }
@@ -37,226 +37,170 @@ export type MemberProps = {
   deactivatedDate?: number | null
   active: ACTIVE // ENUM
   userId: string
+  hoursWorked: number // milliseconds
 }
 
 export class Member {
-  constructor(public props: MemberProps) {
-    if (!Member.validateName(props.name)) {
-      throw new EntityError('props.name')
-    }
-    this.props.name = props.name
-
-    if (!Member.validateEmail(props.email)) {
-      throw new EntityError('props.email')
-    }
-    this.props.email = props.email
-
-    if (!Member.validateRa(props.ra)) {
-      throw new EntityError('props.ra')
-    }
-    this.props.ra = props.ra
-
-    if (!Member.validateRole(props.role)) {
-      throw new EntityError('props.role')
-    }
-    this.props.role = props.role
-
-    if (!Member.validateStack(props.stack)) {
-      throw new EntityError('props.stack')
-    }
-    this.props.stack = props.stack
-
-    if (!Member.validateYear(props.year)) {
-      throw new EntityError('props.year')
-    }
-    this.props.year = props.year
-
-    if (!Member.validateCellphone(props.cellphone)) {
-      throw new EntityError('props.cellphone')
-    }
-    this.props.cellphone = props.cellphone
-
-    if (!Member.validateCourse(props.course)) {
-      throw new EntityError('props.course')
-    }
-    this.props.course = props.course
-
-    if (!Member.validateHiredDate(props.hiredDate)) {
-      throw new EntityError('props.hiredDate')
-    }
-    this.props.hiredDate = props.hiredDate
-
-    if (props.deactivatedDate != null) {
-      if (
-        !Member.validateDeactivatedDate(props.deactivatedDate, props.hiredDate)
-      ) {
-        throw new EntityError('props.deactivatedDate')
-      }
-      if (this.active === ACTIVE.ACTIVE) {
-        throw new EntityError('props.deactivatedDate')
-      }
-      this.props.deactivatedDate = props.deactivatedDate
-    } else {
-      this.props.deactivatedDate = -1
-    }
-
-    if (!Member.validateActive(props.active)) {
-      throw new EntityError('props.active')
-    }
-    this.props.active = props.active
+  private _name: string
+  private _emailDev: string
+  private _email: string
+  private _ra: string
+  private _role: ROLE
+  private _stack: STACK
+  private _year: number
+  private _cellphone: string
+  private _course: COURSE
+  private _hiredDate: number
+  private _deactivatedDate?: number
+  private _active: ACTIVE
+  private _userId: string
+  private _hoursWorked: number
+  constructor({
+    name,
+    emailDev,
+    email,
+    ra,
+    role,
+    stack,
+    year,
+    cellphone,
+    course,
+    hiredDate,
+    deactivatedDate,
+    active,
+    userId,
+    hoursWorked
+  }: MemberProps) {
+    this._name = name
+    this._emailDev = emailDev
+    this._email = email
+    this._ra = ra
+    this._role = role
+    this._stack = stack
+    this._year = year
+    this._cellphone = cellphone
+    this._course = course
+    this._hiredDate = hiredDate
+    this._deactivatedDate = deactivatedDate
+    this._active = active
+    this._userId = userId
+    this._hoursWorked = hoursWorked
   }
 
   // Getters and Setters
 
   get name() {
-    return this.props.name
+    return this._name
   }
 
   set name(name: string) {
-    if (!Member.validateName(name)) {
-      throw new EntityError('name')
-    }
-    this.props.name = name
+    this._name = name
   }
 
   get email() {
-    return this.props.email
+    return this._email
   }
 
   set email(email: string) {
-    if (!Member.validateEmail(email)) {
-      throw new EntityError('email')
-    }
-    this.props.email = email
+    this._email = email
   }
 
   get ra() {
-    return this.props.ra
+    return this._ra
   }
 
   set ra(ra: string) {
-    if (!Member.validateRa(ra)) {
-      throw new EntityError('ra')
-    }
-    this.props.ra = ra
+    this._ra = ra
   }
 
   get role() {
-    return this.props.role
+    return this._role
   }
 
   set role(role: ROLE) {
-    if (!Member.validateRole(role)) {
-      throw new EntityError('role')
-    }
-    this.props.role = role
+    this._role = role
   }
 
   get stack() {
-    return this.props.stack
+    return this._stack
   }
 
   set stack(stack: STACK) {
-    if (!Member.validateStack(stack)) {
-      throw new EntityError('stack')
-    }
-    this.props.stack = stack
+    this._stack = stack
   }
 
   get year() {
-    return this.props.year
+    return this._year
   }
 
   set year(year: number) {
-    if (!Member.validateYear(year)) {
-      throw new EntityError('year')
-    }
-    this.props.year = year
+    this._year = year
   }
 
   get cellphone() {
-    return this.props.cellphone
+    return this._cellphone
   }
 
   set cellphone(cellphone: string) {
-    if (!Member.validateCellphone(cellphone)) {
-      throw new EntityError('cellphone')
-    }
-    this.props.cellphone = cellphone
+    this._cellphone = cellphone
   }
 
   get course() {
-    return this.props.course
+    return this._course
   }
 
   set course(course: COURSE) {
-    if (!Member.validateCourse(course)) {
-      throw new EntityError('course')
-    }
-    this.props.course = course
+    this._course = course
   }
 
   get hiredDate() {
-    return this.props.hiredDate
+    return this._hiredDate
   }
 
   set hiredDate(hiredDate: number) {
-    if (!Member.validateHiredDate(hiredDate)) {
-      throw new EntityError('hiredDate')
-    }
-    this.props.hiredDate = hiredDate
+    this._hiredDate = hiredDate
   }
 
   get deactivatedDate() {
-    if (this.props.deactivatedDate == null) {
-      return -1
-    }
-    return this.props.deactivatedDate
+    if (!this._deactivatedDate) return 0
+
+    return this._deactivatedDate
   }
 
   set deactivatedDate(deactivatedDate: number) {
-    if (
-      !Member.validateDeactivatedDate(
-        this.props.deactivatedDate ?? -1,
-        this.props.hiredDate
-      )
-    ) {
-      throw new EntityError('deactivatedDate')
-    }
-    this.props.deactivatedDate = deactivatedDate
+    this._deactivatedDate = deactivatedDate
   }
 
   get active() {
-    return this.props.active
+    return this._active
   }
 
   set active(active: ACTIVE) {
-    if (!Member.validateActive(active)) {
-      throw new EntityError('active')
-    }
-    this.props.active = active
+    this._active = active
   }
 
   get userId() {
-    return this.props.userId
+    return this._userId
   }
 
   set userId(userId: string) {
-    if (!Member.validateUserId(userId)) {
-      throw new EntityError('userId')
-    }
-    this.props.userId = userId
+    this._userId = userId
   }
 
   get emailDev() {
-    return this.props.emailDev
+    return this._emailDev
   }
 
   set emailDev(emailDev: string) {
-    if (!Member.validateEmailDev(emailDev)) {
-      throw new EntityError('emailDev')
-    }
-    this.props.emailDev = emailDev
+    this._emailDev = emailDev
+  }
+
+  get hoursWorked() {
+    return this._hoursWorked
+  }
+
+  set hoursWorked(hoursWorked: number) {
+    this._hoursWorked = hoursWorked
   }
 
   // JSON conversion
@@ -275,7 +219,8 @@ export class Member {
       hired_date: this.hiredDate,
       deactivated_date: this.deactivatedDate,
       active: this.active,
-      user_id: this.userId
+      user_id: this.userId,
+      hours_worked: this.hoursWorked
     }
   }
 
@@ -293,147 +238,8 @@ export class Member {
       hiredDate: json.member.hired_date,
       deactivatedDate: json.member.deactivated_date,
       active: activeToEnum(json.member.active),
-      userId: json.member.user_id
+      userId: json.member.user_id,
+      hoursWorked: json.member.hours_worked
     })
-  }
-
-  // Validate functions
-  static validateName(name: string): boolean {
-    if (name == null) {
-      return false
-    } else if (typeof name !== 'string') {
-      return false
-    } else if (name.length < 2) {
-      return false
-    }
-    return true
-  }
-
-  static validateEmail(email: string) {
-    const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (email == null) {
-      return false
-    } else if (typeof email !== 'string') {
-      return false
-    } else if (!email.match(regexEmail)) {
-      return false
-    }
-    return true
-  }
-
-  static validateRa(ra: string) {
-    const regexRa = /^\d{8}$/
-    if (ra == null) {
-      return false
-    } else if (typeof ra !== 'string') {
-      return false
-    } else if (!ra.match(regexRa)) {
-      return false
-    }
-    return true
-  }
-
-  static validateRole(role: ROLE) {
-    if (role == null) {
-      return false
-    } else if (typeof role !== 'string') {
-      return false
-    }
-    return true
-  }
-
-  static validateStack(stack: STACK) {
-    if (stack == null) {
-      return false
-    } else if (typeof stack !== 'string') {
-      return false
-    }
-    return true
-  }
-
-  static validateYear(year: number) {
-    if (year == null) {
-      return false
-    } else if (typeof year !== 'number') {
-      return false
-    }
-    return year > 0 && year <= 6
-  }
-
-  static validateCellphone(cellphone: string) {
-    if (cellphone == null) {
-      return false
-    } else if (typeof cellphone !== 'string') {
-      return false
-    } else if (cellphone.length !== 11) {
-      return false
-    }
-    return true
-  }
-
-  static validateCourse(course: COURSE) {
-    if (course == null) {
-      return false
-    } else if (typeof course !== 'string') {
-      return false
-    }
-    return true
-  }
-
-  static validateHiredDate(hiredDate: number) {
-    if (hiredDate == null) {
-      return false
-    } else if (typeof hiredDate !== 'number') {
-      return false
-    } else if (hiredDate < 0) {
-      return false
-    }
-    return true
-  }
-
-  static validateDeactivatedDate(deactivatedDate: number, hiredDate: number) {
-    if (deactivatedDate != null) {
-      if (typeof deactivatedDate !== 'number') {
-        return false
-      } else if (deactivatedDate < 0) {
-        return false
-      } else if (deactivatedDate < hiredDate) {
-        return false
-      }
-    }
-    return true
-  }
-
-  static validateActive(active: ACTIVE) {
-    if (active == null) {
-      return false
-    } else if (typeof active !== 'string') {
-      return false
-    }
-    return true
-  }
-
-  static validateUserId(userId: string) {
-    if (userId == null) {
-      return false
-    } else if (typeof userId !== 'string') {
-      return false
-    } else if (userId.length !== 36) {
-      return false
-    }
-    return true
-  }
-
-  static validateEmailDev(emailDev: string) {
-    const regexEmail = /^\w+\.devmaua@gmail\.com$/
-
-    if (emailDev == null) {
-      return false
-    } else if (typeof emailDev !== 'string') {
-      return false
-    } else if (!emailDev.match(regexEmail)) {
-      return false
-    }
-    return true
   }
 }

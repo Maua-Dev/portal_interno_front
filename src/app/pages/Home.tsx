@@ -7,18 +7,21 @@ import { useMember } from '../hooks/useMember'
 import { useAction } from '../hooks/useAction'
 import { useModal } from '../hooks/useModal'
 import 'react-toastify/dist/ReactToastify.css'
+import { OnHoldModal } from '../components/OnHoldModal'
+import Historic from '../components/Historic'
 
 export default function Home() {
   const { darkMode } = useDarkMode()
-  const { memberError, handleAllMembers, handleMember, isRegister } =
+  const { memberError, handleAllMembers, handleMember, isRegister, isOnHold } =
     useMember()
   const { actionError, actionSuccess, setActionError, setActionSuccess } =
     useAction()
-  const { modalContent } = useModal()
+  const { modalContent, changeModalContent } = useModal()
 
   useEffect(() => {
     handleMember()
     handleAllMembers()
+    changeModalContent(<Historic />)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -73,10 +76,17 @@ export default function Home() {
       <main
         className={`flex w-full items-center justify-center overflow-x-hidden transition-all duration-200 scrollbar-hide ${
           darkMode ? 'bg-skin-fill' : 'theme-white bg-sky-200'
-        } ${modalContent ? 'h-full' : isRegister ? 'h-auto' : 'h-screen'}`}
+        } ${
+          modalContent
+            ? 'h-full'
+            : isRegister || isOnHold
+            ? 'h-auto'
+            : 'h-screen'
+        }`}
       >
+        {isOnHold ? <OnHoldModal /> : null}
         {isRegister ? <RegisterModal /> : null}
-        {modalContent}
+        {!isOnHold && modalContent}
         <ToastContainer
           position="top-right"
           autoClose={3000}

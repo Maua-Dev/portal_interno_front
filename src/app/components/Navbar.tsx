@@ -11,13 +11,13 @@ import {
   BsClipboard
 } from 'react-icons/bs'
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import Historic from './Historic'
 import ActionModal from './ActionModal'
 import { useDarkMode } from '../hooks/useDarkMode'
 import { useModal } from '../hooks/useModal'
 import { useMember } from '../hooks/useMember'
 import Projects from './Projects'
+import { ProfileModal } from './ProfileModal'
 
 interface window {
   innerWidth: number
@@ -29,10 +29,9 @@ export default function Navbar() {
   const maximumWidth: number = 1024
 
   // Hooks
-  const navigate = useNavigate()
   const { darkMode, toggleDarkMode } = useDarkMode()
   const { changeModalContent } = useModal()
-  const { isAdmin } = useMember()
+  const { isAdmin, handleLogout, isOnHold } = useMember()
 
   // States
   const [hover, setHover] = useState(false)
@@ -55,11 +54,6 @@ export default function Navbar() {
     return { innerWidth, innerHeight }
   }
 
-  const handleLogout = () => {
-    localStorage.removeItem('idToken')
-    navigate('/login')
-  }
-
   return (
     <div>
       {windowSize.innerWidth > maximumWidth ? (
@@ -77,7 +71,12 @@ export default function Navbar() {
               className="h-14 w-16"
             />
             <div className="flex flex-col gap-8 font-sans text-3xl">
-              <div className="flex cursor-pointer select-none gap-8 overflow-x-hidden">
+              <div
+                className="flex cursor-pointer select-none gap-8 overflow-x-hidden"
+                onClick={() => {
+                  if (!isOnHold) changeModalContent(<ProfileModal />)
+                }}
+              >
                 <BiSolidUser
                   className={`transform cursor-pointer ${
                     !darkMode ? 'text-gray-700' : 'text-white'
@@ -98,7 +97,7 @@ export default function Navbar() {
               <div
                 className="flex cursor-pointer select-none gap-8 overflow-x-hidden"
                 onClick={() => {
-                  changeModalContent(<ActionModal />)
+                  if (!isOnHold) changeModalContent(<ActionModal />)
                 }}
               >
                 <BsFillPlusSquareFill
@@ -121,7 +120,7 @@ export default function Navbar() {
               <div
                 className="flex cursor-pointer select-none gap-8 overflow-x-hidden"
                 onClick={() => {
-                  changeModalContent(<Historic />)
+                  if (!isOnHold) changeModalContent(<Historic />)
                 }}
               >
                 <AiOutlineHistory
@@ -241,6 +240,9 @@ export default function Navbar() {
                 className={`transform cursor-pointer ${
                   !darkMode ? 'text-gray-700' : 'text-white'
                 } transition-all duration-100 hover:fill-blue-600`}
+                onClick={() => {
+                  if (!isOnHold) changeModalContent(<ProfileModal />)
+                }}
               />
               <BsFillPlusSquareFill
                 className={`transform cursor-pointer ${
