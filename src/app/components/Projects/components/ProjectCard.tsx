@@ -20,10 +20,16 @@ import { ProjectContext } from '../../../contexts/project_context'
 
 interface ProjectCardProps extends HTMLAttributes<HTMLDivElement> {
   project: ProjectType
+  setEditPopUp: React.Dispatch<React.SetStateAction<boolean>>
+  setProjectToEdit: React.Dispatch<
+    React.SetStateAction<ProjectType | undefined>
+  >
   setProjects: React.Dispatch<React.SetStateAction<ProjectType[] | undefined>>
 }
 
 export default function ProjectCard({
+  setEditPopUp,
+  setProjectToEdit,
   project,
   setProjects,
   ...props
@@ -120,10 +126,9 @@ export default function ProjectCard({
               <div className="z-30" onMouseEnter={openSeetingsPopUp}>
                 <Button
                   variant="default"
-                  onClick={(event) => {
-                    // changeModalContent(<ActionModal action={action} />)
-                    setPopUpOpen(false)
-                    event.stopPropagation()
+                  onClick={() => {
+                    setEditPopUp(true)
+                    setProjectToEdit(project)
                   }}
                 >
                   <PenBox className="w-4" />
