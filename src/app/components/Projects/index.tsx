@@ -9,10 +9,14 @@ import { motion } from 'framer-motion'
 import Loader from '../Loader'
 import ProjectCardSkeleton from './components/ProjectCardSkeleton'
 import Button from '../Historic/components/Button'
+import ProjectDialog from './components/ProjectDialog'
 
 export default function Projects() {
   const { getAllProjects } = useContext(ProjectContext)
   const [projects, setProjects] = useState<ProjectType[] | undefined>(undefined)
+  const [editPopUp, setEditPopUp] = useState<boolean>(false)
+  const [createProjectMobile, setCreateProjectMobile] = useState<boolean>(false)
+  const [projectToEdit, setProjectToEdit] = useState<ProjectType>()
   const [filterProps, setFilterProps] = useState<FilterProps>({
     searchText: '',
     active: '',
@@ -77,17 +81,29 @@ export default function Projects() {
         setFilterProps={setFilterProps}
         filterProps={filterProps}
         filterOptions={projectFilterOptions}
-        adicinalButton={<CreateProjectButton />}
-        className="z-30"
+        adicinalButton={
+          <ProjectDialog setProjects={setProjects}>
+            <Button variant={'form'} className={'hidden w-full gap-2 xl:flex'}>
+              Adicinar
+              <Plus strokeWidth={2} />
+            </Button>
+          </ProjectDialog>
+        }
+        className={`${editPopUp || createProjectMobile ? 'z-10' : 'z-30'}`}
       />
       <div
-        className={`z-10 flex h-fit w-full flex-col items-center gap-2 pb-60 ${
-          3 < 10 ? 'h-screen' : null
-        } `}
+        className={`z-10 flex h-fit w-full flex-col items-center gap-2 pb-60`}
       >
-        <div className="flex w-4/5 xl:hidden">
-          <CreateProjectButton />
-        </div>
+        <ProjectDialog
+          setProjects={setProjects}
+          open={createProjectMobile}
+          setOpen={setCreateProjectMobile}
+        >
+          <Button variant={'form'} className={'flex w-4/5 gap-2 xl:hidden'}>
+            Adicinar
+            <Plus strokeWidth={2} />
+          </Button>
+        </ProjectDialog>
         {filteredProjects.length !== 0 ? (
           filteredProjects.map((project, index) => {
             return (
@@ -99,6 +115,8 @@ export default function Projects() {
                 className="flex w-full justify-center"
               >
                 <ProjectCard
+                  setProjectToEdit={setProjectToEdit}
+                  setEditPopUp={setEditPopUp}
                   className="z-10 hover:z-20"
                   setProjects={setProjects}
                   key={project.name + index}
@@ -110,16 +128,13 @@ export default function Projects() {
         ) : (
           <Loader SkeletonComponent={ProjectCardSkeleton} />
         )}
+        <ProjectDialog
+          setProjects={setProjects}
+          open={editPopUp}
+          project={projectToEdit}
+          setOpen={setEditPopUp}
+        ></ProjectDialog>
       </div>
     </div>
-  )
-}
-
-function CreateProjectButton() {
-  return (
-    <Button variant={'form'} className="w-full gap-2">
-      Adicinar
-      <Plus strokeWidth={2} />
-    </Button>
   )
 }
