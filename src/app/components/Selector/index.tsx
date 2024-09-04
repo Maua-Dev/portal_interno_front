@@ -11,6 +11,7 @@ import { useState } from 'react'
 
 interface SelectorProps {
   members?: string[]
+  objectParameter: string
   getValues: any
   setValue: any
   stackTags?: STACK[]
@@ -18,6 +19,7 @@ interface SelectorProps {
 }
 
 export function Selector({
+  objectParameter,
   setValue,
   getValues,
   isStackTagSelector = false
@@ -56,8 +58,8 @@ export function Selector({
                     text={member.name}
                     onClick={() => {
                       setValue(
-                        'associatedMembersUserIds',
-                        getValues('associatedMembersUserIds').filter(
+                        objectParameter,
+                        getValues(objectParameter).filter(
                           (id: string) => id !== member.userId
                         )
                       )
@@ -75,8 +77,10 @@ export function Selector({
                   text={translateStackTag(stack)}
                   onClick={() => {
                     setValue(
-                      'stackTags',
-                      getValues('stackTags').filter((s: STACK) => s !== stack)
+                      objectParameter,
+                      getValues(objectParameter).filter(
+                        (s: STACK) => s !== stack
+                      )
                     )
                     setCurrentStackTags(
                       currentStackTags.filter((s) => s !== stack)
@@ -88,6 +92,7 @@ export function Selector({
       </div>
       {isSelectorModalOpen && (
         <SelectorModal
+          objectParameter={objectParameter}
           setValue={setValue}
           isStack={isStackTagSelector}
           setIsSelectorModalOpen={setIsSelectorModalOpen}
