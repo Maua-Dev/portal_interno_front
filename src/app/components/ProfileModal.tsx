@@ -4,6 +4,7 @@ import { useMember } from '../hooks/useMember'
 import { raFormatterFromJson } from '../utils/functions/formatters'
 import { Avatar } from './Avatar'
 import { Separator } from './Separator'
+import { FaRegClock } from 'react-icons/fa6'
 
 export function ProfileModal() {
   const { darkMode } = useDarkMode()
@@ -16,7 +17,7 @@ export function ProfileModal() {
     }, 100)
   }, [])
   return (
-    <div className="flex w-full flex-col items-center justify-center gap-5 px-8 py-20 lg:ml-28 lg:h-screen lg:flex-row lg:pr-8">
+    <div className="flex min-h-screen w-full flex-col justify-center gap-5 px-8 py-24 lg:ml-28 lg:h-auto lg:flex-row lg:pr-8">
       <div
         className={`flex h-full w-full flex-col gap-6 rounded-2xl p-6 transition-all duration-500 lg:mt-0 lg:w-[70%] ${
           darkMode ? 'bg-skin-secundary text-white' : 'bg-white'
@@ -65,14 +66,6 @@ export function ProfileModal() {
             {member?.hiredDate &&
               new Date(member?.hiredDate).toLocaleDateString()}
           </p>
-          <p className="text-lg">
-            <b>Horas totais: </b>{' '}
-            {member?.hoursWorked ? member?.hoursWorked / 1000 / 60 / 60 : 0}{' '}
-            hora
-            {member?.hoursWorked && member?.hoursWorked / 1000 / 60 / 60 > 1
-              ? 's'
-              : ''}
-          </p>
         </div>
         <Separator />
         <h2 className="text-2xl font-bold">Sobre mim</h2>
@@ -87,15 +80,27 @@ export function ProfileModal() {
       </div>
       <div className="flex h-full w-full flex-col gap-4 lg:w-[30%]">
         <div
-          className={`flex h-1/2 w-full flex-col gap-2 rounded-2xl p-6 transition-all delay-200 duration-700 ${
+          className={`flex h-1/3 min-h-40 w-full flex-col items-center gap-6 rounded-2xl p-6 transition-all delay-200 duration-700 ${
             darkMode ? 'bg-skin-secundary text-white' : 'bg-white'
           } ${fade ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0'}`}
         >
-          <h1 className="text-3xl font-bold">Projeto atual</h1>
-          <p className="text-lg">Em elaboração</p>
+          <h1 className="flex w-full justify-start text-3xl font-bold">
+            Horas totais
+          </h1>
+
+          <div className="flex h-full items-center justify-center gap-4 text-3xl md:text-4xl">
+            <FaRegClock />
+            <p>
+              {member?.hoursWorked ? member?.hoursWorked / 1000 / 60 / 60 : 0}{' '}
+              hora
+              {member?.hoursWorked && member?.hoursWorked / 1000 / 60 / 60 > 1
+                ? 's'
+                : ''}
+            </p>
+          </div>
         </div>
         <div
-          className={`flex h-1/2 w-full flex-col gap-2 rounded-2xl p-6 transition-all delay-300 duration-1000 ${
+          className={`flex h-2/3 w-full flex-col gap-2 rounded-2xl p-6 transition-all delay-300 duration-1000 ${
             darkMode ? 'bg-skin-secundary text-white' : 'bg-white'
           } ${fade ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0'}`}
         >

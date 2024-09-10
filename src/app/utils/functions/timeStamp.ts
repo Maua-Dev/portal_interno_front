@@ -24,7 +24,7 @@ export function timeStampToDate(timestamp: number): string {
 }
 
 export function millisecondsToHours(milliseconds: number): number {
-  return Math.floor(milliseconds / (3.6 * Math.pow(10, 6)))
+  return milliseconds / (3.6 * Math.pow(10, 6))
 }
 
 export function hoursToMilliseconds(hours: number): number {
