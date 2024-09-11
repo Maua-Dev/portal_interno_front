@@ -45,7 +45,7 @@ const projectSchema = z.object({
       // })
     )
     .optional(),
-  description: z.string().min(1, { message: 'Descrição é obrigatório' })
+  description: z.string().min(1, { message: 'Descrição é obrigatório!' })
 })
 
 interface ProjectDialogProps {
