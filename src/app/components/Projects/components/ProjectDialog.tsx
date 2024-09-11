@@ -1,7 +1,6 @@
 import { ProjectType } from '../../../../@clean/shared/infra/repositories/project_repository_http'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
 import Button from '../../Historic/components/Button'
-import { Upload } from 'lucide-react'
 import { ReactNode, useContext, useEffect, useState } from 'react'
 import { ThemeContext } from '../../../contexts/theme_context'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -16,6 +15,7 @@ import {
 } from '../../../utils/functions/timeStamp'
 import { useActionModal } from '../../ActionModal/hooks/useActionModal'
 import { ProjectContext } from '../../../contexts/project_context'
+import { ImBlocked } from 'react-icons/im'
 
 // const MAX_FILE_SIZE = 5000000
 // const ACCEPTED_IMAGE_TYPES = [
@@ -26,13 +26,13 @@ import { ProjectContext } from '../../../contexts/project_context'
 // ]
 
 const projectSchema = z.object({
-  name: z.string().min(1, { message: 'Título do Projeto é obrigatório' }),
-  poUserId: z.string().min(1, { message: 'PO é obrigatório' }),
-  scrumUserId: z.string().min(1, { message: 'Scrum Master é obrigatório' }),
-  startDate: z.string().min(1, { message: 'Data de Inicial é obrigatório' }),
+  name: z.string().min(1, { message: 'Título do Projeto é obrigatório!' }),
+  poUserId: z.string().min(1, { message: 'PO é obrigatório!' }),
+  scrumUserId: z.string().min(1, { message: 'Scrum Master é obrigatório!' }),
+  startDate: z.string().min(1, { message: 'Data de Inicial é obrigatório!' }),
   membersUserIds: z
-    .array(z.string().min(1, { message: 'Membros são Obrigatórios' }))
-    .min(1, { message: 'Membros são Obrigatórios' }),
+    .array(z.string().min(1, { message: 'Membros são obrigatórios!' }))
+    .min(1, { message: 'Membros são obrigatórios!' }),
   photos: z
     .array(
       z.any()
@@ -308,6 +308,7 @@ export default function ProjectDialog({
                       objectParameter="membersUserIds"
                       setValue={setValue}
                       getValues={getValues}
+                      isLabelBold={false}
                     />
                     <span className="font-medium text-red-600">
                       {errors.membersUserIds?.message}
@@ -318,10 +319,10 @@ export default function ProjectDialog({
                   {/* Description */}
                   <div className="flex flex-row gap-10">
                     <p className="text-xl font-medium">Descrição</p>
-                    <span className="font-medium text-red-600">
-                      {errors.description?.message}
-                    </span>
                   </div>
+                  <span className="font-medium text-red-600">
+                    {errors.description?.message}
+                  </span>
                   <textarea
                     {...register('description')}
                     name="description"
@@ -353,8 +354,8 @@ export default function ProjectDialog({
                       : null
                   }`}
                 >
-                  <Upload />
-                  <p className="font-medium">Selecione Imagem Aqui</p>
+                  <ImBlocked className="flex size-2/12" />
+                  <p className="font-medium">Área Indisponivel no momento</p>
                 </label>
                 <input
                   id="image"
@@ -363,6 +364,7 @@ export default function ProjectDialog({
                   className="sr-only"
                   onChange={handleFileChange}
                   multiple
+                  disabled
                 />
                 <div className="relative">
                   {selectedFiles.length > 0 ? (
@@ -413,14 +415,16 @@ export default function ProjectDialog({
               <div className="flex h-fit w-full flex-row gap-2">
                 <Button
                   onClick={() => {
-                    handleClosePop(false)
+                    if (confirm('Deseja fechar sem salvar?'))
+                      handleClosePop(false)
                   }}
                   buttonType="button"
-                  variant={'default'}
+                  variant="default"
                   className="w-full rounded border border-skin-muted"
                 >
                   Cancelar
                 </Button>
+
                 <Button
                   buttonType="submit"
                   variant="form"
