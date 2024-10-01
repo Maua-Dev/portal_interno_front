@@ -1,7 +1,7 @@
 // Pad a number to 2 digits
-const pad = (n: number) => `${Math.floor(Math.abs(n))}`.padStart(2, '0')
+export const pad = (n: number) => `${Math.floor(Math.abs(n))}`.padStart(2, '0')
 
-const toISOStringWithTimezone = (date: Date) => {
+export const toISOStringWithTimezone = (date: Date) => {
   return (
     date.getFullYear() +
     '-' +

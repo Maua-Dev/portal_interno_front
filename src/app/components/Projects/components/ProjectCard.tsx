@@ -1,3 +1,4 @@
+/* eslint-disable react/no-children-prop */
 import { BsThreeDots } from 'react-icons/bs'
 import { useDarkMode } from '../../../hooks/useDarkMode'
 import Card from '../../Card'

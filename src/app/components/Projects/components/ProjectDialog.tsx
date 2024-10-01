@@ -11,7 +11,8 @@ import MemberSelector from './MemberSelector'
 import { motion } from 'framer-motion'
 import {
   dateToMilliseconds,
-  timeStampToDate
+  timeStampToDate,
+  toISOStringWithTimezone
 } from '../../../utils/functions/timeStamp'
 import { useActionModal } from '../../ActionModal/hooks/useActionModal'
 import { ProjectContext } from '../../../contexts/project_context'
@@ -131,12 +132,18 @@ export default function ProjectDialog({
 
       let newCode
       if (project?.name !== data.name) {
-        newCode =
-          data?.name.split(' ')[0].charAt(0).toUpperCase() +
-          data?.name
-            .split(' ')
-            [data.name.split(' ').length - 1].charAt(0)
-            .toUpperCase()
+        const nameParts = data?.name.split(' ')
+        if (nameParts.length > 1) {
+          // Se houver mais de uma palavra, usa a primeira e a última inicial
+          newCode =
+            nameParts[0].charAt(0).toUpperCase() +
+            nameParts[nameParts.length - 1].charAt(0).toUpperCase()
+        } else {
+          // Se houver apenas uma palavra, usa a primeira letra duas vezes
+          newCode =
+            nameParts[0].charAt(0).toUpperCase() +
+            nameParts[0].charAt(1).toUpperCase()
+        }
       } else {
         newCode = project.code
       }
@@ -148,6 +155,8 @@ export default function ProjectDialog({
 
       let projectResponse: ProjectType
 
+      console.log(data.startDate)
+      console.log(dateToMilliseconds(data.startDate))
       if (!project) {
         projectResponse = await createProject({
           code: newCode,
@@ -212,7 +221,7 @@ export default function ProjectDialog({
     } else {
       setCurrentMembers([])
     }
-  }, [project, open])
+  }, [project, open, setValue, setCurrentMembers])
 
   return (
     <div className="static flex w-full justify-center">
@@ -280,6 +289,7 @@ export default function ProjectDialog({
                           name="startDate"
                           type="datetime-local"
                           placeholder="DD/MM/AAAA"
+                          max={toISOStringWithTimezone(new Date()).slice(0, 16)}
                           className={`w-full rounded ${
                             darkMode ? 'bg-gray-600' : 'bg-gray-300'
                           } px-2 py-1 outline-none`}
