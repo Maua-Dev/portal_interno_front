@@ -18,6 +18,7 @@ import { useModal } from '../hooks/useModal'
 import { useMember } from '../hooks/useMember'
 import Projects from './Projects'
 import { ProfileModal } from './ProfileModal'
+import Members from './Members'
 
 interface window {
   innerWidth: number
@@ -165,7 +166,12 @@ export default function Navbar() {
                       Projetos
                     </p>
                   </div>
-                  <div className="flex cursor-pointer select-none gap-8 overflow-x-hidden">
+                  <div
+                    onClick={() => {
+                      changeModalContent(<Members />)
+                    }}
+                    className="flex cursor-pointer select-none gap-8 overflow-x-hidden"
+                  >
                     <IoPeople
                       className={`transform cursor-pointer ${
                         !darkMode ? 'text-gray-700' : 'text-white'
@@ -277,6 +283,9 @@ export default function Navbar() {
                     } hover:fill-blue-600`}
                   />
                   <IoPeople
+                    onClick={() => {
+                      changeModalContent(<Members />)
+                    }}
                     className={`transform cursor-pointer ${
                       !darkMode ? 'text-gray-700' : 'text-white'
                     } transition-all duration-100 ${

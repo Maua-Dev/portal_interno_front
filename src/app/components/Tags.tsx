@@ -1,4 +1,4 @@
-import { ReactElement, useState } from 'react'
+import { HTMLAttributes, ReactElement, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import Text from './FilterBar/components/Text'
 import {
@@ -14,6 +14,8 @@ import {
 } from 'lucide-react'
 import { useDarkMode } from '../hooks/useDarkMode'
 import { MotionProps, motion } from 'framer-motion'
+import { ACTIVE } from '../../@clean/shared/domain/enums/active_enum.ts'
+import HoverCard from './HoverCard.tsx'
 
 interface TagProps {
   variant: string
@@ -229,5 +231,26 @@ export function FilterTag({
         </motion.div>
       )}
     </>
+  )
+}
+
+interface MemberTagProps extends HTMLAttributes<HTMLDivElement> {
+  situation: ACTIVE
+}
+
+export function MemberTag({ situation, ...props }: MemberTagProps) {
+  const styleProps: { [key in ACTIVE]: { label: string; style: string } } = {
+    ACTIVE: { label: 'Ativo', style: 'bg-emerald-600' },
+    FREEZE: { label: 'Congelado', style: 'bg-yellow-600' },
+    DISCONNECTED: { label: 'Desligado', style: 'bg-red-600' },
+    ON_HOLD: { label: 'Em Espera', style: 'bg-gray-600' }
+  }
+
+  return (
+    <HoverCard placeholder={styleProps[situation].label}>
+      <div
+        className={twMerge(styleProps[situation].style, props.className)}
+      ></div>
+    </HoverCard>
   )
 }
