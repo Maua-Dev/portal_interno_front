@@ -3,7 +3,7 @@
 import Card from '../Card'
 import SearchField from './components/SearchField'
 import Text from './components/Text'
-import { MoveLeft, Search, X, LucideIcon } from 'lucide-react'
+import { MoveLeft, Search, X, LucideIcon, Eraser } from 'lucide-react'
 import {
   Popover,
   PopoverContent,
@@ -12,11 +12,20 @@ import {
 } from '../Historic/components/Popover'
 import * as Select from './components/Select'
 import Button from '../Historic/components/Button'
-import React, { HTMLAttributes, ReactNode, useEffect, useState } from 'react'
+import React, {
+  HTMLAttributes,
+  ReactNode,
+  useContext,
+  useEffect,
+  useMemo,
+  useState
+} from 'react'
 import { twMerge } from 'tailwind-merge'
 import { SlidersHorizontal } from 'lucide-react'
 import { FilterTag } from '../Tags'
 import { Tooltip } from '../Tooltip'
+import { ProjectContext } from '../../contexts/project_context.tsx'
+import { useDarkMode } from '../../hooks/useDarkMode.ts'
 
 interface FilterBarProps extends HTMLAttributes<HTMLDivElement> {
   label: string
@@ -24,7 +33,7 @@ interface FilterBarProps extends HTMLAttributes<HTMLDivElement> {
   setFilterProps: (props: React.SetStateAction<FilterProps>) => void
   filterProps: FilterProps
   filterOptions: FilterOptions[]
-  adicinalButton?: ReactNode
+  adicinalButton?: ReactNode | undefined
 }
 
 export interface FilterProps {
@@ -49,6 +58,10 @@ export default function FilterBar({
 }: FilterBarProps) {
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false)
   const [searchOpen, setSearchOpen] = useState<boolean>(false)
+  const [updatedFilterOptions, setUpdatedFilterOptions] =
+    useState<FilterOptions[]>(filterOptions)
+  const { getAllProjects } = useContext(ProjectContext)
+  const { darkMode } = useDarkMode()
 
   const emptyFilterProps = filterOptions.reduce((acc, option) => {
     acc[option.name] = ''
@@ -57,6 +70,27 @@ export default function FilterBar({
 
   const [localFilterProps, setLocalFilterProps] =
     useState<FilterProps>(emptyFilterProps)
+
+  const updateProjectOptions = async () => {
+    const projects = await getAllProjects()
+
+    const projectOptions = projects.map((project) => ({
+      label: project.name,
+      value: project.code
+    })) // Fetched projects options
+
+    const finalFilterOptions = filterOptions.map((option) => {
+      if (option.name === 'project') {
+        return {
+          ...option,
+          options: projectOptions // Add fetched projects to options
+        }
+      }
+      return option
+    })
+
+    setUpdatedFilterOptions(finalFilterOptions)
+  }
 
   function filter() {
     setFilterProps(localFilterProps)
@@ -89,6 +123,10 @@ export default function FilterBar({
       ...prev,
       [key]: ''
     }))
+    setLocalFilterProps((prev) => ({
+      ...prev,
+      [key]: ''
+    }))
   }
 
   function renderFilterTags(
@@ -111,22 +149,27 @@ export default function FilterBar({
     return <></>
   }
 
+  const hasFilterProps = useMemo(() => {
+    return Object.values(filterProps).some((value) => value !== '')
+  }, [filterProps, popUpOpen])
+
+  const activeFiltersCount = useMemo(() => {
+    return Object.values(filterProps).filter((value) => value !== '').length
+  }, [filterProps, popUpOpen])
+
   useEffect(() => {
-    setTimeout(() => {
-      clearFilters()
-    }, 1000)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    updateProjectOptions()
+  }, [filterOptions, getAllProjects])
 
   return (
     <Card
       variant="lg"
       className={twMerge(
-        'flex h-fit flex-row items-center justify-between rounded-t-lg shadow-sm shadow-gray-500 duration-150 ease-in',
+        'flex h-fit flex-row items-center justify-between gap-3 rounded-t-lg shadow-sm shadow-gray-500 duration-150 ease-in',
         props.className
       )}
     >
-      <div className="flex flex-row items-center gap-5">
+      <div className="flex flex-row items-center md:gap-5">
         <div className="flex flex-row items-center gap-2">
           {searchOpen ? (
             <Tooltip placeholder="Voltar">
@@ -153,23 +196,14 @@ export default function FilterBar({
             placeholder="Pesquisar"
             className={`${
               searchOpen ? 'block' : 'hidden'
-            } w-4/5 sm:w-64 md:block lg:w-72`}
+            } w-full sm:w-64 md:block lg:w-72`}
             onChange={handleInputFilterData}
           />
         </div>
-        <div className="hidden min-w-full flex-row gap-4 lg:flex">
-          {filterProps !== emptyFilterProps
-            ? Object.entries(filterProps).map(([key, value], index) => {
-                return (
-                  <div key={key + '' + index}>
-                    {renderFilterTags(key, value, index)}
-                  </div>
-                )
-              })
-            : null}
-        </div>
       </div>
-      <div className="flex h-full flex-row gap-2">
+      <div
+        className={`flex h-full w-fit flex-row items-center justify-end gap-2 md:w-full md:gap-0`}
+      >
         <Tooltip placeholder="Pesquisar">
           <Button
             variant="default"
@@ -183,66 +217,135 @@ export default function FilterBar({
             <Search className="h-5 text-skin-base" />
           </Button>
         </Tooltip>
-        <Popover open={popUpOpen} onOpenChange={setPopUpOpen}>
-          <PopoverTrigger asChild>
-            <Button
-              variant="default"
-              className="p-2 md:px-4"
-              onClick={() => {
-                clearFilters()
-                setPopUpOpen((prev) => !prev)
-              }}
-            >
-              <p className="hidden md:block">Filtro</p>
-              <SlidersHorizontal className="h-5 w-5" />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent>
-            <form
-              onSubmit={(event) => {
-                event.preventDefault()
-                setPopUpOpen(false)
-              }}
-              className="pt-10"
-            >
-              {filterOptions.map((filterOption, index) => {
-                if (filterOption.type === 'select') {
-                  return (
-                    <Select.Root
-                      key={filterOption.name + index}
-                      label={filterOption.label}
-                      name={filterOption.name}
-                      variant="withTextLabel"
-                      onChange={handleSelectFilterData}
-                    >
-                      {filterOption.options?.map((option, index) => {
-                        return (
-                          <Select.Content
-                            key={option.value + index}
-                            value={option.value}
-                          >
-                            {option.label}
-                          </Select.Content>
-                        )
-                      })}
-                    </Select.Root>
-                  )
-                }
-              })}
-              <Button variant="form" className="mt-4" onClick={filter}>
-                Filtrar
-                <Search className="h-4 w-4" />
-              </Button>
-              <PopoverArrow children={undefined} />
-              <X
-                className="absolute right-2.5 top-3 h-5 cursor-pointer"
+        <Button
+          variant={'default'}
+          className={`${
+            hasFilterProps
+              ? `mr-4 hidden items-center xl:flex ${
+                  darkMode
+                    ? 'text-skin-muted'
+                    : 'text-zinc-400 hover:text-skin-muted'
+                }`
+              : 'hidden'
+          }`}
+          onClick={clearFilters}
+        >
+          <Eraser className={'h-5 w-5 text-xs'} />
+          <p className={'text-base'}>Limpar</p>
+        </Button>
+        <div
+          className={`flex flex-row items-center gap-2 md:justify-end md:gap-0 md:p-2 ${
+            hasFilterProps
+              ? 'rounded-sm transition-all duration-300 ease-in-out md:pl-3 lg:border-dashed xl:border xl:border-skin-muted'
+              : ''
+          }`}
+        >
+          <div className="hidden w-fit flex-row gap-4 xl:flex">
+            {activeFiltersCount < 4 ? (
+              Object.entries(filterProps).map(([key, value], index) =>
+                value ? (
+                  <div key={key + '' + index}>
+                    {renderFilterTags(key, value, index)}
+                  </div>
+                ) : null
+              )
+            ) : (
+              <div className={''}>
+                <p>{activeFiltersCount.toString() + ' selecionados'}</p>
+              </div>
+            )}
+          </div>
+          <div
+            className={`${
+              hasFilterProps
+                ? 'mx-1 ml-3 hidden h-7 w-0 border border-dashed  border-skin-muted xl:block'
+                : 'hidden'
+            }`}
+          />
+          <Popover open={popUpOpen} onOpenChange={setPopUpOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                variant="default"
+                className="p-2 md:px-4"
                 onClick={() => {
+                  setPopUpOpen((prev) => !prev)
+                }}
+              >
+                <p className="hidden md:block">Filtro</p>
+                <SlidersHorizontal className="h-5 w-5" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent>
+              <form
+                onSubmit={(event) => {
+                  event.preventDefault()
                   setPopUpOpen(false)
                 }}
-              />
-            </form>
-          </PopoverContent>
-        </Popover>
+                className="pt-10"
+              >
+                {updatedFilterOptions.map((filterOption, index) => {
+                  if (filterOption.type === 'select') {
+                    return (
+                      <Select.Root
+                        key={filterOption.name + index}
+                        label={filterOption.label}
+                        name={filterOption.name}
+                        variant="withTextLabel"
+                        onChange={handleSelectFilterData}
+                        value={localFilterProps[filterOption.name]}
+                      >
+                        {filterOption.options?.map((option, index) => {
+                          return (
+                            <Select.Content
+                              key={option.value + index}
+                              value={option.value}
+                            >
+                              {option.label}
+                            </Select.Content>
+                          )
+                        })}
+                      </Select.Root>
+                    )
+                  }
+                })}
+                <div className={'flex w-full flex-row gap-3'}>
+                  <Button
+                    variant="default"
+                    className={`mt-4 flex w-full flex-row items-center lg:hidden ${
+                      darkMode
+                        ? 'text-skin-muted'
+                        : 'text-zinc-400 hover:text-skin-muted'
+                    }`}
+                    onClick={() => {
+                      clearFilters()
+                      setPopUpOpen(false)
+                    }}
+                  >
+                    <Eraser className={'h-5 w-5 text-xs'} />
+                    <p className={'text-base'}>Limpar</p>
+                  </Button>
+                  <Button
+                    variant="form"
+                    className="mt-4 w-full"
+                    onClick={filter}
+                  >
+                    Filtrar
+                    <Search className="h-4 w-4" />
+                  </Button>
+                </div>
+                <PopoverArrow children={undefined} />
+                <X
+                  className="absolute right-2.5 top-3 h-5 cursor-pointer"
+                  onClick={() => {
+                    setPopUpOpen(false)
+                  }}
+                />
+              </form>
+            </PopoverContent>
+          </Popover>
+        </div>
+      </div>
+      <div className={!adicinalButton ? 'hidden' : undefined}>
         {adicinalButton}
       </div>
     </Card>

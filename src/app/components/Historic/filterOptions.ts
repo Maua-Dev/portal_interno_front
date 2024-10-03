@@ -10,14 +10,7 @@ export const actionsFilterOptions: FilterOptions[] = [
     name: 'project',
     label: 'Projetos',
     type: 'select',
-    options: [
-      { label: 'Portal Interno', value: 'PI' },
-      { label: 'Mauá Food', value: 'MF' },
-      { label: 'Portifólio', value: 'PT' },
-      { label: 'Selfie Mauá', value: 'SF' },
-      { label: 'SMILE', value: 'SM' },
-      { label: 'Gameficação', value: 'GM' }
-    ]
+    options: [] // FilterBar Component handle to fetch the updated options for projects
   },
   {
     name: 'area',

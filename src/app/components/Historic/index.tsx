@@ -135,7 +135,7 @@ export default function Historic() {
   }, [])
 
   return (
-    <div className="flex h-fit w-full flex-col items-center justify-center gap-2 py-20 pl-0 md:py-10 md:pl-14">
+    <div className="flex h-fit w-full flex-col items-center justify-center gap-2 py-20 pl-0 md:pl-14 lg:py-10">
       <FilterBar
         label={'Histórico'}
         icon={History}
