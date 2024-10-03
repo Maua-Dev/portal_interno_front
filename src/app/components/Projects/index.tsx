@@ -83,7 +83,7 @@ export default function Projects() {
         filterOptions={projectFilterOptions}
         adicinalButton={
           <ProjectDialog setProjects={setProjects}>
-            <Button variant={'form'} className={'hidden w-full gap-2 xl:flex'}>
+            <Button variant={'form'} className={'hidden w-fit gap-2 xl:flex'}>
               Adicionar
               <Plus strokeWidth={2} />
             </Button>
@@ -99,7 +99,7 @@ export default function Projects() {
           open={createProjectMobile}
           setOpen={setCreateProjectMobile}
         >
-          <Button variant={'form'} className={'flex w-4/5 gap-2 xl:hidden'}>
+          <Button variant={'form'} className={'flex w-10/12 gap-2 xl:hidden'}>
             Adicionar
             <Plus strokeWidth={2} />
           </Button>
