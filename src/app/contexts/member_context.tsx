@@ -13,6 +13,7 @@ import { UpdateMemberUsecase } from '../../@clean/modules/member/usecases/update
 import { DeleteMemberUsecase } from '../../@clean/modules/member/usecases/delete_member_usecase'
 import { ACTIVE } from '../../@clean/shared/domain/enums/active_enum'
 import { CreateMemberUsecase } from '../../@clean/modules/member/usecases/create_member_usecase'
+import { GetAllMembersAdminUsecase } from '../../@clean/modules/member/usecases/get_all_members_admin_usecase.ts'
 
 export interface MemberContextInterface {
   getMember: () => Promise<Member>
@@ -111,6 +112,11 @@ const getAllMembersUsecase = containerMember.get<GetAllMembersUsecase>(
   RegistryMember.GetAllMembersUsecase
 )
 
+const getAllMembersAdminUsecase =
+  containerMember.get<GetAllMembersAdminUsecase>(
+    RegistryMember.GetAllMembersAdimUsecase
+  )
+
 const createMemberUsecase = containerMember.get<CreateMemberUsecase>(
   RegistryMember.CreateMemberUsecase
 )
@@ -195,7 +201,13 @@ export function MemberProvider({ children }: PropsWithChildren) {
 
   async function getAllMembers(): Promise<Member[]> {
     try {
-      const members = await getAllMembersUsecase.execute()
+      let members
+
+      if (isAdmin) {
+        members = await getAllMembersAdminUsecase.execute()
+      } else {
+        members = await getAllMembersUsecase.execute()
+      }
 
       return members.members
     } catch (error: any) {

@@ -9,7 +9,44 @@ import { decorate, injectable } from 'inversify'
 import { HTTP_STATUS_CODE } from '../../domain/enums/http_status_code'
 import { NoItemsFoundError } from '../../domain/helpers/errors/domain_error'
 
-interface memberRawResponse {
+// interface memberRawResponse {
+//   member: {
+//     name: string
+//     email_dev: string
+//     email: string
+//     ra: string
+//     role: string
+//     stack: string
+//     year: number
+//     cellphone: string
+//     course: string
+//     hired_date: number
+//     deactivated_date?: number
+//     active: string
+//     user_id: string
+//     hours_worked: number
+//   }
+// }
+
+export interface memberOfGetAllMembersRawResponse {
+  member: {
+    name: string
+    email_dev: string
+    email: string
+    ra: string
+    role: string
+    stack: string
+    year: number
+    cellphone: string
+    course: string
+    hired_date: number
+    deactivated_date?: number
+    active: string
+    user_id: string
+  }
+}
+
+export interface memberOfGetAllMembersAdminRawResponse {
   member: {
     name: string
     email_dev: string
@@ -28,23 +65,8 @@ interface memberRawResponse {
   }
 }
 
-export interface memberOfGetAllMembersRawResponse {
-  member: {
-    name: string
-    email_dev: string
-    email: string
-    ra: string
-    role: string
-    stack: string
-    year: number
-    cellphone: string
-    course: string
-    hired_date: number
-    deactivated_date?: number
-    active: string
-    user_id: string
-    hours_worked: number
-  }
+export interface getAllMembersAdminRawResponse {
+  members: memberOfGetAllMembersAdminRawResponse[]
 }
 
 export interface getAllMembersRawResponse {
@@ -145,7 +167,56 @@ export class MemberRepositoryHttp implements IMemberRepository {
       const membersArray: Member[] = []
 
       response.data.members.forEach((member) => {
-        const memberUnit: memberRawResponse = member
+        const memberUnit: memberOfGetAllMembersRawResponse = member
+
+        membersArray.push(
+          new Member({
+            name: memberUnit.member.name,
+            emailDev: memberUnit.member.email_dev,
+            email: memberUnit.member.email,
+            ra: memberUnit.member.ra,
+            role: roleToEnum(memberUnit.member.role),
+            stack: stackToEnum(memberUnit.member.stack),
+            year: memberUnit.member.year,
+            cellphone: memberUnit.member.cellphone,
+            course: courseToEnum(memberUnit.member.course),
+            hiredDate: memberUnit.member.hired_date,
+            deactivatedDate: memberUnit.member.deactivated_date,
+            active: activeToEnum(memberUnit.member.active),
+            userId: memberUnit.member.user_id,
+            hoursWorked: undefined
+          })
+        )
+      })
+
+      return membersArray
+    } catch (error: any) {
+      throw new Error('Error Getting All Members: ' + error.message)
+    }
+  }
+
+  async getAllMembersAdmin(): Promise<Member[]> {
+    try {
+      const token = localStorage.getItem('idToken')
+
+      if (!token) {
+        throw new Error('Token not found')
+      }
+
+      const response = await this.http.post<getAllMembersAdminRawResponse>(
+        '/get-all-members-admin',
+        {},
+        {
+          headers: {
+            Authorization: 'Bearer ' + token
+          }
+        }
+      )
+
+      const membersArray: Member[] = []
+
+      response.data.members.forEach((member) => {
+        const memberUnit: memberOfGetAllMembersAdminRawResponse = member
 
         membersArray.push(
           new Member({
