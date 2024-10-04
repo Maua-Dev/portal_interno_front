@@ -64,7 +64,7 @@ export const memberFilterOptions: FilterOptions[] = [
     options: [
       { label: 'Ativo', value: 'ACTIVE' },
       { label: 'Desligado', value: 'DISCONNECTED' },
-      { label: 'Em espera', value: 'ON_HOLD' },
+      // { label: 'Em espera', value: 'ON_HOLD' },
       { label: 'Congelado', value: 'FREEZE' }
     ]
   }
