@@ -15,8 +15,6 @@ export function activeToEnum(value: string): ACTIVE {
       return ACTIVE.ON_HOLD
     case 'DISCONNECTED':
       return ACTIVE.DISCONNECTED
-    case 'ON_HOLD':
-      return ACTIVE.ON_HOLD
     default:
       throw new Error('Invalid value')
   }
