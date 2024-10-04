@@ -10,7 +10,7 @@ import {
   BsSun,
   BsClipboard
 } from 'react-icons/bs'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Historic from './Historic'
 import ActionModal from './ActionModal'
 import { useDarkMode } from '../hooks/useDarkMode'
@@ -19,13 +19,19 @@ import { useMember } from '../hooks/useMember'
 import Projects from './Projects'
 import { ProfileModal } from './ProfileModal'
 import Members from './Members'
+import NotificationPopover from './NotificationDrawer/components/NotificationPopover.tsx'
 
 interface window {
   innerWidth: number
   innerHeight: number
 }
 
-export default function Navbar() {
+export interface NavbarProps {
+  open: boolean
+  openOnChange: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export default function Navbar({ openOnChange }: NavbarProps) {
   // Constant
   const maximumWidth: number = 1024
 
@@ -59,11 +65,11 @@ export default function Navbar() {
     <div>
       {windowSize.innerWidth > maximumWidth ? (
         <div
-          className={`fixed flex h-screen transform flex-col items-center justify-between gap-12 overflow-x-hidden px-4 py-10 transition-all duration-200 hover:z-40 ${
+          className={`fixed flex h-screen transform flex-col items-center justify-between gap-12 overflow-x-hidden px-4 py-10 transition-all duration-200 ${
             !darkMode
               ? 'bg-white drop-shadow-md'
               : 'border-r-2 border-white bg-dev-gray text-white'
-          } ${hover ? 'w-56' : 'w-28'}`}
+          } ${hover ? 'z-40 w-56' : 'w-28 hover:z-40'}`}
         >
           <div className="flex flex-col items-center gap-12">
             <img
@@ -194,6 +200,11 @@ export default function Navbar() {
             </div>
           </div>
           <div className="flex flex-col gap-6 text-2xl">
+            <NotificationPopover
+              onClick={() => {
+                openOnChange((prev) => !prev)
+              }}
+            />
             <IoMdExit
               onClick={handleLogout}
               className={`cursor-pointer ${
@@ -232,6 +243,12 @@ export default function Navbar() {
               src={darkMode ? logo_white : logo}
               alt="Logo da Dev. Community Mauá"
               className="h-8 w-10 select-none sm:h-10 sm:w-12"
+            />
+            <NotificationPopover
+              onClick={() => {
+                openOnChange((prev) => !prev)
+              }}
+              className={'absolute bottom-0 right-5 top-0 my-auto'}
             />
           </div>
           <div
