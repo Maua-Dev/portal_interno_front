@@ -9,7 +9,7 @@ import { History } from 'lucide-react'
 import { actionsFilterOptions } from './filterOptions'
 import { NoActionsFoundComponent } from '../NoDataFoundCard'
 import { motion } from 'framer-motion'
-import Loader from '../Loader'
+import * as Loader from '../Loader'
 import HistoricActionCardSkeleton from './components/HistoricActionCardSkeleton'
 
 interface lastEvaluatedKey {
@@ -186,7 +186,7 @@ export default function Historic() {
       ) : localHistory ? (
         <NoActionsFoundComponent message={'Ações não encontradas.'} />
       ) : (
-        <Loader SkeletonComponent={HistoricActionCardSkeleton} />
+        <Loader.List SkeletonComponent={HistoricActionCardSkeleton} />
       )}
     </div>
   )

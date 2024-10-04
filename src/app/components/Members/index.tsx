@@ -8,9 +8,10 @@ import MemberCard from './components/MemberCard.tsx'
 import { stackToEnum } from '../../../@clean/shared/domain/enums/stack_enum.ts'
 import { motion } from 'framer-motion'
 import { NoActionsFoundComponent } from '../NoDataFoundCard.tsx'
-import Loader from '../Loader.tsx'
+import * as Loader from '../Loader.tsx'
 import MemberActionCardSkeleton from './components/MemberCardSkeleton.tsx'
 import { millisecondsToHours } from '../../utils/functions/timeStamp.ts'
+import { ACTIVE } from '../../../@clean/shared/domain/enums/active_enum.ts'
 
 export default function Members() {
   const [filterProps, setFilterProps] = useState<FilterProps>({})
@@ -21,6 +22,10 @@ export default function Members() {
 
   // Filter Logic
   const filteredMembers = useMemo(() => {
+    const membersThatAreNotOnHold = members?.filter(
+      (member) => member.active !== ACTIVE.ON_HOLD
+    )
+
     if (
       filterProps.searchText === '' &&
       filterProps.project === '' &&
@@ -30,10 +35,10 @@ export default function Members() {
       filterProps.orderBy === '' &&
       filterProps.situation === ''
     ) {
-      return members || []
+      return membersThatAreNotOnHold || []
     }
 
-    let currentMembers: Member[] = members || []
+    let currentMembers: Member[] = membersThatAreNotOnHold || []
 
     // Search Text Logic
     if (filterProps.searchText !== '' && filterProps.searchText !== undefined) {
@@ -150,7 +155,7 @@ export default function Members() {
             className={'w-full'}
           />
         ) : (
-          <Loader SkeletonComponent={MemberActionCardSkeleton} />
+          <Loader.List SkeletonComponent={MemberActionCardSkeleton} />
         )}
       </div>
     </div>
