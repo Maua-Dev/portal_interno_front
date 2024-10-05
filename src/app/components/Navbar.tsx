@@ -16,6 +16,7 @@ import ActionModal from './ActionModal'
 import { useDarkMode } from '../hooks/useDarkMode'
 import { useModal } from '../hooks/useModal'
 import { useMember } from '../hooks/useMember'
+import Projects from './Projects'
 import { ProfileModal } from './ProfileModal'
 
 interface window {
@@ -57,7 +58,7 @@ export default function Navbar() {
     <div>
       {windowSize.innerWidth > maximumWidth ? (
         <div
-          className={`fixed z-40 flex h-screen transform flex-col items-center justify-between gap-12 overflow-x-hidden px-4 py-10 transition-all duration-200 ${
+          className={`fixed flex h-screen transform flex-col items-center justify-between gap-12 overflow-x-hidden px-4 py-10 transition-all duration-200 hover:z-40 ${
             !darkMode
               ? 'bg-white drop-shadow-md'
               : 'border-r-2 border-white bg-dev-gray text-white'
@@ -141,7 +142,12 @@ export default function Navbar() {
               </div>
               {isAdmin && (
                 <>
-                  <div className="flex cursor-pointer select-none gap-8 overflow-x-hidden">
+                  <div
+                    className="flex cursor-pointer select-none gap-8 overflow-x-hidden"
+                    onClick={() => {
+                      changeModalContent(<Projects />)
+                    }}
+                  >
                     <BsClipboard
                       className={`transform cursor-pointer ${
                         !darkMode ? 'text-gray-700' : 'text-white'
@@ -261,6 +267,9 @@ export default function Navbar() {
               {isAdmin && (
                 <>
                   <BsClipboard
+                    onClick={() => {
+                      changeModalContent(<Projects />)
+                    }}
                     className={`transform cursor-pointer ${
                       !darkMode ? 'text-gray-700' : 'text-white'
                     } transition-all duration-100 ${

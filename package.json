@@ -21,6 +21,7 @@
     "@radix-ui/react-switch": "^1.0.3",
     "@radix-ui/react-tooltip": "^1.0.7",
     "axios": "^1.3.5",
+    "framer-motion": "^11.3.2",
     "inversify": "^6.0.1",
     "lucide-react": "^0.288.0",
     "react": "^18.2.0",

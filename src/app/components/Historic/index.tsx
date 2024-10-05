@@ -1,20 +1,16 @@
 /* eslint-disable indent */
 import { useContext, useEffect, useMemo, useState } from 'react'
 import { Action } from '../../../@clean/shared/domain/entities/action'
-import FilterBar from '../FilterBar'
+import FilterBar, { FilterProps } from '../FilterBar'
 import HistoricActionCard from './components/HistoricActionCard'
 import { ActionContext } from '../../contexts/action_context'
-import Loader from './components/Loader'
 import { stackToEnum } from '../../../@clean/shared/domain/enums/stack_enum'
-import { SearchX } from 'lucide-react'
-
-interface FilterProps {
-  [key: string]: string
-  searchText: string
-  project: string
-  area: string
-  orderBy: string
-}
+import { History } from 'lucide-react'
+import { actionsFilterOptions } from './filterOptions'
+import { NoActionsFoundComponent } from '../NoDataFoundCard'
+import { motion } from 'framer-motion'
+import Loader from '../Loader'
+import HistoricActionCardSkeleton from './components/HistoricActionCardSkeleton'
 
 interface lastEvaluatedKey {
   actionId: string
@@ -141,24 +137,34 @@ export default function Historic() {
   return (
     <div className="flex h-fit w-full flex-col items-center justify-center gap-2 py-20 pl-0 md:py-10 md:pl-14">
       <FilterBar
+        label={'Histórico'}
+        icon={History}
         setFilterProps={setFilterProps}
         filterProps={filterProps}
+        filterOptions={actionsFilterOptions}
         className="z-30"
       />
       {filteredActions.length !== 0 ? (
         <div
-          className={`flex h-fit w-full flex-col items-center gap-2 ${
-            filteredActions.length < 10 ? 'h-screen' : null
+          className={`flex h-fit w-full flex-col items-center gap-2  ${
+            filteredActions.length < 10 ? 'h-screen pb-60' : ''
           } `}
         >
           {filteredActions.map((actionUnit, index) => {
             return (
-              <HistoricActionCard
-                className="z-10 hover:z-20"
+              <motion.div
                 key={index + '' + actionUnit.actionId}
-                action={actionUnit}
-                setHistory={setLocalHistory}
-              />
+                initial={{ marginLeft: '50px', opacity: 0 }}
+                animate={{ marginLeft: '0px', opacity: 1 }}
+                transition={{ duration: 0.5, delay: index * 0.3 }}
+                className="w-full"
+              >
+                <HistoricActionCard
+                  className="z-10 hover:z-20"
+                  action={actionUnit}
+                  setHistory={setLocalHistory}
+                />
+              </motion.div>
             )
           })}
           <h1
@@ -178,21 +184,10 @@ export default function Historic() {
           </h1>
         </div>
       ) : localHistory ? (
-        <NoActionsFoundComponent />
+        <NoActionsFoundComponent message={'Ações não encontradas.'} />
       ) : (
-        <Loader />
+        <Loader SkeletonComponent={HistoricActionCardSkeleton} />
       )}
-    </div>
-  )
-}
-
-function NoActionsFoundComponent() {
-  return (
-    <div className="flex h-screen w-4/5 items-start justify-center">
-      <div className="flex h-44 w-full flex-row items-center justify-center gap-2 border border-skin-muted bg-skin-secundary text-2xl font-bold text-skin-muted">
-        <SearchX className="w-7w h-7" />
-        <p>Ações não encontradas.</p>
-      </div>
     </div>
   )
 }

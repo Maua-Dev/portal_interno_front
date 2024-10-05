@@ -1,4 +1,4 @@
-import { HTMLAttributes, ReactElement, useState } from 'react'
+import { ReactElement, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import Text from './FilterBar/components/Text'
 import {
@@ -13,6 +13,7 @@ import {
   Briefcase
 } from 'lucide-react'
 import { useDarkMode } from '../hooks/useDarkMode'
+import { MotionProps, motion } from 'framer-motion'
 
 interface TagProps {
   variant: string
@@ -123,9 +124,10 @@ export function Tag({ variant }: TagProps) {
   )
 }
 
-interface FilterTagProps extends HTMLAttributes<HTMLDivElement> {
+interface FilterTagProps extends MotionProps {
   label: string
   clearFilterProp: () => void
+  className?: string
 }
 
 interface FilterProps {
@@ -137,7 +139,7 @@ export function FilterTag({
   clearFilterProp,
   ...props
 }: FilterTagProps) {
-  const [isVisble, setVisibility] = useState<boolean>(true)
+  const [isVisible, setVisibility] = useState<boolean>(true)
 
   const variants: Record<string, FilterProps> = {
     PI: {
@@ -190,31 +192,42 @@ export function FilterTag({
     },
     SMALLER: {
       label: 'Menor Duração'
+    },
+    ACTIVE: {
+      label: 'Ativo'
+    },
+    INACTIVE: {
+      label: 'Desativado'
     }
   }
 
   const filterVariant = variants[label] || { label: label }
   const filterName = filterVariant.label
   return (
-    <div
-      {...props}
-      className={twMerge(
-        `flex flex-row items-center justify-between gap-3 rounded-3xl bg-skin-base-foreground px-3 py-1.5 ${
-          isVisble ? '' : 'hidden'
-        }`,
-        props.className
+    <>
+      {isVisible && (
+        <motion.div
+          {...props}
+          className={twMerge(
+            `flex flex-row items-center justify-between gap-3 rounded-3xl bg-skin-base-foreground px-3 py-1.5`,
+            props.className
+          )}
+          initial={{ marginLeft: '50px', opacity: 0 }}
+          animate={{ marginLeft: '0px', opacity: 1 }}
+          transition={{ duration: 0.5, type: 'spring' }}
+        >
+          <Text className="font-medium text-skin-inverted" variant="muted">
+            {filterName}
+          </Text>
+          <X
+            onClick={() => {
+              clearFilterProp()
+              setVisibility(false)
+            }}
+            className="h-5 cursor-pointer text-skin-inverted"
+          />
+        </motion.div>
       )}
-    >
-      <Text className="font-medium text-skin-inverted" variant="muted">
-        {filterName}
-      </Text>
-      <X
-        onClick={() => {
-          clearFilterProp()
-          setVisibility(false)
-        }}
-        className="h-5 cursor-pointer text-skin-inverted"
-      />
-    </div>
+    </>
   )
 }

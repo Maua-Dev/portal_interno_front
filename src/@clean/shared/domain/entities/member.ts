@@ -15,7 +15,7 @@ export type JsonProps = {
     cellphone: string
     course: string
     hired_date: number
-    deactivated_date?: number
+    deactivated_date?: number | null
     active: string
     user_id: string
     hours_worked: number
@@ -34,7 +34,7 @@ export type MemberProps = {
   cellphone: string
   course: COURSE // ENUM
   hiredDate: number
-  deactivatedDate?: number
+  deactivatedDate?: number | null
   active: ACTIVE // ENUM
   userId: string
   hoursWorked: number // milliseconds
@@ -51,7 +51,7 @@ export class Member {
   private _cellphone: string
   private _course: COURSE
   private _hiredDate: number
-  private _deactivatedDate?: number
+  private _deactivatedDate?: number | null
   private _active: ACTIVE
   private _userId: string
   private _hoursWorked: number

@@ -10,12 +10,14 @@ import { useMember } from '../../../hooks/useMember'
 import { useActionModal } from '../../ActionModal/hooks/useActionModal'
 
 interface SelectorModalProps {
+  objectParameter: string
   setValue: any
   isStack?: boolean
   setIsSelectorModalOpen: (value: boolean) => void
 }
 
 export function SelectorModal({
+  objectParameter,
   setValue,
   isStack = false,
   setIsSelectorModalOpen
@@ -55,12 +57,12 @@ export function SelectorModal({
     e.preventDefault()
     if (!isStack) {
       setValue(
-        'associatedMembersUserIds',
+        objectParameter,
         selectedMembers.map((m) => m.userId)
       )
       setCurrentMembers(selectedMembers.map((m) => m.userId))
     } else {
-      setValue('stackTags', selectedStackTags)
+      setValue(objectParameter, selectedStackTags)
       setCurrentStackTags(selectedStackTags)
     }
     setIsSelectorModalOpen(false)

@@ -320,12 +320,17 @@ export default function ActionModal({ action }: { action?: Action }) {
             <div className="flex w-full flex-col justify-between gap-4 lg:w-1/5">
               {/* Associated Members */}
               <div className="flex flex-col gap-4 sm:h-[40%] sm:max-h-52">
-                <Selector setValue={setValue} getValues={getValues} />
+                <Selector
+                  objectParameter="associatedMembersUserIds"
+                  setValue={setValue}
+                  getValues={getValues}
+                />
               </div>
 
               {/* Stack Tag Selector */}
               <div className="flex flex-col gap-4 sm:h-[40%] sm:max-h-52">
                 <Selector
+                  objectParameter="stackTags"
                   isStackTagSelector
                   setValue={setValue}
                   getValues={getValues}
