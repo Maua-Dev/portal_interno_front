@@ -10,6 +10,7 @@ import { Member } from '../../../@clean/shared/domain/entities/member.ts'
 import NotificationMemberCardSkeleton from './components/NotificationMemberCardSkeleton.tsx'
 import * as Loader from '../Loader.tsx'
 import { motion } from 'framer-motion'
+import NoNotifications from './components/NoNotifications.tsx'
 
 export interface NotificationDrawerProps {
   open: boolean
@@ -29,9 +30,9 @@ export default function NotificationDrawer({
 
     if (allMembers) {
       const memberOnHold = allMembers.filter(
-        (member) => member.active === ACTIVE.ON_HOLD
+        (member) => member.active === ACTIVE.FREEZE
       )
-      notifications = memberOnHold
+      notifications = notifications.concat(memberOnHold)
     }
 
     return notifications
@@ -93,23 +94,30 @@ export default function NotificationDrawer({
             />
           </RadioGroup.Root>
         </div>
-        <div>
+        <div className={'flex h-full flex-col gap-1 overflow-y-auto p-2'}>
           {notificationsContent && notificationsContent.length > 0 ? (
             notificationsContent.map((notificationContent, index) => {
               if (notificationContent instanceof Member) {
                 return (
-                  <motion.div
-                    key={notificationContent.userId}
-                    initial={{ marginTop: '50px', opacity: 0 }}
-                    animate={{ marginTop: '0px', opacity: 1 }}
-                    transition={{ duration: 0.5, delay: 0.3 + index * 0.3 }}
-                    className="flex w-full justify-center"
-                  >
-                    <NoticationMemberCard member={notificationContent} />
-                  </motion.div>
+                  <>
+                    <motion.div
+                      key={notificationContent.userId}
+                      initial={{ marginTop: '50px', opacity: 0 }}
+                      animate={{ marginTop: '0px', opacity: 1 }}
+                      transition={{ duration: 0.5, delay: 0.3 + index * 0.3 }}
+                      className="flex w-full justify-center"
+                    >
+                      <NoticationMemberCard member={notificationContent} />
+                    </motion.div>
+                    {index !== notificationsContent.length - 1 ? (
+                      <div className={'h-0.5 w-full bg-skin-fill'} />
+                    ) : null}
+                  </>
                 )
               }
             })
+          ) : notificationsContent.length === 0 ? (
+            <NoNotifications />
           ) : (
             <Loader.Notification
               SkeletonComponent={NotificationMemberCardSkeleton}

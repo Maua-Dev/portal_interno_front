@@ -8,7 +8,7 @@ export default function NotificationMemberCardSkeleton({
   return (
     <div
       className={twMerge(
-        'bg flex w-full animate-pulse flex-col gap-4 border-y border-skin-muted px-4 py-5 text-skin-muted',
+        'bg flex w-full animate-pulse flex-col gap-4 px-4 py-5 text-skin-muted',
         props.className
       )}
     >
