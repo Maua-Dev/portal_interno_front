@@ -245,6 +245,7 @@ export class MemberRepositoryHttp implements IMemberRepository {
   }
 
   async updateMember(
+    memberUserId: string,
     newName?: string | undefined,
     newEmailDev?: string | undefined,
     newRole?: ROLE | undefined,
@@ -261,16 +262,25 @@ export class MemberRepositoryHttp implements IMemberRepository {
         throw new Error('Token not found')
       }
 
-      const response = await this.http.put<JsonProps>('/update-member', {
-        name: newName,
-        email_dev: newEmailDev,
-        role: newRole,
-        stack: newStack,
-        year: newYear,
-        cellphone: newCellphone,
-        course: newCourse,
-        active: newActive
-      })
+      const response = await this.http.put<JsonProps>(
+        '/update-member',
+        {
+          new_member_user_id: memberUserId,
+          new_name: newName,
+          new_email_dev: newEmailDev,
+          new_role: newRole,
+          new_stack: newStack,
+          new_year: newYear,
+          new_cellphone: newCellphone,
+          new_course: newCourse,
+          new_active: newActive
+        },
+        {
+          headers: {
+            Authorization: 'Bearer ' + token
+          }
+        }
+      )
 
       const member = Member.fromJSON(response.data)
 

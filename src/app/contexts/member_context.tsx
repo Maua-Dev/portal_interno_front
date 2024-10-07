@@ -31,6 +31,7 @@ export interface MemberContextInterface {
   ) => Promise<Member>
 
   updateMember: (
+    memberUserId: string,
     newName?: string,
     newEmailDev?: string,
     newRole?: ROLE,
@@ -245,6 +246,7 @@ export function MemberProvider({ children }: PropsWithChildren) {
   }
 
   async function updateMember(
+    memberUserId: string,
     newName?: string,
     newEmailDev?: string,
     newRole?: ROLE,
@@ -256,6 +258,7 @@ export function MemberProvider({ children }: PropsWithChildren) {
   ) {
     try {
       const updatedMember = await updateMemberUsecase.execute(
+        memberUserId,
         newName,
         newEmailDev,
         newRole,
