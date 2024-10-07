@@ -33,9 +33,9 @@ export function Tag({ variant }: TagProps) {
 
   // Fallback default values
   let label = variant
-  let style = `bg-skin-fill ${
+  let style = `bg-skin-fill text-skin-base ${
     darkMode ? 'hover:bg-zinc-800' : 'hover:bg-zinc-400/70'
-  } text-gray-${DARKNESS}`
+  }`
   let icon = null
 
   const variants: Record<string, VariantsProps> = {
