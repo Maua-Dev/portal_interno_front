@@ -1,9 +1,13 @@
 import { Member } from '../../../../@clean/shared/domain/entities/member.ts'
-import { useEffect } from 'react'
+import { useContext, useState } from 'react'
 import { Avatar } from '../../Avatar.tsx'
 import Button from '../../Historic/components/Button.tsx'
 import { Check, X } from 'lucide-react'
 import { useDarkMode } from '../../../hooks/useDarkMode.ts'
+import { MemberContext } from '../../../contexts/member_context.tsx'
+import { ACTIVE } from '../../../../@clean/shared/domain/enums/active_enum.ts'
+import { TextSkeleton } from '../../TextSkeleton.tsx'
+import { toast } from 'react-toastify'
 
 interface MemberAccessCardProps {
   member: Member
@@ -12,15 +16,60 @@ interface MemberAccessCardProps {
 export default function NoticationMemberCard({
   member
 }: MemberAccessCardProps) {
+  const [isUpdatingMemberSituation, setUpdatingMemberSituation] =
+    useState<boolean>(false)
+  const [isDeletingMember, setDeletingMember] = useState<boolean>(false)
   const { darkMode } = useDarkMode()
+  const { handleAllMembers, updateMember } = useContext(MemberContext)
 
-  useEffect(() => {
-    console.log(member)
-  }, [])
+  const handleMemberDeletion = async () => {
+    setDeletingMember(true)
+
+    setTimeout(() => {
+      setDeletingMember(false)
+    }, 2000)
+  }
+
+  const handleMemberApprove = async () => {
+    setUpdatingMemberSituation(true)
+    const response = await updateMember(
+      member.userId,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      ACTIVE.ACTIVE
+    )
+
+    if (response) {
+      await handleAllMembers()
+
+      toast.success(
+        `O ${
+          member.name.split(' ')[0]
+        } agora está ativo e foi autorizado a acessar o portal interno!`,
+        {
+          position: 'top-right',
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'colored'
+        }
+      )
+    }
+
+    setUpdatingMemberSituation(false)
+  }
 
   return (
     <div
-      className={`bg flex w-full transform flex-col gap-4 rounded-lg border-skin-muted px-4 py-5 text-skin-muted duration-150 ease-in-out ${
+      className={`flex w-full transform flex-col gap-4 rounded-lg border-skin-muted px-4 py-5 text-skin-muted duration-150 ease-in-out ${
         darkMode ? 'hover:bg-skin-fill' : 'hover:bg-[#e5e5e5]'
       }`}
     >
@@ -42,15 +91,24 @@ export default function NoticationMemberCard({
           dias
         </p>
         <div className={'flex gap-3'}>
-          <Button
-            variant={'default'}
-            className={`bg-transparent ${darkMode ? 'hover:bg-black' : null}`}
-          >
-            <X />
-          </Button>
-          <Button variant={'form'}>
-            <Check />
-          </Button>
+          {isDeletingMember ? (
+            <TextSkeleton className="h-[40px] w-[56px] rounded-md "></TextSkeleton>
+          ) : (
+            <Button
+              variant={'default'}
+              className={`bg-transparent ${darkMode ? 'hover:bg-black' : null}`}
+              onClick={handleMemberDeletion}
+            >
+              <X />
+            </Button>
+          )}
+          {isUpdatingMemberSituation ? (
+            <TextSkeleton className="h-[40px] w-[56px] rounded-md "></TextSkeleton>
+          ) : (
+            <Button variant={'form'} onClick={handleMemberApprove}>
+              <Check />
+            </Button>
+          )}
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 import { Drawer } from 'vaul'
 import * as RadioGroup from '@radix-ui/react-radio-group'
-import { useContext, useMemo, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import RadioItem from '../RadioItem.tsx'
 import { useDarkMode } from '../../hooks/useDarkMode.ts'
 import { MemberContext } from '../../contexts/member_context.tsx'
@@ -16,7 +16,6 @@ export interface NotificationDrawerProps {
   open: boolean
   openOnChange: (open: boolean) => void
 }
-
 export default function NotificationDrawer({
   open,
   openOnChange
@@ -24,13 +23,21 @@ export default function NotificationDrawer({
   const [radioValue, setRadioValue] = useState<string>('all')
   const { darkMode } = useDarkMode()
   const { allMembers } = useContext(MemberContext)
+  const [loading, setLoading] = useState<boolean>(true)
+
+  // Simulate loading logic
+  useEffect(() => {
+    if (allMembers) {
+      setLoading(false)
+    }
+  }, [allMembers])
 
   const notificationsContent = useMemo(() => {
     let notifications: any[] = []
 
     if (allMembers) {
       const memberOnHold = allMembers.filter(
-        (member) => member.active === ACTIVE.FREEZE
+        (member) => member.active === ACTIVE.ON_HOLD
       )
       notifications = notifications.concat(memberOnHold)
     }
@@ -54,7 +61,6 @@ export default function NotificationDrawer({
   return (
     <Drawer.Root open={open} onOpenChange={openOnChange}>
       <Drawer.Trigger></Drawer.Trigger>
-      {/*<Drawer.Overlay className="fixed inset-0 z-50 bg-black/20" />*/}
       <Drawer.Content
         className={`z-60 fixed bottom-0 left-3 right-3 z-50  h-[80%] rounded-t pt-4 shadow-2xl shadow-black outline-none sm:left-auto sm:right-10 sm:w-[400px] ${
           darkMode ? 'bg-[#202020]' : 'bg-skin-secundary'
@@ -94,34 +100,32 @@ export default function NotificationDrawer({
             />
           </RadioGroup.Root>
         </div>
-        <div className={'flex h-full flex-col gap-1 overflow-y-auto p-2'}>
-          {notificationsContent && notificationsContent.length > 0 ? (
-            notificationsContent.map((notificationContent, index) => {
-              if (notificationContent instanceof Member) {
-                return (
-                  <>
-                    <motion.div
-                      key={notificationContent.userId}
-                      initial={{ marginTop: '50px', opacity: 0 }}
-                      animate={{ marginTop: '0px', opacity: 1 }}
-                      transition={{ duration: 0.5, delay: 0.3 + index * 0.3 }}
-                      className="flex w-full justify-center"
-                    >
-                      <NoticationMemberCard member={notificationContent} />
-                    </motion.div>
-                    {index !== notificationsContent.length - 1 ? (
-                      <div className={'h-0.5 w-full bg-skin-fill'} />
-                    ) : null}
-                  </>
-                )
-              }
-            })
-          ) : notificationsContent.length === 0 ? (
-            <NoNotifications />
-          ) : (
+        <div className={'flex h-full flex-col gap-1 overflow-y-auto p-2 pb-48'}>
+          {loading ? (
+            // Show loader while loading
             <Loader.Notification
               SkeletonComponent={NotificationMemberCardSkeleton}
             />
+          ) : notificationsContent && notificationsContent.length > 0 ? (
+            // Display notifications if available
+            notificationsContent.map((notificationContent, index) => {
+              if (notificationContent instanceof Member) {
+                return (
+                  <motion.div
+                    key={notificationContent.userId}
+                    initial={{ marginTop: '50px', opacity: 0 }}
+                    animate={{ marginTop: '0px', opacity: 1 }}
+                    transition={{ duration: 0.5, delay: 0.3 + index * 0.3 }}
+                    className="flex w-full justify-center"
+                  >
+                    <NoticationMemberCard member={notificationContent} />
+                  </motion.div>
+                )
+              }
+            })
+          ) : (
+            // Show NoNotifications component when no notifications are found
+            <NoNotifications />
           )}
         </div>
       </Drawer.Content>
