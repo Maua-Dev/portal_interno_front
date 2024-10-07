@@ -68,7 +68,7 @@ export default function Navbar({ openOnChange }: NavbarProps) {
           className={`fixed flex h-screen transform flex-col items-center justify-between gap-12 overflow-x-hidden px-4 py-10 transition-all duration-200 ${
             !darkMode
               ? 'bg-white drop-shadow-md'
-              : 'border-r-2 border-white bg-dev-gray text-white'
+              : 'border-r-2 border-[#333533] bg-dev-gray text-white shadow-2xl shadow-black'
           } ${hover ? 'z-40 w-56' : 'w-28 hover:z-40'}`}
         >
           <div className="flex flex-col items-center gap-12">
@@ -235,7 +235,7 @@ export default function Navbar({ openOnChange }: NavbarProps) {
           <div
             className={`fixed z-40 flex w-full justify-center py-2 transition-all duration-200 ${
               darkMode
-                ? 'border-b-2 border-white bg-dev-gray'
+                ? 'border-b-2 border-[#333533] bg-dev-gray shadow-2xl shadow-black'
                 : 'bg-white drop-shadow-md'
             }`}
           >
@@ -254,7 +254,7 @@ export default function Navbar({ openOnChange }: NavbarProps) {
           <div
             className={`fixed bottom-0 z-40 flex w-full justify-center py-4 text-2xl transition-all duration-200 sm:text-3xl ${
               darkMode
-                ? 'border-t-2 border-white bg-dev-gray'
+                ? 'border-t-2 border-[#333533] bg-dev-gray shadow-2xl shadow-black'
                 : 'bg-white drop-shadow-md'
             }`}
           >
