@@ -19,7 +19,7 @@ import { useMember } from '../hooks/useMember'
 import Projects from './Projects'
 import { ProfileModal } from './ProfileModal'
 import Members from './Members'
-import NotificationPopover from './NotificationDrawer/components/NotificationPopover.tsx'
+import NotificationIcon from './NotificationDrawer/components/NotificationIcon.tsx'
 
 interface window {
   innerWidth: number
@@ -200,7 +200,7 @@ export default function Navbar({ openOnChange }: NavbarProps) {
             </div>
           </div>
           <div className="flex flex-col gap-6 text-2xl">
-            <NotificationPopover
+            <NotificationIcon
               onClick={() => {
                 openOnChange((prev) => !prev)
               }}
@@ -244,7 +244,7 @@ export default function Navbar({ openOnChange }: NavbarProps) {
               alt="Logo da Dev. Community Mauá"
               className="h-8 w-10 select-none sm:h-10 sm:w-12"
             />
-            <NotificationPopover
+            <NotificationIcon
               onClick={() => {
                 openOnChange((prev) => !prev)
               }}
