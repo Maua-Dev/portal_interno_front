@@ -81,7 +81,7 @@ export default function Projects() {
         setFilterProps={setFilterProps}
         filterProps={filterProps}
         filterOptions={projectFilterOptions}
-        adicinalButton={
+        adicionalButton={
           <ProjectDialog setProjects={setProjects}>
             <Button variant={'form'} className={'hidden w-fit gap-2 xl:flex'}>
               Adicionar

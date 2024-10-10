@@ -33,7 +33,7 @@ interface FilterBarProps extends HTMLAttributes<HTMLDivElement> {
   setFilterProps: (props: React.SetStateAction<FilterProps>) => void
   filterProps: FilterProps
   filterOptions: FilterOptions[]
-  adicinalButton?: ReactNode | undefined
+  adicionalButton?: ReactNode | undefined
 }
 
 export interface FilterProps {
@@ -53,7 +53,7 @@ export default function FilterBar({
   setFilterProps,
   filterProps,
   filterOptions,
-  adicinalButton,
+  adicionalButton,
   ...props
 }: FilterBarProps) {
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false)
@@ -345,8 +345,8 @@ export default function FilterBar({
           </Popover>
         </div>
       </div>
-      <div className={!adicinalButton ? 'hidden' : undefined}>
-        {adicinalButton}
+      <div className={!adicionalButton ? 'hidden' : undefined}>
+        {adicionalButton}
       </div>
     </Card>
   )
