@@ -18,7 +18,7 @@ export type JsonProps = {
     deactivated_date?: number | null
     active: string
     user_id: string
-    hours_worked: number
+    hours_worked: number | undefined
   }
   message: string
 }
@@ -37,7 +37,7 @@ export type MemberProps = {
   deactivatedDate?: number | null
   active: ACTIVE // ENUM
   userId: string
-  hoursWorked: number // milliseconds
+  hoursWorked: number | undefined // milliseconds
 }
 
 export class Member {
@@ -54,7 +54,7 @@ export class Member {
   private _deactivatedDate?: number | null
   private _active: ACTIVE
   private _userId: string
-  private _hoursWorked: number
+  private _hoursWorked: number | undefined
   constructor({
     name,
     emailDev,
@@ -84,7 +84,7 @@ export class Member {
     this._deactivatedDate = deactivatedDate
     this._active = active
     this._userId = userId
-    this._hoursWorked = hoursWorked
+    this._hoursWorked = hoursWorked || undefined
   }
 
   // Getters and Setters
@@ -195,7 +195,7 @@ export class Member {
     this._emailDev = emailDev
   }
 
-  get hoursWorked() {
+  get hoursWorked(): number | undefined {
     return this._hoursWorked
   }
 

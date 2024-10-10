@@ -9,7 +9,7 @@ import { History } from 'lucide-react'
 import { actionsFilterOptions } from './filterOptions'
 import { NoActionsFoundComponent } from '../NoDataFoundCard'
 import { motion } from 'framer-motion'
-import Loader from '../Loader'
+import * as Loader from '../Loader'
 import HistoricActionCardSkeleton from './components/HistoricActionCardSkeleton'
 
 interface lastEvaluatedKey {
@@ -135,7 +135,7 @@ export default function Historic() {
   }, [])
 
   return (
-    <div className="flex h-fit w-full flex-col items-center justify-center gap-2 py-20 pl-0 md:py-10 md:pl-14">
+    <div className="flex h-fit w-full flex-col items-center justify-center gap-2 py-20 pl-0 md:pl-14 lg:py-10">
       <FilterBar
         label={'Histórico'}
         icon={History}
@@ -186,7 +186,7 @@ export default function Historic() {
       ) : localHistory ? (
         <NoActionsFoundComponent message={'Ações não encontradas.'} />
       ) : (
-        <Loader SkeletonComponent={HistoricActionCardSkeleton} />
+        <Loader.List SkeletonComponent={HistoricActionCardSkeleton} />
       )}
     </div>
   )

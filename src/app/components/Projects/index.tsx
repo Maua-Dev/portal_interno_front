@@ -6,7 +6,7 @@ import ProjectCard from './components/ProjectCard'
 import { ProjectContext } from '../../contexts/project_context'
 import { ProjectType } from '../../../@clean/shared/infra/repositories/project_repository_http'
 import { motion } from 'framer-motion'
-import Loader from '../Loader'
+import * as Loader from '../Loader'
 import ProjectCardSkeleton from './components/ProjectCardSkeleton'
 import Button from '../Historic/components/Button'
 import ProjectDialog from './components/ProjectDialog'
@@ -81,9 +81,9 @@ export default function Projects() {
         setFilterProps={setFilterProps}
         filterProps={filterProps}
         filterOptions={projectFilterOptions}
-        adicinalButton={
+        adicionalButton={
           <ProjectDialog setProjects={setProjects}>
-            <Button variant={'form'} className={'hidden w-full gap-2 xl:flex'}>
+            <Button variant={'form'} className={'hidden w-fit gap-2 xl:flex'}>
               Adicionar
               <Plus strokeWidth={2} />
             </Button>
@@ -99,7 +99,7 @@ export default function Projects() {
           open={createProjectMobile}
           setOpen={setCreateProjectMobile}
         >
-          <Button variant={'form'} className={'flex w-4/5 gap-2 xl:hidden'}>
+          <Button variant={'form'} className={'flex w-10/12 gap-2 xl:hidden'}>
             Adicionar
             <Plus strokeWidth={2} />
           </Button>
@@ -126,7 +126,7 @@ export default function Projects() {
             )
           })
         ) : (
-          <Loader SkeletonComponent={ProjectCardSkeleton} />
+          <Loader.List SkeletonComponent={ProjectCardSkeleton} />
         )}
         <ProjectDialog
           setProjects={setProjects}

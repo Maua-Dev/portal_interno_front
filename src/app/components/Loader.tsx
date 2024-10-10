@@ -4,7 +4,7 @@ interface LoaderInterface {
   SkeletonComponent: ElementType
 }
 
-export default function Loader({ SkeletonComponent }: LoaderInterface) {
+function List({ SkeletonComponent }: LoaderInterface) {
   return (
     <div className="flex h-screen w-full flex-col items-center gap-2 text-skin-base">
       <SkeletonComponent />
@@ -17,3 +17,15 @@ export default function Loader({ SkeletonComponent }: LoaderInterface) {
     </div>
   )
 }
+
+function Notification({ SkeletonComponent }: LoaderInterface) {
+  return (
+    <div className="flex h-screen w-full flex-col items-center text-skin-base">
+      <SkeletonComponent className="opacity-80" />
+      <SkeletonComponent className="opacity-40" />
+      <SkeletonComponent className="opacity-10" />
+    </div>
+  )
+}
+
+export { List, Notification }
