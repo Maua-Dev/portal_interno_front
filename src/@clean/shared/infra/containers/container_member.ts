@@ -7,6 +7,7 @@ import { CreateMemberUsecase } from '../../../modules/member/usecases/create_mem
 import { DeleteMemberUsecase } from '../../../modules/member/usecases/delete_member_usecase'
 import { GetMemberUsecase } from '../../../modules/member/usecases/get_member_usecase'
 import { GetAllMembersUsecase } from '../../../modules/member/usecases/get_all_members_usecase'
+import { GetAllMembersAdminUsecase } from '../../../modules/member/usecases/get_all_members_admin_usecase'
 import { UpdateMemberUsecase } from '../../../modules/member/usecases/update_member_usecase'
 
 export const RegistryMember = {
@@ -22,7 +23,8 @@ export const RegistryMember = {
   DeleteMemberUsecase: Symbol.for('DeleteMemberUsecase'),
   GetMemberUsecase: Symbol.for('GetMemberUsecase'),
   UpdateMemberUsecase: Symbol.for('UpdateMemberUsecase'),
-  GetAllMembersUsecase: Symbol.for('GetAllMembersUsecase')
+  GetAllMembersUsecase: Symbol.for('GetAllMembersUsecase'),
+  GetAllMembersAdimUsecase: Symbol.for('GetAllMembersAdimUsecase')
 }
 
 export const containerMember = new Container()
@@ -82,6 +84,28 @@ containerMember
       )
     } else {
       return new GetAllMembersUsecase(
+        context.container.get(RegistryMember.MemberRepositoryMock)
+      )
+    }
+  })
+
+containerMember
+  .bind(RegistryMember.GetAllMembersAdimUsecase)
+  .toDynamicValue((context) => {
+    if (import.meta.env.VITE_STAGE === 'test') {
+      return new GetAllMembersAdminUsecase(
+        context.container.get(RegistryMember.MemberRepositoryMock)
+      )
+    } else if (
+      import.meta.env.VITE_STAGE === 'dev' ||
+      import.meta.env.VITE_STAGE === 'prod' ||
+      import.meta.env.VITE_STAGE === 'homolog'
+    ) {
+      return new GetAllMembersAdminUsecase(
+        context.container.get(RegistryMember.MemberRepositoryHttp)
+      )
+    } else {
+      return new GetAllMembersAdminUsecase(
         context.container.get(RegistryMember.MemberRepositoryMock)
       )
     }

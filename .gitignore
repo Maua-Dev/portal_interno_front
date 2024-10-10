@@ -40,3 +40,6 @@ iac/.env
 
 # Visual Studio Code settings
 .vscode
+
+# IntelliJ seetings
+.idea

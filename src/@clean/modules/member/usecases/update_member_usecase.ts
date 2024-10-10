@@ -8,6 +8,7 @@ export class UpdateMemberUsecase {
   constructor(private readonly repo: IMemberRepository) {}
 
   async execute(
+    memberUserId: string,
     newName?: string,
     newEmailDev?: string,
     newRole?: ROLE,
@@ -18,6 +19,7 @@ export class UpdateMemberUsecase {
     newActive?: ACTIVE
   ) {
     const member = await this.repo.updateMember(
+      memberUserId,
       newName,
       newEmailDev,
       newRole,

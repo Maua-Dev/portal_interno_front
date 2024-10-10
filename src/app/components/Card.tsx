@@ -13,7 +13,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
     const variants: Record<VariantType, string> = {
       sm: '',
       md: '',
-      lg: 'h-3/5 w-4/5 bg-skin-secundary p-4 text-skin-base'
+      lg: 'h-3/5 w-10/12 bg-skin-secundary p-4 text-skin-base'
     }
 
     const style = variants[variant]

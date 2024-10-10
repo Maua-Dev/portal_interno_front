@@ -19,7 +19,10 @@ export interface IMemberRepository {
 
   getAllMembers(): Promise<Member[]>
 
+  getAllMembersAdmin(): Promise<Member[]>
+
   updateMember(
+    memberUserId: string,
     newName?: string,
     newEmailDev?: string,
     newRole?: ROLE,

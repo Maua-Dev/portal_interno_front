@@ -10,20 +10,28 @@ import {
   BsSun,
   BsClipboard
 } from 'react-icons/bs'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Historic from './Historic'
 import ActionModal from './ActionModal'
 import { useDarkMode } from '../hooks/useDarkMode'
 import { useModal } from '../hooks/useModal'
 import { useMember } from '../hooks/useMember'
+import Projects from './Projects'
 import { ProfileModal } from './ProfileModal'
+import Members from './Members'
+import NotificationIcon from './NotificationDrawer/components/NotificationIcon.tsx'
 
 interface window {
   innerWidth: number
   innerHeight: number
 }
 
-export default function Navbar() {
+export interface NavbarProps {
+  open: boolean
+  openOnChange: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export default function Navbar({ openOnChange }: NavbarProps) {
   // Constant
   const maximumWidth: number = 1024
 
@@ -57,11 +65,11 @@ export default function Navbar() {
     <div>
       {windowSize.innerWidth > maximumWidth ? (
         <div
-          className={`fixed z-40 flex h-screen transform flex-col items-center justify-between gap-12 overflow-x-hidden px-4 py-10 transition-all duration-200 ${
+          className={`fixed flex h-screen transform flex-col items-center justify-between gap-12 overflow-x-hidden px-4 py-10 transition-all duration-200 ${
             !darkMode
               ? 'bg-white drop-shadow-md'
-              : 'border-r-2 border-white bg-dev-gray text-white'
-          } ${hover ? 'w-56' : 'w-28'}`}
+              : 'border-r-2 border-[#333533] bg-dev-gray text-white shadow-2xl shadow-black'
+          } ${hover ? 'z-40 w-56' : 'w-28 hover:z-40'}`}
         >
           <div className="flex flex-col items-center gap-12">
             <img
@@ -141,7 +149,12 @@ export default function Navbar() {
               </div>
               {isAdmin && (
                 <>
-                  <div className="flex cursor-pointer select-none gap-8 overflow-x-hidden">
+                  <div
+                    className="flex cursor-pointer select-none gap-8 overflow-x-hidden"
+                    onClick={() => {
+                      changeModalContent(<Projects />)
+                    }}
+                  >
                     <BsClipboard
                       className={`transform cursor-pointer ${
                         !darkMode ? 'text-gray-700' : 'text-white'
@@ -159,7 +172,12 @@ export default function Navbar() {
                       Projetos
                     </p>
                   </div>
-                  <div className="flex cursor-pointer select-none gap-8 overflow-x-hidden">
+                  <div
+                    onClick={() => {
+                      changeModalContent(<Members />)
+                    }}
+                    className="flex cursor-pointer select-none gap-8 overflow-x-hidden"
+                  >
                     <IoPeople
                       className={`transform cursor-pointer ${
                         !darkMode ? 'text-gray-700' : 'text-white'
@@ -182,6 +200,11 @@ export default function Navbar() {
             </div>
           </div>
           <div className="flex flex-col gap-6 text-2xl">
+            <NotificationIcon
+              onClick={() => {
+                openOnChange((prev) => !prev)
+              }}
+            />
             <IoMdExit
               onClick={handleLogout}
               className={`cursor-pointer ${
@@ -212,7 +235,7 @@ export default function Navbar() {
           <div
             className={`fixed z-40 flex w-full justify-center py-2 transition-all duration-200 ${
               darkMode
-                ? 'border-b-2 border-white bg-dev-gray'
+                ? 'border-b-2 border-[#333533] bg-dev-gray shadow-2xl shadow-black'
                 : 'bg-white drop-shadow-md'
             }`}
           >
@@ -221,11 +244,17 @@ export default function Navbar() {
               alt="Logo da Dev. Community Mauá"
               className="h-8 w-10 select-none sm:h-10 sm:w-12"
             />
+            <NotificationIcon
+              onClick={() => {
+                openOnChange((prev) => !prev)
+              }}
+              className={'absolute bottom-0 right-5 top-0 my-auto'}
+            />
           </div>
           <div
             className={`fixed bottom-0 z-40 flex w-full justify-center py-4 text-2xl transition-all duration-200 sm:text-3xl ${
               darkMode
-                ? 'border-t-2 border-white bg-dev-gray'
+                ? 'border-t-2 border-[#333533] bg-dev-gray shadow-2xl shadow-black'
                 : 'bg-white drop-shadow-md'
             }`}
           >
@@ -261,6 +290,9 @@ export default function Navbar() {
               {isAdmin && (
                 <>
                   <BsClipboard
+                    onClick={() => {
+                      changeModalContent(<Projects />)
+                    }}
                     className={`transform cursor-pointer ${
                       !darkMode ? 'text-gray-700' : 'text-white'
                     } transition-all duration-100 ${
@@ -268,6 +300,9 @@ export default function Navbar() {
                     } hover:fill-blue-600`}
                   />
                   <IoPeople
+                    onClick={() => {
+                      changeModalContent(<Members />)
+                    }}
                     className={`transform cursor-pointer ${
                       !darkMode ? 'text-gray-700' : 'text-white'
                     } transition-all duration-100 ${

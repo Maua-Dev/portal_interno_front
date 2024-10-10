@@ -11,10 +11,10 @@ export function activeToEnum(value: string): ACTIVE {
       return ACTIVE.ACTIVE
     case 'FREEZE':
       return ACTIVE.FREEZE
-    case 'DISCONNECTED':
-      return ACTIVE.DISCONNECTED
     case 'ON_HOLD':
       return ACTIVE.ON_HOLD
+    case 'DISCONNECTED':
+      return ACTIVE.DISCONNECTED
     default:
       throw new Error('Invalid value')
   }

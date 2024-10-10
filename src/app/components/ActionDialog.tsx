@@ -60,7 +60,7 @@ export default function ActionDialog({ action, children }: ActionDialogProps) {
     <div className="static flex w-full justify-center">
       <DialogPrimitive.Root open={open} onOpenChange={setOpen}>
         <DialogPrimitive.Trigger asChild>{children}</DialogPrimitive.Trigger>
-        <DialogPrimitive.Overlay className="fixed inset-0 z-40 opacity-70 backdrop-blur-sm" />
+        <DialogPrimitive.Overlay className="fixed inset-0 z-40 bg-black opacity-50" />
         <DialogPrimitive.DialogContent
           className={`scrollbar-hide-default fixed bottom-0 top-0 z-50 my-auto flex h-4/6 w-5/6 flex-col gap-16 overflow-x-hidden overflow-y-scroll rounded-md border border-skin-muted px-4 py-10 text-skin-base outline-none sm:w-4/6 md:h-fit md:px-10 md:py-20 xl:w-6/12 xl:scrollbar-hide ${
             darkMode ? 'bg-skin-fill' : 'bg-skin-secundary'

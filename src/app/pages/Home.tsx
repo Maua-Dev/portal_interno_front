@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
 import RegisterModal from '../components/RegisterModal'
 import { ToastContainer, toast } from 'react-toastify'
@@ -9,6 +9,7 @@ import { useModal } from '../hooks/useModal'
 import 'react-toastify/dist/ReactToastify.css'
 import { OnHoldModal } from '../components/OnHoldModal'
 import Historic from '../components/Historic'
+import NotificationDrawer from '../components/NotificationDrawer'
 
 export default function Home() {
   const { darkMode } = useDarkMode()
@@ -17,6 +18,7 @@ export default function Home() {
   const { actionError, actionSuccess, setActionError, setActionSuccess } =
     useAction()
   const { modalContent, changeModalContent } = useModal()
+  const [notificationIsOpen, setNotificationIsOpen] = useState<boolean>(false)
 
   useEffect(() => {
     handleMember()
@@ -72,7 +74,7 @@ export default function Home() {
 
   return (
     <>
-      <Navbar />
+      <Navbar open={notificationIsOpen} openOnChange={setNotificationIsOpen} />
       <main
         className={`flex w-full items-center justify-center overflow-x-hidden transition-all duration-200 scrollbar-hide ${
           darkMode ? 'bg-skin-fill' : 'theme-white bg-sky-200'
@@ -98,6 +100,10 @@ export default function Home() {
           draggable
           pauseOnHover
           theme="colored"
+        />
+        <NotificationDrawer
+          open={notificationIsOpen}
+          openOnChange={setNotificationIsOpen}
         />
       </main>
     </>
