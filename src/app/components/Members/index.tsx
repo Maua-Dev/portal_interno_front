@@ -12,9 +12,14 @@ import * as Loader from '../Loader.tsx'
 import MemberActionCardSkeleton from './components/MemberCardSkeleton.tsx'
 import { millisecondsToHours } from '../../utils/functions/timeStamp.ts'
 import { ACTIVE } from '../../../@clean/shared/domain/enums/active_enum.ts'
+import Button from '../Historic/components/Button'
+import { MdDownload } from 'react-icons/md'
+import { exportToCSV } from './exportExcel.ts'
+import { useMember } from '../../hooks/useMember.ts'
 
 export default function Members() {
   const [filterProps, setFilterProps] = useState<FilterProps>({})
+  const { allMembers, member } = useMember()
   const [members, setMembers] = useState<Member[] | undefined>(undefined)
   const [hoursOfTheUserWithMoreHours, setHoursOfTheUserWithMoreHours] =
     useState<number>(0)
@@ -122,6 +127,21 @@ export default function Members() {
         filterProps={filterProps}
         filterOptions={memberFilterOptions}
         className={'z-30'}
+        adicionalButton={
+          <Button
+            variant={'form'}
+            className={
+              'w-fit items-center gap-2 rounded-lg bg-blue-500 xl:flex'
+            }
+            onClick={() => {
+              if (allMembers && member)
+                exportToCSV(allMembers, member, 'members')
+            }}
+          >
+            Exportar
+            <MdDownload className="text-xl" />
+          </Button>
+        }
       />
       <div
         className={`flex h-fit w-10/12 flex-col items-center gap-2  ${

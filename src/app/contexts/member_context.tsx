@@ -203,8 +203,9 @@ export function MemberProvider({ children }: PropsWithChildren) {
   async function getAllMembers(): Promise<Member[]> {
     try {
       let members
+      const member = await getMembersUsecase.execute()
 
-      if (isAdmin) {
+      if (handleAdmin(member.role)) {
         members = await getAllMembersAdminUsecase.execute()
       } else {
         members = await getAllMembersUsecase.execute()
