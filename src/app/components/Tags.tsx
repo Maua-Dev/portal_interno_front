@@ -13,6 +13,9 @@ import {
   Briefcase
 } from 'lucide-react'
 import { useDarkMode } from '../hooks/useDarkMode'
+import { MotionProps, motion, AnimatePresence } from 'framer-motion'
+import { ACTIVE } from '../../@clean/shared/domain/enums/active_enum.ts'
+import HoverCard from './HoverCard.tsx'
 
 interface TagProps {
   variant: string
@@ -27,6 +30,14 @@ interface VariantsProps {
 export function Tag({ variant }: TagProps) {
   const { darkMode } = useDarkMode()
   const DARKNESS = darkMode ? '900' : '400'
+
+  // Fallback default values
+  let label = variant
+  let style = `bg-skin-fill text-skin-base ${
+    darkMode ? 'hover:bg-zinc-800' : 'hover:bg-zinc-400/70'
+  }`
+  let icon = null
+
   const variants: Record<string, VariantsProps> = {
     BACKEND: {
       label: 'BACK',
@@ -106,14 +117,17 @@ export function Tag({ variant }: TagProps) {
     }
   }
 
-  const label = variants[variant].label
-  const style = variants[variant].style
-  const icon = variants[variant].icon
+  // Safely check if variant exists in variants object
+  if (variants[variant]) {
+    label = variants[variant].label
+    style = variants[variant].style
+    icon = variants[variant].icon || null
+  }
 
   return (
     <p
       className={twMerge(
-        'flex h-fit w-fit flex-row items-center gap-2 rounded-md bg-opacity-40 p-0.5 px-1.5 text-xs underline-offset-1 hover:underline',
+        'flex h-fit w-fit flex-row items-center gap-2 rounded-md bg-opacity-40 p-1 px-3 text-xs font-medium underline-offset-1 hover:underline',
         style
       )}
     >
@@ -123,9 +137,10 @@ export function Tag({ variant }: TagProps) {
   )
 }
 
-interface FilterTagProps extends HTMLAttributes<HTMLDivElement> {
+interface FilterTagProps extends MotionProps {
   label: string
   clearFilterProp: () => void
+  className?: string
 }
 
 interface FilterProps {
@@ -137,7 +152,8 @@ export function FilterTag({
   clearFilterProp,
   ...props
 }: FilterTagProps) {
-  const [isVisble, setVisibility] = useState<boolean>(true)
+  const [isVisible, setVisibility] = useState<boolean>(true)
+  const { darkMode } = useDarkMode()
 
   const variants: Record<string, FilterProps> = {
     PI: {
@@ -190,31 +206,96 @@ export function FilterTag({
     },
     SMALLER: {
       label: 'Menor Duração'
+    },
+    ACTIVE: {
+      label: 'Ativo'
+    },
+    INACTIVE: {
+      label: 'Desativado'
+    },
+    DISCONNECTED: {
+      label: 'Desligado'
+    },
+    ON_HOLD: {
+      label: 'Em Espera'
+    },
+    LESS: {
+      label: 'Com Menos Horas'
+    },
+    FREEZE: {
+      label: 'Congelado'
+    },
+    MORE: {
+      label: 'Com Mais Horas'
+    },
+    1: {
+      label: '1° ano'
+    },
+    2: {
+      label: '2° ano'
+    },
+    3: {
+      label: '3° ano'
+    },
+    4: {
+      label: '4° ano'
+    },
+    5: {
+      label: '5° ano'
     }
   }
 
   const filterVariant = variants[label] || { label: label }
   const filterName = filterVariant.label
   return (
-    <div
-      {...props}
-      className={twMerge(
-        `flex flex-row items-center justify-between gap-3 rounded-3xl bg-skin-base-foreground px-3 py-1.5 ${
-          isVisble ? '' : 'hidden'
-        }`,
-        props.className
+    <AnimatePresence>
+      {isVisible && (
+        <motion.div
+          {...props}
+          className={twMerge(
+            `flex flex-row items-center justify-between gap-3 rounded-md bg-skin-fill duration-150 ${
+              darkMode ? 'hover:bg-zinc-800' : 'hover:bg-zinc-300'
+            } px-3 py-1.5`,
+            props.className
+          )}
+          initial={{ translateX: '10%', opacity: 0 }}
+          animate={{ translateX: '0%', opacity: 1 }}
+          exit={{ translateX: '-10%', opacity: 0 }}
+          transition={{ duration: 0.5, type: 'spring' }}
+        >
+          <Text className="font-medium" variant="muted">
+            {filterName}
+          </Text>
+          <X
+            onClick={() => {
+              clearFilterProp()
+              setVisibility(false)
+            }}
+            className="h-5 cursor-pointer text-skin-muted"
+          />
+        </motion.div>
       )}
-    >
-      <Text className="font-medium text-skin-inverted" variant="muted">
-        {filterName}
-      </Text>
-      <X
-        onClick={() => {
-          clearFilterProp()
-          setVisibility(false)
-        }}
-        className="h-5 cursor-pointer text-skin-inverted"
-      />
-    </div>
+    </AnimatePresence>
+  )
+}
+
+interface MemberTagProps extends HTMLAttributes<HTMLDivElement> {
+  situation: ACTIVE
+}
+
+export function MemberTag({ situation, ...props }: MemberTagProps) {
+  const styleProps: { [key in ACTIVE]: { label: string; style: string } } = {
+    ACTIVE: { label: 'Ativo', style: 'bg-emerald-600' },
+    FREEZE: { label: 'Congelado', style: 'bg-yellow-600' },
+    DISCONNECTED: { label: 'Desligado', style: 'bg-red-600' },
+    ON_HOLD: { label: 'Em Espera', style: 'bg-gray-600' }
+  }
+
+  return (
+    <HoverCard placeholder={styleProps[situation].label} side={'left'}>
+      <div
+        className={twMerge(styleProps[situation].style, props.className)}
+      ></div>
+    </HoverCard>
   )
 }

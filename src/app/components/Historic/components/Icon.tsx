@@ -1,3 +1,4 @@
+import { LucideIcon } from 'lucide-react'
 import { ReactElement } from 'react'
 import { BsCheck } from 'react-icons/bs'
 import { CgSandClock } from 'react-icons/cg'
@@ -12,13 +13,13 @@ interface IconsProps {
 function StateIcon({ variant }: IconsProps) {
   const variants: Record<VariantsType, ReactElement> = {
     rejected: (
-      <VscError className="h-5 w-5 rounded-full bg-red-600 text-white" />
+      <VscError className="h-6 w-6 rounded-full bg-red-600 text-white" />
     ),
     waiting: (
-      <CgSandClock className="h-5 w-5 rounded-full bg-yellow-600 text-black" />
+      <CgSandClock className="h-6 w-6 rounded-full bg-yellow-600 p-1 text-white" />
     ),
     approved: (
-      <BsCheck className="h-5 w-5 rounded-full bg-skin-button-blue-accent text-white" />
+      <BsCheck className="h-6 w-6 rounded-full bg-skin-button-blue-accent text-white" />
     )
   }
   return <div className="w-7">{variants[variant]}</div>
@@ -26,13 +27,13 @@ function StateIcon({ variant }: IconsProps) {
 
 interface IconText {
   text: string
-  icon: ReactElement
+  icon: LucideIcon
 }
 
-function IconText({ text, icon }: IconText) {
+function IconText({ text, icon: Icon }: IconText) {
   return (
     <div className="flex flex-row items-center gap-1">
-      {icon}
+      <Icon className="h-4 w-4 text-skin-muted" />
       <p className="text-sm text-skin-muted">{text}</p>
     </div>
   )

@@ -13,7 +13,7 @@ export interface IProjectRepository {
     photos: string[]
   ): Promise<Project>
 
-  deleteProject(code: string): Promise<Project>
+  deleteProject(code: string): Promise<ProjectType>
 
   getAllProjects(): Promise<ProjectType[]>
 

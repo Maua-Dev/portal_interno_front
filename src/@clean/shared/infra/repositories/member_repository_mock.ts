@@ -139,6 +139,7 @@ export class MemberRepositoryMock implements IMemberRepository {
   }
 
   async updateMember(
+    memberUserId: string,
     newName?: string,
     newEmailDev?: string,
     newRole?: ROLE,
@@ -150,7 +151,7 @@ export class MemberRepositoryMock implements IMemberRepository {
   ): Promise<Member> {
     const member = this.members[0]
 
-    this.members = this.members.filter((m) => m.userId !== member.userId)
+    this.members = this.members.filter((m) => m.userId !== memberUserId)
 
     if (newName) {
       member.name = newName
@@ -195,6 +196,10 @@ export class MemberRepositoryMock implements IMemberRepository {
     this.members = this.members.filter((m) => m.userId !== member.userId)
 
     return member
+  }
+
+  getAllMembersAdmin(): Promise<Member[]> {
+    return Promise.resolve([])
   }
 }
 

@@ -11,16 +11,20 @@ import { useState } from 'react'
 
 interface SelectorProps {
   members?: string[]
+  objectParameter: string
   getValues: any
   setValue: any
   stackTags?: STACK[]
   isStackTagSelector?: boolean
+  isLabelBold?: boolean
 }
 
 export function Selector({
+  objectParameter,
   setValue,
   getValues,
-  isStackTagSelector = false
+  isStackTagSelector = false,
+  isLabelBold = true
 }: SelectorProps) {
   const [isSelectorModalOpen, setIsSelectorModalOpen] = useState(false)
 
@@ -35,9 +39,13 @@ export function Selector({
   return (
     <>
       <div className="flex items-center justify-between">
-        <p className="text-2xl font-bold">
+        <label
+          className={`${
+            isLabelBold ? 'text-2xl font-bold' : 'text-xl font-medium'
+          } p-2`}
+        >
           {isStackTagSelector ? 'Áreas' : 'Membros'}
-        </p>
+        </label>
         <CiCirclePlus
           className="cursor-pointer text-2xl"
           onClick={() => {
@@ -56,8 +64,8 @@ export function Selector({
                     text={member.name}
                     onClick={() => {
                       setValue(
-                        'associatedMembersUserIds',
-                        getValues('associatedMembersUserIds').filter(
+                        objectParameter,
+                        getValues(objectParameter).filter(
                           (id: string) => id !== member.userId
                         )
                       )
@@ -75,8 +83,10 @@ export function Selector({
                   text={translateStackTag(stack)}
                   onClick={() => {
                     setValue(
-                      'stackTags',
-                      getValues('stackTags').filter((s: STACK) => s !== stack)
+                      objectParameter,
+                      getValues(objectParameter).filter(
+                        (s: STACK) => s !== stack
+                      )
                     )
                     setCurrentStackTags(
                       currentStackTags.filter((s) => s !== stack)
@@ -88,6 +98,7 @@ export function Selector({
       </div>
       {isSelectorModalOpen && (
         <SelectorModal
+          objectParameter={objectParameter}
           setValue={setValue}
           isStack={isStackTagSelector}
           setIsSelectorModalOpen={setIsSelectorModalOpen}
