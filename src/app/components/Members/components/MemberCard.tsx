@@ -1,12 +1,14 @@
 import { twMerge } from 'tailwind-merge'
 import Card from '../../Card.tsx'
 import { Member } from '../../../../@clean/shared/domain/entities/member.ts'
-import { HTMLAttributes, useState } from 'react'
+import { HTMLAttributes, useContext, useState } from 'react'
 import { MemberTag, Tag } from '../../Tags.tsx'
-import { Clock2 } from 'lucide-react'
+import { Clock2, PowerOff } from 'lucide-react'
 import { IconText } from '../../Historic/components/Icon.tsx'
-import { BsThreeDots } from 'react-icons/bs'
 import { millisecondsToHours } from '../../../utils/functions/timeStamp.ts'
+import Button from '../../Historic/components/Button.tsx'
+import { MemberContext } from '../../../contexts/member_context.tsx'
+import { ACTIVE } from '../../../../@clean/shared/domain/enums/active_enum.ts'
 
 interface MemberCardProps extends HTMLAttributes<HTMLDivElement> {
   member: Member
@@ -19,6 +21,29 @@ export default function MemberCard({
   ...props
 }: MemberCardProps) {
   const [isHovering, setHovering] = useState<boolean>(false)
+  const { updateMember } = useContext(MemberContext)
+
+  const handleDesactiveMember = async (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault()
+
+    if (confirm('Deseja desativar o membro?')) {
+      const response = await updateMember(
+        member.userId,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        ACTIVE.DISCONNECTED
+      )
+
+      console.log(response)
+    }
+  }
 
   return (
     <Card
@@ -32,8 +57,8 @@ export default function MemberCard({
       }}
       variant="lg"
       className={twMerge(
-        `static flex h-fit w-full cursor-pointer flex-row items-center justify-between p-3 shadow-sm shadow-gray-500 brightness-95 duration-150 ease-in hover:z-30 hover:brightness-100 sm:gap-0 md:p-4 ${
-          isHovering ? 'z-30' : 'z-0'
+        `static flex h-fit w-full cursor-pointer flex-row items-center justify-between p-3 shadow-sm shadow-gray-500 brightness-95 duration-150 ease-in hover:brightness-100 sm:gap-0 md:p-4 ${
+          isHovering ? 'z-30' : ''
         }`,
         props.className
       )}
@@ -76,7 +101,9 @@ export default function MemberCard({
           text={millisecondsToHours(member.hoursWorked || 0) + ' horas '}
           icon={Clock2}
         />
-        <BsThreeDots className="h-10 w-10 cursor-pointer p-2 text-skin-base" />
+        <Button onClick={handleDesactiveMember} variant="icon">
+          <PowerOff className="w-4" />
+        </Button>
       </div>
     </Card>
   )
