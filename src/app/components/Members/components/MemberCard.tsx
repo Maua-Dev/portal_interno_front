@@ -101,7 +101,11 @@ export default function MemberCard({
           text={millisecondsToHours(member.hoursWorked || 0) + ' horas '}
           icon={Clock2}
         />
-        <Button onClick={handleDesactiveMember} variant="icon">
+        <Button
+          onClick={handleDesactiveMember}
+          variant="icon"
+          className="hover:bg-transparent hover:text-red-500"
+        >
           <PowerOff className="w-4" />
         </Button>
       </div>
