@@ -200,11 +200,13 @@ export default function Navbar({ openOnChange }: NavbarProps) {
             </div>
           </div>
           <div className="flex flex-col gap-6 text-2xl">
-            <NotificationIcon
-              onClick={() => {
-                openOnChange((prev) => !prev)
-              }}
-            />
+            {isAdmin && (
+              <NotificationIcon
+                onClick={() => {
+                  openOnChange((prev) => !prev)
+                }}
+              />
+            )}
             <IoMdExit
               onClick={handleLogout}
               className={`cursor-pointer ${
@@ -244,12 +246,14 @@ export default function Navbar({ openOnChange }: NavbarProps) {
               alt="Logo da Dev. Community Mauá"
               className="h-8 w-10 select-none sm:h-10 sm:w-12"
             />
-            <NotificationIcon
-              onClick={() => {
-                openOnChange((prev) => !prev)
-              }}
-              className={'absolute bottom-0 right-5 top-0 my-auto'}
-            />
+            {isAdmin && (
+              <NotificationIcon
+                onClick={() => {
+                  openOnChange((prev) => !prev)
+                }}
+                className={'absolute bottom-0 right-5 top-0 my-auto'}
+              />
+            )}
           </div>
           <div
             className={`fixed bottom-0 z-40 flex w-full justify-center py-4 text-2xl transition-all duration-200 sm:text-3xl ${
