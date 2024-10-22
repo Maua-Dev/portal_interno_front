@@ -9,19 +9,22 @@ import { millisecondsToHours } from '../../../utils/functions/timeStamp.ts'
 import Button from '../../Historic/components/Button.tsx'
 import { MemberContext } from '../../../contexts/member_context.tsx'
 import { ACTIVE } from '../../../../@clean/shared/domain/enums/active_enum.ts'
+import { toast } from 'react-toastify'
 
 interface MemberCardProps extends HTMLAttributes<HTMLDivElement> {
   member: Member
+  setMembers: React.Dispatch<React.SetStateAction<Member[] | undefined>>
   isWithMostHours?: boolean
 }
 
 export default function MemberCard({
   member,
+  setMembers,
   isWithMostHours = false,
   ...props
 }: MemberCardProps) {
   const [isHovering, setHovering] = useState<boolean>(false)
-  const { updateMember } = useContext(MemberContext)
+  const { updateMember, getAllMembers } = useContext(MemberContext)
 
   const handleDesactiveMember = async (
     event: React.MouseEvent<HTMLButtonElement>
@@ -41,7 +44,21 @@ export default function MemberCard({
         ACTIVE.DISCONNECTED
       )
 
-      console.log(response)
+      if (response) {
+        toast.success('Membro Desativado! Página atualizando...', {
+          position: 'top-right',
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'colored'
+        })
+
+        const allMembers = await getAllMembers()
+        setMembers(allMembers)
+      }
     }
   }
 
