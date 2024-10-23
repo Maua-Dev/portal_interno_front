@@ -34,18 +34,14 @@ const projectSchema = z.object({
   membersUserIds: z
     .array(z.string().min(1, { message: 'Membros são obrigatórios!' }))
     .min(1, { message: 'Membros são obrigatórios!' }),
-  photos: z
-    .array(
-      z.any()
-      // .refine((file) => file?.size <= MAX_FILE_SIZE, {
-      //   message: 'Só é suportado imagens de até 5MB'
-      // })
-      // .refine((file) => ACCEPTED_IMAGE_TYPES.includes(file?.type), {
-      //   message:
-      //     'Só é suportado arquivos nos formatos: .jpg, .jpeg, .png and .webp'
-      // })
-    )
-    .optional(),
+  photo: z.string().min(1, { message: 'Foto é obrigatório!' }),
+  // .refine((file) => file?.size <= MAX_FILE_SIZE, {
+  //   message: 'Só é suportado imagens de até 5MB'
+  // })
+  // .refine((file) => ACCEPTED_IMAGE_TYPES.includes(file?.type), {
+  //   message:
+  //     'Só é suportado arquivos nos formatos: .jpg, .jpeg, .png and .webp'
+  // })
   description: z.string().min(1, { message: 'Descrição é obrigatório!' })
 })
 
@@ -78,7 +74,7 @@ export default function ProjectDialog({
     setValue('scrumUserId', '')
     setValue('startDate', '')
     setValue('membersUserIds', [])
-    setValue('photos', [])
+    setValue('photo', '')
     setValue('description', '')
     setCurrentMembers([])
     setSelectedFiles([])
@@ -97,8 +93,9 @@ export default function ProjectDialog({
       }))
       // setSelectedFiles((prev) => prev.concat(Array.from(e.target.files)))
       setValue(
-        'photos',
-        filesArray.map((fileObj) => fileObj.file)
+        'photo',
+        // filesArray.map((fileObj) => fileObj.file)
+        '' // VOU RESOLVER DEPOIS @BRN POKAS
       )
     }
   }
@@ -117,7 +114,7 @@ export default function ProjectDialog({
       scrumUserId: project?.scrumUserId || '',
       startDate: project?.startDate ? timeStampToDate(project!.startDate) : '',
       membersUserIds: project?.membersUserIds || [],
-      photos: project?.photos || [],
+      photo: project?.photo || '',
       description: project?.description || ''
     }
   })
@@ -163,7 +160,7 @@ export default function ProjectDialog({
           description: data.description,
           membersUserIds: allMembers,
           name: data.name,
-          photos: [],
+          photo: data.photo,
           poUserId: data.poUserId,
           scrumUserId: data.scrumUserId,
           startDate: dateToMilliseconds(data.startDate)
@@ -174,7 +171,7 @@ export default function ProjectDialog({
           description: data.description,
           membersUserIds: allMembers,
           name: data.name,
-          photos: [],
+          photo: data.photo,
           poUserId: data.poUserId,
           scrumUserId: data.scrumUserId,
           startDate: dateToMilliseconds(data.startDate)
@@ -214,10 +211,10 @@ export default function ProjectDialog({
         )
       )
       setValue('startDate', timeStampToDate(project.startDate))
-      setValue('photos', project.photos)
+      setValue('photo', project.photo)
 
-      const photoFiles = project.photos.map((photoUrl) => ({ name: photoUrl }))
-      setSelectedFiles(photoFiles)
+      // const photoFiles = project.photos.map((photoUrl) => ({ name: photoUrl }))
+      // setSelectedFiles(photoFiles)
     } else {
       setCurrentMembers([])
     }

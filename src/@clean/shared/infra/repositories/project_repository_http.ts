@@ -9,7 +9,7 @@ type ProjectRawResponse = {
     description: string
     members_user_ids: string[]
     name: string
-    photos: string[]
+    photo: string
     po_user_id: string
     scrum_user_id: string
     start_date: number
@@ -21,7 +21,7 @@ export type ProjectType = {
   description: string
   membersUserIds: string[]
   name: string
-  photos: string[]
+  photo: string
   poUserId: string
   scrumUserId: string
   startDate: number
@@ -38,7 +38,7 @@ export class ProjectRepositoryHttp implements IProjectRepository {
     scrumUserId: string,
     startDate: number,
     membersUserIds: string[],
-    photos: string[]
+    photo: string
   ) {
     try {
       const token = localStorage.getItem('idToken')
@@ -57,7 +57,7 @@ export class ProjectRepositoryHttp implements IProjectRepository {
           scrum_user_id: scrumUserId,
           start_date: startDate,
           members_user_ids: membersUserIds,
-          photos
+          photo
         },
         {
           headers: {
@@ -122,7 +122,7 @@ export class ProjectRepositoryHttp implements IProjectRepository {
           description: data.description,
           membersUserIds: data.members_user_ids,
           name: data.name,
-          photos: data.photos,
+          photo: data.photo,
           poUserId: data.po_user_id,
           scrumUserId: data.scrum_user_id,
           startDate: data.start_date
@@ -167,7 +167,7 @@ export class ProjectRepositoryHttp implements IProjectRepository {
     newScrumUserId?: string | undefined,
     newStartDate?: number | undefined,
     newMembersUserIds?: string[] | undefined,
-    newPhotos?: string[] | undefined
+    newPhoto?: string | undefined
   ) {
     console.log('hereee')
     try {
@@ -188,7 +188,7 @@ export class ProjectRepositoryHttp implements IProjectRepository {
           new_scrum_user_id: newScrumUserId,
           new_start_date: newStartDate,
           new_members_user_ids: newMembersUserIds,
-          new_photos: newPhotos
+          new_photo: newPhoto
         },
         {
           headers: {
