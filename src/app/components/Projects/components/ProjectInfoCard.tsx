@@ -8,16 +8,25 @@ import { timeStampToDateDDMMYY } from '../../../utils/functions/timeStamp'
 import { useMember } from '../../../hooks/useMember'
 import { Member } from '../../../../@clean/shared/domain/entities/member'
 import { IoPeople } from 'react-icons/io5'
+import { ProjectType } from '../../../../@clean/shared/infra/repositories/project_repository_http'
 
-interface ProjectActionProps extends HTMLAttributes<HTMLDivElement> {
+interface ProjectInfoCardProps extends HTMLAttributes<HTMLDivElement> {
+  setEditPopUp: React.Dispatch<React.SetStateAction<boolean>>
+  setProjectToEdit: React.Dispatch<
+    React.SetStateAction<ProjectType | undefined>
+  >
+  setOpenStatus: React.Dispatch<React.SetStateAction<boolean>>
   project: ProjectProps
   children: ReactNode // Corrigido o tipo de children
 }
 
-export default function ProjectActionCard({
+export default function ProjectInfoCard({
+  setProjectToEdit,
+  setEditPopUp,
+  setOpenStatus,
   project,
   children
-}: ProjectActionProps): JSX.Element {
+}: ProjectInfoCardProps): JSX.Element {
   const [open, setOpen] = useState<boolean>(false)
   const [associatedMembers, setAssociatedMembers] = useState<Member[]>([])
   const [associatedPOMembers, setAssociatedPOMembers] = useState<Member[]>([])
@@ -27,6 +36,19 @@ export default function ProjectActionCard({
   const { allMembers } = useMember()
   const { darkMode } = useDarkMode()
   const formattedDate = timeStampToDateDDMMYY(project.startDate)
+
+  const changePopUpState = (open: boolean) => {
+    const NEW_STATE = open
+
+    setOpen(NEW_STATE)
+    setOpenStatus(NEW_STATE)
+  }
+
+  const handleEditProject = () => {
+    setEditPopUp(true)
+    setProjectToEdit(project)
+    setOpen(false)
+  }
 
   const loadMember = async (memberIds: string[]) => {
     const members = allMembers?.filter((member) =>
@@ -59,27 +81,15 @@ export default function ProjectActionCard({
   }
 
   useEffect(() => {
-    if (project.membersUserIds) {
-      loadMember(project.membersUserIds)
-    }
-  }, [project.membersUserIds])
-
-  useEffect(() => {
-    if (project.poUserId) {
-      POloadMember(project.poUserId)
-    }
-  }, [project.poUserId])
-
-  useEffect(() => {
-    if (project.scrumUserId) {
-      SCRUMloadMember(project.scrumUserId)
-    }
-  }, [project.scrumUserId])
+    loadMember(project.membersUserIds)
+    POloadMember(project.poUserId)
+    SCRUMloadMember(project.scrumUserId)
+  }, [])
 
   return (
-    <Dialog.Root open={open} onOpenChange={setOpen}>
+    <Dialog.Root open={open} onOpenChange={changePopUpState}>
       <Dialog.Trigger asChild>{children}</Dialog.Trigger>
-      <Dialog.Overlay className="fixed inset-0 z-40 bg-black opacity-50" />
+      <Dialog.Overlay className="fixed inset-0 z-40 bg-black/5" />
       <Dialog.Content
         className={`scrollbar-hide-default fixed bottom-0 top-0 z-50 my-auto flex h-4/6 w-5/6 flex-col gap-10 overflow-x-hidden overflow-y-scroll rounded-lg border border-skin-muted px-8 py-12 text-skin-base outline-none sm:w-4/6 md:h-fit md:px-14 md:py-20 xl:w-6/12 xl:scrollbar-hide ${
           darkMode ? 'bg-skin-fill' : 'bg-skin-secundary'
@@ -89,11 +99,14 @@ export default function ProjectActionCard({
           {/* Header do Projeto com ícone de edição */}
           <div className="flex items-center gap-2">
             <h1 className="text-3xl font-bold">{project.name}</h1>
-            <PenIcon className="h-6 w-6 cursor-pointer text-skin-muted duration-150 hover:text-red-600 sm:h-5 sm:w-5" />
+            <PenIcon
+              onClick={handleEditProject}
+              className="h-6 w-6 cursor-pointer text-skin-muted duration-150 hover:text-red-600 sm:h-5 sm:w-5"
+            />
           </div>
 
           {/* Informações do projeto */}
-          <div className="flex flex-row justify-between gap-10">
+          <div className="flex flex-col justify-between gap-10 md:flex-row">
             {/* Lado esquerdo */}
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-6 sm:flex-row">
@@ -116,10 +129,10 @@ export default function ProjectActionCard({
                 <span className="font-bold">{formattedDate}</span>
               </h2>
 
-              <div>
+              <div className="flex flex-col gap-1">
                 <h2>Descrição:</h2>
                 <textarea
-                  className="h-32 w-full resize-none rounded-md border border-skin-muted bg-white px-4 py-2 text-sm text-black outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  className="h-32 w-full resize-none rounded-md border border-skin-muted bg-white px-4 py-2 text-sm text-black outline-none"
                   value={project.description}
                   readOnly
                 />
@@ -141,19 +154,14 @@ export default function ProjectActionCard({
             </div>
 
             {/* Foto (Placeholder) */}
-            {/* Foto */}
             <div className="flex flex-col items-center gap-2">
               <h2 className="text-lg font-bold">Foto</h2>
-              <div className="flex h-32 w-32 items-center justify-center rounded-md border border-skin-muted">
-                {project.photo ? (
-                  <img
-                    src={project.photo}
-                    alt="Foto do Projeto"
-                    className="h-full w-full rounded-md object-cover"
-                  />
-                ) : (
-                  <span className="text-gray-500">Nenhuma foto</span>
-                )}
+              <div className="flex h-52 w-52 items-center justify-center rounded-md border border-skin-muted">
+                <img
+                  src={project.photo}
+                  alt="Foto do Projeto"
+                  className="h-full w-full rounded-md object-cover"
+                />
               </div>
             </div>
           </div>
