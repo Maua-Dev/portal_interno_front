@@ -12,7 +12,8 @@ export class ProjectRepositoryMock implements IProjectRepository {
       scrumUserId: 'user_456',
       startDate: 1625155200000, // Unix timestamp for July 1, 2021 in milliseconds
       membersUserIds: ['user_123', 'user_456', 'user_789'],
-      photos: ['photo1.jpg', 'photo2.jpg']
+      photo: 'photo1.jpg'
+
     }),
     new Project({
       code: 'P002',
@@ -22,7 +23,8 @@ export class ProjectRepositoryMock implements IProjectRepository {
       scrumUserId: 'user_567',
       startDate: 1640995200000, // Unix timestamp for January 1, 2022 in milliseconds
       membersUserIds: ['user_234', 'user_567', 'user_890'],
-      photos: ['photo3.jpg', 'photo4.jpg']
+      photo: 'photo1.jpg'
+
     }),
     new Project({
       code: 'P003',
@@ -32,7 +34,7 @@ export class ProjectRepositoryMock implements IProjectRepository {
       scrumUserId: 'user_678',
       startDate: 1656633600000, // Unix timestamp for July 1, 2022 in milliseconds
       membersUserIds: ['user_345', 'user_678', 'user_901'],
-      photos: ['photo5.jpg', 'photo6.jpg']
+      photo: 'photo1.jpg'
     }),
     new Project({
       code: 'P004',
@@ -42,7 +44,7 @@ export class ProjectRepositoryMock implements IProjectRepository {
       scrumUserId: 'user_789',
       startDate: 1672531200000, // Unix timestamp for January 1, 2023 in milliseconds
       membersUserIds: ['user_456', 'user_789', 'user_012'],
-      photos: ['photo7.jpg', 'photo8.jpg']
+      photo: 'photo1.jpg'
     }),
     new Project({
       code: 'P005',
@@ -52,7 +54,7 @@ export class ProjectRepositoryMock implements IProjectRepository {
       scrumUserId: 'user_890',
       startDate: 1688169600000, // Unix timestamp for July 1, 2023 in milliseconds
       membersUserIds: ['user_567', 'user_890', 'user_123'],
-      photos: ['photo9.jpg', 'photo10.jpg']
+      photo: 'photo1.jpg'
     })
   ]
 
@@ -64,7 +66,7 @@ export class ProjectRepositoryMock implements IProjectRepository {
     scrumUserId: string,
     startDate: number,
     membersUserIds: string[],
-    photos: string[]
+    photo: string
   ): Promise<Project> {
     const newProject = new Project({
       code,
@@ -74,7 +76,7 @@ export class ProjectRepositoryMock implements IProjectRepository {
       scrumUserId,
       startDate,
       membersUserIds,
-      photos
+      photo
     })
 
     this.projects.push(newProject)
@@ -117,7 +119,7 @@ export class ProjectRepositoryMock implements IProjectRepository {
     newScrumUserId?: string | undefined,
     newStartDate?: number | undefined,
     newMembersUserIds?: string[] | undefined,
-    newPhotos?: string[] | undefined
+    newPhoto?: string | undefined
   ): Promise<Project> {
     const projectIndex = this.projects.findIndex(
       (project) => project.code === code
@@ -136,7 +138,7 @@ export class ProjectRepositoryMock implements IProjectRepository {
       scrumUserId: newScrumUserId ?? project.scrumUserId,
       startDate: newStartDate ?? project.startDate,
       membersUserIds: newMembersUserIds ?? project.membersUserIds,
-      photos: newPhotos ?? project.photos
+      photo: newPhoto ?? project.photo
     })
 
     return this.projects[projectIndex]
