@@ -18,8 +18,6 @@ import {
 import Button from '../../Historic/components/Button'
 import { twMerge } from 'tailwind-merge'
 import { ProjectContext } from '../../../contexts/project_context'
-import ProjectInfoCard from './ProjectInfoCard'
-
 interface ProjectCardProps extends HTMLAttributes<HTMLDivElement> {
   project: ProjectType
   setEditPopUp: React.Dispatch<React.SetStateAction<boolean>>

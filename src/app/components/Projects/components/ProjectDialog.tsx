@@ -87,10 +87,10 @@ export default function ProjectDialog({
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      const filesArray = Array.from(e.target.files).map((file) => ({
-        name: file.name,
-        file
-      }))
+      // const filesArray = Array.from(e.target.files).map((file) => ({
+      //   name: file.name,
+      //   file
+      // }))
       // setSelectedFiles((prev) => prev.concat(Array.from(e.target.files)))
       setValue(
         'photo',
