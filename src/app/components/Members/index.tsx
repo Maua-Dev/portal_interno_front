@@ -161,6 +161,7 @@ export default function Members() {
                 <MemberCard
                   key={member.userId}
                   member={member}
+                  setMembers={setMembers}
                   isWithMostHours={
                     hoursOfTheUserWithMoreHours ===
                     millisecondsToHours(member.hoursWorked || 0) // Compare in hours

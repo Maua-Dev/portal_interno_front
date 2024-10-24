@@ -13,6 +13,7 @@ export class ProjectRepositoryMock implements IProjectRepository {
       startDate: 1625155200000, // Unix timestamp for July 1, 2021 in milliseconds
       membersUserIds: ['user_123', 'user_456', 'user_789'],
       photo: 'photo1.jpg'
+
     }),
     new Project({
       code: 'P002',
@@ -23,6 +24,7 @@ export class ProjectRepositoryMock implements IProjectRepository {
       startDate: 1640995200000, // Unix timestamp for January 1, 2022 in milliseconds
       membersUserIds: ['user_234', 'user_567', 'user_890'],
       photo: 'photo1.jpg'
+
     }),
     new Project({
       code: 'P003',
