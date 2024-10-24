@@ -30,7 +30,7 @@ export class ActionRepositoryMock implements IActionRepository {
         '492e9fa2-9189-4fe7-b0f7-e6ca472b19f0',
         '4a9019df-ab29-453f-8e8d-1cc845492f12'
       ],
-      photos: ['photo1', 'photo2']
+      photo: 'photo1'
     }),
     new Project({
       code: 'PT',
@@ -44,7 +44,7 @@ export class ActionRepositoryMock implements IActionRepository {
         '492e9fa2-9189-4fe7-b0f7-e6ca472b19f0',
         '4a9019df-ab29-453f-8e8d-1cc845492f12'
       ],
-      photos: ['photo1', 'photo2']
+      photo: 'photo1'
     }),
     new Project({
       code: 'SM',
@@ -58,7 +58,7 @@ export class ActionRepositoryMock implements IActionRepository {
         '492e9fa2-9189-4fe7-b0f7-e6ca472b19f0',
         '4a9019df-ab29-453f-8e8d-1cc845492f12'
       ],
-      photos: ['photo1', 'photo2']
+      photo: 'photo1'
     }),
     new Project({
       code: 'GM',
@@ -72,7 +72,7 @@ export class ActionRepositoryMock implements IActionRepository {
         '492e9fa2-9189-4fe7-b0f7-e6ca472b19f0',
         '4a9019df-ab29-453f-8e8d-1cc845492f12'
       ],
-      photos: ['photo1', 'photo2']
+      photo: 'photo1'
     }),
     new Project({
       code: 'PI',
@@ -86,7 +86,7 @@ export class ActionRepositoryMock implements IActionRepository {
         '492e9fa2-9189-4fe7-b0f7-e6ca472b19f0',
         '4a9019df-ab29-453f-8e8d-1cc845492f12'
       ],
-      photos: ['photo1', 'photo2']
+      photo: 'photo1'
     })
   ]
   private members: Member[] = [

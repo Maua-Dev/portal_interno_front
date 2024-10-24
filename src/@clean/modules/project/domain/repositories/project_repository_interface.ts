@@ -10,7 +10,7 @@ export interface IProjectRepository {
     scrumUserId: string,
     startDate: number,
     membersUserIds: string[],
-    photos: string[]
+    photo: string
   ): Promise<Project>
 
   deleteProject(code: string): Promise<ProjectType>
@@ -28,6 +28,6 @@ export interface IProjectRepository {
     newScrumUserId?: string,
     newStartDate?: number,
     newMembersUserIds?: string[],
-    newPhotos?: string[]
+    newPhoto?: string
   ): Promise<Project>
 }
