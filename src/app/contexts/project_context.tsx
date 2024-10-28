@@ -78,7 +78,7 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
         project.scrumUserId,
         project.startDate,
         project.membersUserIds,
-        project.photo ?? []
+        project.photo ?? ''
       )
 
       return projectCreated
@@ -102,7 +102,7 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
         project.scrumUserId,
         project.startDate,
         project.membersUserIds,
-        project.photo
+        project.photo ?? undefined
       )
 
       return projectUpdated

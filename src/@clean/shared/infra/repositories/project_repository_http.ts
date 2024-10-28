@@ -21,7 +21,7 @@ export type ProjectType = {
   description: string
   membersUserIds: string[]
   name: string
-  photo: string
+  photo: string | null
   poUserId: string
   scrumUserId: string
   startDate: number
@@ -176,6 +176,8 @@ export class ProjectRepositoryHttp implements IProjectRepository {
       if (!token) {
         throw new Error('Token not found')
       }
+
+      console.log(newPhoto)
 
       const response = await this.http.put<JsonProps>(
         '/update-project',
