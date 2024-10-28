@@ -8,7 +8,6 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Selector } from '../../Selector'
 import MemberSelector from './MemberSelector'
-import { motion } from 'framer-motion'
 import {
   dateToMilliseconds,
   timeStampToDate,
@@ -16,57 +15,72 @@ import {
 } from '../../../utils/functions/timeStamp'
 import { useActionModal } from '../../ActionModal/hooks/useActionModal'
 import { ProjectContext } from '../../../contexts/project_context'
-import { ImBlocked } from 'react-icons/im'
-
-// const MAX_FILE_SIZE = 5000000
-// const ACCEPTED_IMAGE_TYPES = [
-//   'image/jpeg',
-//   'image/jpg',
-//   'image/png',
-//   'image/webp'
-// ]
-
-const projectSchema = z.object({
-  name: z.string().min(1, { message: 'Título do Projeto é obrigatório!' }),
-  poUserId: z.string().min(1, { message: 'PO é obrigatório!' }),
-  scrumUserId: z.string().min(1, { message: 'Scrum Master é obrigatório!' }),
-  startDate: z.string().min(1, { message: 'Data de Inicial é obrigatório!' }),
-  membersUserIds: z
-    .array(z.string().min(1, { message: 'Membros são obrigatórios!' }))
-    .min(1, { message: 'Membros são obrigatórios!' }),
-  photo: z.string().min(1, { message: 'Foto é obrigatório!' }),
-  // .refine((file) => file?.size <= MAX_FILE_SIZE, {
-  //   message: 'Só é suportado imagens de até 5MB'
-  // })
-  // .refine((file) => ACCEPTED_IMAGE_TYPES.includes(file?.type), {
-  //   message:
-  //     'Só é suportado arquivos nos formatos: .jpg, .jpeg, .png and .webp'
-  // })
-  description: z.string().min(1, { message: 'Descrição é obrigatório!' })
-})
+import { Upload } from 'lucide-react'
+import imageCompression from 'browser-image-compression'
+import { toast } from 'react-toastify'
+import { makeProjectCode } from '../../../utils/functions/formatters'
 
 interface ProjectDialogProps {
+  loadProjects: () => Promise<void>
   open?: boolean
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>
   project?: ProjectType
-  setProjects: React.Dispatch<React.SetStateAction<ProjectType[] | undefined>>
   children?: ReactNode
 }
 
 export default function ProjectDialog({
+  loadProjects,
   open,
   setOpen,
   project,
-  setProjects,
   children
 }: ProjectDialogProps) {
   const { darkMode } = useContext(ThemeContext)
-  const { createProject, updateProject } = useContext(ProjectContext)
+  const { createProject, updateProject, allProjects } =
+    useContext(ProjectContext)
+  const [codeError, setCodeError] = useState<string>('')
   const [isPopUpOpen, setPopUpOpen] = useState<boolean>(false)
-  const [selectedFiles, setSelectedFiles] = useState<
-    Array<{ name: string } | File>
-  >([])
+  const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined)
   const { setCurrentMembers } = useActionModal()
+
+  const projectSchema = z
+    .object({
+      name: z.string().min(1, { message: 'Título do Projeto é obrigatório!' }),
+      poUserId: z.string().min(1, { message: 'PO é obrigatório!' }),
+      scrumUserId: z
+        .string()
+        .min(1, { message: 'Scrum Master é obrigatório!' }),
+      startDate: z
+        .string()
+        .min(1, { message: 'Data de Inicial é obrigatório!' }),
+      membersUserIds: z
+        .array(z.string().min(1, { message: 'Membros são obrigatórios!' }))
+        .min(1, { message: 'Membros são obrigatórios!' }),
+      photo: z.string().min(1, { message: 'Foto é obrigatório!' }),
+      description: z.string().min(1, { message: 'Descrição é obrigatório!' })
+    })
+    .refine(
+      (data) => {
+        const code = makeProjectCode(data.name)
+
+        // If the code is the same as the previus project code, it's ok
+        if (code.toUpperCase() === project?.code.toUpperCase()) return true
+
+        if (allProjects) {
+          const codeAllreadyExists = allProjects.some(
+            (p) => p.code.toUpperCase() === code.toUpperCase()
+          )
+
+          setCodeError(code)
+
+          return !codeAllreadyExists
+        }
+      },
+      {
+        message: `Mude o nome do projeto, pois o code (${codeError}) dele ja exite!`,
+        path: ['name'] // This specifies that the error is related to the 'name' field
+      }
+    )
 
   const handleClosePop = (open: boolean) => {
     setValue('name', '')
@@ -77,7 +91,7 @@ export default function ProjectDialog({
     setValue('photo', '')
     setValue('description', '')
     setCurrentMembers([])
-    setSelectedFiles([])
+    setSelectedFile(undefined)
     setPopUpOpen(open)
 
     if (setOpen) {
@@ -85,18 +99,32 @@ export default function ProjectDialog({
     }
   }
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      // const filesArray = Array.from(e.target.files).map((file) => ({
-      //   name: file.name,
-      //   file
-      // }))
-      // setSelectedFiles((prev) => prev.concat(Array.from(e.target.files)))
-      setValue(
-        'photo',
-        // filesArray.map((fileObj) => fileObj.file)
-        '' // VOU RESOLVER DEPOIS @BRN POKAS
-      )
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+
+    if (file) {
+      setSelectedFile(file)
+
+      try {
+        const options = {
+          maxSizeMB: 1,
+          maxWidthOrHeight: 1920,
+          useWebWorker: true,
+          initialQuality: 0.8
+        }
+
+        const compressedFile = await imageCompression(file, options)
+
+        const reader = new FileReader()
+        reader.onload = () => {
+          const result = reader.result as string
+          const base64Content = result.split(',')[1]
+          setValue('photo', base64Content)
+        }
+        reader.readAsDataURL(compressedFile)
+      } catch (error) {
+        console.error('Error during image compression:', error)
+      }
     }
   }
 
@@ -129,18 +157,7 @@ export default function ProjectDialog({
 
       let newCode
       if (project?.name !== data.name) {
-        const nameParts = data?.name.split(' ')
-        if (nameParts.length > 1) {
-          // Se houver mais de uma palavra, usa a primeira e a última inicial
-          newCode =
-            nameParts[0].charAt(0).toUpperCase() +
-            nameParts[nameParts.length - 1].charAt(0).toUpperCase()
-        } else {
-          // Se houver apenas uma palavra, usa a primeira letra duas vezes
-          newCode =
-            nameParts[0].charAt(0).toUpperCase() +
-            nameParts[0].charAt(1).toUpperCase()
-        }
+        newCode = makeProjectCode(data.name)
       } else {
         newCode = project.code
       }
@@ -165,34 +182,51 @@ export default function ProjectDialog({
           scrumUserId: data.scrumUserId,
           startDate: dateToMilliseconds(data.startDate)
         })
+
+        toast.success('Projeto Criado com sucesso!', {
+          position: 'top-right',
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'colored'
+        })
       } else {
+        let photoFinal: string | null = getValues('photo')
+
+        if (!selectedFile) {
+          photoFinal = null
+        }
+
+        console.log('photoFinal', newCode)
+
         projectResponse = await updateProject(project.code, {
           code: newCode,
           description: data.description,
           membersUserIds: allMembers,
           name: data.name,
-          photo: data.photo,
+          photo: photoFinal,
           poUserId: data.poUserId,
           scrumUserId: data.scrumUserId,
           startDate: dateToMilliseconds(data.startDate)
         })
+
+        toast.success('Projeto Atualizado com sucesso!', {
+          position: 'top-right',
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'colored'
+        })
       }
 
       if (projectResponse) {
-        if (project) {
-          setProjects((prev) =>
-            prev?.filter((projectUnit) => projectUnit.code !== project.code)
-          )
-        }
-
-        setProjects((prev) => {
-          if (prev) {
-            return [...prev, projectResponse]
-          } else {
-            return [projectResponse]
-          }
-        })
-
+        await loadProjects()
         handleClosePop(false)
       }
     }
@@ -211,10 +245,7 @@ export default function ProjectDialog({
         )
       )
       setValue('startDate', timeStampToDate(project.startDate))
-      setValue('photo', project.photo)
-
-      // const photoFiles = project.photos.map((photoUrl) => ({ name: photoUrl }))
-      // setSelectedFiles(photoFiles)
+      setValue('photo', project.photo || '')
     } else {
       setCurrentMembers([])
     }
@@ -347,7 +378,7 @@ export default function ProjectDialog({
               style={{ width: '2px' }}
               className="h-full rounded-lg bg-skin-fill"
             />
-            <div className="flex h-full w-full flex-col gap-4  md:w-3/5">
+            <div className={`flex h-full w-full flex-col gap-4 md:w-3/5`}>
               {/* Picture File  */}
               <div className="h-full gap-2 overflow-x-hidden">
                 <h1 className="pb-2 pl-2 text-2xl font-medium">
@@ -355,69 +386,48 @@ export default function ProjectDialog({
                 </h1>
                 <label
                   htmlFor="image"
-                  className={`flex h-52 w-full cursor-pointer flex-col items-center justify-center gap-1 rounded-md border-2 border-dashed border-gray-200 bg-skin-secundary text-skin-muted opacity-100 delay-100 hover:bg-skin-fill md:h-1/2 ${
-                    selectedFiles.length !== 0
-                      ? 'rounded-b-none border-b-0'
-                      : null
+                  className={`flex h-52 w-full cursor-pointer flex-col items-center justify-center gap-1 rounded-md border-2 bg-skin-secundary text-skin-muted opacity-100 delay-100 hover:bg-skin-fill md:h-1/2 ${
+                    selectedFile || getValues('photo') !== ''
+                      ? 'border-solid border-skin-muted'
+                      : 'border-dashed border-gray-200'
                   }`}
+                  style={{
+                    backgroundImage:
+                      selectedFile === undefined
+                        ? getValues('photo') !== ''
+                          ? `url(${getValues('photo')})`
+                          : 'none'
+                        : `url(${URL.createObjectURL(selectedFile)})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat',
+                    objectPosition: 'center',
+                    transition: 'background 0.3s ease-in-out'
+                  }}
                 >
-                  <ImBlocked className="flex size-2/12" />
-                  <p className="font-medium">Área Indisponivel no momento</p>
+                  <Upload
+                    className={`flex size-2/12 ${
+                      project || selectedFile ? 'hidden' : ''
+                    }`}
+                  />
+                  <p
+                    className={`font-medium ${
+                      project || selectedFile ? 'hidden' : ''
+                    }`}
+                  >
+                    Clique para adicionar uma foto
+                  </p>
                 </label>
+                <span className="pt-4 font-medium text-red-600">
+                  {errors.photo?.message}
+                </span>
                 <input
                   id="image"
                   type="file"
                   accept="image/*"
                   className="sr-only"
                   onChange={handleFileChange}
-                  multiple
-                  disabled
                 />
-                <div className="relative">
-                  {selectedFiles.length > 0 ? (
-                    <motion.div
-                      initial={{ y: '-100%' }}
-                      animate={{ y: 0 }}
-                      exit={{ y: '-100%' }}
-                      transition={{ duration: 1, type: 'spring', delay: 0.5 }}
-                      className={`relative -z-10 flex h-fit max-h-44 w-[calc(100%)] flex-col gap-3 overflow-y-scroll rounded-b-lg border-2 border-t-0 border-dashed p-4 ${
-                        darkMode
-                          ? 'bg-skin-skeleton-foreground'
-                          : 'border-gray-200 bg-neutral-100'
-                      }`}
-                    >
-                      {selectedFiles.map((file, index) => (
-                        <motion.div
-                          key={file.name}
-                          initial={{ marginLeft: '50px', opacity: 0 }}
-                          animate={{ marginLeft: '0px', opacity: 1 }}
-                          exit={{ marginLeft: '50px', opacity: 0 }}
-                          transition={{
-                            duration: 1,
-                            delay: 1 + index * 0.2
-                          }}
-                          className="flex flex-row items-center gap-2 "
-                        >
-                          <img
-                            src={
-                              file instanceof File
-                                ? URL.createObjectURL(file)
-                                : file.name
-                            }
-                            alt={`Uploaded preview ${index}`}
-                            className="max-w-8 rounded"
-                          />
-                          <p>
-                            {file.name.split('.')[0] + '.'}
-                            <strong className="text-skin-muted">
-                              {file.name.split('.')[1]}
-                            </strong>
-                          </p>
-                        </motion.div>
-                      ))}
-                    </motion.div>
-                  ) : null}
-                </div>
               </div>
               <div className="flex h-fit w-full flex-row gap-2">
                 <Button

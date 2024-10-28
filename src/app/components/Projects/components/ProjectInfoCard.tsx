@@ -84,7 +84,7 @@ export default function ProjectInfoCard({
     loadMember(project.membersUserIds)
     POloadMember(project.poUserId)
     SCRUMloadMember(project.scrumUserId)
-  }, [])
+  }, [project])
 
   return (
     <Dialog.Root open={open} onOpenChange={changePopUpState}>
@@ -132,7 +132,7 @@ export default function ProjectInfoCard({
               <div className="flex flex-col gap-1">
                 <h2>Descrição:</h2>
                 <textarea
-                  className="h-32 w-full resize-none rounded-md border border-skin-muted bg-white px-4 py-2 text-sm text-black outline-none"
+                  className="h-32 w-full resize-none rounded-md border border-skin-muted bg-transparent px-4 py-2 text-sm outline-none"
                   value={project.description}
                   readOnly
                 />

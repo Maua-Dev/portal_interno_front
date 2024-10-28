@@ -13,8 +13,10 @@ import ProjectDialog from './components/ProjectDialog'
 import ProjectInfoCard from './components/ProjectInfoCard'
 
 export default function Projects() {
-  const { getAllProjects } = useContext(ProjectContext)
-  const [projects, setProjects] = useState<ProjectType[] | undefined>(undefined)
+  const { handleAllProjects, allProjects } = useContext(ProjectContext)
+  const [localProjects, setLocalProjects] = useState<ProjectType[] | undefined>(
+    undefined
+  )
   const [editPopUp, setEditPopUp] = useState<boolean>(false)
   const [infoPopUp, setInfoPopUp] = useState<boolean>(false)
   const [createProjectMobile, setCreateProjectMobile] = useState<boolean>(false)
@@ -26,20 +28,20 @@ export default function Projects() {
   })
 
   async function loadAllProjects() {
-    const projects = await getAllProjects()
-    setProjects(projects)
+    const response = await handleAllProjects()
+    setLocalProjects(response)
   }
 
   const filteredProjects: ProjectType[] = useMemo(() => {
-    if (!projects) {
+    if (!localProjects) {
       return []
     }
 
     if (filterProps.searchText === '' && filterProps.orderBy === '') {
-      return projects
+      return localProjects
     }
 
-    let currentProjects = projects
+    let currentProjects = localProjects
 
     if (filterProps.searchText !== '') {
       const searchTextLowerCase = filterProps.searchText.toLowerCase()
@@ -69,7 +71,7 @@ export default function Projects() {
     }
 
     return currentProjects
-  }, [filterProps, projects])
+  }, [filterProps, allProjects, localProjects])
 
   useEffect(() => {
     loadAllProjects()
@@ -84,7 +86,7 @@ export default function Projects() {
         filterProps={filterProps}
         filterOptions={projectFilterOptions}
         adicionalButton={
-          <ProjectDialog setProjects={setProjects}>
+          <ProjectDialog loadProjects={loadAllProjects}>
             <Button variant={'form'} className={'hidden w-fit gap-2 xl:flex'}>
               Adicionar
               <Plus strokeWidth={2} />
@@ -99,7 +101,7 @@ export default function Projects() {
         className={`z-10 flex h-fit w-full flex-col items-center gap-2 pb-60`}
       >
         <ProjectDialog
-          setProjects={setProjects}
+          loadProjects={loadAllProjects}
           open={createProjectMobile}
           setOpen={setCreateProjectMobile}
         >
@@ -112,13 +114,13 @@ export default function Projects() {
           filteredProjects.map((project, index) => {
             return (
               <ProjectInfoCard
+                key={index + '' + project.code}
                 setEditPopUp={setEditPopUp}
                 setProjectToEdit={setProjectToEdit}
                 setOpenStatus={setInfoPopUp}
-                project={project}
+                project={{ ...project, photo: project.photo ?? '' }}
               >
                 <motion.div
-                  key={index + '' + project.code}
                   initial={{ marginLeft: '50px', opacity: 0 }}
                   animate={{ marginLeft: '0px', opacity: 1 }}
                   transition={{ duration: 0.5, delay: index * 0.3 }}
@@ -128,7 +130,7 @@ export default function Projects() {
                     setProjectToEdit={setProjectToEdit}
                     setEditPopUp={setEditPopUp}
                     className="z-10 hover:z-20"
-                    setProjects={setProjects}
+                    setProjects={setLocalProjects}
                     key={project.name + index}
                     project={project}
                   />
@@ -140,7 +142,7 @@ export default function Projects() {
           <Loader.List SkeletonComponent={ProjectCardSkeleton} />
         )}
         <ProjectDialog
-          setProjects={setProjects}
+          loadProjects={loadAllProjects}
           open={editPopUp}
           project={projectToEdit}
           setOpen={setEditPopUp}
