@@ -7,10 +7,11 @@ import { MemberContext } from '../contexts/member_context.tsx'
 import { toast } from 'react-toastify'
 
 type AvatarProps = React.HTMLAttributes<HTMLDivElement> & {
+  isEditable?: boolean
   member: Member | undefined
 }
 
-export function Avatar({ member, ...props }: AvatarProps) {
+export function Avatar({ isEditable, member, ...props }: AvatarProps) {
   const { darkMode } = useDarkMode()
   const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined)
   const { changeMemberProfilePicture } = useContext(MemberContext)
@@ -90,9 +91,9 @@ export function Avatar({ member, ...props }: AvatarProps) {
       <div
         {...props}
         className={twMerge(
-          `relative flex aspect-[1/1] h-8 w-8 flex-col items-center justify-end overflow-hidden rounded-full text-skin-muted ${
+          `relative flex aspect-square flex-col items-center justify-end overflow-hidden text-skin-muted ${
             darkMode ? 'bg-skin-secundary' : 'bg-skin-fill'
-          }`,
+          } `,
           props.className
         )}
         style={styleJson}
@@ -104,19 +105,25 @@ export function Avatar({ member, ...props }: AvatarProps) {
         >
           {lastName ? `${firstName[0]}${lastName[0]}` : `${firstName[0]}`}
         </p>
-        <label
-          htmlFor="profile-img"
-          className="w-full cursor-pointer rounded-b-lg border-t border-black/30 bg-black/20 py-1 text-center text-sm font-medium backdrop-blur-sm hover:border-black/40 hover:bg-black/30"
-        >
-          Editar
-        </label>
-        <input
-          id="profile-img"
-          type="file"
-          accept="image/*"
-          className="sr-only"
-          onChange={handleFileChange}
-        />
+        {isEditable ? (
+          <>
+            <label
+              htmlFor="profile-img"
+              className={`w-full cursor-pointer rounded-b-lg border-t border-black/30 bg-black/20 py-1 text-center text-sm font-medium backdrop-blur-sm hover:border-black/40 hover:bg-black/30 ${
+                isEditable ? 'block' : 'hidden'
+              }`}
+            >
+              Editar
+            </label>
+            <input
+              id="profile-img"
+              type="file"
+              accept="image/*"
+              className={`${isEditable ? 'sr-only' : 'hidden'}`}
+              onChange={handleFileChange}
+            />
+          </>
+        ) : null}
       </div>
     )
   } else {

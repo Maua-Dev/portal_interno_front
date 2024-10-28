@@ -29,6 +29,7 @@ export function ProfileModal() {
         <h1 className="text-2xl font-bold sm:text-3xl">Resumo do seu perfil</h1>
         <div className="mt-2 flex h-auto w-full flex-col items-start gap-6 sm:flex-row">
           <Avatar
+            isEditable
             member={member}
             className="h-28 w-28 rounded-xl bg-gradient-to-r from-fuchsia-500 to-cyan-500 text-2xl font-bold text-white sm:self-start"
           />
