@@ -19,6 +19,7 @@ export type JsonProps = {
     active: string
     user_id: string
     hours_worked: number | undefined
+    project: string[]
   }
   message: string
 }
@@ -38,6 +39,7 @@ export type MemberProps = {
   active: ACTIVE // ENUM
   userId: string
   hoursWorked: number | undefined // milliseconds
+  project: string[]
 }
 
 export class Member {
@@ -55,6 +57,8 @@ export class Member {
   private _active: ACTIVE
   private _userId: string
   private _hoursWorked: number | undefined
+  private _project: string[]
+
   constructor({
     name,
     emailDev,
@@ -69,7 +73,8 @@ export class Member {
     deactivatedDate,
     active,
     userId,
-    hoursWorked
+    hoursWorked,
+    project
   }: MemberProps) {
     this._name = name
     this._emailDev = emailDev
@@ -85,6 +90,7 @@ export class Member {
     this._active = active
     this._userId = userId
     this._hoursWorked = hoursWorked || undefined
+    this._project = project
   }
 
   // Getters and Setters
@@ -167,6 +173,10 @@ export class Member {
     return this._deactivatedDate
   }
 
+  get project() {
+    return this._project
+  }
+
   set deactivatedDate(deactivatedDate: number) {
     this._deactivatedDate = deactivatedDate
   }
@@ -203,6 +213,10 @@ export class Member {
     this._hoursWorked = hoursWorked
   }
 
+  set project(project: string[]) {
+    this._project = project
+  }
+
   // JSON conversion
 
   toJSON() {
@@ -220,7 +234,8 @@ export class Member {
       deactivated_date: this.deactivatedDate,
       active: this.active,
       user_id: this.userId,
-      hours_worked: this.hoursWorked
+      hours_worked: this.hoursWorked,
+      project: this.project
     }
   }
 
@@ -239,7 +254,8 @@ export class Member {
       deactivatedDate: json.member.deactivated_date,
       active: activeToEnum(json.member.active),
       userId: json.member.user_id,
-      hoursWorked: json.member.hours_worked
+      hoursWorked: json.member.hours_worked,
+      project: json.member.project
     })
   }
 }
