@@ -20,6 +20,7 @@ export type JsonProps = {
     user_id: string
     hours_worked: number | undefined
     project: string[]
+    photo: string | null
   }
   message: string
 }
@@ -40,6 +41,7 @@ export type MemberProps = {
   userId: string
   hoursWorked: number | undefined // milliseconds
   project: string[]
+  photo: string | null
 }
 
 export class Member {
@@ -58,6 +60,7 @@ export class Member {
   private _userId: string
   private _hoursWorked: number | undefined
   private _project: string[]
+  private _photo: string | null
 
   constructor({
     name,
@@ -74,7 +77,8 @@ export class Member {
     active,
     userId,
     hoursWorked,
-    project
+    project,
+    photo
   }: MemberProps) {
     this._name = name
     this._emailDev = emailDev
@@ -91,6 +95,7 @@ export class Member {
     this._userId = userId
     this._hoursWorked = hoursWorked || undefined
     this._project = project
+    this._photo = photo
   }
 
   // Getters and Setters
@@ -173,10 +178,6 @@ export class Member {
     return this._deactivatedDate
   }
 
-  get project() {
-    return this._project
-  }
-
   set deactivatedDate(deactivatedDate: number) {
     this._deactivatedDate = deactivatedDate
   }
@@ -213,8 +214,20 @@ export class Member {
     this._hoursWorked = hoursWorked
   }
 
+  get project() {
+    return this._project
+  }
+
   set project(project: string[]) {
     this._project = project
+  }
+
+  get photo() {
+    return this._photo
+  }
+
+  set photo(photo: string | null) {
+    this._photo = photo
   }
 
   // JSON conversion
@@ -235,7 +248,8 @@ export class Member {
       active: this.active,
       user_id: this.userId,
       hours_worked: this.hoursWorked,
-      project: this.project
+      project: this.project,
+      photo: this.photo
     }
   }
 
@@ -255,7 +269,8 @@ export class Member {
       active: activeToEnum(json.member.active),
       userId: json.member.user_id,
       hoursWorked: json.member.hours_worked,
-      project: json.member.project
+      project: json.member.project,
+      photo: json.member.photo
     })
   }
 }

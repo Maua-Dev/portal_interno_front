@@ -44,6 +44,7 @@ export interface memberOfGetAllMembersRawResponse {
     active: string
     user_id: string
     project: string[]
+    photo: string | null
   }
 }
 
@@ -64,6 +65,7 @@ export interface memberOfGetAllMembersAdminRawResponse {
     user_id: string
     hours_worked: number
     project: string[]
+    photo: string | null
   }
 }
 
@@ -187,7 +189,8 @@ export class MemberRepositoryHttp implements IMemberRepository {
             active: activeToEnum(memberUnit.member.active),
             userId: memberUnit.member.user_id,
             hoursWorked: undefined,
-            project: memberUnit.member.project
+            project: memberUnit.member.project,
+            photo: memberUnit.member.photo
           })
         )
       })
@@ -237,7 +240,8 @@ export class MemberRepositoryHttp implements IMemberRepository {
             active: activeToEnum(memberUnit.member.active),
             userId: memberUnit.member.user_id,
             hoursWorked: memberUnit.member.hours_worked,
-            project: memberUnit.member.project
+            project: memberUnit.member.project,
+            photo: memberUnit.member.photo
           })
         )
       })
