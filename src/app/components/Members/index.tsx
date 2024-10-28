@@ -57,7 +57,9 @@ export default function Members() {
 
     // Projects Filter Logic
     if (filterProps.project) {
-      return []
+      currentMembers = currentMembers.filter((member) =>
+        member.project.includes(filterProps.project)
+      )
     }
 
     // Year Filter Logic
