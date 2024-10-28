@@ -261,7 +261,8 @@ export class MemberRepositoryHttp implements IMemberRepository {
     newYear?: number | undefined,
     newCellphone?: string | undefined,
     newCourse?: COURSE | undefined,
-    newActive?: ACTIVE | undefined
+    newActive?: ACTIVE | undefined,
+    newPhoto?: string | undefined
   ): Promise<Member> {
     try {
       const token = localStorage.getItem('idToken')
@@ -281,7 +282,8 @@ export class MemberRepositoryHttp implements IMemberRepository {
           new_year: newYear,
           new_cellphone: newCellphone,
           new_course: newCourse,
-          new_active: newActive
+          new_active: newActive,
+          new_photo: newPhoto
         },
         {
           headers: {
