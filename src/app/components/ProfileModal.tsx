@@ -12,10 +12,13 @@ export function ProfileModal() {
   const [fade, setFade] = useState(false)
 
   useEffect(() => {
+    console.log(member)
+
     setTimeout(() => {
       setFade(true)
     }, 100)
   }, [])
+
   return (
     <div className="flex min-h-screen w-full flex-col justify-center gap-5 px-8 py-24 lg:ml-28 lg:h-auto lg:flex-row lg:pr-8">
       <div
@@ -26,8 +29,8 @@ export function ProfileModal() {
         <h1 className="text-2xl font-bold sm:text-3xl">Resumo do seu perfil</h1>
         <div className="mt-2 flex h-auto w-full flex-col items-start gap-6 sm:flex-row">
           <Avatar
-            name={member?.name || ''}
-            className="flex h-28 w-28 items-center justify-center self-center rounded-xl bg-gradient-to-r from-fuchsia-500 to-cyan-500 text-2xl font-bold text-white sm:self-start"
+            member={member}
+            className="h-28 w-28 rounded-xl bg-gradient-to-r from-fuchsia-500 to-cyan-500 text-2xl font-bold text-white sm:self-start"
           />
           <div className="flex h-full flex-col justify-around gap-1">
             <h1 className="text-xl font-bold sm:text-2xl">{member?.name}</h1>

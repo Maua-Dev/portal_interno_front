@@ -308,7 +308,8 @@ export function MemberProvider({ children }: PropsWithChildren) {
         newPhoto
       )
 
-      console.log(response)
+      // Update member context
+      setMember(response)
 
       return response
     } catch (error: any) {
