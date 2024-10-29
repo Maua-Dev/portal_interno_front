@@ -19,6 +19,8 @@ export type JsonProps = {
     active: string
     user_id: string
     hours_worked: number | undefined
+    project: string[]
+    photo: string | null
   }
   message: string
 }
@@ -38,6 +40,8 @@ export type MemberProps = {
   active: ACTIVE // ENUM
   userId: string
   hoursWorked: number | undefined // milliseconds
+  project: string[]
+  photo: string | null
 }
 
 export class Member {
@@ -55,6 +59,9 @@ export class Member {
   private _active: ACTIVE
   private _userId: string
   private _hoursWorked: number | undefined
+  private _project: string[]
+  private _photo: string | null
+
   constructor({
     name,
     emailDev,
@@ -69,7 +76,9 @@ export class Member {
     deactivatedDate,
     active,
     userId,
-    hoursWorked
+    hoursWorked,
+    project,
+    photo
   }: MemberProps) {
     this._name = name
     this._emailDev = emailDev
@@ -85,6 +94,8 @@ export class Member {
     this._active = active
     this._userId = userId
     this._hoursWorked = hoursWorked || undefined
+    this._project = project
+    this._photo = photo
   }
 
   // Getters and Setters
@@ -203,6 +214,22 @@ export class Member {
     this._hoursWorked = hoursWorked
   }
 
+  get project() {
+    return this._project
+  }
+
+  set project(project: string[]) {
+    this._project = project
+  }
+
+  get photo() {
+    return this._photo
+  }
+
+  set photo(photo: string | null) {
+    this._photo = photo
+  }
+
   // JSON conversion
 
   toJSON() {
@@ -220,7 +247,9 @@ export class Member {
       deactivated_date: this.deactivatedDate,
       active: this.active,
       user_id: this.userId,
-      hours_worked: this.hoursWorked
+      hours_worked: this.hoursWorked,
+      project: this.project,
+      photo: this.photo
     }
   }
 
@@ -239,7 +268,9 @@ export class Member {
       deactivatedDate: json.member.deactivated_date,
       active: activeToEnum(json.member.active),
       userId: json.member.user_id,
-      hoursWorked: json.member.hours_worked
+      hoursWorked: json.member.hours_worked,
+      project: json.member.project,
+      photo: json.member.photo
     })
   }
 }

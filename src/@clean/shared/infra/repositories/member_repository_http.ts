@@ -43,6 +43,8 @@ export interface memberOfGetAllMembersRawResponse {
     deactivated_date?: number
     active: string
     user_id: string
+    project: string[]
+    photo: string | null
   }
 }
 
@@ -62,6 +64,8 @@ export interface memberOfGetAllMembersAdminRawResponse {
     active: string
     user_id: string
     hours_worked: number
+    project: string[]
+    photo: string | null
   }
 }
 
@@ -184,7 +188,9 @@ export class MemberRepositoryHttp implements IMemberRepository {
             deactivatedDate: memberUnit.member.deactivated_date,
             active: activeToEnum(memberUnit.member.active),
             userId: memberUnit.member.user_id,
-            hoursWorked: undefined
+            hoursWorked: undefined,
+            project: memberUnit.member.project,
+            photo: memberUnit.member.photo
           })
         )
       })
@@ -233,7 +239,9 @@ export class MemberRepositoryHttp implements IMemberRepository {
             deactivatedDate: memberUnit.member.deactivated_date,
             active: activeToEnum(memberUnit.member.active),
             userId: memberUnit.member.user_id,
-            hoursWorked: memberUnit.member.hours_worked
+            hoursWorked: memberUnit.member.hours_worked,
+            project: memberUnit.member.project,
+            photo: memberUnit.member.photo
           })
         )
       })
@@ -253,7 +261,8 @@ export class MemberRepositoryHttp implements IMemberRepository {
     newYear?: number | undefined,
     newCellphone?: string | undefined,
     newCourse?: COURSE | undefined,
-    newActive?: ACTIVE | undefined
+    newActive?: ACTIVE | undefined,
+    newPhoto?: string | undefined
   ): Promise<Member> {
     try {
       const token = localStorage.getItem('idToken')
@@ -273,7 +282,8 @@ export class MemberRepositoryHttp implements IMemberRepository {
           new_year: newYear,
           new_cellphone: newCellphone,
           new_course: newCourse,
-          new_active: newActive
+          new_active: newActive,
+          new_photo: newPhoto
         },
         {
           headers: {

@@ -21,7 +21,7 @@ export type ProjectType = {
   description: string
   membersUserIds: string[]
   name: string
-  photo: string
+  photo: string | null
   poUserId: string
   scrumUserId: string
   startDate: number
