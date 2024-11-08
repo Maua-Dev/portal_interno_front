@@ -15,6 +15,18 @@ import { ACTIVE } from '../../@clean/shared/domain/enums/active_enum'
 import { CreateMemberUsecase } from '../../@clean/modules/member/usecases/create_member_usecase'
 import { GetAllMembersAdminUsecase } from '../../@clean/modules/member/usecases/get_all_members_admin_usecase.ts'
 
+interface UpdateMemberParams {
+  memberUserId: string
+  newName?: string
+  newEmailDev?: string
+  newRole?: ROLE
+  newStack?: STACK
+  newYear?: number
+  newCellphone?: string
+  newCourse?: COURSE
+  newActive?: ACTIVE
+  newPhoto?: string
+}
 export interface MemberContextInterface {
   getMember: () => Promise<Member>
 
@@ -30,17 +42,7 @@ export interface MemberContextInterface {
     course: COURSE
   ) => Promise<Member>
 
-  updateMember: (
-    memberUserId: string,
-    newName?: string,
-    newEmailDev?: string,
-    newRole?: ROLE,
-    newStack?: STACK,
-    newYear?: number,
-    newCellphone?: string,
-    newCourse?: COURSE,
-    newActive?: ACTIVE
-  ) => Promise<Member>
+  updateMember: (params: UpdateMemberParams) => Promise<Member>
 
   deleteMember: () => Promise<Member>
 
@@ -252,17 +254,20 @@ export function MemberProvider({ children }: PropsWithChildren) {
     }
   }
 
-  async function updateMember(
-    memberUserId: string,
-    newName?: string,
-    newEmailDev?: string,
-    newRole?: ROLE,
-    newStack?: STACK,
-    newYear?: number,
-    newCellphone?: string,
-    newCourse?: COURSE,
-    newActive?: ACTIVE
-  ) {
+  async function updateMember(params: UpdateMemberParams): Promise<Member> {
+    const {
+      memberUserId,
+      newName,
+      newEmailDev,
+      newRole,
+      newStack,
+      newYear,
+      newCellphone,
+      newCourse,
+      newActive,
+      newPhoto
+    } = params
+
     try {
       const updatedMember = await updateMemberUsecase.execute(
         memberUserId,
@@ -273,7 +278,8 @@ export function MemberProvider({ children }: PropsWithChildren) {
         newYear,
         newCellphone,
         newCourse,
-        newActive
+        newActive,
+        newPhoto
       )
       return updatedMember
     } catch (error: any) {
@@ -294,27 +300,22 @@ export function MemberProvider({ children }: PropsWithChildren) {
   }
 
   async function changeMemberProfilePicture(newPhoto: string) {
+    if (!member?.userId) throw new Error('Member ID is undefined')
+
     try {
-      const response = await updateMemberUsecase.execute(
-        member?.userId as string,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
+      const updatedMember = await updateMember({
+        memberUserId: member.userId,
         newPhoto
-      )
+      })
 
-      // Update member context
-      setMember(response)
+      console.log('Updated member:', updatedMember)
 
-      return response
+      setMember(updatedMember)
+
+      return updatedMember
     } catch (error: any) {
       setMemberError(error.message)
-      throw new Error('Something went wrong on delete member: ' + error.message)
+      throw new Error('Error updating profile picture: ' + error.message)
     }
   }
 
