@@ -296,7 +296,9 @@ export class MemberRepositoryHttp implements IMemberRepository {
 
       return member
     } catch (error: any) {
-      throw new Error('Error Updating Member: ' + error.response.data)
+      const errorMessage =
+        error.response?.data || error.message || 'Unknown error'
+      throw new Error('Error Updating Member: ' + errorMessage)
     }
   }
 

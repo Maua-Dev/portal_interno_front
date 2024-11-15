@@ -308,10 +308,6 @@ export function MemberProvider({ children }: PropsWithChildren) {
         newPhoto
       })
 
-      console.log('Updated member:', updatedMember)
-
-      setMember(updatedMember)
-
       return updatedMember
     } catch (error: any) {
       setMemberError(error.message)
