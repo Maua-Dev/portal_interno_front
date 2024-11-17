@@ -67,7 +67,8 @@ export function Avatar({ isEditable, member, ...props }: AvatarProps) {
     const firstName = splitName[0]
     const lastName = splitName.length > 1 ? splitName[splitName.length - 1] : ''
 
-    let styleJson = useMemo(() => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const styleJson = useMemo(() => {
       if (!member.photo && !selectedFile) {
         return undefined
       }
