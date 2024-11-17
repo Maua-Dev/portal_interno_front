@@ -1,6 +1,9 @@
 import { AssociatedAction } from '../../../../shared/domain/entities/associated_action'
 import { Action } from '../../../../shared/domain/entities/action'
-import { historyResponse } from '../../../../shared/infra/repositories/action_repository_http'
+import {
+  GetHistoryActionsParams,
+  historyResponse
+} from '../../../../shared/infra/repositories/action_repository_http'
 import { ACTION_TYPE } from '../../../../shared/domain/enums/action_type_enum'
 import { STACK } from '../../../../shared/domain/enums/stack_enum'
 
@@ -22,15 +25,7 @@ export interface IActionRepository {
   // Retrieves all associated actions of a member, filtered by an optional time range specified by start and end parameters.
   // The method allows for pagination using the exclusive_start_key parameter to determine the starting point of the action list, and the amount parameter to determine the maximum number of actions to be retrieved.
   // If no actions are found, returns []
-  getHistoryActions(
-    start?: number, // milissegundos da data do inicio das actions
-    end?: number, // milissegundos da data de fim da action (vai até essa data contando ela mesma)
-    amount?: number, // quantidade de actions retornadas
-    exclusiveStartKey?: {
-      actionId: string
-      startDate: number
-    }
-  ): Promise<historyResponse>
+  getHistoryActions(params?: GetHistoryActionsParams): Promise<historyResponse>
 
   createAssociatedAction(
     associatedAction: AssociatedAction

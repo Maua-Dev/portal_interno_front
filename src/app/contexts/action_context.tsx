@@ -40,7 +40,8 @@ export interface ActionContextInterface {
     exclusiveStartKey?: {
       actionId: string
       startDate: number
-    }
+    },
+    memberUserId?: string
   ): Promise<historyResponse | undefined>
 
   updateAction(
@@ -174,15 +175,17 @@ export function ActionProvider({ children }: PropsWithChildren) {
     exclusiveStartKey?: {
       actionId: string
       startDate: number
-    }
+    },
+    memberUserId?: string
   ) {
     try {
-      const response = await getHistoryUsecase.execute(
+      const response = await getHistoryUsecase.execute({
         start,
         end,
         amount,
-        exclusiveStartKey
-      )
+        exclusiveStartKey,
+        memberUserId
+      })
 
       return response
     } catch (error: any) {

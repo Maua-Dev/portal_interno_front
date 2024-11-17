@@ -8,6 +8,18 @@ import { ACTION_TYPE } from '../../domain/enums/action_type_enum'
 import { STACK } from '../../domain/enums/stack_enum'
 import { stackFormatter } from '../../domain/enums/stack_enum'
 
+// Define in a relevant location, e.g., in the domain layer
+export interface GetHistoryActionsParams {
+  start?: number
+  end?: number
+  amount?: number
+  exclusiveStartKey?: {
+    actionId: string
+    startDate: number
+  }
+  memberUserId?: string
+}
+
 interface getHistoryRawResponse {
   actions: [
     {
@@ -141,13 +153,7 @@ export class ActionRepositoryHttp implements IActionRepository {
   }
 
   async getHistoryActions(
-    start?: number,
-    end?: number,
-    amount?: number,
-    exclusiveStartKey?: {
-      actionId: string
-      startDate: number
-    }
+    params: GetHistoryActionsParams = {}
   ): Promise<historyResponse> {
     const token = localStorage.getItem('idToken')
 
@@ -155,151 +161,216 @@ export class ActionRepositoryHttp implements IActionRepository {
       throw new Error('Token not found')
     }
 
-    const response: historyResponse = {
-      actions: [],
-      lastEvaluatedKey: {
-        actionId: '',
-        startDate: 0
+    // Build the request parameters Dinamically
+    const requestBody: any = {}
+
+    if (params.start !== undefined) requestBody.start = params.start
+    if (params.end !== undefined) requestBody.end = params.end
+    if (params.amount !== undefined) requestBody.amount = params.amount
+    if (params.exclusiveStartKey !== undefined) {
+      requestBody.exclusive_start_key = {
+        action_id: params.exclusiveStartKey.actionId,
+        start_date: params.exclusiveStartKey.startDate
       }
     }
+    if (params.memberUserId !== undefined)
+      requestBody.member_user_id = params.memberUserId
 
     try {
-      if (
-        amount !== undefined &&
-        start !== undefined &&
-        end !== undefined &&
-        exclusiveStartKey !== undefined
-      ) {
-        const firstCase = await this.http.post<getHistoryRawResponse>(
-          '/get-history',
-          {
-            start,
-            end,
-            amount,
-            exclusiveStartKey
-          },
-          {
-            headers: {
-              Authorization: 'Bearer ' + token
-            }
+      const response = await this.http.post<getHistoryRawResponse>(
+        '/get-history',
+        requestBody,
+        {
+          headers: {
+            Authorization: 'Bearer ' + token
           }
-        )
-        for (let i = 0; i < firstCase.data.actions.length; i++) {
-          response.actions.push(Action.fromJSON(firstCase.data.actions[i]))
         }
-        if (firstCase.data.last_evaluated_key !== null) {
-          response.lastEvaluatedKey = {
-            actionId: firstCase.data.last_evaluated_key.action_id,
-            startDate: firstCase.data.last_evaluated_key.start_date
-          }
-        } else {
-          response.lastEvaluatedKey = null
-        }
-      } else if (
-        amount !== undefined &&
-        start !== undefined &&
-        end !== undefined
-      ) {
-        const secondCase = await this.http.post<getHistoryRawResponse>(
-          '/get-history',
-          {
-            start,
-            end,
-            amount
-          },
-          {
-            headers: { Authorization: 'Bearer ' + token }
-          }
-        )
-        for (let i = 0; i < secondCase.data.actions.length; i++) {
-          response.actions.push(Action.fromJSON(secondCase.data.actions[i]))
-        }
+      )
 
-        if (secondCase.data.last_evaluated_key !== null) {
-          response.lastEvaluatedKey = {
-            actionId: secondCase.data.last_evaluated_key.action_id,
-            startDate: secondCase.data.last_evaluated_key.start_date
-          }
-        } else {
-          response.lastEvaluatedKey = null
-        }
-      } else if (amount !== undefined && exclusiveStartKey !== undefined) {
-        const thirdCase = await this.http.post<getHistoryRawResponse>(
-          '/get-history',
-          {
-            amount,
-            exclusive_start_key: {
-              action_id: exclusiveStartKey.actionId,
-              start_date: exclusiveStartKey.startDate
+      const historyResponse: historyResponse = {
+        actions: response.data.actions.map((actionData) =>
+          Action.fromJSON(actionData)
+        ),
+        lastEvaluatedKey: response.data.last_evaluated_key
+          ? {
+              actionId: response.data.last_evaluated_key.action_id,
+              startDate: response.data.last_evaluated_key.start_date
             }
-          },
-          {
-            headers: {
-              Authorization: 'Bearer ' + token
-            }
-          }
-        )
-
-        for (let i = 0; i < thirdCase.data.actions.length; i++) {
-          response.actions.push(Action.fromJSON(thirdCase.data.actions[i]))
-        }
-
-        if (thirdCase.data.last_evaluated_key !== null) {
-          response.lastEvaluatedKey = {
-            actionId: thirdCase.data.last_evaluated_key.action_id,
-            startDate: thirdCase.data.last_evaluated_key.start_date
-          }
-        } else {
-          response.lastEvaluatedKey = null
-        }
-
-        return response
-      } else if (amount !== undefined) {
-        const fourthCase = await this.http.post<getHistoryRawResponse>(
-          '/get-history',
-          {
-            amount
-          },
-          {
-            headers: {
-              Authorization: 'Bearer ' + token
-            }
-          }
-        )
-        for (let i = 0; i < fourthCase.data.actions.length; i++) {
-          response.actions.push(Action.fromJSON(fourthCase.data.actions[i]))
-        }
-
-        if (fourthCase.data.last_evaluated_key !== null) {
-          response.lastEvaluatedKey = {
-            actionId: fourthCase.data.last_evaluated_key.action_id,
-            startDate: fourthCase.data.last_evaluated_key.start_date
-          }
-        } else {
-          response.lastEvaluatedKey = null
-        }
-        return response
-      } else {
-        const fifthCase = await this.http.post<getHistoryRawResponse>(
-          '/get-history',
-          {},
-          {
-            headers: {
-              Authorization: 'Bearer ' + token
-            }
-          }
-        )
-        for (let i = 0; i < fifthCase.data.actions.length; i++) {
-          response.actions.push(Action.fromJSON(fifthCase.data.actions[i]))
-        }
-        return response
+          : null
       }
 
-      return response
+      return historyResponse
     } catch (error: any) {
-      throw new Error(error)
+      const errorMessage =
+        error.response?.data?.message ||
+        error.response?.data ||
+        error.message ||
+        'Unknown error'
+      throw new Error('Error fetching history actions: ' + errorMessage)
     }
   }
+
+  // async getHistoryActions(
+  //   start?: number,
+  //   end?: number,
+  //   amount?: number,
+  //   exclusiveStartKey?: {
+  //     actionId: string
+  //     startDate: number
+  //   },
+  //   memberUserId?: string // add the memberUserId case
+  // ): Promise<historyResponse> {
+  //   const token = localStorage.getItem('idToken')
+
+  //   if (!token) {
+  //     throw new Error('Token not found')
+  //   }
+
+  //   const response: historyResponse = {
+  //     actions: [],
+  //     lastEvaluatedKey: {
+  //       actionId: '',
+  //       startDate: 0
+  //     }
+  //   }
+
+  //   try {
+  //     if (
+  //       amount !== undefined &&
+  //       start !== undefined &&
+  //       end !== undefined &&
+  //       exclusiveStartKey !== undefined
+  //     ) {
+  //       const firstCase = await this.http.post<getHistoryRawResponse>(
+  //         '/get-history',
+  //         {
+  //           start,
+  //           end,
+  //           amount,
+  //           exclusiveStartKey
+  //         },
+  //         {
+  //           headers: {
+  //             Authorization: 'Bearer ' + token
+  //           }
+  //         }
+  //       )
+  //       for (let i = 0; i < firstCase.data.actions.length; i++) {
+  //         response.actions.push(Action.fromJSON(firstCase.data.actions[i]))
+  //       }
+  //       if (firstCase.data.last_evaluated_key !== null) {
+  //         response.lastEvaluatedKey = {
+  //           actionId: firstCase.data.last_evaluated_key.action_id,
+  //           startDate: firstCase.data.last_evaluated_key.start_date
+  //         }
+  //       } else {
+  //         response.lastEvaluatedKey = null
+  //       }
+  //     } else if (
+  //       amount !== undefined &&
+  //       start !== undefined &&
+  //       end !== undefined
+  //     ) {
+  //       const secondCase = await this.http.post<getHistoryRawResponse>(
+  //         '/get-history',
+  //         {
+  //           start,
+  //           end,
+  //           amount
+  //         },
+  //         {
+  //           headers: { Authorization: 'Bearer ' + token }
+  //         }
+  //       )
+  //       for (let i = 0; i < secondCase.data.actions.length; i++) {
+  //         response.actions.push(Action.fromJSON(secondCase.data.actions[i]))
+  //       }
+
+  //       if (secondCase.data.last_evaluated_key !== null) {
+  //         response.lastEvaluatedKey = {
+  //           actionId: secondCase.data.last_evaluated_key.action_id,
+  //           startDate: secondCase.data.last_evaluated_key.start_date
+  //         }
+  //       } else {
+  //         response.lastEvaluatedKey = null
+  //       }
+  //     } else if (amount !== undefined && exclusiveStartKey !== undefined) {
+  //       const thirdCase = await this.http.post<getHistoryRawResponse>(
+  //         '/get-history',
+  //         {
+  //           amount,
+  //           exclusive_start_key: {
+  //             action_id: exclusiveStartKey.actionId,
+  //             start_date: exclusiveStartKey.startDate
+  //           }
+  //         },
+  //         {
+  //           headers: {
+  //             Authorization: 'Bearer ' + token
+  //           }
+  //         }
+  //       )
+
+  //       for (let i = 0; i < thirdCase.data.actions.length; i++) {
+  //         response.actions.push(Action.fromJSON(thirdCase.data.actions[i]))
+  //       }
+
+  //       if (thirdCase.data.last_evaluated_key !== null) {
+  //         response.lastEvaluatedKey = {
+  //           actionId: thirdCase.data.last_evaluated_key.action_id,
+  //           startDate: thirdCase.data.last_evaluated_key.start_date
+  //         }
+  //       } else {
+  //         response.lastEvaluatedKey = null
+  //       }
+
+  //       return response
+  //     } else if (amount !== undefined) {
+  //       const fourthCase = await this.http.post<getHistoryRawResponse>(
+  //         '/get-history',
+  //         {
+  //           amount
+  //         },
+  //         {
+  //           headers: {
+  //             Authorization: 'Bearer ' + token
+  //           }
+  //         }
+  //       )
+  //       for (let i = 0; i < fourthCase.data.actions.length; i++) {
+  //         response.actions.push(Action.fromJSON(fourthCase.data.actions[i]))
+  //       }
+
+  //       if (fourthCase.data.last_evaluated_key !== null) {
+  //         response.lastEvaluatedKey = {
+  //           actionId: fourthCase.data.last_evaluated_key.action_id,
+  //           startDate: fourthCase.data.last_evaluated_key.start_date
+  //         }
+  //       } else {
+  //         response.lastEvaluatedKey = null
+  //       }
+  //       return response
+  //     } else {
+  //       const fifthCase = await this.http.post<getHistoryRawResponse>(
+  //         '/get-history',
+  //         {},
+  //         {
+  //           headers: {
+  //             Authorization: 'Bearer ' + token
+  //           }
+  //         }
+  //       )
+  //       for (let i = 0; i < fifthCase.data.actions.length; i++) {
+  //         response.actions.push(Action.fromJSON(fifthCase.data.actions[i]))
+  //       }
+  //       return response
+  //     }
+
+  //     return response
+  //   } catch (error: any) {
+  //     throw new Error(error)
+  //   }
+  // }
 
   async createAction(
     startDate: number,

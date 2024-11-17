@@ -11,7 +11,10 @@ import { ACTIVE } from '../../domain/enums/active_enum'
 import { ACTION_TYPE } from '../../domain/enums/action_type_enum'
 import { NoItemsFoundError } from '../../domain/helpers/errors/domain_error'
 import { IActionRepository } from '../../../modules/action/domain/repositories/action_repository_interface'
-import { historyResponse } from './action_repository_http'
+import {
+  GetHistoryActionsParams,
+  historyResponse
+} from './action_repository_http'
 
 export class ActionRepositoryMock implements IActionRepository {
   createAction(): Promise<Action> {
@@ -382,25 +385,17 @@ export class ActionRepositoryMock implements IActionRepository {
   }
 
   async getHistoryActions(
-    amount?: number,
-    start?: number | undefined,
-    end?: number | undefined,
-    exclusiveStartKey?:
-      | {
-          actionId: string
-          startDate: number
-        }
-      | undefined
+    params: GetHistoryActionsParams = {}
   ): Promise<historyResponse> {
     let actions = this.actions.sort((a, b) => {
       return b.startDate - a.startDate
     })
 
-    if (exclusiveStartKey) {
+    if (params.exclusiveStartKey) {
       let action0 = actions[0]
       while (
         action0 !== undefined &&
-        action0.actionId !== exclusiveStartKey.actionId
+        action0.actionId !== params.exclusiveStartKey.actionId
       ) {
         actions.shift()
         if (actions.length > 0) action0 = actions[0]
@@ -408,12 +403,12 @@ export class ActionRepositoryMock implements IActionRepository {
       actions.shift()
     }
 
-    if (start) {
-      actions = actions.filter((action) => action.startDate >= start)
+    if (params.start) {
+      // actions = actions.filter((action) => action.startDate >= params.start) // help params.start' is possibly 'undefined'.ts(18048)
     }
 
-    if (end) {
-      actions = actions.filter((action) => action.endDate <= end)
+    if (params.end) {
+      // actions = actions.filter((action) => action.endDate <= params.end) // 'params.end' is possibly 'undefined'.ts(18048)
     }
 
     actions = actions.filter((action) => {
@@ -429,7 +424,7 @@ export class ActionRepositoryMock implements IActionRepository {
     })
 
     return {
-      actions: actions.slice(0, amount),
+      actions: actions.slice(0, params.amount),
       lastEvaluatedKey: {
         actionId: '663ef972-cc93-4bb8-8b69-8b5cfa2f532c',
         startDate: 1689969600000
