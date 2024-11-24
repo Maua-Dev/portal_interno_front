@@ -1,9 +1,9 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/PKief/vscode-material-icon-theme/ec559a9f6bfd399b82bb44393651661b08aaf7ba/icons/folder-markdown-open.svg" align="center" width="30%">
+    <img src="https://d22wxe17x1tv7t.cloudfront.net/portalinterno.png" align="center" width="30%">
 </p>
-<p align="center"><h1 align="center">PORTAL_INTERNO_FRONT</h1></p>
+<p align="center"><h1 align="center">PORTAL INTERNO</h1></p>
 <p align="center">
-	<em>Empower Your Team with portal_interno_front: Open Source Innovation at Your Fingertips!</em>
+	<em>Empower Your Team with Portal Interno: Open Source Innovation at Your Fingertips!</em>
 </p>
 <p align="center">
 	<img src="https://img.shields.io/github/license/Maua-Dev/portal_interno_front?style=default&logo=opensourceinitiative&logoColor=white&color=0080ff" alt="license">
@@ -29,7 +29,6 @@
   - [ Installation](#-installation)
   - [ Usage](#-usage)
   - [ Testing](#-testing)
-- [ Project Roadmap](#-project-roadmap)
 - [ Contributing](#-contributing)
 - [ License](#-license)
 - [ Acknowledgments](#-acknowledgments)
