@@ -137,7 +137,7 @@ export default function Members() {
             }
             onClick={() => {
               if (allMembers && member)
-                exportToCSV(allMembers, member, 'members')
+                exportToCSV(allMembers, member, 'members', filterProps)
             }}
           >
             Exportar
