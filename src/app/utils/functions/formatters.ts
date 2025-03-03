@@ -44,10 +44,30 @@ function ProjectCodeToProjectName(projectCode: string): string {
   }
 }
 
+function makeProjectCode(projectName: string): string {
+  const nameParts = projectName.split(' ')
+
+  let code
+  if (nameParts.length > 1) {
+    // Se houver mais de uma palavra, usa a primeira e a última inicial
+    code =
+      nameParts[0].charAt(0).toUpperCase() +
+      nameParts[1].charAt(0).toUpperCase()
+  } else {
+    // Se houver apenas uma palavra, usa a primeira letra duas vezes
+    code =
+      nameParts[0].charAt(0).toUpperCase() +
+      nameParts[0].charAt(1).toUpperCase()
+  }
+
+  return code.toUpperCase()
+}
+
 export {
   raFormatterToJson,
   raFormatterFromJson,
   associatedMembersRaFormatter,
   plainTextToRa,
-  ProjectCodeToProjectName
+  ProjectCodeToProjectName,
+  makeProjectCode
 }

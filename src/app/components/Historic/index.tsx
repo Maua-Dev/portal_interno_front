@@ -174,11 +174,6 @@ export default function Historic() {
                   ? 'cursor-pointer hover:text-skin-base'
                   : null
               }`}
-            onClick={() => {
-              if (_lastEvaluatedKey !== null) {
-                loadHistoric(_lastEvaluatedKey)
-              }
-            }}
           >
             {_lastEvaluatedKey === null ? 'Sem Mais Itens' : 'Ver Mais'}
           </h1>

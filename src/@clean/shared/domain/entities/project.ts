@@ -8,7 +8,7 @@ export type ProjectProps = {
   scrumUserId: string
   startDate: number
   membersUserIds: string[]
-  photos: string[]
+  photo: string
 }
 
 export type JsonProps = {
@@ -20,7 +20,7 @@ export type JsonProps = {
     scrum_user_id: string
     start_date: number
     members_user_ids: string[]
-    photos: string[]
+    photo: string
   }
 }
 
@@ -62,16 +62,10 @@ export class Project {
     }
     this.props.startDate = props.startDate
 
-    if (props.photos !== undefined) {
-      if (Array.isArray(props.photos)) {
-        props.photos.forEach((photo) => {
-          if (typeof photo !== 'string') {
-            throw new EntityError('props.photos')
-          }
-        })
-      }
-      this.props.photos = props.photos
+    if (typeof props.photo !== 'string' || props.photo.length === 0) {
+      throw new EntityError('props.photo')
     }
+    this.props.photo = props.photo
 
     if (!Array.isArray(props.membersUserIds)) {
       throw new EntityError('props.membersUserIds')
@@ -121,8 +115,8 @@ export class Project {
     return this.props.membersUserIds
   }
 
-  get photos() {
-    return this.props.photos
+  get photo() {
+    return this.props.photo
   }
 
   set setCode(code: string) {
@@ -192,15 +186,11 @@ export class Project {
     this.props.membersUserIds = membersUserIds
   }
 
-  set setPhotos(photos: string[]) {
-    if (Array.isArray(photos)) {
-      photos.forEach((photo) => {
-        if (typeof photo !== 'string') {
-          throw new EntityError('props.photos')
-        }
-      })
+  set setPhoto(photo: string) {
+    if (typeof photo !== 'string') {
+      throw new EntityError('props.photo')
     }
-    this.props.photos = photos
+    this.props.photo = photo
   }
 
   // JSON Conversion
@@ -214,7 +204,7 @@ export class Project {
       scrumUserId: json.project.scrum_user_id,
       startDate: json.project.start_date,
       membersUserIds: json.project.members_user_ids,
-      photos: json.project.photos
+      photo: json.project.photo
     })
   }
 
@@ -227,7 +217,7 @@ export class Project {
       scrum_user_id: this.scrumUserId,
       start_date: this.startDate,
       members_user_ids: this.membersUserIds,
-      photos: this.photos
+      photo: this.photo
     }
   }
 

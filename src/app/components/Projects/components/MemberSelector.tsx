@@ -10,6 +10,7 @@ import { Member } from '../../../../@clean/shared/domain/entities/member'
 import { MemberContext } from '../../../contexts/member_context'
 import Button from '../../Historic/components/Button'
 import { STACK } from '../../../../@clean/shared/domain/enums/stack_enum'
+import { ACTIVE } from '../../../../@clean/shared/domain/enums/active_enum'
 
 interface MemberSelectorProps
   extends React.DetailedHTMLProps<
@@ -50,7 +51,8 @@ export default function MemberSelector({
 
   const filteredMembers: Member[] | undefined = useMemo(() => {
     const businessMembers = allMembers?.filter(
-      (member) => member.stack === STACK.BUSINESS
+      (member) =>
+        member.stack === STACK.BUSINESS && member.active === ACTIVE.ACTIVE
     )
 
     if (inputValue === '') {
@@ -75,6 +77,18 @@ export default function MemberSelector({
       }, 0)
     }
   }, [popUp])
+
+  useEffect(() => {
+    if (getValue(objectParameter) !== '') {
+      const member = allMembers?.find(
+        (member) => member.userId === getValue(objectParameter)
+      )
+
+      console.log(member)
+
+      setInputValue(member?.name || '')
+    }
+  }, [])
 
   // useEffect(() => {
   //   console.log(getValue(objectParameter))

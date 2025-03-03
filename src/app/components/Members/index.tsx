@@ -57,7 +57,9 @@ export default function Members() {
 
     // Projects Filter Logic
     if (filterProps.project) {
-      return []
+      currentMembers = currentMembers.filter((member) =>
+        member.project.includes(filterProps.project)
+      )
     }
 
     // Year Filter Logic
@@ -161,6 +163,7 @@ export default function Members() {
                 <MemberCard
                   key={member.userId}
                   member={member}
+                  setMembers={setMembers}
                   isWithMostHours={
                     hoursOfTheUserWithMoreHours ===
                     millisecondsToHours(member.hoursWorked || 0) // Compare in hours

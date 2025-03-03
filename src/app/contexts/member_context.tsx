@@ -61,6 +61,8 @@ export interface MemberContextInterface {
   isRegister: boolean
 
   isOnHold: boolean
+
+  changeMemberProfilePicture: (newPhoto: string) => Promise<Member>
 }
 
 const defaultContext: MemberContextInterface = {
@@ -89,6 +91,10 @@ const defaultContext: MemberContextInterface = {
   handleMember: async () => {},
 
   handleLogout: () => {},
+
+  changeMemberProfilePicture: async () => {
+    return {} as Member
+  },
 
   member: undefined,
 
@@ -287,6 +293,31 @@ export function MemberProvider({ children }: PropsWithChildren) {
     }
   }
 
+  async function changeMemberProfilePicture(newPhoto: string) {
+    try {
+      const response = await updateMemberUsecase.execute(
+        member?.userId as string,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        newPhoto
+      )
+
+      // Update member context
+      setMember(response)
+
+      return response
+    } catch (error: any) {
+      setMemberError(error.message)
+      throw new Error('Something went wrong on delete member: ' + error.message)
+    }
+  }
+
   return (
     <MemberContext.Provider
       value={{
@@ -303,7 +334,8 @@ export function MemberProvider({ children }: PropsWithChildren) {
         isAdmin,
         isRegister,
         isOnHold,
-        handleLogout
+        handleLogout,
+        changeMemberProfilePicture
       }}
     >
       {children}
