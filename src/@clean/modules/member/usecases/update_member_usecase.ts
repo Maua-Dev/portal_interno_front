@@ -16,7 +16,8 @@ export class UpdateMemberUsecase {
     newYear?: number,
     newCellphone?: string,
     newCourse?: COURSE,
-    newActive?: ACTIVE
+    newActive?: ACTIVE,
+    newPhoto?: string
   ) {
     const member = await this.repo.updateMember(
       memberUserId,
@@ -27,7 +28,8 @@ export class UpdateMemberUsecase {
       newYear,
       newCellphone,
       newCourse,
-      newActive
+      newActive,
+      newPhoto
     )
 
     return member

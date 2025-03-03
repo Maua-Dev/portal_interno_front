@@ -1,5 +1,4 @@
 import { EntityError } from '../helpers/errors/domain_error'
-import { validate } from 'uuid'
 
 export type AssociatedActionProps = {
   actionId: string
@@ -107,9 +106,7 @@ export class AssociatedAction {
     if (typeof userId !== 'string') {
       return false
     }
-    if (!validate(userId)) {
-      return false
-    }
+
     return true
   }
 }

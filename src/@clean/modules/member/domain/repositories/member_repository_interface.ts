@@ -30,7 +30,8 @@ export interface IMemberRepository {
     newYear?: number,
     newCellphone?: string,
     newCourse?: COURSE,
-    newActive?: ACTIVE
+    newActive?: ACTIVE,
+    newPhoto?: string
   ): Promise<Member>
 
   deleteMember(): Promise<Member>

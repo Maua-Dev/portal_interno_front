@@ -74,7 +74,7 @@ export default function NoticationMemberCard({
       }`}
     >
       <div className={'flex items-center gap-3'}>
-        <Avatar name={member.name} />
+        <Avatar member={member} className="w-20 rounded-full" />
         <p className={'text-skin-base'}>
           <span className={'hover:underline'}>{member.name}</span>{' '}
           <span className={'font-thin italic text-skin-muted'}>

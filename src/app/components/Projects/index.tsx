@@ -10,11 +10,15 @@ import * as Loader from '../Loader'
 import ProjectCardSkeleton from './components/ProjectCardSkeleton'
 import Button from '../Historic/components/Button'
 import ProjectDialog from './components/ProjectDialog'
+import ProjectInfoCard from './components/ProjectInfoCard'
 
 export default function Projects() {
-  const { getAllProjects } = useContext(ProjectContext)
-  const [projects, setProjects] = useState<ProjectType[] | undefined>(undefined)
+  const { handleAllProjects, allProjects } = useContext(ProjectContext)
+  const [localProjects, setLocalProjects] = useState<ProjectType[] | undefined>(
+    undefined
+  )
   const [editPopUp, setEditPopUp] = useState<boolean>(false)
+  const [infoPopUp, setInfoPopUp] = useState<boolean>(false)
   const [createProjectMobile, setCreateProjectMobile] = useState<boolean>(false)
   const [projectToEdit, setProjectToEdit] = useState<ProjectType>()
   const [filterProps, setFilterProps] = useState<FilterProps>({
@@ -24,20 +28,20 @@ export default function Projects() {
   })
 
   async function loadAllProjects() {
-    const projects = await getAllProjects()
-    setProjects(projects)
+    const response = await handleAllProjects()
+    setLocalProjects(response)
   }
 
   const filteredProjects: ProjectType[] = useMemo(() => {
-    if (!projects) {
+    if (!localProjects) {
       return []
     }
 
     if (filterProps.searchText === '' && filterProps.orderBy === '') {
-      return projects
+      return localProjects
     }
 
-    let currentProjects = projects
+    let currentProjects = localProjects
 
     if (filterProps.searchText !== '') {
       const searchTextLowerCase = filterProps.searchText.toLowerCase()
@@ -67,7 +71,7 @@ export default function Projects() {
     }
 
     return currentProjects
-  }, [filterProps, projects])
+  }, [filterProps, allProjects, localProjects])
 
   useEffect(() => {
     loadAllProjects()
@@ -82,20 +86,22 @@ export default function Projects() {
         filterProps={filterProps}
         filterOptions={projectFilterOptions}
         adicionalButton={
-          <ProjectDialog setProjects={setProjects}>
+          <ProjectDialog loadProjects={loadAllProjects}>
             <Button variant={'form'} className={'hidden w-fit gap-2 xl:flex'}>
               Adicionar
               <Plus strokeWidth={2} />
             </Button>
           </ProjectDialog>
         }
-        className={`${editPopUp || createProjectMobile ? 'z-10' : 'z-30'}`}
+        className={`${
+          editPopUp || createProjectMobile || infoPopUp ? 'z-10' : 'z-30'
+        }`}
       />
       <div
         className={`z-10 flex h-fit w-full flex-col items-center gap-2 pb-60`}
       >
         <ProjectDialog
-          setProjects={setProjects}
+          loadProjects={loadAllProjects}
           open={createProjectMobile}
           setOpen={setCreateProjectMobile}
         >
@@ -107,29 +113,36 @@ export default function Projects() {
         {filteredProjects.length !== 0 ? (
           filteredProjects.map((project, index) => {
             return (
-              <motion.div
+              <ProjectInfoCard
                 key={index + '' + project.code}
-                initial={{ marginLeft: '50px', opacity: 0 }}
-                animate={{ marginLeft: '0px', opacity: 1 }}
-                transition={{ duration: 0.5, delay: index * 0.3 }}
-                className="flex w-full justify-center"
+                setEditPopUp={setEditPopUp}
+                setProjectToEdit={setProjectToEdit}
+                setOpenStatus={setInfoPopUp}
+                project={{ ...project, photo: project.photo ?? '' }}
               >
-                <ProjectCard
-                  setProjectToEdit={setProjectToEdit}
-                  setEditPopUp={setEditPopUp}
-                  className="z-10 hover:z-20"
-                  setProjects={setProjects}
-                  key={project.name + index}
-                  project={project}
-                />
-              </motion.div>
+                <motion.div
+                  initial={{ marginLeft: '50px', opacity: 0 }}
+                  animate={{ marginLeft: '0px', opacity: 1 }}
+                  transition={{ duration: 0.5, delay: index * 0.3 }}
+                  className="flex w-full justify-center"
+                >
+                  <ProjectCard
+                    setProjectToEdit={setProjectToEdit}
+                    setEditPopUp={setEditPopUp}
+                    className="z-10 hover:z-20"
+                    setProjects={setLocalProjects}
+                    key={project.name + index}
+                    project={project}
+                  />
+                </motion.div>
+              </ProjectInfoCard>
             )
           })
         ) : (
           <Loader.List SkeletonComponent={ProjectCardSkeleton} />
         )}
         <ProjectDialog
-          setProjects={setProjects}
+          loadProjects={loadAllProjects}
           open={editPopUp}
           project={projectToEdit}
           setOpen={setEditPopUp}

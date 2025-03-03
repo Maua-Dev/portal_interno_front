@@ -101,7 +101,7 @@ export function SelectorModal({
             ? allMembers
                 ?.filter((member) => {
                   if (search !== '') {
-                    if (/^[a-z ]+$/.test(search)) {
+                    if (/^[a-z ]+$/.test(search.toLowerCase())) {
                       return member.name
                         .toLowerCase()
                         .includes(search.toLowerCase())

@@ -11,7 +11,7 @@ export class CreateProjectUsecase {
     scrumUserId: string,
     startDate: number,
     membersUserIds: string[],
-    photos: string[]
+    photo: string
   ) {
     const project = await this.repo.createProject(
       code,
@@ -21,7 +21,7 @@ export class CreateProjectUsecase {
       scrumUserId,
       startDate,
       membersUserIds,
-      photos
+      photo
     )
 
     return project

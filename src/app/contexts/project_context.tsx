@@ -1,4 +1,4 @@
-import { createContext } from 'react'
+import { createContext, useState } from 'react'
 import {
   RegistryProject,
   containerProject
@@ -10,6 +10,8 @@ import { CreateProjectUsecase } from '../../@clean/modules/project/usecases/crea
 import { UpdateProjectUsecase } from '../../@clean/modules/project/usecases/update_project_usecase'
 
 export type ProjectContextType = {
+  handleAllProjects: () => Promise<ProjectType[]>
+  allProjects: ProjectType[] | undefined
   getAllProjects: () => Promise<ProjectType[]>
   createProject: (project: ProjectType) => Promise<ProjectType>
   updateProject: (oldCode: string, project: ProjectType) => Promise<ProjectType>
@@ -17,6 +19,12 @@ export type ProjectContextType = {
 }
 
 const projectContextDefault: ProjectContextType = {
+  allProjects: undefined,
+
+  handleAllProjects: async () => {
+    return []
+  },
+
   getAllProjects: async () => {
     return []
   },
@@ -55,6 +63,10 @@ const deleteProjectUsecase = containerProject.get<DeleteProjectUsecase>(
 )
 
 export function ProjectProvider({ children }: { children: React.ReactNode }) {
+  const [allProjects, setAllProjects] = useState<ProjectType[] | undefined>(
+    undefined
+  )
+
   const getAllProjects = async () => {
     try {
       const projects = await getAllProjectsUsecase.execute()
@@ -78,7 +90,7 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
         project.scrumUserId,
         project.startDate,
         project.membersUserIds,
-        project.photos ?? []
+        project.photo ?? ''
       )
 
       return projectCreated
@@ -102,7 +114,7 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
         project.scrumUserId,
         project.startDate,
         project.membersUserIds,
-        project.photos
+        project.photo ?? undefined
       )
 
       return projectUpdated
@@ -125,9 +137,22 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
+  const handleAllProjects = async () => {
+    const projects = await getAllProjects()
+    setAllProjects(projects)
+    return projects
+  }
+
   return (
     <ProjectContext.Provider
-      value={{ getAllProjects, createProject, updateProject, deleteProject }}
+      value={{
+        handleAllProjects,
+        allProjects,
+        getAllProjects,
+        createProject,
+        updateProject,
+        deleteProject
+      }}
     >
       {children}
     </ProjectContext.Provider>

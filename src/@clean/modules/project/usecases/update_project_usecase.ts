@@ -12,7 +12,7 @@ export class UpdateProjectUsecase {
     newScrumUserId?: string,
     newStartDate?: number,
     newMembersUserIds?: string[],
-    newPhotos?: string[]
+    newPhoto?: string
   ) {
     const project = await this.repo.updateProject(
       code,
@@ -23,7 +23,7 @@ export class UpdateProjectUsecase {
       newScrumUserId,
       newStartDate,
       newMembersUserIds,
-      newPhotos
+      newPhoto
     )
 
     return project

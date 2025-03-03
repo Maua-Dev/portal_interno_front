@@ -30,7 +30,7 @@ export class ActionRepositoryMock implements IActionRepository {
         '492e9fa2-9189-4fe7-b0f7-e6ca472b19f0',
         '4a9019df-ab29-453f-8e8d-1cc845492f12'
       ],
-      photos: ['photo1', 'photo2']
+      photo: 'photo1'
     }),
     new Project({
       code: 'PT',
@@ -44,7 +44,7 @@ export class ActionRepositoryMock implements IActionRepository {
         '492e9fa2-9189-4fe7-b0f7-e6ca472b19f0',
         '4a9019df-ab29-453f-8e8d-1cc845492f12'
       ],
-      photos: ['photo1', 'photo2']
+      photo: 'photo1'
     }),
     new Project({
       code: 'SM',
@@ -58,7 +58,7 @@ export class ActionRepositoryMock implements IActionRepository {
         '492e9fa2-9189-4fe7-b0f7-e6ca472b19f0',
         '4a9019df-ab29-453f-8e8d-1cc845492f12'
       ],
-      photos: ['photo1', 'photo2']
+      photo: 'photo1'
     }),
     new Project({
       code: 'GM',
@@ -72,7 +72,7 @@ export class ActionRepositoryMock implements IActionRepository {
         '492e9fa2-9189-4fe7-b0f7-e6ca472b19f0',
         '4a9019df-ab29-453f-8e8d-1cc845492f12'
       ],
-      photos: ['photo1', 'photo2']
+      photo: 'photo1'
     }),
     new Project({
       code: 'PI',
@@ -86,7 +86,7 @@ export class ActionRepositoryMock implements IActionRepository {
         '492e9fa2-9189-4fe7-b0f7-e6ca472b19f0',
         '4a9019df-ab29-453f-8e8d-1cc845492f12'
       ],
-      photos: ['photo1', 'photo2']
+      photo: 'photo1'
     })
   ]
   private members: Member[] = [
@@ -103,7 +103,9 @@ export class ActionRepositoryMock implements IActionRepository {
       active: ACTIVE.ACTIVE,
       userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
       emailDev: 'dsiqueira.devmaua@gmail.com',
-      hoursWorked: 3
+      hoursWorked: 3,
+      project: ['MF', 'PT', 'SM', 'GM', 'PI'],
+      photo: 'photo1'
     }),
     new Member({
       name: 'Bruno fevs',
@@ -118,7 +120,9 @@ export class ActionRepositoryMock implements IActionRepository {
       active: ACTIVE.ACTIVE,
       userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee626',
       emailDev: 'bfevs.devmaua@maua.com',
-      hoursWorked: 3
+      hoursWorked: 3,
+      project: ['MF', 'PT', 'SM', 'GM', 'PI'],
+      photo: 'photo1'
     }),
     new Member({
       name: 'Rubicks Cube',
@@ -133,7 +137,9 @@ export class ActionRepositoryMock implements IActionRepository {
       active: ACTIVE.ACTIVE,
       userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee625',
       emailDev: 'rcube.devmaua@gmai.com',
-      hoursWorked: 3
+      hoursWorked: 3,
+      project: ['MF', 'PT', 'SM', 'GM', 'PI'],
+      photo: 'photo1'
     }),
     new Member({
       name: 'Enzo sakas',
@@ -148,7 +154,9 @@ export class ActionRepositoryMock implements IActionRepository {
       active: ACTIVE.ACTIVE,
       userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee624',
       emailDev: 'esakas.devmaua@gmail.com',
-      hoursWorked: 3
+      hoursWorked: 3,
+      project: ['MF', 'PT', 'SM', 'GM', 'PI'],
+      photo: 'photo1'
     }),
     new Member({
       name: 'Lounis Televisas',
@@ -163,7 +171,9 @@ export class ActionRepositoryMock implements IActionRepository {
       active: ACTIVE.ACTIVE,
       userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee623',
       emailDev: 'ltelevision.devmaua@gmail.com',
-      hoursWorked: 3
+      hoursWorked: 3,
+      project: ['MF', 'PT', 'SM', 'GM', 'PI'],
+      photo: 'photo1'
     }),
     new Member({
       name: 'MAGIC WHITE HANDS',
@@ -178,7 +188,9 @@ export class ActionRepositoryMock implements IActionRepository {
       active: ACTIVE.ACTIVE,
       userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee622',
       emailDev: 'jbranco.devmaua@gmail.com',
-      hoursWorked: 3
+      hoursWorked: 3,
+      project: ['MF', 'PT', 'SM', 'GM', 'PI'],
+      photo: 'photo1'
     })
   ]
   private actions: Action[] = [
@@ -549,7 +561,9 @@ export class ActionRepositoryMock implements IActionRepository {
       active: ACTIVE.ACTIVE,
       userId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627',
       hiredDate: 1640192165000,
-      hoursWorked: 3
+      hoursWorked: 3,
+      project: ['MF', 'PT', 'SM', 'GM', 'PI'],
+      photo: 'photo1'
     })
 
     this.members.push(member)

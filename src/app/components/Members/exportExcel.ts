@@ -1,6 +1,7 @@
 import * as XLSX from 'xlsx'
 import { saveAs } from 'file-saver'
 import { Member } from '../../../@clean/shared/domain/entities/member'
+import { ACTIVE } from '../../../@clean/shared/domain/enums/active_enum'
 
 const fileType =
   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
@@ -12,6 +13,7 @@ export const exportToCSV = (
   fileName: string
 ) => {
   const membersFormatted = apiData
+    .filter((member) => member.active === ACTIVE.ACTIVE)
     .map((member) => {
       return {
         Nome: member.name,

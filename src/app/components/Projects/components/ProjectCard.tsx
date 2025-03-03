@@ -18,7 +18,6 @@ import {
 import Button from '../../Historic/components/Button'
 import { twMerge } from 'tailwind-merge'
 import { ProjectContext } from '../../../contexts/project_context'
-
 interface ProjectCardProps extends HTMLAttributes<HTMLDivElement> {
   project: ProjectType
   setEditPopUp: React.Dispatch<React.SetStateAction<boolean>>
@@ -120,14 +119,20 @@ export default function ProjectCard({
         <IconText text={startDateFormated} icon={Calendar} />
         <div onMouseLeave={closeSettingsPopUp}>
           <Popover open={isPopUpOpen} onOpenChange={setPopUpOpen}>
-            <PopoverTrigger>
+            <PopoverTrigger
+              onClick={(e) => {
+                e.preventDefault()
+                setPopUpOpen(true)
+              }}
+            >
               <BsThreeDots className="h-10 w-10 cursor-pointer p-2 text-skin-base" />
             </PopoverTrigger>
             <PopoverContent>
               <div className="z-30" onMouseEnter={openSeetingsPopUp}>
                 <Button
                   variant="default"
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.preventDefault()
                     setEditPopUp(true)
                     setProjectToEdit(project)
                   }}
