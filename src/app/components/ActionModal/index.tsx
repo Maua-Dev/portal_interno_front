@@ -45,6 +45,14 @@ const actionSchema = z.object({
     .positive({ message: 'Duração deve ser um número maior que zero' })
     .gte(0.1, { message: 'Duração é obrigatória' })
     .finite(),
+  hour: z.number(),
+  minute: z
+    .number({
+      required_error: 'Duração é obrigatória',
+      invalid_type_error: 'Esse campo deve ser um número'
+    })
+    .min(0)
+    .max(59, { message: 'Minutos não podem ser maiores que 59' }),
   associatedMembersUserIds: z.array(z.string()),
   actionTypeTag: z.nativeEnum(ACTION_TYPE, {
     errorMap: (issue) => {
@@ -138,6 +146,16 @@ export default function ActionModal({ action }: { action?: Action }) {
       duration: action?.duration
         ? millisecondsToHours(action!.duration)
         : undefined,
+      hour: action?.duration
+        ? Math.floor(millisecondsToHours(action!.duration))
+        : 0,
+      minute: action?.duration
+        ? Math.round(
+            (millisecondsToHours(action!.duration) -
+              Math.floor(millisecondsToHours(action!.duration))) *
+              60
+          )
+        : 0,
       associatedMembersUserIds: action?.associatedMembersUserIds || [],
       actionTypeTag: action?.actionTypeTag || undefined,
       stackTags: action?.stackTags || [],
@@ -146,6 +164,15 @@ export default function ActionModal({ action }: { action?: Action }) {
     mode: 'onBlur'
   })
 
+  useEffect(() => {
+    const hour = getValues('hour') || 0
+    const minute = getValues('minute') || 0
+    console.log({ hour, minute })
+
+    const duration = hour + minute / 60
+    setValue('duration', duration)
+    console.log('duration: ', getValues('duration'))
+  }, [getValues('hour'), getValues('minute')])
   return (
     <>
       <div
@@ -286,18 +313,33 @@ export default function ActionModal({ action }: { action?: Action }) {
                   {/* Duration */}
                   <div className="flex flex-col gap-2">
                     <p className="text-lg">Duração da atividade</p>
-                    <input
-                      type="text"
-                      {...register('duration', {
-                        valueAsNumber: true
-                      })}
-                      placeholder="Em horas"
-                      className={`rounded ${
-                        darkMode ? 'bg-gray-600' : 'bg-gray-300'
-                      } select-none px-2 py-[0.35rem] outline-none`}
-                    />
+                    <div className="flex gap-2">
+                      <input
+                        type="number"
+                        {...register('hour', {
+                          valueAsNumber: true,
+                          setValueAs: (value) => (isNaN(value) ? 0 : value)
+                        })}
+                        placeholder="Horas"
+                        className={`rounded ${
+                          darkMode ? 'bg-gray-600' : 'bg-gray-300'
+                        } w-1/2 select-none px-2 py-[0.35rem] outline-none`}
+                      />
+                      <span> : </span>
+                      <input
+                        type="number"
+                        {...register('minute', {
+                          valueAsNumber: true,
+                          setValueAs: (value) => (isNaN(value) ? 0 : value)
+                        })}
+                        placeholder="Minutos"
+                        className={`rounded ${
+                          darkMode ? 'bg-gray-600' : 'bg-gray-300'
+                        } w-1/2 select-none px-2 py-[0.35rem] outline-none`}
+                      />
+                    </div>
                     <span className="text-red-600">
-                      {errors.duration?.message}
+                      {errors.duration?.message || errors.minute?.message}
                     </span>
                   </div>
                 </div>
