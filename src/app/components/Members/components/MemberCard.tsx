@@ -114,7 +114,7 @@ export default function MemberCard({
         }
       >
         <IconText
-          text={Math.round(millisecondsToHours(member.hoursWorked || 0) * 100) / 100 + ' horas '}
+          text={millisecondsToHours(member.hoursWorked || 0)+ ' horas '}
           icon={Clock2}
         />
         <Button

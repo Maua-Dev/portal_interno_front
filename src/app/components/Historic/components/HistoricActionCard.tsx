@@ -44,7 +44,7 @@ export default function HistoricActionCard({
   const title = `${action.projectCode}: ${action?.title} `
 
   const endDateFormated = timeStampToDateDDMMYY(action.endDate)
-  const durationFormated = Math.round(millisecondsToHours(action.duration)*100)/100
+  const durationFormated = millisecondsToHours(action.duration)
   const stackStringArray = stackFormatter(action.stackTags)
 
   const handleSettingsPopUp = (event: React.MouseEvent<HTMLButtonElement>) => {
