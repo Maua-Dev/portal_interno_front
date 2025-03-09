@@ -51,8 +51,9 @@ const actionSchema = z.object({
       required_error: 'Duração é obrigatória',
       invalid_type_error: 'Esse campo deve ser um número'
     })
-    .min(0)
+    .min(0, { message: 'Minutos não podem ser menores que 0' })
     .max(59, { message: 'Minutos não podem ser maiores que 59' }),
+
   associatedMembersUserIds: z.array(z.string()),
   actionTypeTag: z.nativeEnum(ACTION_TYPE, {
     errorMap: (issue) => {
@@ -133,6 +134,8 @@ export default function ActionModal({ action }: { action?: Action }) {
     handleSubmit,
     getValues,
     setValue,
+    setError,
+    clearErrors,
     formState: { errors }
   } = useForm<ActionModalType>({
     resolver: zodResolver(actionSchema),
@@ -143,9 +146,7 @@ export default function ActionModal({ action }: { action?: Action }) {
       storyId: action?.storyId ? action?.storyId.toString() : '',
       startDate: action?.startDate ? timeStampToDate(action!.startDate) : '',
       endDate: action?.endDate ? timeStampToDate(action!.endDate) : '',
-      duration: action?.duration
-        ? millisecondsToHours(action!.duration)
-        : undefined,
+      duration: action?.duration ? millisecondsToHours(action!.duration) : 0,
       hour: action?.duration
         ? Math.floor(millisecondsToHours(action!.duration))
         : 0,
@@ -172,7 +173,26 @@ export default function ActionModal({ action }: { action?: Action }) {
     const duration = hour + minute / 60
     setValue('duration', duration)
     console.log('duration: ', getValues('duration'))
+    if (duration <= 0) {
+      setError('duration', {
+        type: 'manual',
+        message: 'Duração deve ser maior que zero'
+      })
+    } else {
+      clearErrors('duration')
+    }
   }, [getValues('hour'), getValues('minute')])
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    field: 'hour' | 'minute'
+  ) => {
+    const value = e.target.value
+    if (value.length > 2) {
+      e.target.value = value.slice(0, 2)
+    }
+    setValue(field, parseInt(e.target.value) || 0)
+  }
+
   return (
     <>
       <div
@@ -321,6 +341,7 @@ export default function ActionModal({ action }: { action?: Action }) {
                           setValueAs: (value) => (isNaN(value) ? 0 : value)
                         })}
                         placeholder="Horas"
+                        onChange={(e) => handleInputChange(e, 'hour')}
                         className={`rounded ${
                           darkMode ? 'bg-gray-600' : 'bg-gray-300'
                         } w-1/2 select-none px-2 py-[0.35rem] outline-none`}
@@ -333,6 +354,7 @@ export default function ActionModal({ action }: { action?: Action }) {
                           setValueAs: (value) => (isNaN(value) ? 0 : value)
                         })}
                         placeholder="Minutos"
+                        onChange={(e) => handleInputChange(e, 'minute')}
                         className={`rounded ${
                           darkMode ? 'bg-gray-600' : 'bg-gray-300'
                         } w-1/2 select-none px-2 py-[0.35rem] outline-none`}
