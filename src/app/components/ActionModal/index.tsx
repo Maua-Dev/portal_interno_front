@@ -18,6 +18,7 @@ import { useModal } from '../../hooks/useModal'
 import { useAction } from '../../hooks/useAction'
 import { useProject } from '../../hooks/useProject'
 import { useActionModal } from './hooks/useActionModal'
+import { parse } from 'path'
 
 const actionSchema = z.object({
   title: z.string().min(1, { message: 'Título é obrigatório' }),
@@ -42,7 +43,7 @@ const actionSchema = z.object({
       required_error: 'Duração é obrigatória',
       invalid_type_error: 'Esse campo deve ser um número'
     })
-    .positive({ message: 'Duração deve ser um número maior que zero' })
+    .positive({ message: 'Duração deve ser maior que zero' })
     .gte(0.1, { message: 'Duração é obrigatória' })
     .finite(),
   hour: z.string().refine((value) => /^\d{1,2}$/.test(value), {
@@ -153,21 +154,21 @@ export default function ActionModal({ action }: { action?: Action }) {
       storyId: action?.storyId ? action?.storyId.toString() : '',
       startDate: action?.startDate ? timeStampToDate(action!.startDate) : '',
       endDate: action?.endDate ? timeStampToDate(action!.endDate) : '',
-      duration: action?.duration ? millisecondsToHours(action!.duration) : 0,
+      duration: action?.duration ? millisecondsToHours(action!.duration) : undefined,
       hour: action?.duration
         ? Math.floor(millisecondsToHours(action!.duration))
-            .toString()
-            .padStart(2, '0')
-        : '00',
+          .toString()
+          .padStart(2, '0')
+        : undefined,
       minute: action?.duration
         ? Math.round(
-            (millisecondsToHours(action!.duration) -
-              Math.floor(millisecondsToHours(action!.duration))) *
-              60
-          )
-            .toString()
-            .padStart(2, '0')
-        : '00',
+          (millisecondsToHours(action!.duration) -
+            Math.floor(millisecondsToHours(action!.duration))) *
+          60
+        )
+          .toString()
+          .padStart(2, '0')
+        : undefined,
       associatedMembersUserIds: action?.associatedMembersUserIds || [],
       actionTypeTag: action?.actionTypeTag || undefined,
       stackTags: action?.stackTags || [],
@@ -175,32 +176,44 @@ export default function ActionModal({ action }: { action?: Action }) {
     },
     mode: 'onBlur'
   })
-
   useEffect(() => {
-    const hour = parseInt(getValues('hour') || '0', 10)
-    const minute = parseInt(getValues('minute') || '0', 10)
+    const hourString = getValues('hour') || '0';
+    const minuteString = getValues('minute') || '0';
 
-    const duration = hour + minute / 60
-    setValue('duration', duration)
+    const hour = parseInt(hourString, 10);
+    const minute = parseInt(minuteString, 10);
 
+    const duration = hour + minute / 60;
+    setValue('duration', duration);
+    console.log(hour, minute);
+    console.log(duration);
+
+
+    // Validação dos minutos
     if (minute < 0 || minute > 59) {
       setError('minute', {
         type: 'manual',
-        message: 'Minutos devem estar entre 0 e 59'
-      })
+        message: 'Minutos devem estar entre 0 e 59',
+      });
     } else {
-      clearErrors('minute')
+      clearErrors('minute');
     }
 
-    if (duration <= 0) {
-      setError('duration', {
-        type: 'manual',
-        message: 'Duração deve ser maior que zero'
-      })
+    // Só valida a duração se pelo menos um dos campos (hour ou minute) tiver valor
+    if (hourString !== '0' || minuteString !== '0') {
+      if (duration <= 0) {
+        setError('duration', {
+          type: 'manual',
+          message: 'Duração deve ser maior que zero',
+        });
+      } else {
+        clearErrors('duration');
+      }
     } else {
-      clearErrors('duration')
+      // Se ambos os campos estiverem vazios, limpa o erro de duração
+      clearErrors('duration');
     }
-  }, [getValues('hour'), getValues('minute')])
+  }, [getValues('hour'), getValues('minute')]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -225,17 +238,14 @@ export default function ActionModal({ action }: { action?: Action }) {
   return (
     <>
       <div
-        className={`flex w-full transform items-center justify-center overflow-x-hidden overflow-y-hidden py-24 transition-all duration-500 sm:pt-24 lg:h-dvh lg:py-12 lg:pt-24 ${
-          isUpdateModal
-            ? 'absolute left-0 top-0 z-50 h-[100rem] bg-black bg-opacity-80 sm:h-[85rem] lg:pt-0'
-            : 'h-full lg:pl-14'
-        } ${
-          isUpdateModal
+        className={`flex w-full transform items-center justify-center overflow-x-hidden overflow-y-hidden py-24 transition-all duration-500 sm:pt-24 lg:h-dvh lg:py-12 lg:pt-24 ${isUpdateModal
+          ? 'absolute left-0 top-0 z-50 h-[100rem] bg-black bg-opacity-80 sm:h-[85rem] lg:pt-0'
+          : 'h-full lg:pl-14'
+          } ${isUpdateModal
             ? `${fade ? 'opacity-100' : 'opacity-0'}`
-            : `${
-                fade ? 'translate-x-0 opacity-100' : 'translate-x-24 opacity-0'
-              }`
-        }
+            : `${fade ? 'translate-x-0 opacity-100' : 'translate-x-24 opacity-0'
+            }`
+          }
         `}
       >
         <div
@@ -243,9 +253,8 @@ export default function ActionModal({ action }: { action?: Action }) {
           onClick={isUpdateModal ? handleConfirmCloseModal : undefined}
         ></div>
         <div
-          className={`z-[70] h-auto w-4/5 rounded-2xl transition-all duration-200 ${
-            darkMode ? 'bg-skin-secundary text-white' : 'bg-white'
-          }`}
+          className={`z-[70] h-auto w-4/5 rounded-2xl transition-all duration-200 ${darkMode ? 'bg-skin-secundary text-white' : 'bg-white'
+            }`}
         >
           <form
             onSubmit={
@@ -262,9 +271,8 @@ export default function ActionModal({ action }: { action?: Action }) {
                 <input
                   type="text"
                   {...register('title')}
-                  className={`rounded ${
-                    darkMode ? 'bg-gray-600' : 'bg-gray-300'
-                  } px-2 py-1 outline-none`}
+                  className={`rounded ${darkMode ? 'bg-gray-600' : 'bg-gray-300'
+                    } px-2 py-1 outline-none`}
                 />
                 <span className="text-red-600">{errors.title?.message}</span>
               </div>
@@ -275,9 +283,8 @@ export default function ActionModal({ action }: { action?: Action }) {
                     <p className="text-lg">Projeto</p>
                     <select
                       {...register('projectCode')}
-                      className={`rounded ${
-                        darkMode ? 'bg-gray-600' : 'bg-gray-300'
-                      } px-2 py-[0.375rem] outline-none`}
+                      className={`rounded ${darkMode ? 'bg-gray-600' : 'bg-gray-300'
+                        } px-2 py-[0.375rem] outline-none`}
                       value={action?.projectCode}
                     >
                       <option value="">Selecione uma opção</option>
@@ -298,9 +305,8 @@ export default function ActionModal({ action }: { action?: Action }) {
                     <input
                       type="text"
                       {...register('storyId')}
-                      className={`rounded ${
-                        darkMode ? 'bg-gray-600' : 'bg-gray-300'
-                      } px-2 py-1 outline-none`}
+                      className={`rounded ${darkMode ? 'bg-gray-600' : 'bg-gray-300'
+                        } px-2 py-1 outline-none`}
                     />
                     <span className="text-red-600">
                       {errors.storyId?.message}
@@ -312,9 +318,8 @@ export default function ActionModal({ action }: { action?: Action }) {
                     <p className="text-lg">Tag</p>
                     <select
                       {...register('actionTypeTag')}
-                      className={`rounded ${
-                        darkMode ? 'bg-gray-600' : 'bg-gray-300'
-                      } px-2 py-[0.375rem] outline-none`}
+                      className={`rounded ${darkMode ? 'bg-gray-600' : 'bg-gray-300'
+                        } px-2 py-[0.375rem] outline-none`}
                     >
                       <option value="">Selecione uma opção</option>
                       {actionTypes.map((actionType, index) => (
@@ -335,9 +340,8 @@ export default function ActionModal({ action }: { action?: Action }) {
                       type="datetime-local"
                       {...register('startDate')}
                       placeholder="DD/MM/AAAA"
-                      className={`rounded ${
-                        darkMode ? 'bg-gray-600' : 'bg-gray-300'
-                      } px-2 py-1 outline-none`}
+                      className={`rounded ${darkMode ? 'bg-gray-600' : 'bg-gray-300'
+                        } px-2 py-1 outline-none`}
                     />
                     <span className="text-red-600">
                       {errors.startDate?.message}
@@ -350,9 +354,8 @@ export default function ActionModal({ action }: { action?: Action }) {
                     <input
                       type="datetime-local"
                       {...register('endDate')}
-                      className={`rounded ${
-                        darkMode ? 'bg-gray-600' : 'bg-gray-300'
-                      } px-2 py-1 outline-none`}
+                      className={`rounded ${darkMode ? 'bg-gray-600' : 'bg-gray-300'
+                        } px-2 py-1 outline-none`}
                     />
                     <span className="text-red-600">
                       {errors.endDate?.message}
@@ -366,25 +369,23 @@ export default function ActionModal({ action }: { action?: Action }) {
                       <input
                         type="text"
                         {...register('hour')}
-                        placeholder="Horas"
+                        placeholder="00"
                         onChange={(e) => handleInputChange(e, 'hour')}
-                        className={`rounded ${
-                          darkMode ? 'bg-gray-600' : 'bg-gray-300'
-                        } w-1/2 select-none px-2 py-[0.35rem] outline-none`}
+                        className={`rounded ${darkMode ? 'bg-gray-600' : 'bg-gray-300'
+                          } w-1/2 select-none px-2 py-[0.35rem] outline-none`}
                       />
                       <span> : </span>
                       <input
                         type="text"
                         {...register('minute')}
-                        placeholder="Minutos"
+                        placeholder="00"
                         onChange={(e) => handleInputChange(e, 'minute')}
-                        className={`rounded ${
-                          darkMode ? 'bg-gray-600' : 'bg-gray-300'
-                        } w-1/2 select-none px-2 py-[0.35rem] outline-none`}
+                        className={`rounded ${darkMode ? 'bg-gray-600' : 'bg-gray-300'
+                          } w-1/2 select-none px-2 py-[0.35rem] outline-none`}
                       />
                     </div>
                     <span className="text-red-600">
-                      {errors.duration?.message || errors.minute?.message}
+                      {errors.duration?.message || errors.minute?.message || errors.hour?.message}
                     </span>
                   </div>
                 </div>
@@ -394,9 +395,8 @@ export default function ActionModal({ action }: { action?: Action }) {
                 <p className="text-lg">Descrição</p>
                 <textarea
                   {...register('description')}
-                  className={`h-full resize-none rounded ${
-                    darkMode ? 'bg-gray-600' : 'bg-gray-300'
-                  } px-2 py-1 outline-none`}
+                  className={`h-full resize-none rounded ${darkMode ? 'bg-gray-600' : 'bg-gray-300'
+                    } px-2 py-1 outline-none`}
                 ></textarea>
                 <span className="text-red-600">
                   {errors.description?.message}
