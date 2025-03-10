@@ -45,14 +45,21 @@ const actionSchema = z.object({
     .positive({ message: 'Duração deve ser um número maior que zero' })
     .gte(0.1, { message: 'Duração é obrigatória' })
     .finite(),
-  hour: z.number(),
+  hour: z.string().refine((value) => /^\d{1,2}$/.test(value), {
+    message: 'Horas devem ser um número entre 0 e 99'
+  }),
   minute: z
-    .number({
-      required_error: 'Duração é obrigatória',
-      invalid_type_error: 'Esse campo deve ser um número'
+    .string()
+    .refine((value) => /^\d{1,2}$/.test(value), {
+      message: 'Minutos devem ser um número entre 0 e 59'
     })
-    .min(0, { message: 'Minutos não podem ser menores que 0' })
-    .max(59, { message: 'Minutos não podem ser maiores que 59' }),
+    .transform((value) => {
+      const num = Number(value)
+      return num < 10 ? `0${num}` : `${num}`
+    })
+    .refine((value) => Number(value) >= 0 && Number(value) <= 59, {
+      message: 'Minutos devem estar entre 0 e 59'
+    }),
 
   associatedMembersUserIds: z.array(z.string()),
   actionTypeTag: z.nativeEnum(ACTION_TYPE, {
@@ -149,14 +156,18 @@ export default function ActionModal({ action }: { action?: Action }) {
       duration: action?.duration ? millisecondsToHours(action!.duration) : 0,
       hour: action?.duration
         ? Math.floor(millisecondsToHours(action!.duration))
-        : 0,
+            .toString()
+            .padStart(2, '0')
+        : '00',
       minute: action?.duration
         ? Math.round(
             (millisecondsToHours(action!.duration) -
               Math.floor(millisecondsToHours(action!.duration))) *
               60
           )
-        : 0,
+            .toString()
+            .padStart(2, '0')
+        : '00',
       associatedMembersUserIds: action?.associatedMembersUserIds || [],
       actionTypeTag: action?.actionTypeTag || undefined,
       stackTags: action?.stackTags || [],
@@ -166,13 +177,21 @@ export default function ActionModal({ action }: { action?: Action }) {
   })
 
   useEffect(() => {
-    const hour = getValues('hour') || 0
-    const minute = getValues('minute') || 0
-    console.log({ hour, minute })
+    const hour = parseInt(getValues('hour') || '0', 10)
+    const minute = parseInt(getValues('minute') || '0', 10)
 
     const duration = hour + minute / 60
     setValue('duration', duration)
-    console.log('duration: ', getValues('duration'))
+
+    if (minute < 0 || minute > 59) {
+      setError('minute', {
+        type: 'manual',
+        message: 'Minutos devem estar entre 0 e 59'
+      })
+    } else {
+      clearErrors('minute')
+    }
+
     if (duration <= 0) {
       setError('duration', {
         type: 'manual',
@@ -182,15 +201,25 @@ export default function ActionModal({ action }: { action?: Action }) {
       clearErrors('duration')
     }
   }, [getValues('hour'), getValues('minute')])
+
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     field: 'hour' | 'minute'
   ) => {
-    const value = e.target.value
+    let value = e.target.value
+    value = value.replace(/\D/g, '')
+
+    value = value.replace(/^0+(\d)/, '$1')
+
     if (value.length > 2) {
-      e.target.value = value.slice(0, 2)
+      value = value.slice(0, 2)
     }
-    setValue(field, parseInt(e.target.value) || 0)
+
+    if (value.length === 1) {
+      value = `0${value}`
+    }
+
+    setValue(field, value)
   }
 
   return (
@@ -335,11 +364,8 @@ export default function ActionModal({ action }: { action?: Action }) {
                     <p className="text-lg">Duração da atividade</p>
                     <div className="flex gap-2">
                       <input
-                        type="number"
-                        {...register('hour', {
-                          valueAsNumber: true,
-                          setValueAs: (value) => (isNaN(value) ? 0 : value)
-                        })}
+                        type="text"
+                        {...register('hour')}
                         placeholder="Horas"
                         onChange={(e) => handleInputChange(e, 'hour')}
                         className={`rounded ${
@@ -348,11 +374,8 @@ export default function ActionModal({ action }: { action?: Action }) {
                       />
                       <span> : </span>
                       <input
-                        type="number"
-                        {...register('minute', {
-                          valueAsNumber: true,
-                          setValueAs: (value) => (isNaN(value) ? 0 : value)
-                        })}
+                        type="text"
+                        {...register('minute')}
                         placeholder="Minutos"
                         onChange={(e) => handleInputChange(e, 'minute')}
                         className={`rounded ${
