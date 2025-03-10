@@ -287,7 +287,7 @@ export default function ActionModal({ action }: { action?: Action }) {
                   <div className="flex flex-col gap-2">
                     <p className="text-lg">Duração da atividade</p>
                     <input
-                      type="text"
+                      type="number"
                       {...register('duration', {
                         valueAsNumber: true
                       })}
