@@ -45,21 +45,8 @@ const actionSchema = z.object({
     .positive({ message: 'Duração deve ser maior que zero' })
     .gte(0.1, { message: 'Duração é obrigatória' })
     .finite(),
-  hour: z.string().refine((value) => /^\d{1,2}$/.test(value), {
-    message: 'Horas devem ser um número entre 0 e 99'
-  }),
-  minute: z
-    .string()
-    .refine((value) => /^\d{1,2}$/.test(value), {
-      message: 'Minutos devem ser um número entre 0 e 59'
-    })
-    .transform((value) => {
-      const num = Number(value)
-      return num < 10 ? `0${num}` : `${num}`
-    })
-    .refine((value) => Number(value) >= 0 && Number(value) <= 59, {
-      message: 'Minutos devem estar entre 0 e 59'
-    }),
+  hour: z.string(),
+  minute: z.string(),
 
   associatedMembersUserIds: z.array(z.string()),
   actionTypeTag: z.nativeEnum(ACTION_TYPE, {
@@ -141,8 +128,7 @@ export default function ActionModal({ action }: { action?: Action }) {
     handleSubmit,
     getValues,
     setValue,
-    setError,
-    clearErrors,
+
     formState: { errors }
   } = useForm<ActionModalType>({
     resolver: zodResolver(actionSchema),
@@ -157,18 +143,14 @@ export default function ActionModal({ action }: { action?: Action }) {
         ? millisecondsToHours(action!.duration)
         : undefined,
       hour: action?.duration
-        ? Math.floor(millisecondsToHours(action!.duration))
-            .toString()
-            .padStart(2, '0')
+        ? Math.floor(millisecondsToHours(action!.duration)).toString()
         : undefined,
       minute: action?.duration
         ? Math.round(
             (millisecondsToHours(action!.duration) -
               Math.floor(millisecondsToHours(action!.duration))) *
               60
-          )
-            .toString()
-            .padStart(2, '0')
+          ).toString()
         : undefined,
       associatedMembersUserIds: action?.associatedMembersUserIds || [],
       actionTypeTag: action?.actionTypeTag || undefined,
@@ -177,63 +159,25 @@ export default function ActionModal({ action }: { action?: Action }) {
     },
     mode: 'onBlur'
   })
+
+  const [isMinutes, setIsMinutes] = useState(false)
+
   useEffect(() => {
     const hourString = getValues('hour') || '0'
     const minuteString = getValues('minute') || '0'
 
-    const hour = parseInt(hourString, 10)
-    const minute = parseInt(minuteString, 10)
+    const hour = parseFloat(hourString)
+    const minute = parseFloat(minuteString)
 
-    const duration = hour + minute / 60
-    setValue('duration', duration)
-    console.log(hour, minute)
-    console.log(duration)
-
-    // Validação dos minutos
-    if (minute < 0 || minute > 59) {
-      setError('minute', {
-        type: 'manual',
-        message: 'Minutos devem estar entre 0 e 59'
-      })
+    if (isMinutes) {
+      setValue('duration', minute / 60)
+      console.log('minutes', minute)
     } else {
-      clearErrors('minute')
+      setValue('duration', hour)
+      console.log('hour', hour)
     }
-
-    // Só valida a duração se pelo menos um dos campos (hour ou minute) tiver valor
-    if (hourString !== '0' || minuteString !== '0') {
-      if (duration <= 0) {
-        setError('duration', {
-          type: 'manual',
-          message: 'Duração deve ser maior que zero'
-        })
-      } else {
-        clearErrors('duration')
-      }
-    } else {
-      // Se ambos os campos estiverem vazios, limpa o erro de duração
-      clearErrors('duration')
-    }
+    console.log('duration', getValues('duration'))
   }, [getValues('hour'), getValues('minute')])
-
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    field: 'hour' | 'minute'
-  ) => {
-    let value = e.target.value
-    value = value.replace(/\D/g, '')
-
-    value = value.replace(/^0+(\d)/, '$1')
-
-    if (value.length > 2) {
-      value = value.slice(0, 2)
-    }
-
-    if (value.length === 1) {
-      value = `0${value}`
-    }
-
-    setValue(field, value)
-  }
 
   return (
     <>
@@ -375,32 +319,38 @@ export default function ActionModal({ action }: { action?: Action }) {
                   {/* Duration */}
                   <div className="flex flex-col gap-2">
                     <p className="text-lg">Duração da atividade</p>
-                    <div className="flex gap-2">
+                    <div className="flex w-full gap-2">
                       <input
                         type="text"
                         {...register('hour')}
-                        placeholder="00"
-                        onChange={(e) => handleInputChange(e, 'hour')}
+                        placeholder="Em horas"
                         className={`rounded ${
                           darkMode ? 'bg-gray-600' : 'bg-gray-300'
-                        } w-1/2 select-none px-2 py-[0.35rem] outline-none`}
+                        } ${
+                          isMinutes ? 'hidden' : 'visible'
+                        } select-none px-2 py-[0.35rem] outline-none`}
                       />
-                      <span> : </span>
                       <input
                         type="text"
                         {...register('minute')}
-                        placeholder="00"
-                        onChange={(e) => handleInputChange(e, 'minute')}
+                        placeholder="Em minutos"
                         className={`rounded ${
                           darkMode ? 'bg-gray-600' : 'bg-gray-300'
-                        } w-1/2 select-none px-2 py-[0.35rem] outline-none`}
+                        } ${
+                          isMinutes ? 'visible' : 'hidden'
+                        } select-none px-2 py-[0.35rem] outline-none`}
                       />
                     </div>
                     <span className="text-red-600">
-                      {errors.duration?.message ||
-                        errors.minute?.message ||
-                        errors.hour?.message}
+                      {errors.duration?.message}
                     </span>
+                    <div className="flex gap-2">
+                      <input
+                        type="checkbox"
+                        onChange={() => setIsMinutes(!isMinutes)}
+                      />
+                      Em minutos
+                    </div>
                   </div>
                 </div>
               </div>
