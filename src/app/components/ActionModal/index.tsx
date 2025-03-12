@@ -45,8 +45,7 @@ const actionSchema = z.object({
     .positive({ message: 'Duração deve ser maior que zero' })
     .gte(0.1, { message: 'Duração é obrigatória' })
     .finite(),
-  hour: z.string(),
-  minute: z.string(),
+  durationString: z.string(),
 
   associatedMembersUserIds: z.array(z.string()),
   actionTypeTag: z.nativeEnum(ACTION_TYPE, {
@@ -142,16 +141,6 @@ export default function ActionModal({ action }: { action?: Action }) {
       duration: action?.duration
         ? millisecondsToHours(action!.duration)
         : undefined,
-      hour: action?.duration
-        ? Math.floor(millisecondsToHours(action!.duration)).toString()
-        : undefined,
-      minute: action?.duration
-        ? Math.round(
-            (millisecondsToHours(action!.duration) -
-              Math.floor(millisecondsToHours(action!.duration))) *
-              60
-          ).toString()
-        : undefined,
       associatedMembersUserIds: action?.associatedMembersUserIds || [],
       actionTypeTag: action?.actionTypeTag || undefined,
       stackTags: action?.stackTags || [],
@@ -162,22 +151,20 @@ export default function ActionModal({ action }: { action?: Action }) {
 
   const [isMinutes, setIsMinutes] = useState(false)
 
-  useEffect(() => {
-    const hourString = getValues('hour') || '0'
-    const minuteString = getValues('minute') || '0'
+  const handleChangeIsMinutes = () => {
+    setIsMinutes(!isMinutes)
+  }
 
-    const hour = parseFloat(hourString)
-    const minute = parseFloat(minuteString)
+  useEffect(() => {
+    const duration = parseFloat(getValues('durationString') || '0')
 
     if (isMinutes) {
-      setValue('duration', minute / 60)
-      console.log('minutes', minute)
+      setValue('duration', duration / 60)
     } else {
-      setValue('duration', hour)
-      console.log('hour', hour)
+      setValue('duration', duration)
     }
     console.log('duration', getValues('duration'))
-  }, [getValues('hour'), getValues('minute')])
+  }, [getValues('durationString'), getValues('duration')])
 
   return (
     <>
@@ -319,36 +306,19 @@ export default function ActionModal({ action }: { action?: Action }) {
                   {/* Duration */}
                   <div className="flex flex-col gap-2">
                     <p className="text-lg">Duração da atividade</p>
-                    <div className="flex w-full gap-2">
-                      <input
-                        type="text"
-                        {...register('hour')}
-                        placeholder="Em horas"
-                        className={`rounded ${
-                          darkMode ? 'bg-gray-600' : 'bg-gray-300'
-                        } ${
-                          isMinutes ? 'hidden' : 'visible'
-                        } select-none px-2 py-[0.35rem] outline-none`}
-                      />
-                      <input
-                        type="text"
-                        {...register('minute')}
-                        placeholder="Em minutos"
-                        className={`rounded ${
-                          darkMode ? 'bg-gray-600' : 'bg-gray-300'
-                        } ${
-                          isMinutes ? 'visible' : 'hidden'
-                        } select-none px-2 py-[0.35rem] outline-none`}
-                      />
-                    </div>
+                    <input
+                      type="text"
+                      {...register('durationString')}
+                      placeholder={`${isMinutes ? 'Em minutos' : 'Em horas'}`}
+                      className={`rounded ${
+                        darkMode ? 'bg-gray-600' : 'bg-gray-300'
+                      } select-none px-2 py-[0.35rem] outline-none`}
+                    />
                     <span className="text-red-600">
                       {errors.duration?.message}
                     </span>
                     <div className="flex gap-2">
-                      <input
-                        type="checkbox"
-                        onChange={() => setIsMinutes(!isMinutes)}
-                      />
+                      <input type="checkbox" onChange={handleChangeIsMinutes} />
                       Em minutos
                     </div>
                   </div>
