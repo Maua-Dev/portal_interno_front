@@ -74,8 +74,7 @@ export default function MemberCard({
       }}
       variant="lg"
       className={twMerge(
-        `static flex h-fit w-full cursor-pointer flex-row items-center justify-between p-3 shadow-sm shadow-gray-500 brightness-95 duration-150 ease-in hover:brightness-100 sm:gap-0 md:p-4 ${
-          isHovering ? 'z-30' : ''
+        `static flex h-fit w-full cursor-pointer flex-row items-center justify-between p-3 shadow-sm shadow-gray-500 brightness-95 duration-150 ease-in hover:brightness-100 sm:gap-0 md:p-4 ${isHovering ? 'z-30' : ''
         }`,
         props.className
       )}
@@ -115,7 +114,7 @@ export default function MemberCard({
         }
       >
         <IconText
-          text={millisecondsToHours(member.hoursWorked || 0) + ' horas '}
+          text={millisecondsToHours(member.hoursWorked || 0)+ ' horas '}
           icon={Clock2}
         />
         <Button

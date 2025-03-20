@@ -5,6 +5,7 @@ import { raFormatterFromJson } from '../utils/functions/formatters'
 import { Avatar } from './Avatar'
 import { Separator } from './Separator'
 import { FaRegClock } from 'react-icons/fa6'
+import { millisecondsToHours } from '../utils/functions/timeStamp'
 
 export function ProfileModal() {
   const { darkMode } = useDarkMode()
@@ -95,7 +96,7 @@ export function ProfileModal() {
           <div className="flex h-full items-center justify-center gap-4 text-3xl md:text-4xl">
             <FaRegClock />
             <p>
-              {member?.hoursWorked ? member?.hoursWorked / 1000 / 60 / 60 : 0}{' '}
+              {millisecondsToHours(member?.hoursWorked || 0)}{' '}
               hora
               {member?.hoursWorked && member?.hoursWorked / 1000 / 60 / 60 > 1
                 ? 's'
