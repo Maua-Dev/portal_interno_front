@@ -21,6 +21,7 @@ export const exportToCSV = (
           2,
           7
         )}-${member.ra.substring(7)}`,
+        Area: member.stack,
         Horas_trabalhadas: member.hoursWorked
           ? member.hoursWorked / 1000 / 60 / 60
           : 0
@@ -32,6 +33,7 @@ export const exportToCSV = (
         2,
         7
       )}-${currentMember.ra.substring(7)}`,
+      Area: currentMember.stack,
       Horas_trabalhadas: currentMember.hoursWorked
         ? currentMember.hoursWorked / 1000 / 60 / 60
         : 0
