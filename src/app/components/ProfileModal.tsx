@@ -13,7 +13,7 @@ export function ProfileModal() {
   const [fade, setFade] = useState(false)
 
   useEffect(() => {
-    console.log(member)
+    // console.log(member)
 
     setTimeout(() => {
       setFade(true)
@@ -96,8 +96,7 @@ export function ProfileModal() {
           <div className="flex h-full items-center justify-center gap-4 text-3xl md:text-4xl">
             <FaRegClock />
             <p>
-              {millisecondsToHours(member?.hoursWorked || 0)}{' '}
-              hora
+              {millisecondsToHours(member?.hoursWorked || 0)} hora
               {member?.hoursWorked && member?.hoursWorked / 1000 / 60 / 60 > 1
                 ? 's'
                 : ''}
