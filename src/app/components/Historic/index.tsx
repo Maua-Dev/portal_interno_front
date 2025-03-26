@@ -175,7 +175,17 @@ export default function Historic() {
                   : null
               }`}
           >
-            {_lastEvaluatedKey === null ? 'Sem Mais Itens' : 'Ver Mais'}
+            {_lastEvaluatedKey === null ? (
+              <p
+                onClick={() => {
+                  window.location.href = 'https://aula.devmaua.com'
+                }}
+              >
+                Sem Mais Itens
+              </p>
+            ) : (
+              'Ver Mais'
+            )}
           </h1>
         </div>
       ) : localHistory ? (
