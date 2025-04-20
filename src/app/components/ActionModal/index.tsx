@@ -82,13 +82,26 @@ export default function ActionModal({ action }: { action?: Action }) {
     isUpdateModal = true
   }
 
+  const loadProjects = async () => {
+    await handleProjects()
+  }
+
   // Fade animation on mount
   useEffect(() => {
-    if (action) {
-      setCurrentMembers(action?.associatedMembersUserIds || [])
-      setCurrentStackTags(action?.stackTags || [])
+    const initialize = async () => {
+      await loadProjects()
+
+      if (action) {
+        setCurrentMembers(action.associatedMembersUserIds || [])
+        setCurrentStackTags(action.stackTags || [])
+        setValue('projectCode', action.projectCode)
+      }
+
+      setTimeout(() => setFade(true))
     }
-    handleProjects()
+
+    initialize()
+
     setTimeout(() => {
       setFade(true)
     })
@@ -217,7 +230,7 @@ export default function ActionModal({ action }: { action?: Action }) {
                       className={`rounded ${
                         darkMode ? 'bg-gray-600' : 'bg-gray-300'
                       } px-2 py-[0.375rem] outline-none`}
-                      value={action?.projectCode}
+                      defaultValue={action?.projectCode}
                     >
                       <option value="">Selecione uma opção</option>
                       {projects.map((project, index) => (
