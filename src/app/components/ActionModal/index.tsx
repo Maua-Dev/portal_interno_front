@@ -8,7 +8,7 @@ import {
 import { useForm } from 'react-hook-form'
 import { STACK } from '../../../@clean/shared/domain/enums/stack_enum'
 import {
-  millisecondsToHours,
+  millisecondsToMinutes,
   timeStampToDate
 } from '../../utils/functions/timeStamp'
 import { useEffect, useState } from 'react'
@@ -151,7 +151,7 @@ export default function ActionModal({ action }: { action?: Action }) {
       startDate: action?.startDate ? timeStampToDate(action!.startDate) : '',
       endDate: action?.endDate ? timeStampToDate(action!.endDate) : '',
       duration: action?.duration
-        ? millisecondsToHours(action!.duration)
+        ? millisecondsToMinutes(action!.duration)
         : undefined,
       associatedMembersUserIds: action?.associatedMembersUserIds || [],
       actionTypeTag: action?.actionTypeTag || undefined,
