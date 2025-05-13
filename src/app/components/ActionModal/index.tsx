@@ -57,7 +57,7 @@ const actionSchema = z.object({
   }),
   stackTags: z
     .array(z.nativeEnum(STACK))
-    .min(1, { message: 'Action type tag é obrigatória' })
+    .min(1, { message: 'Área é obrigatória' })
 })
 
 export type ActionModalType = z.infer<typeof actionSchema>
@@ -362,6 +362,7 @@ export default function ActionModal({ action }: { action?: Action }) {
                   getValues={getValues}
                 />
               </div>
+              <span className="text-red-600">{errors.stackTags?.message}</span>
               <div className="flex w-full flex-col items-center gap-8 sm:flex-row lg:flex-col">
                 <button
                   type="submit"
