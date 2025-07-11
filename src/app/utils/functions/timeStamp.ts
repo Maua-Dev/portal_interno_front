@@ -33,7 +33,11 @@ export function timeStampToDateDDMMYY(timestamp: number): string {
 }
 
 export function millisecondsToHours(milliseconds: number): number {
-  return Number((milliseconds / (3.6 * Math.pow(10, 6))).toFixed(2))
+  return Number((milliseconds / (1000 * 60 * 60)).toFixed(2))
+}
+
+export function millisecondsToMinutes(milliseconds: number): number {
+  return Number((milliseconds / (1000 * 60)).toFixed(2))
 }
 
 export function hoursToMilliseconds(hours: number): number {
