@@ -88,9 +88,9 @@ export default function Login() {
   }, [navigate])
 
   const handleRedirect = () => {
-    const redirectUri = `https://${authDomain}/login`
     const clientId = import.meta.env.VITE_USERPOOL_CLIENT_ID
     const authDomain = import.meta.env.VITE_AUTH_DOMAIN
+    const redirectUri = `https://${authDomain}/login`
     
     const authEndpoint = `https://${authDomain}/login`
     
