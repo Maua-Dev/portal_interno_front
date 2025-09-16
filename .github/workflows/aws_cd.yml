@@ -63,7 +63,7 @@ jobs:
           VITE_MSS_API_URL: ${{ vars.MSS_ACTION }}
           VITE_REFRESH_TOKEN_URL: ${{ vars.VITE_REFRESH_TOKEN_URL }}
           VITE_BASIC_AUTH_USERPOOL: ${{ secrets.BASIC_AUTH_USERPOOL }}
-          VITE_AUTH_DOMAIN: ${{ vars.VITE_AUTH_DOMAIN }}
+          VITE_AUTH_DOMAIN: ${{ vars.AUTH_DOMAIN }}
       - name: Setup envs
         run: |
           echo AWS_REGION=${{ vars.AWS_REGION }} >> $GITHUB_ENV
