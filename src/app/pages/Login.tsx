@@ -28,7 +28,7 @@ export default function Login() {
         new URLSearchParams({
           grant_type: 'authorization_code',
           code: code,
-          redirect_uri: `https://${window.location.hostname}`
+          redirect_uri: ${window.location.origin}
         }),
         {
           headers: {
@@ -58,6 +58,24 @@ export default function Login() {
     }
   }
 
+  // Handle authorization code from URL
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search)
+    const code = urlParams.get('code')
+    
+    if (code) {
+      // Clear the URL parameters
+      window.history.replaceState({}, document.title, window.location.pathname)
+      exchangeCodeForTokens(code)
+      return
+    }
+
+    // Check if there's already a token in localStorage
+    const token = localStorage.getItem('idToken')
+    if (token) {
+      navigate('/')
+    }
+  }, [navigate])
 
   const handleRedirect = () => {
     const redirectUri = `${window.location.origin}`
@@ -69,24 +87,6 @@ export default function Login() {
     
 
     authEndpoint = `https://${authDomain}/login`
-    const urlParams = new URLSearchParams(window.location.search)
-    const code = urlParams.get('code')
-    
-    if (code) {
-      // Clear the URL parameters
-      window.history.replaceState({}, document.title, window.location.pathname)
-      exchangeCodeForTokens(code)
-      return
-    }
-    // Handle authorization code from URL
-    useEffect(() => {
-  
-      // Check if there's already a token in localStorage
-      const token = localStorage.getItem('idToken')
-      if (token) {
-        navigate('/')
-      }
-    }, [navigate])
     
     window.location.replace(
       `${authEndpoint}?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent('aws.cognito.signin.user.admin email openid phone profile')}`
