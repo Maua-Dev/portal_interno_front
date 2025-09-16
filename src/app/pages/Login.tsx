@@ -65,7 +65,7 @@ export default function Login() {
     // 1. Primeiro, verifica se o usuário já está logado
     const token = localStorage.getItem('idToken')
     if (token) {
-      console.log(token)
+      console.log("token: ", token)
       navigate('/')
       return // Encerra a execução se já estiver logado
     }
@@ -73,7 +73,7 @@ export default function Login() {
     // 2. Depois, procura pelo código de autorização na URL
     const urlParams = new URLSearchParams(window.location.search)
     const code = urlParams.get('code')
-    console.log(code)
+    console.log("code: ", code)
 
     // Se encontrar o código, inicia a troca
     if (code) {
