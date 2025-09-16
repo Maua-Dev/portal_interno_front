@@ -28,7 +28,7 @@ export default function Login() {
         new URLSearchParams({
           grant_type: 'authorization_code',
           code: code,
-          redirect_uri: ${window.location.origin}
+          redirect_uri: window.location.origin
         }),
         {
           headers: {
