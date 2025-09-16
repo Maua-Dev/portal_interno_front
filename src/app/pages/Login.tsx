@@ -18,23 +18,21 @@ export default function Login() {
       setIsLoading(true)
       setError(null)
 
-      const stage = import.meta.env.VITE_STAGE
       const authDomain = import.meta.env.VITE_AUTH_DOMAIN
-      let tokenEndpoint: string
-      
-      tokenEndpoint = `https://${authDomain}/oauth2/token`
+      const tokenEndpoint = `https://${authDomain}/oauth2/token`
 
-      const response = await axios.post(tokenEndpoint, 
+      const response = await axios.post(
+        tokenEndpoint,
         new URLSearchParams({
           grant_type: 'authorization_code',
           code: code,
-          redirect_uri: window.location.origin
+          redirect_uri: window.location.origin, // CORRIGIDO
         }),
         {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
-            'Authorization': `Basic ${import.meta.env.VITE_BASIC_AUTH_USERPOOL}`
-          }
+            Authorization: `Basic ${import.meta.env.VITE_BASIC_AUTH_USERPOOL}`,
+          },
         }
       )
 
@@ -58,38 +56,42 @@ export default function Login() {
     }
   }
 
-  // Handle authorization code from URL
+  // Handle authorization code from URL and check for existing session
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search)
-    const code = urlParams.get('code')
-    
-    if (code) {
-      // Clear the URL parameters
-      exchangeCodeForTokens(code)
-      window.history.replaceState({}, document.title, window.location.pathname)
-      return
-    }
-
-    // Check if there's already a token in localStorage
+    // 1. Primeiro, verifica se o usuário já está logado
     const token = localStorage.getItem('idToken')
     if (token) {
       navigate('/')
+      return // Encerra a execução se já estiver logado
+    }
+
+    // 2. Depois, procura pelo código de autorização na URL
+    const urlParams = new URLSearchParams(window.location.search)
+    const code = urlParams.get('code')
+
+    // Se encontrar o código, inicia a troca
+    if (code) {
+      // Limpa a URL para que o código não seja processado novamente
+      window.history.replaceState({}, document.title, window.location.pathname)
+      
+      // Chama a função para trocar o código por tokens
+      exchangeCodeForTokens(code)
     }
   }, [navigate])
 
   const handleRedirect = () => {
     const redirectUri = `${window.location.origin}`
     const clientId = import.meta.env.VITE_USERPOOL_CLIENT_ID
-    const stage = import.meta.env.VITE_STAGE
     const authDomain = import.meta.env.VITE_AUTH_DOMAIN
     
-    let authEndpoint: string
-    
-
-    authEndpoint = `https://${authDomain}/login`
+    const authEndpoint = `https://${authDomain}/login`
     
     window.location.replace(
-      `${authEndpoint}?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent('aws.cognito.signin.user.admin email openid phone profile')}`
+      `${authEndpoint}?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(
+        redirectUri
+      )}&scope=${encodeURIComponent(
+        'aws.cognito.signin.user.admin email openid phone profile'
+      )}`
     )
   }
 
