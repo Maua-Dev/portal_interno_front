@@ -58,17 +58,17 @@ export default function Login() {
     }
   }
 
+  const urlParams = new URLSearchParams(window.location.search)
+  const code = urlParams.get('code')
+  
+  if (code) {
+    // Clear the URL parameters
+    window.history.replaceState({}, document.title, window.location.pathname)
+    exchangeCodeForTokens(code)
+    return
+  }
   // Handle authorization code from URL
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search)
-    const code = urlParams.get('code')
-    
-    if (code) {
-      // Clear the URL parameters
-      window.history.replaceState({}, document.title, window.location.pathname)
-      exchangeCodeForTokens(code)
-      return
-    }
 
     // Check if there's already a token in localStorage
     const token = localStorage.getItem('idToken')
