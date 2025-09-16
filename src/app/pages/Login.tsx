@@ -21,6 +21,9 @@ export default function Login() {
       const authDomain = import.meta.env.VITE_AUTH_DOMAIN
       const tokenEndpoint = `https://${authDomain}/oauth2/token`
 
+      
+      console.log("Fazendo requisição")
+      
       const response = await axios.post(
         tokenEndpoint,
         new URLSearchParams({
@@ -39,6 +42,7 @@ export default function Login() {
       const { id_token, access_token, refresh_token } = response.data
 
       if (id_token && refresh_token) {
+        console.log("Setando tokens")
         localStorage.setItem('idToken', id_token)
         localStorage.setItem('refreshToken', refresh_token)
         if (access_token) {
@@ -61,6 +65,7 @@ export default function Login() {
     // 1. Primeiro, verifica se o usuário já está logado
     const token = localStorage.getItem('idToken')
     if (token) {
+      console.log(token)
       navigate('/')
       return // Encerra a execução se já estiver logado
     }
@@ -68,10 +73,12 @@ export default function Login() {
     // 2. Depois, procura pelo código de autorização na URL
     const urlParams = new URLSearchParams(window.location.search)
     const code = urlParams.get('code')
+    console.log(code)
 
     // Se encontrar o código, inicia a troca
     if (code) {
       // Limpa a URL para que o código não seja processado novamente
+      console.log("Tem token")
       window.history.replaceState({}, document.title, window.location.pathname)
       
       // Chama a função para trocar o código por tokens
