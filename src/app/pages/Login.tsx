@@ -89,7 +89,7 @@ export default function Login() {
     authEndpoint = `https://${authDomain}/login`
     
     window.location.replace(
-      `${authEndpoint}?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}`
+      `${authEndpoint}?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent('aws.cognito.signin.user.admin email openid phone profile')}`
     )
   }
 
