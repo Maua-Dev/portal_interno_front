@@ -72,6 +72,7 @@ export default function Login() {
 
     // 2. Depois, procura pelo código de autorização na URL
     const urlParams = new URLSearchParams(window.location.search)
+    console.log("urlParams: ", window.location.search)
     const code = urlParams.get('code')
     console.log("code: ", code)
 
