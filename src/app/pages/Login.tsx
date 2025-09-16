@@ -29,7 +29,7 @@ export default function Login() {
         new URLSearchParams({
           grant_type: 'authorization_code',
           code: code,
-          redirect_uri: window.location.origin, // CORRIGIDO
+          redirect_uri: `https://${authDomain}/login`, // CORRIGIDO
         }),
         {
           headers: {
@@ -88,7 +88,7 @@ export default function Login() {
   }, [navigate])
 
   const handleRedirect = () => {
-    const redirectUri = `${window.location.origin}`
+    const redirectUri = `https://${authDomain}/login`
     const clientId = import.meta.env.VITE_USERPOOL_CLIENT_ID
     const authDomain = import.meta.env.VITE_AUTH_DOMAIN
     
