@@ -65,8 +65,8 @@ export default function Login() {
     
     if (code) {
       // Clear the URL parameters
-      window.history.replaceState({}, document.title, window.location.pathname)
       exchangeCodeForTokens(code)
+      window.history.replaceState({}, document.title, window.location.pathname)
       return
     }
 
