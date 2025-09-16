@@ -78,7 +78,7 @@ export default function Login() {
   }, [navigate])
 
   const handleRedirect = () => {
-    const redirectUri = window.location.href.split('?')[0]
+    const redirectUri = `${window.location.origin}`
     const clientId = import.meta.env.VITE_USERPOOL_CLIENT_ID
     const stage = import.meta.env.VITE_STAGE
     const authDomain = import.meta.env.VITE_AUTH_DOMAIN
