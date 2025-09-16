@@ -7,7 +7,10 @@ export const http = axios.create({
   baseURL: import.meta.env.VITE_MSS_API_URL
 })
 
-const stage = import.meta.env.VITE_STAGE === 'prod' ? 'prod' : 'dev'
+// Helper function to get auth domain based on stage
+const getAuthDomain = () => {
+  return import.meta.env.VITE_AUTH_DOMAIN
+}
 
 http.interceptors.response.use(
   (response) => {
@@ -25,16 +28,34 @@ http.interceptors.response.use(
           localStorage.removeItem('idToken')
           return Promise.reject(error)
         }
-        const response = await axios.post(
-          `${import.meta.env.VITE_REFRESH_TOKEN_URL}/refresh_token`,
-          {
+
+        const authDomain = getAuthDomain()
+        const tokenEndpoint = `https://${authDomain}/oauth2/token`
+        
+        const response = await axios.post(tokenEndpoint, 
+          new URLSearchParams({
+            grant_type: 'refresh_token',
             refresh_token: refreshToken,
-            stage
+            redirect_uri: window.location.origin
+          }),
+          {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Authorization': `Basic ${import.meta.env.VITE_BASIC_AUTH_USERPOOL}`
+            }
           }
         )
+        
         // Atualize o token de acesso com o novo token recebido
         const newToken = response.data.id_token
         localStorage.setItem('idToken', newToken)
+        if (response.data.refresh_token) {
+          localStorage.setItem('refreshToken', response.data.refresh_token)
+        }
+        if (response.data.access_token) {
+          localStorage.setItem('accessToken', response.data.access_token)
+        }
+        
         // Reenvie a solicitação original com o novo token de acesso
         originalRequest.headers.Authorization = `Bearer ${newToken}`
         return http(originalRequest)
