@@ -64,6 +64,7 @@ jobs:
           VITE_REFRESH_TOKEN_URL: ${{ vars.VITE_REFRESH_TOKEN_URL }}
           VITE_BASIC_AUTH_USERPOOL: ${{ secrets.BASIC_AUTH_USERPOOL }}
           VITE_AUTH_DOMAIN: ${{ vars.AUTH_DOMAIN }}
+          VITE_USERPOOL_CLIENT_ID: ${{ vars.USERPOOL_CLIENT_ID }}
       - name: Setup envs
         run: |
           echo AWS_REGION=${{ vars.AWS_REGION }} >> $GITHUB_ENV
