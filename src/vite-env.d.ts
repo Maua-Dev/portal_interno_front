@@ -5,6 +5,7 @@ interface ImportMetaEnv {
   readonly VITE_MSS_API_URL: string
   readonly VITE_REFRESH_TOKEN_URL: string
   readonly VITE_BASIC_AUTH_USERPOOL: string
+  readonly VITE_AUTH_DOMAIN: string
 }
 
 interface ImportMeta {
