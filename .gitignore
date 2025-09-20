@@ -41,5 +41,10 @@ iac/.env
 # Visual Studio Code settings
 .vscode
 
-# IntelliJ seetings
+# IntelliJ settings
 .idea
+
+
+pnpm-lock.yaml
+.DS_Store
+.vscode
