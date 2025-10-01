@@ -5,7 +5,7 @@ import { ProjectType } from './project_repository_http'
 export class ProjectRepositoryMock implements IProjectRepository {
   private projects: Project[] = [
     new Project({
-      code: 'P001',
+      code: 'PA',
       name: 'Project Alpha',
       description: 'A project focused on developing an AI-powered chatbot.',
       poUserId: 'user_123',
@@ -13,10 +13,9 @@ export class ProjectRepositoryMock implements IProjectRepository {
       startDate: 1625155200000, // Unix timestamp for July 1, 2021 in milliseconds
       membersUserIds: ['user_123', 'user_456', 'user_789'],
       photo: 'photo1.jpg'
-
     }),
     new Project({
-      code: 'P002',
+      code: 'PB',
       name: 'Project Beta',
       description: 'A project aimed at building a new e-commerce platform.',
       poUserId: 'user_234',
@@ -24,10 +23,9 @@ export class ProjectRepositoryMock implements IProjectRepository {
       startDate: 1640995200000, // Unix timestamp for January 1, 2022 in milliseconds
       membersUserIds: ['user_234', 'user_567', 'user_890'],
       photo: 'photo1.jpg'
-
     }),
     new Project({
-      code: 'P003',
+      code: 'PC',
       name: 'Project Gamma',
       description: 'A project for developing a mobile game.',
       poUserId: 'user_345',
@@ -37,7 +35,7 @@ export class ProjectRepositoryMock implements IProjectRepository {
       photo: 'photo1.jpg'
     }),
     new Project({
-      code: 'P004',
+      code: 'PD',
       name: 'Project Delta',
       description: 'A project to create a new social media platform.',
       poUserId: 'user_456',
@@ -47,7 +45,7 @@ export class ProjectRepositoryMock implements IProjectRepository {
       photo: 'photo1.jpg'
     }),
     new Project({
-      code: 'P005',
+      code: 'PE',
       name: 'Project Epsilon',
       description: 'A project for building a cloud storage solution.',
       poUserId: 'user_567',
