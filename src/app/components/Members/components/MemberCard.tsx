@@ -1,7 +1,8 @@
 import { twMerge } from 'tailwind-merge'
 import Card from '../../Card.tsx'
 import { Member } from '../../../../@clean/shared/domain/entities/member.ts'
-import { HTMLAttributes, useContext, useState } from 'react'
+import { useContext, useState } from 'react'
+import type { HTMLAttributes } from 'react'
 import { MemberTag, Tag } from '../../Tags.tsx'
 import { Clock2, PowerOff } from 'lucide-react'
 import { IconText } from '../../Historic/components/Icon.tsx'
@@ -74,7 +75,8 @@ export default function MemberCard({
       }}
       variant="lg"
       className={twMerge(
-        `static flex h-fit w-full cursor-pointer flex-row items-center justify-between p-3 shadow-sm shadow-gray-500 brightness-95 duration-150 ease-in hover:brightness-100 sm:gap-0 md:p-4 ${isHovering ? 'z-30' : ''
+        `static flex h-fit w-full cursor-pointer flex-row items-center justify-between p-3 shadow-sm shadow-gray-500 brightness-95 duration-150 ease-in hover:brightness-100 sm:gap-0 md:p-4 ${
+          isHovering ? 'z-30' : ''
         }`,
         props.className
       )}
@@ -102,10 +104,11 @@ export default function MemberCard({
         </div>
       </div>
       <div
-        className={'hidden md:grid md:w-full md:grid-cols-3 md:gap-1 md:pl-10'}
+        className={'hidden md:grid md:w-full md:grid-cols-4 md:gap-1 md:pl-10'}
       >
-        <Tag variant={member.year + '° ano'} />
+        {/* <Tag variant={member.year + '° ano'} /> */}
         <Tag variant={member.role} />
+        <Tag variant={member.cellphone || 'N/A'} />
         <Tag variant={member.stack} />
       </div>
       <div
@@ -114,7 +117,7 @@ export default function MemberCard({
         }
       >
         <IconText
-          text={millisecondsToHours(member.hoursWorked || 0)+ ' horas '}
+          text={millisecondsToHours(member.hoursWorked || 0) + ' horas '}
           icon={Clock2}
         />
         <Button
