@@ -21,28 +21,27 @@ export default function Login() {
       const authDomain = import.meta.env.VITE_AUTH_DOMAIN
       const tokenEndpoint = `https://${authDomain}/oauth2/token`
 
-      
-      console.log("Fazendo requisição")
-      
+      console.log('Fazendo requisição')
+
       const response = await axios.post(
         tokenEndpoint,
         new URLSearchParams({
           grant_type: 'authorization_code',
           code: code,
-          redirect_uri: `https://${window.location.hostname}/login`, // CORRIGIDO
+          redirect_uri: `https://${window.location.hostname}/login` // CORRIGIDO
         }),
         {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
-            Authorization: `Basic ${import.meta.env.VITE_BASIC_AUTH_USERPOOL}`,
-          },
+            Authorization: `Basic ${import.meta.env.VITE_BASIC_AUTH_USERPOOL}`
+          }
         }
       )
 
       const { id_token, access_token, refresh_token } = response.data
 
       if (id_token && refresh_token) {
-        console.log("Setando tokens")
+        console.log('Setando tokens')
         localStorage.setItem('idToken', id_token)
         localStorage.setItem('refreshToken', refresh_token)
         if (access_token) {
@@ -65,23 +64,23 @@ export default function Login() {
     // 1. Primeiro, verifica se o usuário já está logado
     const token = localStorage.getItem('idToken')
     if (token) {
-      console.log("token: ", token)
+      console.log('token: ', token)
       navigate('/')
       return // Encerra a execução se já estiver logado
     }
 
     // 2. Depois, procura pelo código de autorização na URL
     const urlParams = new URLSearchParams(window.location.search)
-    console.log("urlParams: ", window.location.search)
+    console.log('urlParams: ', window.location.search)
     const code = urlParams.get('code')
-    console.log("code: ", code)
+    console.log('code: ', code)
 
     // Se encontrar o código, inicia a troca
     if (code) {
       // Limpa a URL para que o código não seja processado novamente
-      console.log("Tem token")
+      console.log('Tem token')
       window.history.replaceState({}, document.title, window.location.pathname)
-      
+
       // Chama a função para trocar o código por tokens
       exchangeCodeForTokens(code)
     }
@@ -91,9 +90,9 @@ export default function Login() {
     const clientId = import.meta.env.VITE_USERPOOL_CLIENT_ID
     const authDomain = import.meta.env.VITE_AUTH_DOMAIN
     const redirectUri = `https://${window.location.hostname}/login`
-    
+
     const authEndpoint = `https://${authDomain}/login`
-    
+
     window.location.replace(
       `${authEndpoint}?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(
         redirectUri
@@ -135,19 +134,19 @@ export default function Login() {
           Para acessar o Portal Interno é necessário realizar autenticação no
           login integrado
         </p>
-        
+
         {error && (
-          <p className="w-4/5 text-center text-red-500 text-sm sm:w-3/5">
+          <p className="w-4/5 text-center text-sm text-red-500 sm:w-3/5">
             {error}
           </p>
         )}
-        
+
         <button
           onClick={handleRedirect}
           disabled={isLoading}
           className={`w-4/5 rounded-md py-[2px] text-lg font-bold text-white sm:w-3/5 ${
-            isLoading 
-              ? 'bg-gray-400 cursor-not-allowed' 
+            isLoading
+              ? 'cursor-not-allowed bg-gray-400'
               : 'bg-gradient-to-r from-red-400 to-blue-600 hover:from-red-500 hover:to-blue-700'
           }`}
         >
