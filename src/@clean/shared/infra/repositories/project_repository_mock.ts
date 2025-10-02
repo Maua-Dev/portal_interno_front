@@ -1,57 +1,79 @@
-import { IProjectRepository } from '../../../modules/project/domain/repositories/project_repository_interface'
+import { type IProjectRepository } from '../../../modules/project/domain/repositories/project_repository_interface'
 import { Project } from '../../domain/entities/project'
-import { ProjectType } from './project_repository_http'
+import { type ProjectType } from './project_repository_http'
+import { injectable } from 'inversify'
 
+@injectable()
 export class ProjectRepositoryMock implements IProjectRepository {
   private projects: Project[] = [
     new Project({
       code: 'PA',
       name: 'Project Alpha',
       description: 'A project focused on developing an AI-powered chatbot.',
-      poUserId: 'user_123',
-      scrumUserId: 'user_456',
-      startDate: 1625155200000, // Unix timestamp for July 1, 2021 in milliseconds
-      membersUserIds: ['user_123', 'user_456', 'user_789'],
+      poUserId: '11111111-1111-1111-1111-111111111111',
+      scrumUserId: '22222222-2222-2222-2222-222222222222',
+      startDate: 1625155200000,
+      membersUserIds: [
+        '11111111-1111-1111-1111-111111111111',
+        '22222222-2222-2222-2222-222222222222',
+        '99999999-9999-9999-9999-999999999999'
+      ],
       photo: 'photo1.jpg'
     }),
     new Project({
       code: 'PB',
       name: 'Project Beta',
       description: 'A project aimed at building a new e-commerce platform.',
-      poUserId: 'user_234',
-      scrumUserId: 'user_567',
-      startDate: 1640995200000, // Unix timestamp for January 1, 2022 in milliseconds
-      membersUserIds: ['user_234', 'user_567', 'user_890'],
+      poUserId: '33333333-3333-3333-3333-333333333333',
+      scrumUserId: '44444444-4444-4444-4444-444444444444',
+      startDate: 1640995200000,
+      membersUserIds: [
+        '33333333-3333-3333-3333-333333333333',
+        '44444444-4444-4444-4444-444444444444',
+        'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'
+      ],
       photo: 'photo1.jpg'
     }),
     new Project({
-      code: 'PC',
+      code: 'PG',
       name: 'Project Gamma',
       description: 'A project for developing a mobile game.',
-      poUserId: 'user_345',
-      scrumUserId: 'user_678',
-      startDate: 1656633600000, // Unix timestamp for July 1, 2022 in milliseconds
-      membersUserIds: ['user_345', 'user_678', 'user_901'],
+      poUserId: '55555555-5555-5555-5555-555555555555',
+      scrumUserId: '66666666-6666-6666-6666-666666666666',
+      startDate: 1656633600000,
+      membersUserIds: [
+        '55555555-5555-5555-5555-555555555555',
+        '66666666-6666-6666-6666-666666666666',
+        'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb'
+      ],
       photo: 'photo1.jpg'
     }),
     new Project({
       code: 'PD',
       name: 'Project Delta',
       description: 'A project to create a new social media platform.',
-      poUserId: 'user_456',
-      scrumUserId: 'user_789',
-      startDate: 1672531200000, // Unix timestamp for January 1, 2023 in milliseconds
-      membersUserIds: ['user_456', 'user_789', 'user_012'],
+      poUserId: '77777777-7777-7777-7777-777777777777',
+      scrumUserId: '88888888-8888-8888-8888-888888888888',
+      startDate: 1672531200000,
+      membersUserIds: [
+        '77777777-7777-7777-7777-777777777777',
+        '88888888-8888-8888-8888-888888888888',
+        'cccccccc-cccc-cccc-cccc-cccccccccccc'
+      ],
       photo: 'photo1.jpg'
     }),
     new Project({
       code: 'PE',
       name: 'Project Epsilon',
       description: 'A project for building a cloud storage solution.',
-      poUserId: 'user_567',
-      scrumUserId: 'user_890',
-      startDate: 1688169600000, // Unix timestamp for July 1, 2023 in milliseconds
-      membersUserIds: ['user_567', 'user_890', 'user_123'],
+      poUserId: '99999999-9999-9999-9999-999999999999',
+      scrumUserId: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+      startDate: 1688169600000,
+      membersUserIds: [
+        '99999999-9999-9999-9999-999999999999',
+        'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+        'dddddddd-dddd-dddd-dddd-dddddddddddd'
+      ],
       photo: 'photo1.jpg'
     })
   ]
