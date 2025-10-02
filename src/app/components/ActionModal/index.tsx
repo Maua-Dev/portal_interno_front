@@ -8,7 +8,7 @@ import {
 import { useForm } from 'react-hook-form'
 import { STACK } from '../../../@clean/shared/domain/enums/stack_enum'
 import {
-  millisecondsToHours,
+  millisecondsToMinutes,
   timeStampToDate
 } from '../../utils/functions/timeStamp'
 import { useEffect, useState } from 'react'
@@ -42,9 +42,10 @@ const actionSchema = z.object({
       required_error: 'Duração é obrigatória',
       invalid_type_error: 'Esse campo deve ser um número'
     })
-    .positive({ message: 'Duração deve ser um número maior que zero' })
+    .positive({ message: 'Duração deve ser maior que zero' })
     .gte(0.1, { message: 'Duração é obrigatória' })
     .finite(),
+
   associatedMembersUserIds: z.array(z.string()),
   actionTypeTag: z.nativeEnum(ACTION_TYPE, {
     errorMap: (issue) => {
@@ -56,7 +57,7 @@ const actionSchema = z.object({
   }),
   stackTags: z
     .array(z.nativeEnum(STACK))
-    .min(1, { message: 'Action type tag é obrigatória' })
+    .min(1, { message: 'Área é obrigatória' })
 })
 
 export type ActionModalType = z.infer<typeof actionSchema>
@@ -81,13 +82,26 @@ export default function ActionModal({ action }: { action?: Action }) {
     isUpdateModal = true
   }
 
+  const loadProjects = async () => {
+    await handleProjects()
+  }
+
   // Fade animation on mount
   useEffect(() => {
-    if (action) {
-      setCurrentMembers(action?.associatedMembersUserIds || [])
-      setCurrentStackTags(action?.stackTags || [])
+    const initialize = async () => {
+      await loadProjects()
+
+      if (action) {
+        setCurrentMembers(action.associatedMembersUserIds || [])
+        setCurrentStackTags(action.stackTags || [])
+        setValue('projectCode', action.projectCode)
+      }
+
+      setTimeout(() => setFade(true))
     }
-    handleProjects()
+
+    initialize()
+
     setTimeout(() => {
       setFade(true)
     })
@@ -125,6 +139,7 @@ export default function ActionModal({ action }: { action?: Action }) {
     handleSubmit,
     getValues,
     setValue,
+
     formState: { errors }
   } = useForm<ActionModalType>({
     resolver: zodResolver(actionSchema),
@@ -136,7 +151,7 @@ export default function ActionModal({ action }: { action?: Action }) {
       startDate: action?.startDate ? timeStampToDate(action!.startDate) : '',
       endDate: action?.endDate ? timeStampToDate(action!.endDate) : '',
       duration: action?.duration
-        ? millisecondsToHours(action!.duration)
+        ? millisecondsToMinutes(action!.duration)
         : undefined,
       associatedMembersUserIds: action?.associatedMembersUserIds || [],
       actionTypeTag: action?.actionTypeTag || undefined,
@@ -145,6 +160,23 @@ export default function ActionModal({ action }: { action?: Action }) {
     },
     mode: 'onBlur'
   })
+
+  //const [isMinutes] = useState(false)
+
+  //const handleChangeIsMinutes = () => {
+  // setIsMinutes(!isMinutes)
+  //}
+
+  const onSubmit = (data: ActionModalType) => {
+    data.duration = data.duration / 60
+    console.log(data.duration)
+
+    if (action) {
+      handleUpdateActionSubmit(data)
+    } else {
+      handleCreateActionSubmit(data)
+    }
+  }
 
   return (
     <>
@@ -172,11 +204,7 @@ export default function ActionModal({ action }: { action?: Action }) {
           }`}
         >
           <form
-            onSubmit={
-              action
-                ? handleSubmit(handleUpdateActionSubmit)
-                : handleSubmit(handleCreateActionSubmit)
-            }
+            onSubmit={handleSubmit(onSubmit)}
             className="flex h-auto flex-col gap-6 px-12 py-12 lg:flex-row"
           >
             <div className="flex w-full flex-col justify-between gap-8 lg:w-4/5">
@@ -202,7 +230,7 @@ export default function ActionModal({ action }: { action?: Action }) {
                       className={`rounded ${
                         darkMode ? 'bg-gray-600' : 'bg-gray-300'
                       } px-2 py-[0.375rem] outline-none`}
-                      value={action?.projectCode}
+                      defaultValue={action?.projectCode}
                     >
                       <option value="">Selecione uma opção</option>
                       {projects.map((project, index) => (
@@ -288,10 +316,8 @@ export default function ActionModal({ action }: { action?: Action }) {
                     <p className="text-lg">Duração da atividade</p>
                     <input
                       type="text"
-                      {...register('duration', {
-                        valueAsNumber: true
-                      })}
-                      placeholder="Em horas"
+                      {...register('duration', { valueAsNumber: true })}
+                      placeholder={'Em minutos'}
                       className={`rounded ${
                         darkMode ? 'bg-gray-600' : 'bg-gray-300'
                       } select-none px-2 py-[0.35rem] outline-none`}
@@ -336,6 +362,7 @@ export default function ActionModal({ action }: { action?: Action }) {
                   getValues={getValues}
                 />
               </div>
+              <span className="text-red-600">{errors.stackTags?.message}</span>
               <div className="flex w-full flex-col items-center gap-8 sm:flex-row lg:flex-col">
                 <button
                   type="submit"

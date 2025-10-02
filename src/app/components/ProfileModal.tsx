@@ -5,6 +5,7 @@ import { raFormatterFromJson } from '../utils/functions/formatters'
 import { Avatar } from './Avatar'
 import { Separator } from './Separator'
 import { FaRegClock } from 'react-icons/fa6'
+import { millisecondsToHours } from '../utils/functions/timeStamp'
 
 export function ProfileModal() {
   const { darkMode } = useDarkMode()
@@ -12,7 +13,7 @@ export function ProfileModal() {
   const [fade, setFade] = useState(false)
 
   useEffect(() => {
-    console.log(member)
+    // console.log(member)
 
     setTimeout(() => {
       setFade(true)
@@ -71,8 +72,8 @@ export function ProfileModal() {
               new Date(member?.hiredDate).toLocaleDateString()}
           </p>
         </div>
-        <Separator />
-        <h2 className="text-2xl font-bold">Sobre mim</h2>
+        {/* <Separator /> */}
+        {/* <h2 className="text-2xl font-bold">Sobre mim</h2>
         <textarea
           readOnly
           className={`h-full min-h-24 resize-none rounded-xl sm:text-justify lg:min-h-0 ${
@@ -80,7 +81,7 @@ export function ProfileModal() {
           } p-3 outline-none`}
           value={`Meu nome é ${member?.name}, sou do curso de ${member?.course} do ${member?.year}º ano. Atualmente estou na área de ${member?.stack}. Estou empolgado para aprender mais sobre ${member?.stack} e me tornar um desenvolvedor melhor.
           `}
-        />
+        /> */}
       </div>
       <div className="flex h-full w-full flex-col gap-4 lg:w-[30%]">
         <div
@@ -95,21 +96,12 @@ export function ProfileModal() {
           <div className="flex h-full items-center justify-center gap-4 text-3xl md:text-4xl">
             <FaRegClock />
             <p>
-              {member?.hoursWorked ? member?.hoursWorked / 1000 / 60 / 60 : 0}{' '}
-              hora
+              {millisecondsToHours(member?.hoursWorked || 0)} hora
               {member?.hoursWorked && member?.hoursWorked / 1000 / 60 / 60 > 1
                 ? 's'
                 : ''}
             </p>
           </div>
-        </div>
-        <div
-          className={`flex h-2/3 w-full flex-col gap-2 rounded-2xl p-6 transition-all delay-300 duration-1000 ${
-            darkMode ? 'bg-skin-secundary text-white' : 'bg-white'
-          } ${fade ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0'}`}
-        >
-          <h1 className="text-3xl font-bold">Gráfico de horas</h1>
-          <p className="text-lg">Em elaboração</p>
         </div>
       </div>
     </div>

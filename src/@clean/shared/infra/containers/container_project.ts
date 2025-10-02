@@ -2,6 +2,7 @@ import 'reflect-metadata'
 import { Container } from 'inversify'
 import { http } from '../http'
 import { ProjectRepositoryHttp } from '../repositories/project_repository_http'
+import { ProjectRepositoryMock } from '../repositories/project_repository_mock'
 import { GetAllProjectsUsecase } from '../../../modules/project/usecases/get_all_projects_usecase'
 import { DeleteProjectUsecase } from '../../../modules/project/usecases/delete_project_usecase'
 import { CreateProjectUsecase } from '../../../modules/project/usecases/create_project_usecase'
@@ -35,6 +36,10 @@ containerProject
       context.container.get(RegistryProject.AxiosAdapter)
     )
   })
+
+containerProject
+  .bind(RegistryProject.ProjectRepositoryMock)
+  .to(ProjectRepositoryMock)
 
 // Usecases
 containerProject

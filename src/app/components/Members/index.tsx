@@ -1,4 +1,5 @@
-import FilterBar, { FilterProps } from '../FilterBar'
+import FilterBar from '../FilterBar'
+import type { FilterProps } from '../FilterBar'
 import { memberFilterOptions } from './filterOptions.tsx'
 import { Users } from 'lucide-react'
 import { useContext, useEffect, useMemo, useState } from 'react'

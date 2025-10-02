@@ -1,4 +1,5 @@
-import { PropsWithChildren, createContext, useState } from 'react'
+import { createContext, useState } from 'react'
+import type { PropsWithChildren } from 'react'
 import { Member } from '../../@clean/shared/domain/entities/member'
 import { COURSE } from '../../@clean/shared/domain/enums/course_enum'
 import { ROLE } from '../../@clean/shared/domain/enums/role_enum'
@@ -216,6 +217,12 @@ export function MemberProvider({ children }: PropsWithChildren) {
       } else {
         members = await getAllMembersUsecase.execute()
       }
+
+      console.log('===== CONTEXT DEBUG =====')
+      console.log('Members from context:', members)
+      console.log('First member:', members.members[0])
+      console.log('First member cellphone:', members.members[0]?.cellphone)
+      console.log('==========================')
 
       return members.members
     } catch (error: any) {

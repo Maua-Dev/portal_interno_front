@@ -1,5 +1,6 @@
 export enum COURSE {
   ADM = 'ADM',
+  ARQ = 'ARQ',
   DSG = 'DSG',
   EAL = 'EAL',
   ETC = 'ETC',
@@ -10,7 +11,9 @@ export enum COURSE {
   EMC = 'EMC',
   EPM = 'EPM',
   EQM = 'EQM',
+  IAC = 'IAC',
   CIC = 'CIC',
+  RIN = 'RIN',
   SIN = 'SIN'
 }
 
@@ -42,6 +45,12 @@ export function courseToEnum(value: string): COURSE {
       return COURSE.EAL
     case 'EPM':
       return COURSE.EPM
+    case 'IAC':
+      return COURSE.IAC
+    case 'RIN':
+      return COURSE.RIN
+    case 'ARQ':
+      return COURSE.ARQ
     default:
       throw new Error('Invalid value')
   }
@@ -53,6 +62,10 @@ export function translateCourse(value: string): string {
       return 'Administração'
     case 'DSG':
       return 'Design'
+    case 'ARQ':
+      return 'Arquitetura'
+    case 'RIN':
+      return 'Relações Internacionais'
 
     case 'EAL':
       return 'Engenharia de Alimentos'
@@ -77,6 +90,8 @@ export function translateCourse(value: string): string {
       return 'Sistemas de Informação'
     case 'CIC':
       return 'Ciências da Computação'
+    case 'IAC':
+      return 'Inteligência Artificial e Ciência de Dados'
     default:
       return 'Invalid value'
   }

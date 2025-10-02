@@ -311,7 +311,7 @@ export default function FilterBar({
                 <div className={'flex w-full flex-row gap-3'}>
                   <Button
                     variant="default"
-                    className={`mt-4 flex w-full flex-row items-center lg:hidden ${
+                    className={`mt-4 flex w-full flex-row items-center ${
                       darkMode
                         ? 'text-skin-muted'
                         : 'text-zinc-400 hover:text-skin-muted'
