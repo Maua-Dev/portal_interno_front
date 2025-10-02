@@ -1,7 +1,8 @@
 import { twMerge } from 'tailwind-merge'
 import Card from '../../Card.tsx'
 import { Member } from '../../../../@clean/shared/domain/entities/member.ts'
-import { HTMLAttributes, useContext, useState } from 'react'
+import { useContext, useState } from 'react'
+import type { HTMLAttributes } from 'react'
 import { MemberTag, Tag } from '../../Tags.tsx'
 import { Clock2, PowerOff } from 'lucide-react'
 import { IconText } from '../../Historic/components/Icon.tsx'
@@ -106,11 +107,12 @@ export default function MemberCard({
         </div>
         <div
           className={
-            'hidden md:grid md:w-full md:grid-cols-3 md:gap-1 md:pl-10'
+            'hidden md:grid md:w-full md:grid-cols-4 md:gap-1 md:pl-10'
           }
         >
-          <Tag variant={member.year + '° ano'} />
+          {/* <Tag variant={member.year + '° ano'} /> */}
           <Tag variant={member.role} />
+          <Tag variant={member.cellphone || 'N/A'} />
           <Tag variant={member.stack} />
         </div>
         <div

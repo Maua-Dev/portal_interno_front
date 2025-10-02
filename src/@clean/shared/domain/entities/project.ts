@@ -228,7 +228,7 @@ export class Project {
       return false
     } else if (typeof code !== 'string') {
       return false
-    } else if (code.length !== 2) {
+    } else if (code.length < 2) {
       return false
     } else if (code !== code.toUpperCase()) {
       return false
@@ -263,7 +263,7 @@ export class Project {
       return false
     } else if (typeof userId !== 'string') {
       return false
-    } else if (userId.length !== 36) {
+    } else if (userId.length > 36) {
       return false
     }
     return true

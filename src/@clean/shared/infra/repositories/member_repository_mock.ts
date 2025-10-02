@@ -12,7 +12,7 @@ export class MemberRepositoryMock implements IMemberRepository {
       name: 'Digao Siqueira',
       email: 'dsiqueira.devmaua@gmail.com',
       ra: '22006800',
-      role: ROLE.DEV,
+      role: ROLE.DIRECTOR,
       stack: STACK.FRONTEND,
       year: 3,
       cellphone: '11999999999',

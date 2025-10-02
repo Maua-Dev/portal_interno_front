@@ -169,13 +169,26 @@ export default function Historic() {
           })}
           <h1
             className={`pb-8 pt-8 text-skin-muted duration-150
-              ${
-                _lastEvaluatedKey !== null
-                  ? 'cursor-pointer hover:text-skin-base'
-                  : null
-              }`}
+    ${
+      _lastEvaluatedKey !== null ? 'cursor-pointer hover:text-skin-base' : null
+    }`}
+            onClick={() => {
+              if (_lastEvaluatedKey !== null) {
+                loadHistoric(_lastEvaluatedKey)
+              }
+            }}
           >
-            {_lastEvaluatedKey === null ? 'Sem Mais Itens' : 'Ver Mais'}
+            {_lastEvaluatedKey === null ? (
+              <p
+                onClick={() => {
+                  window.location.href = 'https://aula.devmaua.com'
+                }}
+              >
+                Sem Mais Itens
+              </p>
+            ) : (
+              'Ver Mais'
+            )}
           </h1>
         </div>
       ) : localHistory ? (

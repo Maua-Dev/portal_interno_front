@@ -19,16 +19,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Use Node.js 18.x
+      - name: Use Node.js 22.x
         uses: actions/setup-node@v3
         with:
-          node-version: 18.x
+          node-version: 22.x
 
       - name: Install dependencies
-        run: yarn install
+        run: npm install
 
       - name: Build React.js app
-        run: yarn build
-
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3
+        run: npm run build
