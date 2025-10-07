@@ -5,6 +5,7 @@ import { useDarkMode } from '../../../hooks/useDarkMode'
 import Button from '../../Historic/components/Button'
 import { millisecondsToHours } from '../../../utils/functions/timeStamp'
 import { date } from 'zod'
+import { AiFillStar } from 'react-icons/ai'
 
 interface MemberDialogProps {
   member: Member
@@ -22,6 +23,9 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
   const FIRST_NAME = nameArray[0]
   const LAST_NAME = nameArray[nameArray.length - 1]
 
+  const [activeStrikes, setActiveStrikes] = useState(Array(5).fill(true))
+  const [showToast, setShowToast] = useState(false)
+
   return (
     <div className="static flex w-full justify-center">
       <DialogPrimitive.Root open={open} onOpenChange={setOpen}>
@@ -32,7 +36,6 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
             darkMode ? 'bg-skin-fill' : 'bg-skin-secundary'
           }`}
         >
-          <h1 className="text-xl font-bold">Ficha da Usuario</h1>
           <div className="grid w-full grid-cols-2 gap-5">
             <div className="flex flex-col gap-1">
               {/* Name */}
@@ -186,6 +189,7 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
               />
               <span className="text-red-600">{}</span>
             </div>
+
             <div className="flex flex-col gap-1">
               {/* Name */}
               <h1 className="font-semi-bold text-lg">Horas</h1>
@@ -202,7 +206,29 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
               <span className="text-red-600">{}</span>
             </div>
           </div>
-          <div className="flex w-full flex-row justify-end gap-4">
+          <div className="flex w-full flex-row justify-end gap-96">
+            <div className="flex items-center gap-1">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <AiFillStar
+                  key={i}
+                  className={`cursor-pointer text-2xl transition-colors ${
+                    activeStrikes[i] ? 'text-yellow-400' : 'text-gray-400'
+                  }`}
+                  onClick={() => {
+                    setActiveStrikes((prev) =>
+                      prev.map((on, idx) => {
+                        if (idx === i && on) {
+                          // só mostra toast se estava ativa (amarela)
+                          setShowToast(true)
+                          setTimeout(() => setShowToast(false), 2000)
+                        }
+                        return idx === i ? !on : on
+                      })
+                    )
+                  }}
+                />
+              ))}
+            </div>
             <Button
               variant="default"
               onClick={() => {
@@ -223,6 +249,11 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
               </Button>
             )}
           </div>
+          {showToast && (
+            <div className="fixed right-4 top-4 z-50 rounded bg-green-600 px-4 py-2 text-white shadow-lg">
+              Strike removido de {FIRST_NAME} {LAST_NAME}!
+            </div>
+          )}
         </DialogPrimitive.DialogContent>
       </DialogPrimitive.Root>
     </div>

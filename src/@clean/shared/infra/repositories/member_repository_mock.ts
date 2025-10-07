@@ -1,5 +1,5 @@
 import { decorate, injectable } from 'inversify'
-import { IMemberRepository } from '../../../modules/member/domain/repositories/member_repository_interface'
+import type { IMemberRepository } from '../../../modules/member/domain/repositories/member_repository_interface'
 import { Member } from '../../domain/entities/member'
 import { ACTIVE } from '../../domain/enums/active_enum'
 import { COURSE } from '../../domain/enums/course_enum'
@@ -161,7 +161,8 @@ export class MemberRepositoryMock implements IMemberRepository {
     newYear?: number,
     newCellphone?: string,
     newCourse?: COURSE,
-    newActive?: ACTIVE
+    newActive?: ACTIVE,
+    newPhoto?: string
   ): Promise<Member> {
     const member = this.members[0]
 
@@ -199,6 +200,10 @@ export class MemberRepositoryMock implements IMemberRepository {
       member.active = newActive
     }
 
+    if (newPhoto) {
+      member.photo = newPhoto
+    }
+
     this.members.push(member)
 
     return member
@@ -213,7 +218,9 @@ export class MemberRepositoryMock implements IMemberRepository {
   }
 
   getAllMembersAdmin(): Promise<Member[]> {
-    return Promise.resolve([])
+    // No ambiente de teste/mock queremos simular o endpoint admin retornando todos os membros
+    // Em vez de array vazio (que gera NoItemsFoundError nos usecases)
+    return Promise.resolve(this.members)
   }
 }
 
