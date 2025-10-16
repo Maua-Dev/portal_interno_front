@@ -4,8 +4,9 @@ import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { useDarkMode } from '../../../hooks/useDarkMode'
 import Button from '../../Historic/components/Button'
 import { millisecondsToHours } from '../../../utils/functions/timeStamp'
-import { date } from 'zod'
+//import { date } from 'zod'
 import { AiFillStar } from 'react-icons/ai'
+import StrikeCard from '../components/StrikeCard'
 
 interface MemberDialogProps {
   member: Member
@@ -25,6 +26,11 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
 
   const [activeStrikes, setActiveStrikes] = useState(Array(5).fill(true))
   const [showToast, setShowToast] = useState(false)
+
+  const [showStrikeCard, setShowStrikeCard] = useState(false)
+  const [selectedStrikeIndex, setSelectedStrikeIndex] = useState<number | null>(
+    null
+  )
 
   return (
     <div className="static flex w-full justify-center">
@@ -215,16 +221,8 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
                     activeStrikes[i] ? 'text-yellow-400' : 'text-gray-400'
                   }`}
                   onClick={() => {
-                    setActiveStrikes((prev) =>
-                      prev.map((on, idx) => {
-                        if (idx === i && on) {
-                          // só mostra toast se estava ativa (amarela)
-                          setShowToast(true)
-                          setTimeout(() => setShowToast(false), 2000)
-                        }
-                        return idx === i ? !on : on
-                      })
-                    )
+                    setSelectedStrikeIndex(i)
+                    setShowStrikeCard(true)
                   }}
                 />
               ))}
@@ -249,10 +247,19 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
               </Button>
             )}
           </div>
-          {showToast && (
-            <div className="fixed right-4 top-4 z-50 rounded bg-green-600 px-4 py-2 text-white shadow-lg">
-              Strike removido de {FIRST_NAME} {LAST_NAME}!
-            </div>
+          {showStrikeCard && (
+            <StrikeCard
+              onConfirm={() => {
+                setActiveStrikes((prev) =>
+                  prev.map((on, idx) =>
+                    idx === selectedStrikeIndex ? !on : on
+                  )
+                )
+                setShowStrikeCard(false) // Fecha o pop-up após confirmar
+              }}
+              onCancel={() => setShowStrikeCard(false)} // Fecha o pop-up sem aplicar o strike
+              memberName={`${FIRST_NAME} ${LAST_NAME}`}
+            />
           )}
         </DialogPrimitive.DialogContent>
       </DialogPrimitive.Root>

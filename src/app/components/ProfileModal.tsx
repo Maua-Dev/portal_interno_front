@@ -6,11 +6,13 @@ import { Avatar } from './Avatar'
 import { Separator } from './Separator'
 import { FaRegClock } from 'react-icons/fa6'
 import { millisecondsToHours } from '../utils/functions/timeStamp'
+import { AiFillStar } from 'react-icons/ai'
 
 export function ProfileModal() {
   const { darkMode } = useDarkMode()
   const { member } = useMember()
   const [fade, setFade] = useState(false)
+  const [activeStrikes, setActiveStrikes] = useState(Array(5).fill(true))
 
   useEffect(() => {
     // console.log(member)
@@ -101,6 +103,31 @@ export function ProfileModal() {
                 ? 's'
                 : ''}
             </p>
+          </div>
+        </div>
+        <div
+          className={`flex h-1/3 min-h-40 w-full flex-col items-center gap-6 rounded-2xl p-6 transition-all delay-200 duration-700 ${
+            darkMode ? 'bg-skin-secundary text-white' : 'bg-white'
+          } ${fade ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0'}`}
+        >
+          <h1 className="flex w-full justify-start text-3xl font-bold">
+            Strikes
+          </h1>
+
+          <div className="flex h-full items-center justify-center gap-4 text-3xl">
+            {activeStrikes.map((active, i) => (
+              <AiFillStar
+                key={i}
+                className={`cursor-pointer text-4xl transition-colors ${
+                  active ? 'text-yellow-400' : 'text-gray-400'
+                }`}
+                onClick={() =>
+                  setActiveStrikes((prev) =>
+                    prev.map((on, idx) => (idx === i ? !on : on))
+                  )
+                }
+              />
+            ))}
           </div>
         </div>
       </div>
