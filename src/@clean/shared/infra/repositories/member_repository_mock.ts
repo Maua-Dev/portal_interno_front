@@ -1,5 +1,5 @@
 import { decorate, injectable } from 'inversify'
-import { IMemberRepository } from '../../../modules/member/domain/repositories/member_repository_interface'
+import type { IMemberRepository } from '../../../modules/member/domain/repositories/member_repository_interface'
 import { Member } from '../../domain/entities/member'
 import { ACTIVE } from '../../domain/enums/active_enum'
 import { COURSE } from '../../domain/enums/course_enum'

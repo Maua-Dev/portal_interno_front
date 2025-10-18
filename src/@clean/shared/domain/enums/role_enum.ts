@@ -5,7 +5,8 @@ export enum ROLE {
   INTERNAL = 'INTERNAL',
   PO = 'PO',
   SCRUM = 'SCRUM',
-  DESIGNER = 'DESIGNER'
+  DESIGNER = 'DESIGNER',
+  EXTERNAL = 'EXTERNAL'
 }
 
 export function roleToEnum(value: string): ROLE {
@@ -24,6 +25,8 @@ export function roleToEnum(value: string): ROLE {
       return ROLE.SCRUM
     case 'DESIGNER':
       return ROLE.DESIGNER
+    case 'EXTERNAL':
+      return ROLE.EXTERNAL
     default:
       throw new Error('Invalid value')
   }
@@ -45,6 +48,8 @@ export function translateRole(value: string): string {
       return 'Scrum Master'
     case 'DESIGNER':
       return 'Designer'
+    case 'EXTERNAL':
+      return 'Externo'
     default:
       return 'Invalid value'
   }
