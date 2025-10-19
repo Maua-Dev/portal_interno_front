@@ -113,7 +113,7 @@ export function ProfileModal() {
           <h1 className="flex w-full justify-start text-3xl font-bold">
             Strikes
           </h1>
-
+          {/* Enzo, aqui é uma das telas que vai ter q mexer  */}
           <div className="flex h-full items-center justify-center gap-4 text-3xl">
             {activeStrikes.map((active, i) => (
               <AiFillStar

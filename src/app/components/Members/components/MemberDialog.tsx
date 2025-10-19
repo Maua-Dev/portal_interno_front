@@ -213,19 +213,24 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
             </div>
           </div>
           <div className="flex w-full flex-row justify-end gap-96">
-            <div className="flex items-center gap-1">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <AiFillStar
-                  key={i}
-                  className={`cursor-pointer text-2xl transition-colors ${
-                    activeStrikes[i] ? 'text-yellow-400' : 'text-gray-400'
-                  }`}
-                  onClick={() => {
-                    setSelectedStrikeIndex(i)
-                    setShowStrikeCard(true)
-                  }}
-                />
-              ))}
+            <div className="flex flex-col justify-center">
+              <div className="flex items-center pr-2">
+                <h1 className="font-semi-bold text-lg">Strikes</h1>
+              </div>
+              <div className="flex items-center gap-1">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <AiFillStar
+                    key={i}
+                    className={`cursor-pointer text-2xl transition-colors ${
+                      activeStrikes[i] ? 'text-yellow-400' : 'text-gray-400'
+                    }`}
+                    onClick={() => {
+                      setSelectedStrikeIndex(i)
+                      setShowStrikeCard(true)
+                    }}
+                  />
+                ))}
+              </div>
             </div>
             <Button
               variant="default"
