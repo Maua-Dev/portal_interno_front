@@ -32,17 +32,10 @@ export default function NoticationMemberCard({
 
   const handleMemberApprove = async () => {
     setUpdatingMemberSituation(true)
-    const response = await updateMember(
-      member.userId,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      ACTIVE.ACTIVE
-    )
+    const response = await updateMember({
+      memberUserId: member.userId,
+      newActive: ACTIVE.ACTIVE
+    })
 
     if (response) {
       await handleAllMembers()

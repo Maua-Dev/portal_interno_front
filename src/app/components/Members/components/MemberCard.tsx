@@ -33,17 +33,10 @@ export default function MemberCard({
     event.preventDefault()
 
     if (confirm('Deseja desativar o membro?')) {
-      const response = await updateMember(
-        member.userId,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        ACTIVE.DISCONNECTED
-      )
+      const response = await updateMember({
+        memberUserId: member.userId,
+        newActive: ACTIVE.DISCONNECTED
+      })
 
       if (response) {
         toast.success('Membro Desativado! Página atualizando...', {
