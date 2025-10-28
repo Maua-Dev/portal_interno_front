@@ -15,11 +15,20 @@ import { DeleteMemberUsecase } from '../../@clean/modules/member/usecases/delete
 import { ACTIVE } from '../../@clean/shared/domain/enums/active_enum'
 import { CreateMemberUsecase } from '../../@clean/modules/member/usecases/create_member_usecase'
 import { GetAllMembersAdminUsecase } from '../../@clean/modules/member/usecases/get_all_members_admin_usecase.ts'
+import { CreateStrikeUsecase } from '../../@clean/modules/member/usecases/create_strike_usecase'
+import type { StrikeCreationResponse } from '../../@clean/shared/infra/repositories//member_repository_http.ts'
 
 export interface MemberContextInterface {
   getMember: () => Promise<Member>
 
   getAllMembers: () => Promise<Member[]>
+
+  createStrike: (
+    memberUserId: string,
+    reason: string,
+    comment: string,
+    date: number
+  ) => Promise<StrikeCreationResponse>
 
   createMember: (
     ra: string,
@@ -67,6 +76,9 @@ export interface MemberContextInterface {
 }
 
 const defaultContext: MemberContextInterface = {
+  createStrike: async (memberUserId, reason, comment, date) => {
+    return {} as StrikeCreationResponse
+  },
   getMember: async () => {
     return {} as Member
   },
@@ -115,6 +127,9 @@ export const MemberContext = createContext(defaultContext)
 const getMembersUsecase = containerMember.get<GetMemberUsecase>(
   RegistryMember.GetMemberUsecase
 )
+const createStrikeUsecase = containerMember.get<CreateStrikeUsecase>(
+  RegistryMember.CreateStrikeUsecase
+)
 
 const getAllMembersUsecase = containerMember.get<GetAllMembersUsecase>(
   RegistryMember.GetAllMembersUsecase
@@ -144,6 +159,26 @@ export function MemberProvider({ children }: PropsWithChildren) {
   const [isRegister, setIsRegister] = useState(false)
   const [isOnHold, setIsOnHold] = useState(false)
   const [member, setMember] = useState<Member | undefined>()
+
+  async function createStrike(
+    memberUserId: string,
+    reason: string,
+    comment: string,
+    date: number
+  ) {
+    try {
+      const response = await createStrikeUsecase.execute(
+        memberUserId,
+        reason,
+        comment,
+        date
+      )
+      return response
+    } catch (error: any) {
+      setMemberError(error.message)
+      throw new Error('Something went wrong on create strike: ' + error.message)
+    }
+  }
 
   async function handleAllMembers() {
     try {
@@ -339,6 +374,7 @@ export function MemberProvider({ children }: PropsWithChildren) {
         handleAllMembers,
         allMembers,
         isAdmin,
+        createStrike,
         isRegister,
         isOnHold,
         handleLogout,

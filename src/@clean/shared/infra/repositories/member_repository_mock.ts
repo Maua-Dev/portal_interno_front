@@ -5,6 +5,7 @@ import { ACTIVE } from '../../domain/enums/active_enum'
 import { COURSE } from '../../domain/enums/course_enum'
 import { ROLE } from '../../domain/enums/role_enum'
 import { STACK } from '../../domain/enums/stack_enum'
+import type { StrikeCreationResponse } from './member_repository_http'
 
 export class MemberRepositoryMock implements IMemberRepository {
   private members: Member[] = [
@@ -23,7 +24,9 @@ export class MemberRepositoryMock implements IMemberRepository {
       emailDev: 'dsiqueira.devmaua@gmail.com',
       hoursWorked: 3,
       project: ['MF', 'PT', 'SM', 'GM', 'PI'],
-      photo: 'photo1'
+      photo: 'photo1',
+      strikes: 2,
+      strikes_allowed: 4
     }),
     new Member({
       name: 'Bruno fevs',
@@ -40,7 +43,9 @@ export class MemberRepositoryMock implements IMemberRepository {
       emailDev: 'bfevs.devmaua@maua.com',
       hoursWorked: 3,
       project: ['MF', 'PT', 'SM', 'GM', 'PI'],
-      photo: 'photo1'
+      photo: 'photo1',
+      strikes: 2,
+      strikes_allowed: 4
     }),
     new Member({
       name: 'Rubicks Cube',
@@ -57,7 +62,9 @@ export class MemberRepositoryMock implements IMemberRepository {
       emailDev: 'rcube.devmaua@gmai.com',
       hoursWorked: 3,
       project: ['MF', 'PT', 'SM', 'GM', 'PI'],
-      photo: 'photo1'
+      photo: 'photo1',
+      strikes: 2,
+      strikes_allowed: 4
     }),
     new Member({
       name: 'Enzo sakas',
@@ -74,7 +81,9 @@ export class MemberRepositoryMock implements IMemberRepository {
       emailDev: 'esakas.devmaua@gmail.com',
       hoursWorked: 3,
       project: ['MF', 'PT', 'SM', 'GM', 'PI'],
-      photo: 'photo1'
+      photo: 'photo1',
+      strikes: 2,
+      strikes_allowed: 4
     }),
     new Member({
       name: 'Lounis Televisas',
@@ -91,7 +100,9 @@ export class MemberRepositoryMock implements IMemberRepository {
       emailDev: 'ltelevision.devmaua@gmail.com',
       hoursWorked: 3,
       project: ['MF', 'PT', 'SM', 'GM', 'PI'],
-      photo: 'photo1'
+      photo: 'photo1',
+      strikes: 2,
+      strikes_allowed: 4
     }),
     new Member({
       name: 'MAGIC WHITE HANDS',
@@ -108,7 +119,9 @@ export class MemberRepositoryMock implements IMemberRepository {
       emailDev: 'jbranco.devmaua@gmail.com',
       hoursWorked: 3,
       project: ['MF', 'PT', 'SM', 'GM', 'PI'],
-      photo: 'photo1'
+      photo: 'photo1',
+      strikes: 2,
+      strikes_allowed: 4
     })
   ]
 
@@ -136,7 +149,9 @@ export class MemberRepositoryMock implements IMemberRepository {
       year,
       hoursWorked: 3,
       project: ['MF', 'PT', 'SM', 'GM', 'PI'],
-      photo: 'photo1'
+      photo: 'photo1',
+      strikes: 2,
+      strikes_allowed: 4
     })
 
     this.members.push(member)
@@ -150,6 +165,33 @@ export class MemberRepositoryMock implements IMemberRepository {
 
   async getAllMembers(): Promise<Member[]> {
     return this.members
+  }
+
+  async createStrike(
+    memberUserId: string,
+    reason: string,
+    comment: string,
+    date: number
+  ): Promise<StrikeCreationResponse> {
+    console.log(`-- MOCK: Criando strike para ${memberUserId} --`)
+    console.log(`Motivo: ${reason}`)
+    console.log(`Comentário: ${comment}`)
+    console.log(`Data: ${new Date(date).toLocaleDateString()}`)
+
+    const response: StrikeCreationResponse = {
+      strike_id: 'mock-strike-id-' + Math.random(),
+      user_id: memberUserId,
+      reason: reason,
+      comment: comment,
+      date: date
+    }
+
+    const member = this.members.find((m) => m.userId === memberUserId)
+    if (member) {
+      member.strikes = (member.strikes || 0) + 1
+    }
+
+    return Promise.resolve(response)
   }
 
   async updateMember(

@@ -45,6 +45,8 @@ export interface memberOfGetAllMembersRawResponse {
     user_id: string
     project: string[]
     photo: string | null
+    strikes: number | null
+    strikes_allowed: number | null
   }
 }
 
@@ -66,6 +68,8 @@ export interface memberOfGetAllMembersAdminRawResponse {
     hours_worked: number
     project: string[]
     photo: string | null
+    strikes: number | null
+    strikes_allowed: number | null
   }
 }
 
@@ -77,8 +81,42 @@ export interface getAllMembersRawResponse {
   members: memberOfGetAllMembersRawResponse[]
 }
 
+export type StrikeCreationResponse = {
+  strike_id: string
+  user_id: string
+  reason: string
+  comment: string
+  date: number
+}
+
 export class MemberRepositoryHttp implements IMemberRepository {
   constructor(private readonly http: AxiosInstance) {}
+
+  async createStrike(
+    memberUserId: string,
+    reason: string,
+    comment: string,
+    date: number
+  ): Promise<StrikeCreationResponse> {
+    try {
+      const token = localStorage.getItem('idToken')
+      if (!token) throw new Error('Token not found')
+      const response = await this.http.post<StrikeCreationResponse>(
+        '/create-strike',
+        {
+          user_id: memberUserId,
+          reason: reason,
+          comment: comment,
+          date: date
+        },
+        { headers: { Authorization: 'Bearer ' + token } }
+      )
+
+      return response.data
+    } catch (error: any) {
+      throw new Error('Error Creating Strike: ' + error.response?.data?.message)
+    }
+  }
 
   async createMember(
     ra: string,
@@ -190,7 +228,9 @@ export class MemberRepositoryHttp implements IMemberRepository {
             userId: memberUnit.member.user_id,
             hoursWorked: undefined,
             project: memberUnit.member.project,
-            photo: memberUnit.member.photo
+            photo: memberUnit.member.photo,
+            strikes: memberUnit.member.strikes ?? null,
+            strikes_allowed: memberUnit.member.strikes_allowed ?? null
           })
         )
       })
@@ -241,7 +281,9 @@ export class MemberRepositoryHttp implements IMemberRepository {
             userId: memberUnit.member.user_id,
             hoursWorked: memberUnit.member.hours_worked,
             project: memberUnit.member.project,
-            photo: memberUnit.member.photo
+            photo: memberUnit.member.photo,
+            strikes: memberUnit.member.strikes ?? null,
+            strikes_allowed: memberUnit.member.strikes_allowed ?? null
           })
         )
       })

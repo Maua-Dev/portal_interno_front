@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Member } from '../../../../@clean/shared/domain/entities/member'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { useDarkMode } from '../../../hooks/useDarkMode'
@@ -7,6 +7,7 @@ import { millisecondsToHours } from '../../../utils/functions/timeStamp'
 //import { date } from 'zod'
 import { AiFillStar } from 'react-icons/ai'
 import StrikeCard from '../components/StrikeCard'
+import { MemberContext } from '../../../contexts/member_context'
 
 interface MemberDialogProps {
   member: Member
@@ -24,13 +25,23 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
   const FIRST_NAME = nameArray[0]
   const LAST_NAME = nameArray[nameArray.length - 1]
 
-  const [activeStrikes, setActiveStrikes] = useState(Array(5).fill(true))
-  const [showToast, setShowToast] = useState(false)
-
+  const { createStrike } = useContext(MemberContext)
   const [showStrikeCard, setShowStrikeCard] = useState(false)
-  const [selectedStrikeIndex, setSelectedStrikeIndex] = useState<number | null>(
-    null
-  )
+
+  const handleConfirmStrike = async (data: {
+    reason: string
+    comment: string
+    date: string
+  }) => {
+    if (!member) return
+
+    try {
+      await createStrike(member.userId, data.reason, data.comment, Date.now())
+      setShowStrikeCard(false)
+    } catch (error) {
+      console.error('Falha ao criar strike:', error)
+    }
+  }
 
   return (
     <div className="static flex w-full justify-center">
@@ -218,18 +229,23 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
                 <h1 className="font-semi-bold text-lg">Strikes</h1>
               </div>
               <div className="flex items-center gap-1">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <AiFillStar
-                    key={i}
-                    className={`cursor-pointer text-2xl transition-colors ${
-                      activeStrikes[i] ? 'text-yellow-400' : 'text-gray-400'
-                    }`}
-                    onClick={() => {
-                      setSelectedStrikeIndex(i)
-                      setShowStrikeCard(true)
-                    }}
-                  />
-                ))}
+                {Array.from({ length: member.strikes_allowed || 0 }).map(
+                  (_, i) => (
+                    <AiFillStar
+                      key={i}
+                      className={`text-2xl transition-colors ${
+                        i < (member.strikes || 0)
+                          ? 'text-yellow-400'
+                          : 'cursor-pointer text-gray-400 hover:text-yellow-300'
+                      }`}
+                      onClick={() => {
+                        if (i >= (member.strikes || 0) && !formDisabled) {
+                          setShowStrikeCard(true)
+                        }
+                      }}
+                    />
+                  )
+                )}
               </div>
             </div>
             <Button
@@ -254,15 +270,8 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
           </div>
           {showStrikeCard && (
             <StrikeCard
-              onConfirm={() => {
-                setActiveStrikes((prev) =>
-                  prev.map((on, idx) =>
-                    idx === selectedStrikeIndex ? !on : on
-                  )
-                )
-                setShowStrikeCard(false) // Fecha o pop-up após confirmar
-              }}
-              onCancel={() => setShowStrikeCard(false)} // Fecha o pop-up sem aplicar o strike
+              onConfirm={handleConfirmStrike} // <-- CONECTADO CORRETAMENTE
+              onCancel={() => setShowStrikeCard(false)}
               memberName={`${FIRST_NAME} ${LAST_NAME}`}
             />
           )}

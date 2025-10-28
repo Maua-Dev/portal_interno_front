@@ -9,6 +9,7 @@ import { GetMemberUsecase } from '../../../modules/member/usecases/get_member_us
 import { GetAllMembersUsecase } from '../../../modules/member/usecases/get_all_members_usecase'
 import { GetAllMembersAdminUsecase } from '../../../modules/member/usecases/get_all_members_admin_usecase'
 import { UpdateMemberUsecase } from '../../../modules/member/usecases/update_member_usecase'
+import { CreateStrikeUsecase } from '../../../modules/member/usecases/create_strike_usecase'
 
 export const RegistryMember = {
   // Axios Adapter
@@ -24,7 +25,8 @@ export const RegistryMember = {
   GetMemberUsecase: Symbol.for('GetMemberUsecase'),
   UpdateMemberUsecase: Symbol.for('UpdateMemberUsecase'),
   GetAllMembersUsecase: Symbol.for('GetAllMembersUsecase'),
-  GetAllMembersAdimUsecase: Symbol.for('GetAllMembersAdimUsecase')
+  GetAllMembersAdimUsecase: Symbol.for('GetAllMembersAdimUsecase'),
+  CreateStrikeUsecase: Symbol.for('CreateStrikeUsecase')
 }
 
 export const containerMember = new Container()
@@ -175,4 +177,11 @@ containerMember
         context.container.get(RegistryMember.MemberRepositoryMock)
       )
     }
+  })
+containerMember
+  .bind<CreateStrikeUsecase>(RegistryMember.CreateStrikeUsecase)
+  .toDynamicValue((context) => {
+    return new CreateStrikeUsecase(
+      context.container.get<IMemberRepository>(RegistryMember.MemberRepositoryHttp)
+    )
   })

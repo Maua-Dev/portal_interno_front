@@ -115,7 +115,21 @@ export function ProfileModal() {
           </h1>
           {/* Enzo, aqui é uma das telas que vai ter q mexer  */}
           <div className="flex h-full items-center justify-center gap-4 text-3xl">
-            {activeStrikes.map((active, i) => (
+            {/* member?.strikes_allowed define o número TOTAL de estrelas */}
+            {Array.from({ length: member?.strikes_allowed || 0 }).map(
+              (_, i) => (
+                <AiFillStar
+                  key={i}
+                  // A estrela é pintada (text-yellow-400) se o índice for menor que o número de strikes tomados
+                  className={`text-4xl transition-colors ${
+                    i < (member?.strikes || 0)
+                      ? 'text-yellow-400'
+                      : 'text-gray-400'
+                  }`}
+                />
+              )
+            )}
+            {/* {activeStrikes.map((active, i) => (
               <AiFillStar
                 key={i}
                 className={`cursor-pointer text-4xl transition-colors ${
@@ -127,7 +141,7 @@ export function ProfileModal() {
                   )
                 }
               />
-            ))}
+            ))} */}
           </div>
         </div>
       </div>

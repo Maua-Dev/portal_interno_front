@@ -5,6 +5,7 @@ export const useMember = () => {
   const {
     getMember,
     getAllMembers,
+    // getAllMembersAdmin, 
     memberError,
     createMember,
     updateMember,

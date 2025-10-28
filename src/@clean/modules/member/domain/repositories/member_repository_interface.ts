@@ -15,6 +15,13 @@ export interface IMemberRepository {
     course: COURSE
   ): Promise<Member>
 
+  createStrike(
+    memberUserId: string,
+    reason: string,
+    comment: string, // <-- ADICIONE ESTE
+    date: number
+  ): Promise<StrikeCreationResponse>
+
   getMember(): Promise<Member>
 
   getAllMembers(): Promise<Member[]>
