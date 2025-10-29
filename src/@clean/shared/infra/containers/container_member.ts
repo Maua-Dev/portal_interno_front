@@ -182,6 +182,8 @@ containerMember
   .bind<CreateStrikeUsecase>(RegistryMember.CreateStrikeUsecase)
   .toDynamicValue((context) => {
     return new CreateStrikeUsecase(
-      context.container.get<IMemberRepository>(RegistryMember.MemberRepositoryHttp)
+      context.container.get<IMemberRepository>(
+        RegistryMember.MemberRepositoryHttp
+      ) // <-- Sempre usa o HTTP!
     )
   })

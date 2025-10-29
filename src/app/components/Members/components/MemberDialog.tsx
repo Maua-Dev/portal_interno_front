@@ -239,7 +239,7 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
                           : 'cursor-pointer text-gray-400 hover:text-yellow-300'
                       }`}
                       onClick={() => {
-                        if (i >= (member.strikes || 0) && !formDisabled) {
+                        if (i >= (member.strikes || 0)) {
                           setShowStrikeCard(true)
                         }
                       }}
@@ -270,7 +270,7 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
           </div>
           {showStrikeCard && (
             <StrikeCard
-              onConfirm={handleConfirmStrike} // <-- CONECTADO CORRETAMENTE
+              onConfirm={handleConfirmStrike} 
               onCancel={() => setShowStrikeCard(false)}
               memberName={`${FIRST_NAME} ${LAST_NAME}`}
             />
