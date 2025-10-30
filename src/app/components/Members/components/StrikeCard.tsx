@@ -5,12 +5,14 @@ interface SrikeCardProps {
   onConfirm: (data: { reason: string; comment: string; date: string }) => void
   onCancel: () => void
   memberName: string
+  isSubmitting: boolean
 }
 
 export default function StrikeCard({
   onConfirm,
   onCancel,
-  memberName
+  memberName,
+  isSubmitting
 }: SrikeCardProps) {
   const [reason, setReason] = useState('')
   const [comment, setComment] = useState('')
@@ -87,14 +89,17 @@ export default function StrikeCard({
                 darkMode ? 'bg-black text-white' : 'bg-black text-white'
               }`}
               onClick={() => onConfirm({ reason, comment, date: currentDate })}
+              disabled={isSubmitting || !reason}
             >
               Confirmar
+              {isSubmitting ? 'Confirmando...' : 'Confirmar'} {/* MODIFICADO */}
             </button>
             <button
               className={`rounded px-4 py-2 shadow ${
                 darkMode ? 'bg-black text-white' : 'bg-black text-white'
               }`}
               onClick={onCancel}
+              disabled={isSubmitting}
             >
               Cancelar
             </button>

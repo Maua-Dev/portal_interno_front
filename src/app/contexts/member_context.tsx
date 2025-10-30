@@ -16,7 +16,8 @@ import { ACTIVE } from '../../@clean/shared/domain/enums/active_enum'
 import { CreateMemberUsecase } from '../../@clean/modules/member/usecases/create_member_usecase'
 import { GetAllMembersAdminUsecase } from '../../@clean/modules/member/usecases/get_all_members_admin_usecase.ts'
 import { CreateStrikeUsecase } from '../../@clean/modules/member/usecases/create_strike_usecase'
-import type { StrikeCreationResponse } from '../../@clean/shared/infra/repositories//member_repository_http.ts'
+// import type { StrikeCreationResponse } from '../../@clean/shared/infra/repositories//member_repository_http.ts'
+import type { StrikeCreationResponse } from '../../@clean/shared/domain/entities/strike.ts'
 
 export interface MemberContextInterface {
   getMember: () => Promise<Member>
@@ -259,7 +260,7 @@ export function MemberProvider({ children }: PropsWithChildren) {
       console.log('First member cellphone:', members.members[0]?.cellphone)
       console.log('==========================')
 
-      return members.members
+      return members.members // mexer aqui Enzo
     } catch (error: any) {
       setMemberError(error.message)
       throw new Error(

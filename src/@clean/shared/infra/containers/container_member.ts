@@ -9,7 +9,7 @@ import { GetMemberUsecase } from '../../../modules/member/usecases/get_member_us
 import { GetAllMembersUsecase } from '../../../modules/member/usecases/get_all_members_usecase'
 import { GetAllMembersAdminUsecase } from '../../../modules/member/usecases/get_all_members_admin_usecase'
 import { UpdateMemberUsecase } from '../../../modules/member/usecases/update_member_usecase'
-import { CreateStrikeUsecase } from '../../../modules/member/usecases/create_strike_usecase'
+import { CreateStrikeUsecase } from '../../../modules/member/usecases/create_strike_usecase' // 👈 1. Importe o usecase
 
 export const RegistryMember = {
   // Axios Adapter
@@ -179,11 +179,17 @@ containerMember
     }
   })
 containerMember
-  .bind<CreateStrikeUsecase>(RegistryMember.CreateStrikeUsecase)
+  .bind(RegistryMember.CreateStrikeUsecase)
   .toDynamicValue((context) => {
-    return new CreateStrikeUsecase(
-      context.container.get<IMemberRepository>(
-        RegistryMember.MemberRepositoryHttp
-      ) // <-- Sempre usa o HTTP!
-    )
+    
+    if (import.meta.env.VITE_STAGE === 'test') {
+      return new CreateStrikeUsecase(
+        context.container.get(RegistryMember.MemberRepositoryMock)
+      )
+    } else {
+      
+      return new CreateStrikeUsecase(
+        context.container.get(RegistryMember.MemberRepositoryHttp)
+      )
+    }
   })

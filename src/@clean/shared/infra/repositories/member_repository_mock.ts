@@ -5,7 +5,8 @@ import { ACTIVE } from '../../domain/enums/active_enum'
 import { COURSE } from '../../domain/enums/course_enum'
 import { ROLE } from '../../domain/enums/role_enum'
 import { STACK } from '../../domain/enums/stack_enum'
-import type { StrikeCreationResponse } from './member_repository_http'
+// import type { StrikeCreationResponse } from './member_repository_http'
+import type { StrikeCreationResponse } from '../../domain/entities/strike'
 
 export class MemberRepositoryMock implements IMemberRepository {
   private members: Member[] = [
@@ -173,25 +174,44 @@ export class MemberRepositoryMock implements IMemberRepository {
     comment: string,
     date: number
   ): Promise<StrikeCreationResponse> {
-    console.log(`-- MOCK: Criando strike para ${memberUserId} --`)
-    console.log(`Motivo: ${reason}`)
-    console.log(`Comentário: ${comment}`)
-    console.log(`Data: ${new Date(date).toLocaleDateString()}`)
+    console.log(
+      '%c--- MOCK: createStrike ACIONADO ---',
+      'color: orange; font-weight: bold;'
+    )
+    console.log(` striking usuário: ${memberUserId}`)
 
-    const response: StrikeCreationResponse = {
-      strike_id: 'mock-strike-id-' + Math.random(),
-      user_id: memberUserId,
-      reason: reason,
-      comment: comment,
-      date: date
-    }
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const memberToStrike = this.members.find(
+          (m) => m.userId === memberUserId
+        )
 
-    const member = this.members.find((m) => m.userId === memberUserId)
-    if (member) {
-      member.strikes = (member.strikes || 0) + 1
-    }
+        if (memberToStrike) {
+          memberToStrike.strikes = (memberToStrike.strikes || 0) + 1
+          console.log(
+            `Strikes de ${memberToStrike.name} atualizado para: ${memberToStrike.strikes}`
+          )
+        } else {
+          console.error(
+            `❌ Membro com ID ${memberUserId} não encontrado no mock.`
+          )
+        }
 
-    return Promise.resolve(response)
+        const response: StrikeCreationResponse = {
+          strike_id: `mock-strike-${Date.now()}`,
+          owner_user_id: memberUserId,
+          target_user_id: memberUserId,
+          applier_user_id: 'mock-admin-id',
+          occurred_date: date,
+          category: reason,
+          description: comment,
+          case_number: 1,
+          message: 'Strike was created successfully via MOCK'
+        }
+
+        resolve(response)
+      }, 500) // 500ms de atraso
+    })
   }
 
   async updateMember(

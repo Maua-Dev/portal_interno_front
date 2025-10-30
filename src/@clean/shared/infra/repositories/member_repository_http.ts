@@ -8,6 +8,7 @@ import { STACK, stackToEnum } from '../../domain/enums/stack_enum'
 import { decorate, injectable } from 'inversify'
 import { HTTP_STATUS_CODE } from '../../domain/enums/http_status_code'
 import { NoItemsFoundError } from '../../domain/helpers/errors/domain_error'
+import { StrikeCreationResponse } from '../../domain/entities/strike'
 
 // interface memberRawResponse {
 //   member: {
@@ -83,10 +84,14 @@ export interface getAllMembersRawResponse {
 
 export type StrikeCreationResponse = {
   strike_id: string
-  user_id: string
-  reason: string
-  comment: string
-  date: number
+  owner_user_id: string
+  target_user_id: string
+  applier_user_id: string
+  occurred_date: number
+  category: string
+  description: string
+  case_number: number
+  message: string
 }
 
 export class MemberRepositoryHttp implements IMemberRepository {
@@ -101,20 +106,22 @@ export class MemberRepositoryHttp implements IMemberRepository {
     try {
       const token = localStorage.getItem('idToken')
       if (!token) throw new Error('Token not found')
+
       const response = await this.http.post<StrikeCreationResponse>(
         '/create-strike',
         {
-          user_id: memberUserId,
-          reason: reason,
-          comment: comment,
-          date: date
+          target_user_id: memberUserId,
+          category: reason,
+          description: comment,
+          occurred_date: date
         },
         { headers: { Authorization: 'Bearer ' + token } }
       )
 
       return response.data
     } catch (error: any) {
-      throw new Error('Error Creating Strike: ' + error.response?.data?.message)
+      const errorMessage = error.response?.data?.message || error.message
+      throw new Error(`Error Creating Strike: ${errorMessage}`)
     }
   }
 

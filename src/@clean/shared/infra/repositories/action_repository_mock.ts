@@ -105,7 +105,9 @@ export class ActionRepositoryMock implements IActionRepository {
       emailDev: 'dsiqueira.devmaua@gmail.com',
       hoursWorked: 3,
       project: ['MF', 'PT', 'SM', 'GM', 'PI'],
-      photo: 'photo1'
+      photo: 'photo1',
+      strikes: 2,
+      strikes_allowed: 4
     }),
     new Member({
       name: 'Bruno fevs',
@@ -122,7 +124,9 @@ export class ActionRepositoryMock implements IActionRepository {
       emailDev: 'bfevs.devmaua@maua.com',
       hoursWorked: 3,
       project: ['MF', 'PT', 'SM', 'GM', 'PI'],
-      photo: 'photo1'
+      photo: 'photo1',
+      strikes: 2,
+      strikes_allowed: 4
     }),
     new Member({
       name: 'Rubicks Cube',
@@ -139,7 +143,9 @@ export class ActionRepositoryMock implements IActionRepository {
       emailDev: 'rcube.devmaua@gmai.com',
       hoursWorked: 3,
       project: ['MF', 'PT', 'SM', 'GM', 'PI'],
-      photo: 'photo1'
+      photo: 'photo1',
+      strikes: 2,
+      strikes_allowed: 4
     }),
     new Member({
       name: 'Enzo sakas',
@@ -156,7 +162,9 @@ export class ActionRepositoryMock implements IActionRepository {
       emailDev: 'esakas.devmaua@gmail.com',
       hoursWorked: 3,
       project: ['MF', 'PT', 'SM', 'GM', 'PI'],
-      photo: 'photo1'
+      photo: 'photo1',
+      strikes: 2,
+      strikes_allowed: 4
     }),
     new Member({
       name: 'Lounis Televisas',
@@ -173,7 +181,9 @@ export class ActionRepositoryMock implements IActionRepository {
       emailDev: 'ltelevision.devmaua@gmail.com',
       hoursWorked: 3,
       project: ['MF', 'PT', 'SM', 'GM', 'PI'],
-      photo: 'photo1'
+      photo: 'photo1',
+      strikes: 2,
+      strikes_allowed: 4
     }),
     new Member({
       name: 'MAGIC WHITE HANDS',
@@ -190,7 +200,9 @@ export class ActionRepositoryMock implements IActionRepository {
       emailDev: 'jbranco.devmaua@gmail.com',
       hoursWorked: 3,
       project: ['MF', 'PT', 'SM', 'GM', 'PI'],
-      photo: 'photo1'
+      photo: 'photo1',
+      strikes: 2,
+      strikes_allowed: 4
     })
   ]
   private actions: Action[] = [

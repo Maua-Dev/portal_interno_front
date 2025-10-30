@@ -5,8 +5,9 @@ export const useMember = () => {
   const {
     getMember,
     getAllMembers,
-    // getAllMembersAdmin, 
+    // getAllMembersAdmin
     memberError,
+    createStrike,
     createMember,
     updateMember,
     deleteMember,
@@ -27,6 +28,7 @@ export const useMember = () => {
     handleMember,
     allMembers,
     getMember,
+    createStrike,
     createMember,
     updateMember,
     deleteMember,

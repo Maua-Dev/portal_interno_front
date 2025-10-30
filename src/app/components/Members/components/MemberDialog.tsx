@@ -8,6 +8,7 @@ import { millisecondsToHours } from '../../../utils/functions/timeStamp'
 import { AiFillStar } from 'react-icons/ai'
 import StrikeCard from '../components/StrikeCard'
 import { MemberContext } from '../../../contexts/member_context'
+import { useMember } from '../../../hooks/useMember'
 
 interface MemberDialogProps {
   member: Member
@@ -25,7 +26,9 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
   const FIRST_NAME = nameArray[0]
   const LAST_NAME = nameArray[nameArray.length - 1]
 
-  const { createStrike } = useContext(MemberContext)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const { createStrike, handleAllMembers } = useMember()
   const [showStrikeCard, setShowStrikeCard] = useState(false)
 
   const handleConfirmStrike = async (data: {
@@ -33,13 +36,19 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
     comment: string
     date: string
   }) => {
-    if (!member) return
+    if (!member || isSubmitting) return
+
+    setIsSubmitting(true)
 
     try {
       await createStrike(member.userId, data.reason, data.comment, Date.now())
+
+      await handleAllMembers()
       setShowStrikeCard(false)
     } catch (error) {
       console.error('Falha ao criar strike:', error)
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -270,9 +279,10 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
           </div>
           {showStrikeCard && (
             <StrikeCard
-              onConfirm={handleConfirmStrike} 
+              onConfirm={handleConfirmStrike}
               onCancel={() => setShowStrikeCard(false)}
               memberName={`${FIRST_NAME} ${LAST_NAME}`}
+              isSubmitting={isSubmitting}
             />
           )}
         </DialogPrimitive.DialogContent>
