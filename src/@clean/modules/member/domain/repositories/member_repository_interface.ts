@@ -3,6 +3,7 @@ import { ACTIVE } from '../../../../shared/domain/enums/active_enum'
 import { COURSE } from '../../../../shared/domain/enums/course_enum'
 import { ROLE } from '../../../../shared/domain/enums/role_enum'
 import { STACK } from '../../../../shared/domain/enums/stack_enum'
+import { Strike, StrikeCreationResponse } from '../../../../shared/domain/entities/strike'
 
 export interface IMemberRepository {
   createMember(
@@ -18,8 +19,9 @@ export interface IMemberRepository {
   createStrike(
     memberUserId: string,
     reason: string,
-    comment: string, // <-- ADICIONE ESTE
-    date: number
+    comment: string,
+    date: number,
+    ownerUserId: string // qual admin deu o strike
   ): Promise<StrikeCreationResponse>
 
   getMember(): Promise<Member>

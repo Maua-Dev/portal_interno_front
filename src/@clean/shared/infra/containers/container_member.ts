@@ -10,6 +10,7 @@ import { GetAllMembersUsecase } from '../../../modules/member/usecases/get_all_m
 import { GetAllMembersAdminUsecase } from '../../../modules/member/usecases/get_all_members_admin_usecase'
 import { UpdateMemberUsecase } from '../../../modules/member/usecases/update_member_usecase'
 import { CreateStrikeUsecase } from '../../../modules/member/usecases/create_strike_usecase' // 👈 1. Importe o usecase
+import { GetStrikeUsecase } from '../../../modules/member/usecases/get_strike_usecase'
 
 export const RegistryMember = {
   // Axios Adapter
@@ -26,7 +27,8 @@ export const RegistryMember = {
   UpdateMemberUsecase: Symbol.for('UpdateMemberUsecase'),
   GetAllMembersUsecase: Symbol.for('GetAllMembersUsecase'),
   GetAllMembersAdimUsecase: Symbol.for('GetAllMembersAdimUsecase'),
-  CreateStrikeUsecase: Symbol.for('CreateStrikeUsecase')
+  CreateStrikeUsecase: Symbol.for('CreateStrikeUsecase'),
+  GetStrikeUsecase: Symbol.for('GetStrikeUseCase')
 }
 
 export const containerMember = new Container()
@@ -181,15 +183,34 @@ containerMember
 containerMember
   .bind(RegistryMember.CreateStrikeUsecase)
   .toDynamicValue((context) => {
-    
     if (import.meta.env.VITE_STAGE === 'test') {
       return new CreateStrikeUsecase(
         context.container.get(RegistryMember.MemberRepositoryMock)
       )
     } else {
-      
       return new CreateStrikeUsecase(
         context.container.get(RegistryMember.MemberRepositoryHttp)
+      )
+    }
+  })
+containerMember
+  .bind(RegistryMember.GetStrikeUsecase)
+  .toDynamicValue((context) => {
+    if (import.meta.env.VITE_STAGE === 'test') {
+      return new GetStrikeUsecase(
+        context.container.get(RegistryMember.MemberRepositoryMock)
+      )
+    } else if (
+      import.meta.env.VITE_STAGE === 'dev' ||
+      import.meta.env.VITE_STAGE === 'prod' ||
+      import.meta.env.VITE_STAGE === 'homolog'
+    ) {
+      return new GetStrikeUsecase(
+        context.container.get(RegistryMember.MemberRepositoryHttp)
+      )
+    } else {
+      return new GetStrikeUsecase(
+        context.container.get(RegistryMember.MemberRepositoryMock)
       )
     }
   })

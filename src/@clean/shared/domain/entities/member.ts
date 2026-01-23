@@ -17,6 +17,7 @@ export type JsonProps = {
     hired_date: number
     deactivated_date?: number | null
     strikes?: number | null
+    strikes_id?: string[]
     strikes_allowed?: number | null
     active: string
     user_id: string
@@ -36,6 +37,7 @@ export type MemberProps = {
   stack: STACK // ENUM
   year: number
   strikes: number | null
+  strikesId: string[]
   strikes_allowed: number | null
   cellphone: string
   course: COURSE // ENUM
@@ -58,6 +60,7 @@ export class Member {
   private _year: number
   private _cellphone: string
   private _strikes: number | null
+  private _strikesId: string[]
   private _strikes_allowed: number | null
   private _course: COURSE
   private _hiredDate: number
@@ -79,6 +82,7 @@ export class Member {
     cellphone,
     course,
     strikes,
+    strikesId,
     strikes_allowed,
     hiredDate,
     deactivatedDate,
@@ -98,6 +102,7 @@ export class Member {
     this._cellphone = cellphone
     this._course = course
     this._strikes = strikes
+    this._strikesId = strikesId || []
     this._strikes_allowed = strikes_allowed
     this._hiredDate = hiredDate
     this._deactivatedDate = deactivatedDate
@@ -247,6 +252,13 @@ export class Member {
     this._strikes = strikes
   }
 
+  get strikesId(): string[] {
+    return this._strikesId
+  }
+  set strikesId(strikesId: string[]) {
+    this._strikesId = strikesId
+  }
+
   get strikes_allowed(): number {
     if (this._strikes_allowed == null) return 0
     return this._strikes_allowed as number
@@ -271,6 +283,7 @@ export class Member {
       hired_date: this.hiredDate,
       deactivated_date: this.deactivatedDate,
       strikes: this.strikes,
+      strikes_id: this.strikesId,
       strikes_allowed: this.strikes_allowed,
       active: this.active,
       user_id: this.userId,
@@ -288,6 +301,7 @@ export class Member {
       ra: json.member.ra,
       role: roleToEnum(json.member.role),
       stack: stackToEnum(json.member.stack),
+      strikesId: json.member.strikes_id || [],
       strikes: json.member.strikes ?? null,
       strikes_allowed: json.member.strikes_allowed ?? null,
       year: json.member.year,

@@ -1,23 +1,46 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useDarkMode } from '../../../hooks/useDarkMode'
+
+export interface StrikeData {
+  reason: string
+  comment: string
+  date: number
+}
 
 interface SrikeCardProps {
   onConfirm: (data: { reason: string; comment: string; date: string }) => void
   onCancel: () => void
   memberName: string
   isSubmitting: boolean
+  // NOVAS PROPS:
+  initialData?: StrikeData | null // <-- Recebe os dados para visualização
+  readOnly?: boolean // <-- Define se é apenas leitura
 }
 
 export default function StrikeCard({
   onConfirm,
   onCancel,
   memberName,
-  isSubmitting
+  isSubmitting,
+  initialData, // <-- Recebendo a prop
+  readOnly = false // <-- Recebendo a prop (padrão false)
 }: SrikeCardProps) {
-  const [reason, setReason] = useState('')
-  const [comment, setComment] = useState('')
-  const currentDate = new Date().toLocaleDateString()
+  // const [reason, setReason] = useState('')
+  // const [comment, setComment] = useState('')
+  const [reason, setReason] = useState(initialData?.reason || '')
+  const [comment, setComment] = useState(initialData?.comment || '')
+  // const currentDate = new Date().toLocaleDateString()
+  const displayDate = initialData
+    ? new Date(initialData.date).toLocaleDateString()
+    : new Date().toLocaleDateString()
   const { darkMode } = useDarkMode()
+
+  useEffect(() => {
+    if (initialData) {
+      setReason(initialData.reason)
+      setComment(initialData.comment)
+    }
+  }, [initialData])
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 text-black">
@@ -57,7 +80,8 @@ export default function StrikeCard({
             <label className="block text-sm font-medium">Data</label>
             <input
               type="text"
-              value={currentDate}
+              // value={currentDate}
+              value={displayDate}
               disabled
               className={`mt-1 w-full rounded px-3 py-2 shadow-sm ${
                 darkMode
@@ -88,7 +112,7 @@ export default function StrikeCard({
               className={`rounded px-4 py-2 shadow ${
                 darkMode ? 'bg-black text-white' : 'bg-black text-white'
               }`}
-              onClick={() => onConfirm({ reason, comment, date: currentDate })}
+              onClick={() => onConfirm({ reason, comment, date: displayDate })}
               disabled={isSubmitting || !reason}
             >
               Confirmar

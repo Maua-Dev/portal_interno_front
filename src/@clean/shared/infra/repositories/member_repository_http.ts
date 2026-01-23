@@ -101,11 +101,20 @@ export class MemberRepositoryHttp implements IMemberRepository {
     memberUserId: string,
     reason: string,
     comment: string,
-    date: number
+    date: number,
+    ownerUserId: string
   ): Promise<StrikeCreationResponse> {
     try {
       const token = localStorage.getItem('idToken')
       if (!token) throw new Error('Token not found')
+
+      const data = {
+        owner_user_id: ownerUserId,
+        target_user_id: memberUserId,
+        occurred_date: date,
+        category: reason,
+        description: comment
+      }
 
       const response = await this.http.post<StrikeCreationResponse>(
         '/create-strike',
@@ -123,6 +132,12 @@ export class MemberRepositoryHttp implements IMemberRepository {
       const errorMessage = error.response?.data?.message || error.message
       throw new Error(`Error Creating Strike: ${errorMessage}`)
     }
+  }
+  async getStrike(strikeId: string): Promise<Strike> {
+    const response = await this.http.get(`/get_strike`, {
+      params: { strike_id: strikeId }
+    })
+    return Strike.fromJSON(response.data.strike)
   }
 
   async createMember(

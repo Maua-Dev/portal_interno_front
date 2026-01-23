@@ -9,6 +9,13 @@ import { AiFillStar } from 'react-icons/ai'
 import StrikeCard from '../components/StrikeCard'
 import { MemberContext } from '../../../contexts/member_context'
 import { useMember } from '../../../hooks/useMember'
+import { Strike } from '../../../../@clean/shared/domain/entities/strike'
+
+export interface StrikeData {
+  reason: string
+  comment: string
+  date: number
+}
 
 interface MemberDialogProps {
   member: Member
@@ -28,8 +35,68 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
 
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const { createStrike, handleAllMembers } = useMember()
+  // const { createStrike, handleAllMembers } = useMember()
   const [showStrikeCard, setShowStrikeCard] = useState(false)
+
+  const [currentStrikes, setCurrentStrikes] = useState(member.strikes || 0)
+
+  const [strikesList, setStrikesList] = useState<StrikeData[]>([])
+
+  // const [selectedStrikeToView, setSelectedStrikeToView] =
+  // useState<StrikeData | null>(null)
+  const [isReadOnly, setIsReadOnly] = useState(false)
+
+  const { createStrike, getStrike, handleAllMembers } = useMember() // Importar getStrike
+  const [selectedStrikeToView, setSelectedStrikeToView] =
+    useState<StrikeData | null>(null)
+
+  // Garante que o estado reseta se fechares e abrires o modal novamente
+  useEffect(() => {
+    if (open) {
+      setCurrentStrikes(member.strikes || 0)
+      // Nota: No Mock, começamos com a lista vazia ou teríamos de inventar dados fictícios
+      // Se o membro já vem com 2 strikes do mock, mas sem detalhes, eles não abrirão detalhes (esperado no mock)
+    }
+  }, [open, member.strikes])
+
+  const handleStarClick = async (index: number) => {
+    //(CRIAR)
+    if (index === (member.strikes || 0)) {
+      setSelectedStrikeToView(null) // Limpa dados anteriores
+      setIsReadOnly(false) // Modo de edição
+      setShowStrikeCard(true)
+    }
+    // CASO B: Clicou numa estrela já preenchida (VISUALIZAR)
+    else if (index < (member.strikes || 0)) {
+      // Verifica se temos a lista de IDs dos strikes no membro
+      const strikeIdList = member.strikesId || [] // Garante que existe no Member entity
+      const strikeId = strikeIdList[index] // Pega o ID correspondente à posição da estrela
+
+      if (strikeId) {
+        try {
+          // Busca os dados reais no backend
+          const strikeDetails = await getStrike(strikeId)
+
+          
+          setSelectedStrikeToView({
+            reason: strikeDetails.category, 
+            comment: strikeDetails.description, // Backend chama de description
+            date: strikeDetails.occurredDate
+          })
+
+          setIsReadOnly(true)
+          setShowStrikeCard(true)
+        } catch (err) {
+          console.error('Erro ao buscar strike', err)
+          alert('Erro ao buscar detalhes do strike.')
+        }
+      } else {
+        console.log(
+          'Strike ID não encontrado para esta posição (pode ser dado antigo sem ID associado).'
+        )
+      }
+    }
+  }
 
   const handleConfirmStrike = async (data: {
     reason: string
@@ -41,7 +108,16 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
     setIsSubmitting(true)
 
     try {
+      // entender melhor essa parte
       await createStrike(member.userId, data.reason, data.comment, Date.now())
+      setCurrentStrikes((prev) => prev + 1)
+      // Guarda os detalhes na memória local para podermos clicar na estrela depois e ver
+      const newStrikeData: StrikeData = {
+        reason: data.reason,
+        comment: data.comment,
+        date: Date.now()
+      }
+      setStrikesList((prev) => [...prev, newStrikeData])
 
       await handleAllMembers()
       setShowStrikeCard(false)
@@ -240,18 +316,31 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
               <div className="flex items-center gap-1">
                 {Array.from({ length: member.strikes_allowed || 0 }).map(
                   (_, i) => (
+                    // <AiFillStar
+                    //   key={i}
+                    //   className={`text-2xl transition-colors ${
+                    //     i < currentStrikes // MUDOU DE: i < (member.strikes || 0)
+                    //       ? 'text-yellow-400'
+                    //       : 'cursor-pointer text-gray-400 hover:text-yellow-300'
+                    //   }`}
+                    //   // --- ALTERAÇÃO NO ONCLICK ---
+                    //   onClick={() => {
+                    //     // MUDOU DE: i >= (member.strikes || 0)
+                    //     // PARA:
+                    //     if (i === currentStrikes) {
+                    //       setShowStrikeCard(true)
+                    //     }
+                    //   }}
+                    // />
                     <AiFillStar
                       key={i}
+                      // 3. ATUALIZAÇÃO VISUAL E LÓGICA DE CLIQUE
                       className={`text-2xl transition-colors ${
-                        i < (member.strikes || 0)
-                          ? 'text-yellow-400'
-                          : 'cursor-pointer text-gray-400 hover:text-yellow-300'
+                        i < currentStrikes
+                          ? 'cursor-pointer text-yellow-400 hover:text-yellow-500' // Estrela Cheia
+                          : 'cursor-pointer text-gray-400 hover:text-yellow-300' // Estrela Vazia
                       }`}
-                      onClick={() => {
-                        if (i >= (member.strikes || 0)) {
-                          setShowStrikeCard(true)
-                        }
-                      }}
+                      onClick={() => handleStarClick(i)}
                     />
                   )
                 )}
@@ -283,6 +372,9 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
               onCancel={() => setShowStrikeCard(false)}
               memberName={`${FIRST_NAME} ${LAST_NAME}`}
               isSubmitting={isSubmitting}
+              // Passamos os dados extras aqui
+              initialData={selectedStrikeToView}
+              readOnly={isReadOnly}
             />
           )}
         </DialogPrimitive.DialogContent>

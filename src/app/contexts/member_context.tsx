@@ -18,6 +18,8 @@ import { GetAllMembersAdminUsecase } from '../../@clean/modules/member/usecases/
 import { CreateStrikeUsecase } from '../../@clean/modules/member/usecases/create_strike_usecase'
 // import type { StrikeCreationResponse } from '../../@clean/shared/infra/repositories//member_repository_http.ts'
 import type { StrikeCreationResponse } from '../../@clean/shared/domain/entities/strike.ts'
+import { GetStrikeUsecase } from '../../@clean/modules/member/usecases/get_strike_usecase.ts'
+import { Strike } from '../../@clean/shared/domain/entities/strike.ts'
 
 export interface MemberContextInterface {
   getMember: () => Promise<Member>
@@ -30,6 +32,8 @@ export interface MemberContextInterface {
     comment: string,
     date: number
   ) => Promise<StrikeCreationResponse>
+
+  getStrike: (strikeId: string) => Promise<Strike>
 
   createMember: (
     ra: string,
@@ -153,6 +157,10 @@ const deleteMemberUsecase = containerMember.get<DeleteMemberUsecase>(
   RegistryMember.DeleteMemberUsecase
 )
 
+const getStrikeUsecase = containerMember.get<GetStrikeUsecase>(
+  RegistryMember.GetStrikeUsecase
+)
+
 export function MemberProvider({ children }: PropsWithChildren) {
   const [memberError, setMemberError] = useState('')
   const [isAdmin, setIsAdmin] = useState(false)
@@ -178,6 +186,14 @@ export function MemberProvider({ children }: PropsWithChildren) {
     } catch (error: any) {
       setMemberError(error.message)
       throw new Error('Something went wrong on create strike: ' + error.message)
+    }
+  }
+
+  async function getStrike(strikeId: string): Promise<Strike> {
+    try {
+      return await getStrikeUsecase.execute(strikeId)
+    } catch (error: any) {
+      throw new Error(error.message)
     }
   }
 
@@ -372,6 +388,7 @@ export function MemberProvider({ children }: PropsWithChildren) {
         deleteMember,
         memberError,
         handleMember,
+        getStrike,
         handleAllMembers,
         allMembers,
         isAdmin,
