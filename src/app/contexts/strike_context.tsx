@@ -1,12 +1,7 @@
-import type { FaF } from 'react-icons/fa6'
 import type { Strike } from '../../@clean/shared/domain/entities/strike'
-import { useStrike } from '../hooks/useStrike'
-import React, {
+import {
   createContext,
-  useState,
-  useContext,
-  ReactNode,
-  useEffect
+  useState, ReactNode
 } from 'react'
 
 export interface StrikeContextInterface {
@@ -23,7 +18,7 @@ export interface StrikeContextInterface {
   ) => Promise<void>
 }
 
-const StrikeContext = createContext<StrikeContextInterface>({} as StrikeContextInterface)
+export const StrikeContext = createContext<StrikeContextInterface>({} as StrikeContextInterface)
 
 export function StrikeContextProvider({ children }: { children: ReactNode }) {
   const [strikes, setStrikes] = useState<Strike[]>([])

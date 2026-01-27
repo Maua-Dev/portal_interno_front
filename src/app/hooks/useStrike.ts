@@ -1,7 +1,10 @@
+import { useContext } from 'react'
+import { StrikeContext } from '../contexts/strike_context'
 export const useStrike = () => {
-    const {
-        create_strike, 
-        delete_strike,
-        get_strike,
-    }
+  const { postStrike, deleteStrike, getStrikes } = useContext(StrikeContext)
+  return {
+    postStrike,
+    deleteStrike,
+    getStrikes
+  }
 }
