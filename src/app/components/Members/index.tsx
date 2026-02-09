@@ -113,8 +113,13 @@ export default function Members() {
   }, [filterProps, members])
 
   async function loadMembers() {
-    const response = await getAllMembers()
-    setMembers(response)
+    try {
+      const response = await getAllMembers()
+      setMembers(response)
+    } catch (error) {
+      console.error('Error loading members:', error)
+      setMembers([]) // Remove loader state
+    }
   }
 
   useEffect(() => {

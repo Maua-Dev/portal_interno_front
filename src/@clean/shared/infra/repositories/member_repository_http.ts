@@ -1,4 +1,4 @@
-import { AxiosInstance } from 'axios'
+import type { AxiosInstance } from 'axios'
 import { IMemberRepository } from '../../../modules/member/domain/repositories/member_repository_interface'
 import { JsonProps, Member } from '../../domain/entities/member'
 import { ACTIVE, activeToEnum } from '../../domain/enums/active_enum'
@@ -8,26 +8,9 @@ import { STACK, stackToEnum } from '../../domain/enums/stack_enum'
 import { decorate, injectable } from 'inversify'
 import { HTTP_STATUS_CODE } from '../../domain/enums/http_status_code'
 import { NoItemsFoundError } from '../../domain/helpers/errors/domain_error'
-import { StrikeCreationResponse } from '../../domain/entities/strike'
+import { Strike, StrikeCreationResponse } from '../../domain/entities/strike'
 
-// interface memberRawResponse {
-//   member: {
-//     name: string
-//     email_dev: string
-//     email: string
-//     ra: string
-//     role: string
-//     stack: string
-//     year: number
-//     cellphone: string
-//     course: string
-//     hired_date: number
-//     deactivated_date?: number
-//     active: string
-//     user_id: string
-//     hours_worked: number
-//   }
-// }
+// interface memberRawResponse... (mantido comentado como no original)
 
 export interface memberOfGetAllMembersRawResponse {
   member: {
@@ -82,18 +65,6 @@ export interface getAllMembersRawResponse {
   members: memberOfGetAllMembersRawResponse[]
 }
 
-export type StrikeCreationResponse = {
-  strike_id: string
-  owner_user_id: string
-  target_user_id: string
-  applier_user_id: string
-  occurred_date: number
-  category: string
-  description: string
-  case_number: number
-  message: string
-}
-
 export class MemberRepositoryHttp implements IMemberRepository {
   constructor(private readonly http: AxiosInstance) {}
 
@@ -138,6 +109,23 @@ export class MemberRepositoryHttp implements IMemberRepository {
       params: { strike_id: strikeId }
     })
     return Strike.fromJSON(response.data.strike)
+  }
+
+  async getAllStrikes(): Promise<Strike[]> {
+    try {
+      const token = localStorage.getItem('idToken')
+      if (!token) throw new Error('Token not found')
+
+      const response = await this.http.post<{ strikes: StrikeCreationResponse[] }>(
+        '/get-all-strikes',
+        {},
+        { headers: { Authorization: 'Bearer ' + token } }
+      )
+
+      return response.data.strikes.map((strike) => Strike.fromJSON(strike))
+    } catch (error: any) {
+      throw new Error('Error Getting All Strikes: ' + error.message)
+    }
   }
 
   async createMember(
@@ -213,6 +201,7 @@ export class MemberRepositoryHttp implements IMemberRepository {
   async getAllMembers(): Promise<Member[]> {
     try {
       const token = localStorage.getItem('idToken')
+      console.log('MemberRepositoryHttp: Token encontrado para getAllMembers?', !!token)
 
       if (!token) {
         throw new Error('Token not found')
@@ -252,6 +241,7 @@ export class MemberRepositoryHttp implements IMemberRepository {
             project: memberUnit.member.project,
             photo: memberUnit.member.photo,
             strikes: memberUnit.member.strikes ?? null,
+            strikesId: [],
             strikes_allowed: memberUnit.member.strikes_allowed ?? null
           })
         )
@@ -305,6 +295,7 @@ export class MemberRepositoryHttp implements IMemberRepository {
             project: memberUnit.member.project,
             photo: memberUnit.member.photo,
             strikes: memberUnit.member.strikes ?? null,
+            strikesId: [],
             strikes_allowed: memberUnit.member.strikes_allowed ?? null
           })
         )

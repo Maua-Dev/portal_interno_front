@@ -1,7 +1,7 @@
 import type { Strike } from '../../@clean/shared/domain/entities/strike'
 import {
   createContext,
-  useState, ReactNode
+  useState, type ReactNode
 } from 'react'
 
 export interface StrikeContextInterface {

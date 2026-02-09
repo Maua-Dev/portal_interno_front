@@ -75,6 +75,7 @@ containerMember
   .bind(RegistryMember.GetAllMembersUsecase)
   .toDynamicValue((context) => {
     if (import.meta.env.VITE_STAGE === 'test') {
+      console.log('Using MemberRepositoryMock (test)')
       return new GetAllMembersUsecase(
         context.container.get(RegistryMember.MemberRepositoryMock)
       )
@@ -83,10 +84,12 @@ containerMember
       import.meta.env.VITE_STAGE === 'prod' ||
       import.meta.env.VITE_STAGE === 'homolog'
     ) {
+      console.log('Using MemberRepositoryHttp (dev/prod/homolog)')
       return new GetAllMembersUsecase(
         context.container.get(RegistryMember.MemberRepositoryHttp)
       )
     } else {
+      console.log('Using MemberRepositoryMock (fallback)')
       return new GetAllMembersUsecase(
         context.container.get(RegistryMember.MemberRepositoryMock)
       )

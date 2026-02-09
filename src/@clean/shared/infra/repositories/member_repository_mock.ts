@@ -6,7 +6,7 @@ import { COURSE } from '../../domain/enums/course_enum'
 import { ROLE } from '../../domain/enums/role_enum'
 import { STACK } from '../../domain/enums/stack_enum'
 // import type { StrikeCreationResponse } from './member_repository_http'
-import type { StrikeCreationResponse } from '../../domain/entities/strike'
+import { Strike, StrikeCreationResponse } from '../../domain/entities/strike'
 
 export class MemberRepositoryMock implements IMemberRepository {
   private members: Member[] = [
@@ -27,6 +27,7 @@ export class MemberRepositoryMock implements IMemberRepository {
       project: ['MF', 'PT', 'SM', 'GM', 'PI'],
       photo: 'photo1',
       strikes: 2,
+      strikesId: [],
       strikes_allowed: 4
     }),
     new Member({
@@ -46,6 +47,7 @@ export class MemberRepositoryMock implements IMemberRepository {
       project: ['MF', 'PT', 'SM', 'GM', 'PI'],
       photo: 'photo1',
       strikes: 2,
+      strikesId: [],
       strikes_allowed: 4
     }),
     new Member({
@@ -65,6 +67,7 @@ export class MemberRepositoryMock implements IMemberRepository {
       project: ['MF', 'PT', 'SM', 'GM', 'PI'],
       photo: 'photo1',
       strikes: 2,
+      strikesId: [],
       strikes_allowed: 4
     }),
     new Member({
@@ -84,6 +87,7 @@ export class MemberRepositoryMock implements IMemberRepository {
       project: ['MF', 'PT', 'SM', 'GM', 'PI'],
       photo: 'photo1',
       strikes: 2,
+      strikesId: [],
       strikes_allowed: 4
     }),
     new Member({
@@ -103,6 +107,7 @@ export class MemberRepositoryMock implements IMemberRepository {
       project: ['MF', 'PT', 'SM', 'GM', 'PI'],
       photo: 'photo1',
       strikes: 2,
+      strikesId: [],
       strikes_allowed: 4
     }),
     new Member({
@@ -122,7 +127,7 @@ export class MemberRepositoryMock implements IMemberRepository {
       project: ['MF', 'PT', 'SM', 'GM', 'PI'],
       photo: 'photo1',
       strikes: 2,
-      strikes_allowed: 4
+      strikesId: [],
     })
   ]
 
@@ -152,6 +157,7 @@ export class MemberRepositoryMock implements IMemberRepository {
       project: ['MF', 'PT', 'SM', 'GM', 'PI'],
       photo: 'photo1',
       strikes: 2,
+      strikesId: [],
       strikes_allowed: 4
     })
 
@@ -283,6 +289,33 @@ export class MemberRepositoryMock implements IMemberRepository {
     // No ambiente de teste/mock queremos simular o endpoint admin retornando todos os membros
     // Em vez de array vazio (que gera NoItemsFoundError nos usecases)
     return Promise.resolve(this.members)
+  }
+
+  async getStrike(strikeId: string): Promise<Strike> {
+    const strike = new Strike({
+      strikeId: strikeId, // Use the passed ID
+      ownerUserId: 'mock-owner-id',
+      targetUserId: 'mock-target-id',
+      applierUserId: 'mock-applier-id',
+      occurredDate: Date.now(),
+      category: 'Mock Category',
+      description: 'Mock Description'
+    })
+    return Promise.resolve(strike)
+  }
+
+  async getAllStrikes(): Promise<Strike[]> {
+    return Promise.resolve([
+        new Strike({
+        strikeId: 'mock-strike-1',
+        ownerUserId: 'mock-owner-id',
+        targetUserId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627', // Matching one member
+        applierUserId: 'mock-applier-id',
+        occurredDate: Date.now(),
+        category: 'Mock Category 1',
+        description: 'Mock Description 1'
+        })
+    ])
   }
 }
 

@@ -44,4 +44,8 @@ export interface IMemberRepository {
   ): Promise<Member>
 
   deleteMember(): Promise<Member>
+
+  getStrike(strikeId: string): Promise<Strike>
+
+  getAllStrikes(): Promise<Strike[]>
 }
