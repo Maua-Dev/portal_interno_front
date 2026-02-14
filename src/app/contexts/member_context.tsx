@@ -214,10 +214,11 @@ export function MemberProvider({ children }: PropsWithChildren) {
       } else if (error.message.toLowerCase().includes('user is not active')) {
         setIsOnHold(true)
       } else {
-        window.location.replace('/login')
-        localStorage.removeItem('accessToken')
-        localStorage.removeItem('refreshToken')
-        localStorage.removeItem('idToken')
+        console.error('Error in handleMember:', error)
+        // window.location.replace('/login')
+        // localStorage.removeItem('accessToken')
+        // localStorage.removeItem('refreshToken')
+        // localStorage.removeItem('idToken')
       }
     }
   }

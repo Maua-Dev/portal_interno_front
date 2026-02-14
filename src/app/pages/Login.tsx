@@ -27,6 +27,8 @@ export default function Login() {
       const response = await axios.post(
         tokenEndpoint,
         new URLSearchParams({
+          grant_type: 'authorization_code',
+          code,
           redirect_uri: import.meta.env.VITE_REDIRECT_URI 
             ? import.meta.env.VITE_REDIRECT_URI
             : `${window.location.protocol}//${window.location.hostname === 'localhost' ? '127.0.0.1' : window.location.hostname}:${window.location.port}/login`,
