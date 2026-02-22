@@ -8,6 +8,7 @@ import { STACK, stackToEnum } from '../../@clean/shared/domain/enums/stack_enum'
 import { ACTIVE, activeToEnum } from '../../@clean/shared/domain/enums/active_enum'
 import type { StrikeCreationResponse } from '../../@clean/shared/domain/entities/strike'
 import { Strike } from '../../@clean/shared/domain/entities/strike'
+import { MemberRepositoryHttp } from '../../@clean/shared/infra/repositories/member_repository_http'
 
 export interface MemberContextInterface {
   getMember: () => Promise<Member>
@@ -127,6 +128,7 @@ const defaultContext: MemberContextInterface = {
 export const MemberContext = createContext(defaultContext)
 
 export function MemberProvider({ children }: PropsWithChildren) {
+  const memberRepository = new MemberRepositoryHttp(http)
   const [memberError, setMemberError] = useState('')
   const [isAdmin, setIsAdmin] = useState(false)
   const [allMembers, setAllMembers] = useState<Member[] | undefined>([])
@@ -152,7 +154,7 @@ export function MemberProvider({ children }: PropsWithChildren) {
           description: comment,
           occurred_date: date
         },
-        { headers: { Authorization: 'Bearer ' + token } }
+        { headers: { Authorization: token } }
       )
       return response.data
     } catch (error: any) {
@@ -163,10 +165,8 @@ export function MemberProvider({ children }: PropsWithChildren) {
 
   async function getStrike(strikeId: string): Promise<Strike> {
     try {
-      const response = await http.get(`/get_strike`, {
-        params: { strike_id: strikeId }
-      })
-      return Strike.fromJSON(response.data.strike)
+      const strike = await memberRepository.getStrike(strikeId)
+      return strike
     } catch (error: any) {
       throw new Error(error.message)
     }
@@ -174,15 +174,8 @@ export function MemberProvider({ children }: PropsWithChildren) {
 
   async function getAllStrikes(): Promise<Strike[]> {
     try {
-      const token = localStorage.getItem('idToken')
-      if (!token) throw new Error('Token not found')
-
-      const response = await http.post<{ strikes: StrikeCreationResponse[] }>(
-        '/get-all-strikes',
-        {},
-        { headers: { Authorization: 'Bearer ' + token } }
-      )
-      return response.data.strikes.map((strike) => Strike.fromJSON(strike))
+      const strikes = await memberRepository.getAllStrikes()
+      return strikes
     } catch (error: any) {
       throw new Error(error.message)
     }
@@ -236,16 +229,7 @@ export function MemberProvider({ children }: PropsWithChildren) {
 
   async function getMember(): Promise<Member> {
     try {
-      const token = localStorage.getItem('idToken')
-      if (!token) throw new Error('Token not found')
-
-      const response = await http.post<any>(
-        '/get-member',
-        {},
-        { headers: { Authorization: 'Bearer ' + token } }
-      )
-      
-      const member = Member.fromJSON(response.data)
+      const member = await memberRepository.getMember()
 
       if (handleAdmin(member.role)) {
         setIsAdmin(true)
@@ -264,9 +248,6 @@ export function MemberProvider({ children }: PropsWithChildren) {
     try {
       const token = localStorage.getItem('idToken')
       if (!token) throw new Error('Token not found')
-
-      // Fetch member role using getMember logic or assume it is set? 
-      // Original logic fetched getMember again. We will do the same to be safe.
       const member = await getMember()
 
       let endpoint = '/get-all-members'
@@ -277,41 +258,41 @@ export function MemberProvider({ children }: PropsWithChildren) {
       const response = await http.post<any>(
         endpoint,
         {},
-        { headers: { Authorization: 'Bearer ' + token } }
+        { headers: { Authorization: token } }
       )
 
       const membersList: Member[] = []
 
       if (response.data.members && Array.isArray(response.data.members)) {
-        response.data.members.forEach((item: any) => {
+        response.data.members.forEach((item: any, index: number) => {
            const m = item.member
-           membersList.push(new Member({
-              name: m.name,
-              emailDev: m.email_dev,
-              email: m.email,
-              ra: m.ra,
-              role: roleToEnum(m.role),
-              stack: stackToEnum(m.stack),
-              year: m.year,
-              cellphone: m.cellphone,
-              course: courseToEnum(m.course),
-              hiredDate: m.hired_date,
-              deactivatedDate: m.deactivated_date,
-              active: activeToEnum(m.active),
-              userId: m.user_id,
-              hoursWorked: m.hours_worked,
-              project: m.project,
-              photo: m.photo,
-              strikes: m.strikes ?? 0,
-              strikesId: [],
-              strikes_allowed: m.strikes_allowed ?? 0
-           }))
+           try {
+             membersList.push(new Member({
+                name: m.name,
+                emailDev: m.email_dev,
+                email: m.email,
+                ra: m.ra,
+                role: roleToEnum(m.role),
+                stack: stackToEnum(m.stack),
+                year: m.year,
+                cellphone: m.cellphone,
+                course: courseToEnum(m.course),
+                hiredDate: m.hired_date,
+                deactivatedDate: m.deactivated_date,
+                active: activeToEnum(m.active),
+                userId: m.user_id,
+                hoursWorked: m.hours_worked,
+                project: m.project,
+                photo: m.photo,
+                strikes: m.strikes ?? 0,
+                strikesId: [],
+                strikes_allowed: m.strikes_allowed ?? 0
+             }))
+           } catch (e: any) {
+             console.warn(`Aviso: Pulando membro no índice ${index} devido a erro: ${e.message}`, m)
+           }
         })
       }
-
-      console.log('===== CONTEXT DEBUG =====')
-      console.log('Members from context:', membersList)
-      console.log('==========================')
 
       return membersList
     } catch (error: any) {
@@ -332,24 +313,16 @@ export function MemberProvider({ children }: PropsWithChildren) {
     course: COURSE
   ) {
     try {
-      const token = localStorage.getItem('idToken')
-      if (!token) throw new Error('Token not found')
-
-      const response = await http.post<any>(
-        '/create-member',
-        {
-          ra,
-          email_dev: emailDev,
-          role,
-          stack,
-          year,
-          cellphone,
-          course,
-          hired_date: Date.now() 
-        },
-        { headers: { Authorization: 'Bearer ' + token } }
+      const member = await memberRepository.createMember(
+        ra,
+        emailDev,
+        role,
+        stack,
+        year,
+        cellphone,
+        course
       )
-      return Member.fromJSON(response.data)
+      return member
     } catch (error: any) {
       setMemberError(error.message)
       throw new Error('Something went wrong on create member: ' + error.message)
@@ -368,25 +341,18 @@ export function MemberProvider({ children }: PropsWithChildren) {
     newActive?: ACTIVE
   ) {
     try {
-      const token = localStorage.getItem('idToken')
-      if (!token) throw new Error('Token not found')
-
-      const response = await http.put<any>(
-        '/update-member',
-        {
-          new_member_user_id: memberUserId,
-          new_name: newName,
-          new_email_dev: newEmailDev,
-          new_role: newRole,
-          new_stack: newStack,
-          new_year: newYear,
-          new_cellphone: newCellphone,
-          new_course: newCourse,
-          new_active: newActive
-        },
-        { headers: { Authorization: 'Bearer ' + token } }
+      const member = await memberRepository.updateMember(
+        memberUserId,
+        newName,
+        newEmailDev,
+        newRole,
+        newStack,
+        newYear,
+        newCellphone,
+        newCourse,
+        newActive
       )
-      return Member.fromJSON(response.data)
+      return member
     } catch (error: any) {
       setMemberError(error.message)
       throw new Error('Something went wrong on update member: ' + error.message)
@@ -395,14 +361,8 @@ export function MemberProvider({ children }: PropsWithChildren) {
 
   async function deleteMember() {
     try {
-      const token = localStorage.getItem('idToken')
-      if (!token) throw new Error('Token not found')
-
-      const response = await http.delete<any>('/delete-member', {
-        headers: { Authorization: 'Bearer ' + token }
-      })
-
-      return Member.fromJSON(response.data)
+      const member = await memberRepository.deleteMember()
+      return member
     } catch (error: any) {
       setMemberError(error.message)
       throw new Error('Something went wrong on delete member: ' + error.message)
@@ -411,19 +371,21 @@ export function MemberProvider({ children }: PropsWithChildren) {
 
   async function changeMemberProfilePicture(newPhoto: string) {
     try {
-      const token = localStorage.getItem('idToken')
-      if (!token) throw new Error('Token not found')
-
-      const response = await http.put<any>(
-        '/update-member',
-        {
-          new_member_user_id: member?.userId,
-          new_photo: newPhoto
-        },
-        { headers: { Authorization: 'Bearer ' + token } }
+      if (!member) throw new Error('Member not found')
+      
+      const updatedMember = await memberRepository.updateMember(
+        member.userId,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        newPhoto
       )
 
-      const updatedMember = Member.fromJSON(response.data)
       setMember(updatedMember)
 
       return updatedMember

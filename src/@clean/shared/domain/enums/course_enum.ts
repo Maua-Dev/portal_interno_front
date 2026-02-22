@@ -52,7 +52,7 @@ export function courseToEnum(value: string): COURSE {
     case 'ARQ':
       return COURSE.ARQ
     default:
-      throw new Error('Invalid value')
+      throw new Error(`Invalid course value: ${value}`)
   }
 }
 

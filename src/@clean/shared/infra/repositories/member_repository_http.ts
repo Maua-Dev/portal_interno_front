@@ -1,6 +1,6 @@
 import type { AxiosInstance } from 'axios'
-import { IMemberRepository } from '../../../modules/member/domain/repositories/member_repository_interface'
-import { JsonProps, Member } from '../../domain/entities/member'
+import type { IMemberRepository } from '../../../modules/member/domain/repositories/member_repository_interface'
+import { Member, type JsonProps } from '../../domain/entities/member'
 import { ACTIVE, activeToEnum } from '../../domain/enums/active_enum'
 import { COURSE, courseToEnum } from '../../domain/enums/course_enum'
 import { ROLE, roleToEnum } from '../../domain/enums/role_enum'
@@ -8,7 +8,7 @@ import { STACK, stackToEnum } from '../../domain/enums/stack_enum'
 import { decorate, injectable } from 'inversify'
 import { HTTP_STATUS_CODE } from '../../domain/enums/http_status_code'
 import { NoItemsFoundError } from '../../domain/helpers/errors/domain_error'
-import { Strike, StrikeCreationResponse } from '../../domain/entities/strike'
+import { Strike, type StrikeCreationResponse } from '../../domain/entities/strike'
 
 // interface memberRawResponse... (mantido comentado como no original)
 
@@ -95,7 +95,7 @@ export class MemberRepositoryHttp implements IMemberRepository {
           description: comment,
           occurred_date: date
         },
-        { headers: { Authorization: 'Bearer ' + token } }
+        { headers: { Authorization: token } }
       )
 
       return response.data
@@ -105,7 +105,7 @@ export class MemberRepositoryHttp implements IMemberRepository {
     }
   }
   async getStrike(strikeId: string): Promise<Strike> {
-    const response = await this.http.get(`/get_strike`, {
+    const response = await this.http.get(`/get-strike`, {
       params: { strike_id: strikeId }
     })
     return Strike.fromJSON(response.data.strike)
@@ -119,7 +119,7 @@ export class MemberRepositoryHttp implements IMemberRepository {
       const response = await this.http.post<{ strikes: StrikeCreationResponse[] }>(
         '/get-all-strikes',
         {},
-        { headers: { Authorization: 'Bearer ' + token } }
+        { headers: { Authorization: token } }
       )
 
       return response.data.strikes.map((strike) => Strike.fromJSON(strike))
@@ -158,7 +158,7 @@ export class MemberRepositoryHttp implements IMemberRepository {
         },
         {
           headers: {
-            Authorization: 'Bearer ' + token
+            Authorization: token
           }
         }
       )
@@ -183,7 +183,7 @@ export class MemberRepositoryHttp implements IMemberRepository {
         {},
         {
           headers: {
-            Authorization: 'Bearer ' + token
+            Authorization: token
           }
         }
       )
@@ -212,7 +212,7 @@ export class MemberRepositoryHttp implements IMemberRepository {
         {},
         {
           headers: {
-            Authorization: 'Bearer ' + token
+            Authorization: token
           }
         }
       )
@@ -266,7 +266,7 @@ export class MemberRepositoryHttp implements IMemberRepository {
         {},
         {
           headers: {
-            Authorization: 'Bearer ' + token
+            Authorization: token
           }
         }
       )
@@ -342,7 +342,7 @@ export class MemberRepositoryHttp implements IMemberRepository {
         },
         {
           headers: {
-            Authorization: 'Bearer ' + token
+            Authorization: token
           }
         }
       )
@@ -365,7 +365,7 @@ export class MemberRepositoryHttp implements IMemberRepository {
 
       const response = await this.http.delete<JsonProps>('/delete-member', {
         headers: {
-          Authorization: 'Bearer ' + token
+          Authorization: token
         }
       })
 

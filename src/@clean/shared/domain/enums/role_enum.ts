@@ -25,7 +25,7 @@ export function roleToEnum(value: string): ROLE {
     case 'DESIGNER':
       return ROLE.DESIGNER
     default:
-      throw new Error('Invalid value')
+      throw new Error(`Invalid role value: ${value}`)
   }
 }
 
