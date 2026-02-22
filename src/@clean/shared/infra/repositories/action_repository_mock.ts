@@ -10,8 +10,8 @@ import { COURSE } from '../../domain/enums/course_enum'
 import { ACTIVE } from '../../domain/enums/active_enum'
 import { ACTION_TYPE } from '../../domain/enums/action_type_enum'
 import { NoItemsFoundError } from '../../domain/helpers/errors/domain_error'
-import { IActionRepository } from '../../../modules/action/domain/repositories/action_repository_interface'
-import { historyResponse } from './action_repository_http'
+import type { IActionRepository } from '../../../modules/action/domain/repositories/action_repository_interface'
+import type { historyResponse } from './action_repository_http'
 
 export class ActionRepositoryMock implements IActionRepository {
   createAction(): Promise<Action> {

@@ -12,6 +12,7 @@ import { MemberContext } from '../../../contexts/member_context.tsx'
 import { ACTIVE } from '../../../../@clean/shared/domain/enums/active_enum.ts'
 import { toast } from 'react-toastify'
 import MemberDialog from './MemberDialog.tsx'
+import { AiFillStar } from 'react-icons/ai'
 
 interface MemberCardProps extends HTMLAttributes<HTMLDivElement> {
   member: Member
@@ -96,6 +97,16 @@ export default function MemberCard({
             <p className="text-base font-semibold md:text-lg">
               {member.name} {isWithMostHours ? '🏆' : ''}
             </p>
+            <div className="flex items-center gap-1">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <AiFillStar
+                  key={i}
+                  className={`text-sm md:text-base ${
+                    i < (member.strikes || 0) ? 'text-yellow-400' : 'text-gray-400'
+                  }`}
+                />
+              ))}
+            </div>
             <p className={'text-xs md:hidden'}>
               {member.year}° ano / {member.role} / {member.stack}
             </p>

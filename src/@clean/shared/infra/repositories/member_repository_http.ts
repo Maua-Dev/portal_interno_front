@@ -9,6 +9,7 @@ import { decorate, injectable } from 'inversify'
 import { HTTP_STATUS_CODE } from '../../domain/enums/http_status_code'
 import { NoItemsFoundError } from '../../domain/helpers/errors/domain_error'
 import { Strike, type StrikeCreationResponse } from '../../domain/entities/strike'
+import { STRIKE_CATEGORY } from '../../domain/enums/strike_category_enum'
 
 // interface memberRawResponse... (mantido comentado como no original)
 
@@ -70,7 +71,7 @@ export class MemberRepositoryHttp implements IMemberRepository {
 
   async createStrike(
     memberUserId: string,
-    reason: string,
+    reason: STRIKE_CATEGORY,
     comment: string,
     date: number,
     ownerUserId: string
@@ -79,27 +80,22 @@ export class MemberRepositoryHttp implements IMemberRepository {
       const token = localStorage.getItem('idToken')
       if (!token) throw new Error('Token not found')
 
-      const data = {
-        owner_user_id: ownerUserId,
-        target_user_id: memberUserId,
-        occurred_date: date,
-        category: reason,
-        description: comment
-      }
-
       const response = await this.http.post<StrikeCreationResponse>(
         '/create-strike',
         {
+          owner_user_id: ownerUserId,
           target_user_id: memberUserId,
           category: reason,
           description: comment,
-          occurred_date: date
+          occurred_date: date,
+          applier_user_id: ownerUserId // Adding this as it's present in the entity/response type
         },
         { headers: { Authorization: token } }
       )
 
       return response.data
     } catch (error: any) {
+      console.error('Detailed createStrike Error Response:', error.response?.data)
       const errorMessage = error.response?.data?.message || error.message
       throw new Error(`Error Creating Strike: ${errorMessage}`)
     }
@@ -116,15 +112,26 @@ export class MemberRepositoryHttp implements IMemberRepository {
       const token = localStorage.getItem('idToken')
       if (!token) throw new Error('Token not found')
 
-      const response = await this.http.post<{ strikes: StrikeCreationResponse[] }>(
-        '/get-all-strikes',
-        {},
-        { headers: { Authorization: token } }
-      )
+      // Tentando GET primeiro para evitar problemas de preflight CORS caso o backend suporte
+      let response
+      try {
+        response = await this.http.get<{ strikes: StrikeCreationResponse[] }>(
+          '/get-all-strikes',
+          { headers: { Authorization: token } }
+        )
+      } catch (getErr) {
+        console.warn('GET /get-all-strikes falhou, tentando POST...', getErr)
+        response = await this.http.post<{ strikes: StrikeCreationResponse[] }>(
+          '/get-all-strikes',
+          {},
+          { headers: { Authorization: token } }
+        )
+      }
 
       return response.data.strikes.map((strike) => Strike.fromJSON(strike))
     } catch (error: any) {
-      throw new Error('Error Getting All Strikes: ' + error.message)
+      console.error('Detailed getAllStrikes Error Response:', error.response?.data || error.message)
+      throw new Error('Error Getting All Strikes: ' + (error.response?.data?.message || error.message))
     }
   }
 

@@ -3,7 +3,8 @@ import { ACTIVE } from '../../../../shared/domain/enums/active_enum'
 import { COURSE } from '../../../../shared/domain/enums/course_enum'
 import { ROLE } from '../../../../shared/domain/enums/role_enum'
 import { STACK } from '../../../../shared/domain/enums/stack_enum'
-import { Strike, StrikeCreationResponse } from '../../../../shared/domain/entities/strike'
+import { Strike, type StrikeCreationResponse } from '../../../../shared/domain/entities/strike'
+import { STRIKE_CATEGORY } from '../../../../shared/domain/enums/strike_category_enum'
 
 export interface IMemberRepository {
   createMember(
@@ -18,7 +19,7 @@ export interface IMemberRepository {
 
   createStrike(
     memberUserId: string,
-    reason: string,
+    reason: STRIKE_CATEGORY,
     comment: string,
     date: number,
     ownerUserId: string // qual admin deu o strike

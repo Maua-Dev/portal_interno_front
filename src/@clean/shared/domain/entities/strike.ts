@@ -1,3 +1,4 @@
+import { STRIKE_CATEGORY } from "../enums/strike_category_enum"
 
 export type StrikeCreationResponse = {
   strike_id: string
@@ -5,7 +6,7 @@ export type StrikeCreationResponse = {
   target_user_id: string
   applier_user_id: string
   occurred_date: number
-  category: string
+  category: STRIKE_CATEGORY
   description: string
   case_number: number
   message: string
@@ -17,7 +18,7 @@ export type StrikeProps = {
   targetUserId: string
   applierUserId: string
   occurredDate: number
-  category: string
+  category: STRIKE_CATEGORY
   description: string
 }
 

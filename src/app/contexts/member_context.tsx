@@ -6,126 +6,14 @@ import { COURSE, courseToEnum } from '../../@clean/shared/domain/enums/course_en
 import { ROLE, roleToEnum } from '../../@clean/shared/domain/enums/role_enum'
 import { STACK, stackToEnum } from '../../@clean/shared/domain/enums/stack_enum'
 import { ACTIVE, activeToEnum } from '../../@clean/shared/domain/enums/active_enum'
-import type { StrikeCreationResponse } from '../../@clean/shared/domain/entities/strike'
 import { Strike } from '../../@clean/shared/domain/entities/strike'
+import { STRIKE_CATEGORY } from '../../@clean/shared/domain/enums/strike_category_enum'
 import { MemberRepositoryHttp } from '../../@clean/shared/infra/repositories/member_repository_http'
 
-export interface MemberContextInterface {
-  getMember: () => Promise<Member>
+import { defaultMemberContext } from './member_context_type'
+import type { MemberContextInterface } from './member_context_type'
 
-  getAllMembers: () => Promise<Member[]>
-
-  createStrike: (
-    memberUserId: string,
-    reason: string,
-    comment: string,
-    date: number
-  ) => Promise<StrikeCreationResponse>
-
-  getStrike: (strikeId: string) => Promise<Strike>
-
-  createMember: (
-    ra: string,
-    emailDev: string,
-    role: ROLE,
-    stack: STACK,
-    year: number,
-    cellphone: string,
-    course: COURSE
-  ) => Promise<Member>
-
-  updateMember: (
-    memberUserId: string,
-    newName?: string,
-    newEmailDev?: string,
-    newRole?: ROLE,
-    newStack?: STACK,
-    newYear?: number,
-    newCellphone?: string,
-    newCourse?: COURSE,
-    newActive?: ACTIVE
-  ) => Promise<Member>
-
-  deleteMember: () => Promise<Member>
-
-  handleMember: () => Promise<void>
-
-  handleAllMembers: () => Promise<void>
-
-  handleLogout: () => void
-
-  member: Member | undefined
-
-  allMembers: Member[] | undefined
-
-  memberError: string
-
-  isAdmin: boolean
-
-  isRegister: boolean
-
-  isOnHold: boolean
-
-  changeMemberProfilePicture: (newPhoto: string) => Promise<Member>
-
-  getAllStrikes: () => Promise<Strike[]>
-}
-
-const defaultContext: MemberContextInterface = {
-  createStrike: async (memberUserId, reason, comment, date) => {
-    return {} as StrikeCreationResponse
-  },
-  getStrike: async (strikeId) => {
-    return {} as Strike
-  },
-  getMember: async () => {
-    return {} as Member
-  },
-
-  getAllMembers: async () => {
-    return [] as Member[]
-  },
-
-  createMember: async () => {
-    return {} as Member
-  },
-
-  updateMember: async () => {
-    return {} as Member
-  },
-
-  deleteMember: async () => {
-    return {} as Member
-  },
-
-  handleAllMembers: async () => {},
-
-  handleMember: async () => {},
-
-  handleLogout: () => {},
-
-  changeMemberProfilePicture: async () => {
-    return {} as Member
-  },
-
-  getAllStrikes: async () => {
-    return [] as Strike[]
-  },
-
-  member: undefined,
-
-  allMembers: [],
-
-  memberError: '',
-
-  isAdmin: false,
-
-  isRegister: false,
-
-  isOnHold: false
-}
-
-export const MemberContext = createContext(defaultContext)
+export const MemberContext = createContext<MemberContextInterface>(defaultMemberContext)
 
 export function MemberProvider({ children }: PropsWithChildren) {
   const memberRepository = new MemberRepositoryHttp(http)
@@ -138,28 +26,27 @@ export function MemberProvider({ children }: PropsWithChildren) {
 
   async function createStrike(
     memberUserId: string,
-    reason: string,
+    reason: STRIKE_CATEGORY,
     comment: string,
-    date: number
+    date: number,
+    ownerUserId: string
   ) {
     try {
-      const token = localStorage.getItem('idToken')
-      if (!token) throw new Error('Token not found')
-
-      const response = await http.post<StrikeCreationResponse>(
-        '/create-strike',
-        {
-          target_user_id: memberUserId,
-          category: reason,
-          description: comment,
-          occurred_date: date
-        },
-        { headers: { Authorization: token } }
+      const response = await memberRepository.createStrike(
+        memberUserId,
+        reason,
+        comment,
+        date,
+        ownerUserId
       )
-      return response.data
+      return response
     } catch (error: any) {
+      console.error('Detailed Create Strike Error:', error.response?.data)
       setMemberError(error.message)
-      throw new Error('Something went wrong on create strike: ' + error.message)
+      throw new Error(
+        'Something went wrong on create strike: ' +
+          (error.response?.data?.message || error.message)
+      )
     }
   }
 

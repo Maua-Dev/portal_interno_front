@@ -9,9 +9,10 @@ import { AiFillStar } from 'react-icons/ai'
 import StrikeCard from '../components/StrikeCard'
 import { useMember } from '../../../hooks/useMember'
 import { Strike } from '../../../../@clean/shared/domain/entities/strike'
+import { STRIKE_CATEGORY } from '../../../../@clean/shared/domain/enums/strike_category_enum'
 
 export interface StrikeData {
-  reason: string
+  reason: STRIKE_CATEGORY
   comment: string
   date: number
 }
@@ -39,7 +40,7 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
   const [isReadOnly, setIsReadOnly] = useState(false)
 
   // conexão com o backend
-  const { createStrike, getAllStrikes } = useMember()
+  const { createStrike, getAllStrikes, member: loggedInUser } = useMember()
 
   const [strikes, setStrikes] = useState<Strike[]>([])
 
@@ -70,7 +71,7 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
   }, [open, getAllStrikes, member.userId])
 
   const handleConfirmStrike = async (data: {
-    reason: string
+    reason: STRIKE_CATEGORY
     comment: string
     date: string
   }) => {
@@ -79,11 +80,14 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
     setIsSubmitting(true)
 
     try {
+      if (!loggedInUser?.userId) throw new Error('Owner ID not found')
+
       await createStrike(
         member.userId,
         data.reason,
         data.comment,
-        Date.now()
+        Date.now(),
+        loggedInUser.userId
       )
 
       // Recarrega strikes após criar
@@ -105,24 +109,24 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
   }
 
   const handleStarClick = (index: number) => {
-    const strike = strikes[index]
-
-    // Criar novo strike
-    if (!strike) {
-      setSelectedStrikeToView(null)
-      setIsReadOnly(false)
-      setShowStrikeCard(true)
+    // Se clicou em uma estrela que já tem strike (colorida)
+    if (index < currentStrikes) {
+      const strike = strikes[index]
+      if (strike) {
+        setSelectedStrikeToView({
+          reason: strike.category as STRIKE_CATEGORY,
+          comment: strike.description,
+          date: strike.occurredDate
+        })
+        setIsReadOnly(true)
+        setShowStrikeCard(true)
+      }
       return
     }
 
-    // Visualizar strike existente
-    setSelectedStrikeToView({
-      reason: strike.category,
-      comment: strike.description,
-      date: strike.occurredDate
-    })
-
-    setIsReadOnly(true)
+    // Se clicou em uma estrela vazia (válida para novo strike)
+    setSelectedStrikeToView(null)
+    setIsReadOnly(false)
     setShowStrikeCard(true)
   }
 
@@ -136,6 +140,12 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
             darkMode ? 'bg-skin-fill' : 'bg-skin-secundary'
           }`}
         >
+          <DialogPrimitive.Title className="sr-only">
+            Detalhes do Membro: {member.name}
+          </DialogPrimitive.Title>
+          <DialogPrimitive.Description className="sr-only">
+            Visualize e edite as informações do membro {member.name} e gerencie seus strikes.
+          </DialogPrimitive.Description>
           <div className="grid w-full grid-cols-2 gap-5">
             <div className="flex flex-col gap-1">
               {/* Name */}
@@ -312,19 +322,17 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
                 <h1 className="font-semi-bold text-lg">Strikes</h1>
               </div>
               <div className="flex items-center gap-1">
-                {Array.from({ length: member.strikes_allowed || 0 }).map(
-                  (_, i) => (
-                    <AiFillStar
-                      key={i}
-                      className={`text-2xl transition-colors ${
-                        i < currentStrikes
-                          ? 'cursor-pointer text-yellow-400 hover:text-yellow-500' // Estrela Cheia
-                          : 'cursor-pointer text-gray-400 hover:text-yellow-300' // Estrela Vazia
-                      }`}
-                      onClick={() => handleStarClick(i)}
-                    />
-                  )
-                )}
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <AiFillStar
+                    key={i}
+                    className={`text-2xl transition-colors ${
+                      i < currentStrikes
+                        ? 'cursor-pointer text-yellow-400 hover:text-yellow-500' // Estrela Cheia
+                        : 'cursor-pointer text-gray-400 hover:text-yellow-300' // Estrela Vazia
+                    }`}
+                    onClick={() => handleStarClick(i)}
+                  />
+                ))}
               </div>
             </div>
             <Button

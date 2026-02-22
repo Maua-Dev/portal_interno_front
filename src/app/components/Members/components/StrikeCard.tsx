@@ -1,14 +1,22 @@
 import { useState, useEffect } from 'react'
 import { useDarkMode } from '../../../hooks/useDarkMode'
+import {
+  STRIKE_CATEGORY,
+  strikeCategoryToPortuguese
+} from '../../../../@clean/shared/domain/enums/strike_category_enum'
 
 export interface StrikeData {
-  reason: string
+  reason: STRIKE_CATEGORY
   comment: string
   date: number
 }
 
 interface SrikeCardProps {
-  onConfirm: (data: { reason: string; comment: string; date: string }) => void
+  onConfirm: (data: {
+    reason: STRIKE_CATEGORY
+    comment: string
+    date: string
+  }) => void
   onCancel: () => void
   memberName: string
   isSubmitting: boolean
@@ -27,7 +35,9 @@ export default function StrikeCard({
 }: SrikeCardProps) {
   // const [reason, setReason] = useState('')
   // const [comment, setComment] = useState('')
-  const [reason, setReason] = useState(initialData?.reason || '')
+  const [reason, setReason] = useState(
+    initialData?.reason || STRIKE_CATEGORY.MISCONDUCT
+  )
   const [comment, setComment] = useState(initialData?.comment || '')
   // const currentDate = new Date().toLocaleDateString()
   const displayDate = initialData
@@ -62,17 +72,26 @@ export default function StrikeCard({
           {/* Campo para motivo */}
           <div className="pt-4">
             <label className="block text-sm font-medium">Motivo</label>
-            <input
-              type="text"
+            <select
               value={reason}
-              onChange={(e) => setReason(e.target.value)}
+              onChange={(e) => setReason(e.target.value as STRIKE_CATEGORY)}
+              disabled={readOnly || isSubmitting}
               className={`mt-1 w-full rounded px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${
                 darkMode
                   ? 'border-gray-600 bg-gray-700 text-white'
                   : 'border-gray-300 bg-gray-100 text-black'
-              }`}
-              placeholder="Digite o motivo do strike"
-            />
+              } ${readOnly ? 'cursor-not-allowed opacity-75' : ''}`}
+            >
+              {Object.values(STRIKE_CATEGORY).map((category) => (
+                <option
+                  key={category}
+                  value={category}
+                  className={darkMode ? 'bg-gray-700' : 'bg-white'}
+                >
+                  {strikeCategoryToPortuguese(category as STRIKE_CATEGORY)}
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* Campo para data */}
@@ -80,14 +99,13 @@ export default function StrikeCard({
             <label className="block text-sm font-medium">Data</label>
             <input
               type="text"
-              // value={currentDate}
               value={displayDate}
               disabled
               className={`mt-1 w-full rounded px-3 py-2 shadow-sm ${
                 darkMode
                   ? 'border-gray-600 bg-gray-700 text-white'
                   : 'border-gray-300 bg-gray-100 text-black'
-              }`}
+              } cursor-not-allowed opacity-75`}
             />
           </div>
 
@@ -97,27 +115,29 @@ export default function StrikeCard({
             <textarea
               value={comment}
               onChange={(e) => setComment(e.target.value)}
+              disabled={readOnly || isSubmitting}
               className={`mt-1 w-full rounded px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${
                 darkMode
                   ? 'border-gray-600 bg-gray-700 text-white'
                   : 'border-gray-300 bg-gray-100 text-black'
-              }`}
+              } ${readOnly ? 'cursor-not-allowed opacity-75' : ''}`}
               placeholder="Adicione um comentário (opcional)"
             />
           </div>
 
           {/* Botões de ação */}
           <div className="mt-4 flex gap-2">
-            <button
-              className={`rounded px-4 py-2 shadow ${
-                darkMode ? 'bg-black text-white' : 'bg-black text-white'
-              }`}
-              onClick={() => onConfirm({ reason, comment, date: displayDate })}
-              disabled={isSubmitting || !reason}
-            >
-              Confirmar
-              {isSubmitting ? 'Confirmando...' : 'Confirmar'} {/* MODIFICADO */}
-            </button>
+            {!readOnly && (
+              <button
+                className={`rounded px-4 py-2 shadow ${
+                  darkMode ? 'bg-black text-white' : 'bg-black text-white'
+                }`}
+                onClick={() => onConfirm({ reason, comment, date: displayDate })}
+                disabled={isSubmitting || !reason}
+              >
+                {isSubmitting ? 'Confirmando...' : 'Confirmar'}
+              </button>
+            )}
             <button
               className={`rounded px-4 py-2 shadow ${
                 darkMode ? 'bg-black text-white' : 'bg-black text-white'
@@ -125,7 +145,7 @@ export default function StrikeCard({
               onClick={onCancel}
               disabled={isSubmitting}
             >
-              Cancelar
+              {readOnly ? 'Fechar' : 'Cancelar'}
             </button>
           </div>
         </div>

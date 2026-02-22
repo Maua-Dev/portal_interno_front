@@ -6,7 +6,9 @@ import { COURSE } from '../../domain/enums/course_enum'
 import { ROLE } from '../../domain/enums/role_enum'
 import { STACK } from '../../domain/enums/stack_enum'
 // import type { StrikeCreationResponse } from './member_repository_http'
-import { Strike, StrikeCreationResponse } from '../../domain/entities/strike'
+import type { StrikeCreationResponse } from '../../domain/entities/strike'
+import { Strike } from '../../domain/entities/strike'
+import { STRIKE_CATEGORY } from '../../domain/enums/strike_category_enum'
 
 export class MemberRepositoryMock implements IMemberRepository {
   private members: Member[] = [
@@ -128,6 +130,7 @@ export class MemberRepositoryMock implements IMemberRepository {
       photo: 'photo1',
       strikes: 2,
       strikesId: [],
+      strikes_allowed: 4
     })
   ]
 
@@ -176,9 +179,10 @@ export class MemberRepositoryMock implements IMemberRepository {
 
   async createStrike(
     memberUserId: string,
-    reason: string,
+    reason: STRIKE_CATEGORY,
     comment: string,
-    date: number
+    date: number,
+    ownerUserId: string
   ): Promise<StrikeCreationResponse> {
     console.log(
       '%c--- MOCK: createStrike ACIONADO ---',
@@ -209,7 +213,7 @@ export class MemberRepositoryMock implements IMemberRepository {
           target_user_id: memberUserId,
           applier_user_id: 'mock-admin-id',
           occurred_date: date,
-          category: reason,
+          category: STRIKE_CATEGORY.OTHER, // Fixed from reason to match new enum type
           description: comment,
           case_number: 1,
           message: 'Strike was created successfully via MOCK'
@@ -298,7 +302,7 @@ export class MemberRepositoryMock implements IMemberRepository {
       targetUserId: 'mock-target-id',
       applierUserId: 'mock-applier-id',
       occurredDate: Date.now(),
-      category: 'Mock Category',
+      category: STRIKE_CATEGORY.OTHER,
       description: 'Mock Description'
     })
     return Promise.resolve(strike)
@@ -312,7 +316,7 @@ export class MemberRepositoryMock implements IMemberRepository {
         targetUserId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627', // Matching one member
         applierUserId: 'mock-applier-id',
         occurredDate: Date.now(),
-        category: 'Mock Category 1',
+        category: STRIKE_CATEGORY.OTHER,
         description: 'Mock Description 1'
         })
     ])
