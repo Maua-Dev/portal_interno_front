@@ -10,6 +10,7 @@ import StrikeCard from '../components/StrikeCard'
 import { useMember } from '../../../hooks/useMember'
 import { Strike } from '../../../../@clean/shared/domain/entities/strike'
 import { STRIKE_CATEGORY } from '../../../../@clean/shared/domain/enums/strike_category_enum'
+import { toast } from 'react-toastify'
 
 export interface StrikeData {
   reason: STRIKE_CATEGORY
@@ -89,6 +90,17 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
         Date.now(),
         loggedInUser.userId
       )
+
+      toast.success('Strike aplicado com sucesso!', {
+        position: 'top-right',
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored'
+      })
 
       // Recarrega strikes após criar
       const allStrikes = await getAllStrikes()
