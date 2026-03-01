@@ -63,8 +63,10 @@ export default function StrikeCard({
             ? 'bg-black bg-opacity-70 text-white'
             : 'bg-black bg-opacity-50 text-black'
         }`}
+        onClick={isSubmitting ? undefined : onCancel}
       >
         <div
+          onClick={(e) => e.stopPropagation()}
           className={`rounded p-6 shadow-lg ${
             darkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'
           }`}
@@ -155,9 +157,9 @@ export default function StrikeCard({
           <div className="mt-4 flex gap-2">
             {!readOnly && (
               <button
-                className={`rounded px-4 py-2 shadow ${
-                  darkMode ? 'bg-black text-white' : 'bg-black text-white'
-                }`}
+                className={`rounded px-4 py-2 font-semibold duration-150 ease-in text-white shadow ${
+                  darkMode ? 'bg-green-700 hover:bg-green-800' : 'bg-green-600 hover:bg-green-700'
+                } disabled:opacity-50 disabled:cursor-not-allowed`}
                 onClick={() => onConfirm({ reason, comment, date: displayDate })}
                 disabled={isSubmitting || !reason}
               >
