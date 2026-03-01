@@ -97,16 +97,6 @@ export default function MemberCard({
             <p className="text-base font-semibold md:text-lg">
               {member.name} {isWithMostHours ? '🏆' : ''}
             </p>
-            <div className="flex items-center gap-1">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <AiFillStar
-                  key={i}
-                  className={`text-sm md:text-base ${
-                    i < (member.strikes || 0) ? 'text-yellow-400' : 'text-gray-400'
-                  }`}
-                />
-              ))}
-            </div>
             <p className={'text-xs md:hidden'}>
               {member.year}° ano / {member.role} / {member.stack}
             </p>
@@ -114,13 +104,23 @@ export default function MemberCard({
         </div>
         <div
           className={
-            'hidden md:grid md:w-full md:grid-cols-4 md:gap-1 md:pl-10'
+            'hidden md:grid md:w-full md:grid-cols-5 md:gap-1 md:pl-10 md:items-center'
           }
         >
           {/* <Tag variant={member.year + '° ano'} /> */}
           <Tag variant={member.role} />
           <Tag variant={member.cellphone || 'N/A'} />
           <Tag variant={member.stack} />
+          <div className="flex items-center gap-1 justify-center">
+            {Array.from({ length: member.strikes_allowed || 0 }).map((_, i) => (
+              <AiFillStar
+                key={i}
+                className={`text-sm md:text-base ${
+                  i < (member.strikes || 0) ? 'text-yellow-400' : 'text-gray-400'
+                }`}
+              />
+            ))}
+          </div>
         </div>
         <div
           className={

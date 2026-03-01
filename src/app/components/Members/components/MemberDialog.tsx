@@ -419,7 +419,7 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
                 <h1 className="font-semi-bold text-lg">Strikes</h1>
               </div>
               <div className="flex items-center gap-1">
-                {Array.from({ length: 5 }).map((_, i) => (
+                {Array.from({ length: member.strikes_allowed || 0 }).map((_, i) => (
                   <AiFillStar
                     key={i}
                     className={`text-2xl transition-colors ${
