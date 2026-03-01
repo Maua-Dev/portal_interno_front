@@ -31,6 +31,7 @@ export interface memberOfGetAllMembersRawResponse {
     project: string[]
     photo: string | null
     strikes: number | null
+    strikes_id?: string[] | null
     strikes_allowed: number | null
   }
 }
@@ -54,6 +55,7 @@ export interface memberOfGetAllMembersAdminRawResponse {
     project: string[]
     photo: string | null
     strikes: number | null
+    strikes_id?: string[] | null
     strikes_allowed: number | null
   }
 }
@@ -100,40 +102,34 @@ export class MemberRepositoryHttp implements IMemberRepository {
       throw new Error(`Error Creating Strike: ${errorMessage}`)
     }
   }
-  async getStrike(strikeId: string): Promise<Strike> {
-    const response = await this.http.get(`/get-strike`, {
-      params: { strike_id: strikeId }
-    })
-    return Strike.fromJSON(response.data.strike)
-  }
-
-  async getAllStrikes(): Promise<Strike[]> {
+  async deleteStrike(strikeId: string): Promise<void> {
     try {
       const token = localStorage.getItem('idToken')
       if (!token) throw new Error('Token not found')
 
-      // Tentando GET primeiro para evitar problemas de preflight CORS caso o backend suporte
-      let response
-      try {
-        response = await this.http.get<{ strikes: StrikeCreationResponse[] }>(
-          '/get-all-strikes',
-          { headers: { Authorization: token } }
-        )
-      } catch (getErr) {
-        console.warn('GET /get-all-strikes falhou, tentando POST...', getErr)
-        response = await this.http.post<{ strikes: StrikeCreationResponse[] }>(
-          '/get-all-strikes',
-          {},
-          { headers: { Authorization: token } }
-        )
-      }
-
-      return response.data.strikes.map((strike) => Strike.fromJSON(strike))
+      await this.http.delete('/delete-strike', {
+        data: { strike_id: strikeId },
+        headers: { Authorization: token }
+      })
     } catch (error: any) {
-      console.error('Detailed getAllStrikes Error Response:', error.response?.data || error.message)
-      throw new Error('Error Getting All Strikes: ' + (error.response?.data?.message || error.message))
+      console.error('Detailed deleteStrike Error Response:', error.response?.data)
+      const errorMessage = error.response?.data?.message || error.message
+      throw new Error(`Error Deleting Strike: ${errorMessage}`)
     }
   }
+  async getStrike(strikeId: string): Promise<Strike> {
+    const token = localStorage.getItem('idToken')
+    const response = await this.http.get(`/get-strike`, {
+      params: { strike_id: strikeId },
+      headers: { 
+        Authorization: token || '',
+        'Content-Type': undefined 
+      }
+    })
+    const strikeData = response.data.strike || response.data
+    return Strike.fromJSON(strikeData)
+  }
+
 
   async createMember(
     ra: string,
@@ -195,6 +191,10 @@ export class MemberRepositoryHttp implements IMemberRepository {
         }
       )
 
+      console.log('--- GET MEMBER RAW RESPONSE ---:', response.data.member)
+      console.log('Strikes field:', response.data.member.strikes)
+      console.log('Strikes_id field:', response.data.member.strikes_id)
+
       const member = Member.fromJSON(response.data)
       return member
     } catch (error: any) {
@@ -224,6 +224,8 @@ export class MemberRepositoryHttp implements IMemberRepository {
         }
       )
 
+      console.log('--- GET ALL MEMBERS RAW RESPONSE[0] ---:', response.data.members[0]?.member)
+
       const membersArray: Member[] = []
 
       response.data.members.forEach((member) => {
@@ -248,7 +250,7 @@ export class MemberRepositoryHttp implements IMemberRepository {
             project: memberUnit.member.project,
             photo: memberUnit.member.photo,
             strikes: memberUnit.member.strikes ?? null,
-            strikesId: [],
+            strikesId: memberUnit.member.strikes_id || [],
             strikes_allowed: memberUnit.member.strikes_allowed ?? null
           })
         )
@@ -302,7 +304,7 @@ export class MemberRepositoryHttp implements IMemberRepository {
             project: memberUnit.member.project,
             photo: memberUnit.member.photo,
             strikes: memberUnit.member.strikes ?? null,
-            strikesId: [],
+            strikesId: memberUnit.member.strikes_id || [],
             strikes_allowed: memberUnit.member.strikes_allowed ?? null
           })
         )

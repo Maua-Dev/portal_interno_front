@@ -18,7 +18,9 @@ export const useMember = () => {
     isRegister,
     isOnHold,
     member,
-    getAllStrikes
+    getAllStrikes,
+    deleteStrike,
+    getStrike
   } = useContext(MemberContext)
 
   return {
@@ -29,6 +31,8 @@ export const useMember = () => {
     allMembers,
     getMember,
     createStrike,
+    deleteStrike,
+    getStrike,
     createMember,
     updateMember,
     deleteMember,

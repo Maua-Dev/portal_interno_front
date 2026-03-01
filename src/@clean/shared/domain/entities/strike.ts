@@ -28,6 +28,9 @@ export class Strike {
   get strikeId() {
     return this.props.strikeId
   }
+  get ownerUserId() {
+    return this.props.ownerUserId
+  }
   get targetUserId() {
     return this.props.targetUserId
   }
@@ -41,15 +44,15 @@ export class Strike {
     return this.props.description
   }
 
-  static fromJSON(json: StrikeCreationResponse): Strike {
+  static fromJSON(json: any): Strike {
     return new Strike({
-      strikeId: json.strike_id,
-      ownerUserId: json.owner_user_id,
-      targetUserId: json.target_user_id,
-      applierUserId: json.applier_user_id,
-      occurredDate: json.occurred_date,
-      category: json.category,
-      description: json.description
+      strikeId: json.strike_id || json.strikeId || json.id || '',
+      ownerUserId: json.owner_user_id || json.ownerUserId || '',
+      targetUserId: json.target_user_id || json.targetUserId || '',
+      applierUserId: json.applier_user_id || json.applierUserId || '',
+      occurredDate: json.occurred_date || json.occurredDate || json.date || 0,
+      category: json.category || json.reason,
+      description: json.description || json.message || json.comment || ''
     })
   }
 }

@@ -25,6 +25,8 @@ export interface IMemberRepository {
     ownerUserId: string // qual admin deu o strike
   ): Promise<StrikeCreationResponse>
 
+  deleteStrike(strikeId: string): Promise<void>
+
   getMember(): Promise<Member>
 
   getAllMembers(): Promise<Member[]>
@@ -47,6 +49,5 @@ export interface IMemberRepository {
   deleteMember(): Promise<Member>
 
   getStrike(strikeId: string): Promise<Strike>
-
-  getAllStrikes(): Promise<Strike[]>
+  getStrike(strikeId: string): Promise<Strike>
 }

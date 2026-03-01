@@ -17,6 +17,7 @@ export interface MemberContextInterface {
     date: number,
     ownerUserId: string
   ) => Promise<StrikeCreationResponse>
+  deleteStrike: (strikeId: string) => Promise<void>
   getStrike: (strikeId: string) => Promise<Strike>
   createMember: (
     ra: string,
@@ -49,12 +50,12 @@ export interface MemberContextInterface {
   isRegister: boolean
   isOnHold: boolean
   changeMemberProfilePicture: (newPhoto: string) => Promise<Member>
-  getAllStrikes: () => Promise<Strike[]>
 }
 
 export const defaultMemberContext: MemberContextInterface = {
-  createStrike: async () => ({} as StrikeCreationResponse),
-  getStrike: async () => ({} as Strike),
+  createStrike: () => Promise.resolve({} as StrikeCreationResponse),
+  deleteStrike: () => Promise.resolve(),
+  getStrike: () => Promise.resolve({} as Strike),
   getMember: async () => ({} as Member),
   getAllMembers: async () => [] as Member[],
   createMember: async () => ({} as Member),
@@ -69,6 +70,5 @@ export const defaultMemberContext: MemberContextInterface = {
   isAdmin: false,
   isRegister: false,
   isOnHold: false,
-  changeMemberProfilePicture: async () => ({} as Member),
-  getAllStrikes: async () => [] as Strike[]
+  changeMemberProfilePicture: async () => ({} as Member)
 }

@@ -6,9 +6,11 @@ import {
 } from '../../../../@clean/shared/domain/enums/strike_category_enum'
 
 export interface StrikeData {
+  strikeId?: string // <-- Adicionado
   reason: STRIKE_CATEGORY
   comment: string
   date: number
+  applierName?: string
 }
 
 interface SrikeCardProps {
@@ -18,11 +20,11 @@ interface SrikeCardProps {
     date: string
   }) => void
   onCancel: () => void
+  onDelete?: (strikeId: string) => void // <-- Adicionado
   memberName: string
   isSubmitting: boolean
-  // NOVAS PROPS:
-  initialData?: StrikeData | null // <-- Recebe os dados para visualização
-  readOnly?: boolean // <-- Define se é apenas leitura
+  initialData?: StrikeData | null
+  readOnly?: boolean
 }
 
 export default function StrikeCard({
@@ -30,8 +32,9 @@ export default function StrikeCard({
   onCancel,
   memberName,
   isSubmitting,
-  initialData, // <-- Recebendo a prop
-  readOnly = false // <-- Recebendo a prop (padrão false)
+  initialData,
+  readOnly = false,
+  onDelete // <-- Adicionado
 }: SrikeCardProps) {
   // const [reason, setReason] = useState('')
   // const [comment, setComment] = useState('')
@@ -40,7 +43,7 @@ export default function StrikeCard({
   )
   const [comment, setComment] = useState(initialData?.comment || '')
   // const currentDate = new Date().toLocaleDateString()
-  const displayDate = initialData
+  const displayDate = initialData?.date
     ? new Date(initialData.date).toLocaleDateString()
     : new Date().toLocaleDateString()
   const { darkMode } = useDarkMode()
@@ -66,8 +69,31 @@ export default function StrikeCard({
             darkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'
           }`}
         >
-          <h2 className="text-lg font-bold">Confirmar Strike</h2>
-          <p>Deseja realmente dar um strike para {memberName}?</p>
+          <h2 className="text-lg font-bold">
+            {readOnly ? 'Detalhes do Strike' : 'Confirmar Strike'}
+          </h2>
+          <p>
+            {readOnly
+              ? `Informações do strike aplicado a ${memberName}:`
+              : `Deseja realmente dar um strike para ${memberName}?`}
+          </p>
+
+          {/* Campo para aplicador */}
+          {readOnly && initialData?.applierName && (
+            <div className="pt-4">
+              <label className="block text-sm font-medium">Aplicado por</label>
+              <input
+                type="text"
+                value={initialData.applierName}
+                disabled
+                className={`mt-1 w-full rounded px-3 py-2 shadow-sm ${
+                  darkMode
+                    ? 'border-gray-600 bg-gray-700 text-white'
+                    : 'border-gray-300 bg-gray-100 text-black'
+                } cursor-not-allowed opacity-75`}
+              />
+            </div>
+          )}
 
           {/* Campo para motivo */}
           <div className="pt-4">
@@ -147,6 +173,21 @@ export default function StrikeCard({
             >
               {readOnly ? 'Fechar' : 'Cancelar'}
             </button>
+            {readOnly && onDelete && initialData?.strikeId && (
+              <button
+                className="rounded bg-red-600 px-4 py-2 text-white shadow hover:bg-red-700"
+                onClick={() => {
+                  if (
+                    confirm('Deseja realmente excluir este strike permanentemente?')
+                  ) {
+                    onDelete(initialData.strikeId!)
+                  }
+                }}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Excluindo...' : 'Excluir Strike'}
+              </button>
+            )}
           </div>
         </div>
       </div>

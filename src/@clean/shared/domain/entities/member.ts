@@ -294,6 +294,9 @@ export class Member {
   }
 
   static fromJSON(json: JsonProps) {
+    if (json.member.strikes_id && json.member.strikes_id.length > 0) {
+      console.log(`Member ${json.member.name} has strikes_id:`, json.member.strikes_id)
+    }
     return new Member({
       name: json.member.name,
       emailDev: json.member.email_dev,

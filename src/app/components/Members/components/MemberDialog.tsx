@@ -13,9 +13,11 @@ import { STRIKE_CATEGORY } from '../../../../@clean/shared/domain/enums/strike_c
 import { toast } from 'react-toastify'
 
 export interface StrikeData {
+  strikeId?: string
   reason: STRIKE_CATEGORY
   comment: string
   date: number
+  applierName?: string
 }
 
 interface MemberDialogProps {
@@ -41,35 +43,53 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
   const [isReadOnly, setIsReadOnly] = useState(false)
 
   // conexão com o backend
-  const { createStrike, getAllStrikes, member: loggedInUser } = useMember()
+  const { createStrike, deleteStrike, getStrike, member: loggedInUser, allMembers, handleMember } = useMember()
 
   const [strikes, setStrikes] = useState<Strike[]>([])
+  const [isLoadingStrikes, setIsLoadingStrikes] = useState(false)
 
   // Importar getStrike
   const [selectedStrikeToView, setSelectedStrikeToView] =
     useState<StrikeData | null>(null)
 
+  const fetchStrikes = async () => {
+    try {
+      console.log('Fetching strikes for member:', member.userId, 'Expected strikesId list:', member.strikesId)
+      
+      const memberStrikes: Strike[] = []
+      
+      if (member.strikesId && member.strikesId.length > 0) {
+        setIsLoadingStrikes(true)
+        const fetchPromises = member.strikesId.map(id => 
+          getStrike(id).catch(err => {
+            console.error(`Error fetching individual strike ${id}:`, err)
+            return null
+          })
+        )
+        const results = await Promise.all(fetchPromises)
+        results.forEach(s => {
+          if (s) memberStrikes.push(s)
+        })
+      }
+
+      memberStrikes.sort((a, b) => a.occurredDate - b.occurredDate)
+
+      setStrikes(memberStrikes)
+      setCurrentStrikes(memberStrikes.length || member.strikes || 0)
+      console.log('Final strikes loaded:', memberStrikes.length)
+    } catch (err: any) {
+      console.error('Erro ao buscar strikes na fetchStrikes:', err)
+      // Mantemos o currentStrikes do objeto member mesmo se a busca falhar
+      setCurrentStrikes(member.strikes || 0)
+    } finally {
+      setIsLoadingStrikes(false)
+    }
+  }
 
   useEffect(() => {
     if (!open) return
-
-    const fetchStrikes = async () => {
-      try {
-        const data = await getAllStrikes()
-
-        const memberStrikes = data.filter(
-          (strike: Strike) => strike.targetUserId === member.userId
-        )
-
-        setStrikes(memberStrikes)
-        setCurrentStrikes(memberStrikes.length)
-      } catch (err) {
-        console.error('Erro ao buscar strikes', err)
-      }
-    }
-
     fetchStrikes()
-  }, [open, getAllStrikes, member.userId])
+  }, [open, member.userId]) // Removido getAllStrikes e getStrike da dependência para evitar loops se mudarem
 
   const handleConfirmStrike = async (data: {
     reason: STRIKE_CATEGORY
@@ -83,7 +103,7 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
     try {
       if (!loggedInUser?.userId) throw new Error('Owner ID not found')
 
-      await createStrike(
+      const newStrikeDetails = await createStrike(
         member.userId,
         data.reason,
         data.comment,
@@ -102,15 +122,25 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
         theme: 'colored'
       })
 
-      // Recarrega strikes após criar
-      const allStrikes = await getAllStrikes()
-
-      const memberStrikes = allStrikes.filter(
-        (strike) => strike.targetUserId === member.userId
-      )
-
-      setStrikes(memberStrikes)
-      setCurrentStrikes(memberStrikes.length)
+      // Fetch the newly created strike immediately
+      if (newStrikeDetails && newStrikeDetails.strike_id) {
+        try {
+          const freshStrike = await getStrike(newStrikeDetails.strike_id)
+          const updatedStrikes = [...strikes, freshStrike].sort((a, b) => a.occurredDate - b.occurredDate)
+          setStrikes(updatedStrikes)
+          setCurrentStrikes(updatedStrikes.length)
+        } catch (err) {
+            console.error('Error fetching newly created strike', err)
+            // fallback caching
+            setCurrentStrikes(currentStrikes + 1)
+        }
+      } else {
+        // Fallback if strikeId is not in return value properly or just missing
+        setCurrentStrikes(currentStrikes + 1)
+      }
+      
+      // Update the member's global profile
+      await handleMember()
 
       setShowStrikeCard(false)
     } catch (error) {
@@ -120,26 +150,81 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
     }
   }
 
-  const handleStarClick = (index: number) => {
-    // Se clicou em uma estrela que já tem strike (colorida)
+  function handleStarClick(index: number) {
+    if (isLoadingStrikes) {
+      toast.info('Carregando informações, aguarde um instante...', {
+        position: 'top-right',
+        autoClose: 2000
+      })
+      return
+    }
+    console.log('Star clicked:', index, 'Current strikes:', currentStrikes, 'Loaded strikes:', strikes.length)
     if (index < currentStrikes) {
-      const strike = strikes[index]
-      if (strike) {
-        setSelectedStrikeToView({
-          reason: strike.category as STRIKE_CATEGORY,
-          comment: strike.description,
-          date: strike.occurredDate
+      const strikeToView = strikes[index]
+      if (!strikeToView) {
+        toast.info('Carregando detalhes do strike... Tente novamente em um instante.', {
+          position: 'top-right',
+          autoClose: 2000
         })
-        setIsReadOnly(true)
-        setShowStrikeCard(true)
+        console.warn('Strike data not found for index:', index)
+        return
       }
+      let applierName = 'Desconhecido'
+      if (strikeToView.ownerUserId === loggedInUser?.userId) {
+        applierName = loggedInUser?.name || 'Desconhecido'
+      } else {
+        const applier = allMembers?.find((m) => m.userId === strikeToView.ownerUserId)
+        if (applier) applierName = applier.name
+      }
+
+      setSelectedStrikeToView({
+        strikeId: strikeToView.strikeId,
+        reason: strikeToView.category,
+        comment: strikeToView.description,
+        date: strikeToView.occurredDate,
+        applierName
+      })
+      setIsReadOnly(true)
+      setShowStrikeCard(true)
       return
     }
 
-    // Se clicou em uma estrela vazia (válida para novo strike)
+    // Se clicou em uma estrela vazia, abre para criar um novo strike
     setSelectedStrikeToView(null)
     setIsReadOnly(false)
     setShowStrikeCard(true)
+  }
+
+  async function handleDeleteStrike(strikeId: string) {
+    setIsSubmitting(true)
+    try {
+      await deleteStrike(strikeId)
+      toast.success('Strike removido com sucesso!', {
+        position: 'top-right',
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored'
+      })
+
+      // Recarrega strikes após deletar omitindo o strike que foi salvo localmente
+      const updatedStrikes = strikes.filter((strike) => strike.strikeId !== strikeId)
+
+      setStrikes(updatedStrikes)
+      setCurrentStrikes(updatedStrikes.length)
+      
+      // update user locally regarding backend values
+      await handleMember()
+      
+      setShowStrikeCard(false)
+    } catch (error: any) {
+      toast.error('Erro ao remover strike: ' + error.message)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -371,6 +456,7 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
             <StrikeCard
               onConfirm={handleConfirmStrike}
               onCancel={() => setShowStrikeCard(false)}
+              onDelete={handleDeleteStrike}
               memberName={`${FIRST_NAME} ${LAST_NAME}`}
               isSubmitting={isSubmitting}
               initialData={selectedStrikeToView}

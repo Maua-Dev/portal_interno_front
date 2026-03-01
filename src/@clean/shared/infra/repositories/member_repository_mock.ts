@@ -295,6 +295,15 @@ export class MemberRepositoryMock implements IMemberRepository {
     return Promise.resolve(this.members)
   }
 
+  async deleteStrike(strike_id: string): Promise<void> {
+    console.log(
+      '%c--- MOCK: deleteStrike ACIONADO ---',
+      'color: red; font-weight: bold;'
+    )
+    console.log(` excluindo strike: ${strike_id}`)
+    return Promise.resolve()
+  }
+
   async getStrike(strikeId: string): Promise<Strike> {
     const strike = new Strike({
       strikeId: strikeId, // Use the passed ID

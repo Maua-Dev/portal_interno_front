@@ -50,19 +50,19 @@ export function MemberProvider({ children }: PropsWithChildren) {
     }
   }
 
-  async function getStrike(strikeId: string): Promise<Strike> {
+  async function deleteStrike(strikeId: string) {
     try {
-      const strike = await memberRepository.getStrike(strikeId)
-      return strike
+      await memberRepository.deleteStrike(strikeId)
     } catch (error: any) {
+      setMemberError(error.message)
       throw new Error(error.message)
     }
   }
 
-  async function getAllStrikes(): Promise<Strike[]> {
+  async function getStrike(strikeId: string): Promise<Strike> {
     try {
-      const strikes = await memberRepository.getAllStrikes()
-      return strikes
+      const strike = await memberRepository.getStrike(strikeId)
+      return strike
     } catch (error: any) {
       throw new Error(error.message)
     }
@@ -172,7 +172,7 @@ export function MemberProvider({ children }: PropsWithChildren) {
                 project: m.project,
                 photo: m.photo,
                 strikes: m.strikes ?? 0,
-                strikesId: [],
+                strikesId: m.strikes_id ?? [],
                 strikes_allowed: m.strikes_allowed ?? 0
              }))
            } catch (e: any) {
@@ -298,10 +298,10 @@ export function MemberProvider({ children }: PropsWithChildren) {
         allMembers,
         isAdmin,
         createStrike,
+        deleteStrike,
         isRegister,
         isOnHold,
         handleLogout,
-        getAllStrikes,
         changeMemberProfilePicture
       }}
     >
