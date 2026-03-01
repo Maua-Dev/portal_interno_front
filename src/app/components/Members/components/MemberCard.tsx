@@ -66,8 +66,10 @@ export default function MemberCard({
   }
 
   return (
-    <MemberDialog member={member}>
-      <Card
+    <div className="flex w-full" onClick={(e) => e.stopPropagation()}>
+      <MemberDialog member={member} setMembers={setMembers}>
+        <div className="w-full">
+          <Card
         onMouseEnter={() => {
           setHovering(true)
         }}
@@ -139,7 +141,9 @@ export default function MemberCard({
             <PowerOff className="w-4" />
           </Button>
         </div>
-      </Card>
-    </MemberDialog>
+          </Card>
+        </div>
+      </MemberDialog>
+    </div>
   )
 }

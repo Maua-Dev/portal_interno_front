@@ -23,9 +23,10 @@ export interface StrikeData {
 interface MemberDialogProps {
   member: Member
   children: React.ReactNode
+  setMembers?: React.Dispatch<React.SetStateAction<Member[] | undefined>>
 }
 
-export default function MemberDialog({ member, children }: MemberDialogProps) {
+export default function MemberDialog({ member, children, setMembers }: MemberDialogProps) {
   const [open, setOpen] = useState(false)
   const [formDisabled, setFormDisabled] = useState(true)
   const { darkMode } = useDarkMode()
@@ -43,7 +44,7 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
   const [isReadOnly, setIsReadOnly] = useState(false)
 
   // conexão com o backend
-  const { createStrike, deleteStrike, getStrike, member: loggedInUser, allMembers, handleMember } = useMember()
+  const { createStrike, deleteStrike, getStrike, member: loggedInUser, allMembers, handleMember, getAllMembers } = useMember()
 
   const [strikes, setStrikes] = useState<Strike[]>([])
   const [isLoadingStrikes, setIsLoadingStrikes] = useState(false)
@@ -138,9 +139,14 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
         // Fallback if strikeId is not in return value properly or just missing
         setCurrentStrikes(currentStrikes + 1)
       }
-      
       // Update the member's global profile
       await handleMember()
+      
+      // Auto-refresh the member list on the screen
+      if (setMembers) {
+        const freshMembers = await getAllMembers()
+        setMembers(freshMembers)
+      }
 
       setShowStrikeCard(false)
     } catch (error) {
@@ -218,6 +224,12 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
       
       // update user locally regarding backend values
       await handleMember()
+      
+      // Auto-refresh the member list on the screen
+      if (setMembers) {
+        const freshMembers = await getAllMembers()
+        setMembers(freshMembers)
+      }
       
       setShowStrikeCard(false)
     } catch (error: any) {
@@ -413,7 +425,7 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
               <span className="text-red-600">{}</span>
             </div>
           </div>
-          <div className="flex w-full flex-row justify-end gap-96">
+          <div className="flex w-full flex-row items-center justify-between mt-4">
             <div className="flex flex-col justify-center">
               <div className="flex items-center pr-2">
                 <h1 className="font-semi-bold text-lg">Strikes</h1>
@@ -432,14 +444,16 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
                 ))}
               </div>
             </div>
-            <Button
-              variant="default"
-              onClick={() => {
-                setFormDisabled((prev) => !prev)
-              }}
-            >
-              {formDisabled ? 'Editar' : 'Cancelar'}
-            </Button>
+            
+            <div className="flex items-center gap-4">
+              <Button
+                variant="default"
+                onClick={() => {
+                  setFormDisabled((prev) => !prev)
+                }}
+              >
+                {formDisabled ? 'Editar' : 'Cancelar'}
+              </Button>
 
             {!formDisabled && (
               <Button
@@ -451,6 +465,7 @@ export default function MemberDialog({ member, children }: MemberDialogProps) {
                 Salvar
               </Button>
             )}
+            </div>
           </div>
           {showStrikeCard && (
             <StrikeCard
