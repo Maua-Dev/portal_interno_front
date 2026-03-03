@@ -155,6 +155,21 @@ export default function StrikeCard({
 
           {/* Botões de ação */}
           <div className="mt-4 flex gap-2">
+            {readOnly && onDelete && initialData?.strikeId && (
+              <button
+                className="rounded bg-red-600 px-4 py-2 text-white shadow hover:bg-red-700"
+                onClick={() => {
+                  if (
+                    confirm('Deseja realmente excluir este strike permanentemente?')
+                  ) {
+                    onDelete(initialData.strikeId!)
+                  }
+                }}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Excluindo...' : 'Excluir Strike'}
+              </button>
+            )}
             {!readOnly && (
               <button
                 className={`rounded px-4 py-2 font-semibold duration-150 ease-in text-white shadow ${
@@ -173,23 +188,8 @@ export default function StrikeCard({
               onClick={onCancel}
               disabled={isSubmitting}
             >
-              {readOnly ? 'Fechar' : 'Cancelar'}
+              Cancelar
             </button>
-            {readOnly && onDelete && initialData?.strikeId && (
-              <button
-                className="rounded bg-red-600 px-4 py-2 text-white shadow hover:bg-red-700"
-                onClick={() => {
-                  if (
-                    confirm('Deseja realmente excluir este strike permanentemente?')
-                  ) {
-                    onDelete(initialData.strikeId!)
-                  }
-                }}
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? 'Excluindo...' : 'Excluir Strike'}
-              </button>
-            )}
           </div>
         </div>
       </div>
