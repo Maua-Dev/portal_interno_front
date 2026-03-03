@@ -8,19 +8,90 @@ import { FaRegClock } from 'react-icons/fa6'
 import { millisecondsToHours } from '../utils/functions/timeStamp'
 import { AiFillStar } from 'react-icons/ai'
 
+import { Strike } from '../../@clean/shared/domain/entities/strike'
+import StrikeCard from './Members/components/StrikeCard'
+import type { StrikeData } from './Members/components/StrikeCard'
+import { toast } from 'react-toastify'
+
 export function ProfileModal() {
   const { darkMode } = useDarkMode()
-  const { member } = useMember()
+  const { member, getStrike } = useMember()
   const [fade, setFade] = useState(false)
-  const [activeStrikes, setActiveStrikes] = useState(Array(5).fill(true))
+  const [currentStrikes, setCurrentStrikes] = useState(member?.strikes || 0)
+  const [strikes, setStrikes] = useState<Strike[]>([])
+  const [isLoadingStrikes, setIsLoadingStrikes] = useState(false)
+  const [showStrikeCard, setShowStrikeCard] = useState(false)
+  const [selectedStrikeToView, setSelectedStrikeToView] = useState<StrikeData | null>(null)
+
+  const fetchStrikes = async () => {
+    if (!member) return
+    try {
+      const memberStrikes: Strike[] = []
+      
+      if (member.strikesId && member.strikesId.length > 0) {
+        setIsLoadingStrikes(true)
+        const fetchPromises = member.strikesId.map(id => 
+          getStrike(id).catch(err => {
+            console.error(`Error fetching individual strike ${id}:`, err)
+            return null
+          })
+        )
+        const results = await Promise.all(fetchPromises)
+        results.forEach(s => {
+          if (s) memberStrikes.push(s)
+        })
+      }
+
+      memberStrikes.sort((a, b) => a.occurredDate - b.occurredDate)
+
+      setStrikes(memberStrikes)
+      setCurrentStrikes(memberStrikes.length || member.strikes || 0)
+    } catch (err: any) {
+      console.error('Erro ao buscar strikes na fetchStrikes:', err)
+      setCurrentStrikes(member?.strikes || 0)
+    } finally {
+      setIsLoadingStrikes(false)
+    }
+  }
 
   useEffect(() => {
-    // console.log(member)
+    fetchStrikes()
+  }, [member?.userId])
 
+  useEffect(() => {
     setTimeout(() => {
       setFade(true)
     }, 100)
   }, [])
+
+  function handleStarClick(index: number) {
+    if (isLoadingStrikes) {
+      toast.info('Carregando informações, aguarde um instante...', {
+        position: 'top-right',
+        autoClose: 2000
+      })
+      return
+    }
+
+    if (index < currentStrikes) {
+      const strikeToView = strikes[index]
+      if (!strikeToView) {
+        toast.info('Carregando detalhes do strike... Tente novamente em um instante.', {
+          position: 'top-right',
+          autoClose: 2000
+        })
+        return
+      }
+      
+      setSelectedStrikeToView({
+        strikeId: strikeToView.strikeId,
+        reason: strikeToView.category,
+        comment: strikeToView.description,
+        date: strikeToView.occurredDate,
+      })
+      setShowStrikeCard(true)
+    }
+  }
 
   return (
     <div className="flex min-h-screen w-full flex-col justify-center gap-5 px-8 py-24 lg:ml-28 lg:h-auto lg:flex-row lg:pr-8">
@@ -118,15 +189,15 @@ export function ProfileModal() {
             {/* member?.strikes_allowed define o número TOTAL de estrelas */}
             {Array.from({ length: member?.strikes_allowed || 0 }).map(
               (_, i) => (
-                <AiFillStar
-                  key={i}
-                  // A estrela é pintada (text-yellow-400) se o índice for menor que o número de strikes tomados
-                  className={`text-4xl transition-colors ${
-                    i < (member?.strikes || 0)
-                      ? 'text-yellow-400'
-                      : 'text-gray-400'
-                  }`}
-                />
+                  <AiFillStar
+                    key={i}
+                    onClick={() => handleStarClick(i)}
+                    className={`text-4xl transition-colors ${
+                      i < currentStrikes
+                        ? 'cursor-pointer text-yellow-400 hover:text-yellow-500'
+                        : 'text-gray-400'
+                    }`}
+                  />
               )
             )}
             {/* {activeStrikes.map((active, i) => (
@@ -145,6 +216,16 @@ export function ProfileModal() {
           </div>
         </div>
       </div>
+      {showStrikeCard && (
+        <StrikeCard
+          onConfirm={() => {}}
+          onCancel={() => setShowStrikeCard(false)}
+          memberName={member?.name || ''}
+          isSubmitting={false}
+          initialData={selectedStrikeToView}
+          readOnly={true}
+        />
+      )}
     </div>
   )
 }
