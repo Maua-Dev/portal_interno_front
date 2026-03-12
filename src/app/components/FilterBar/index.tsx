@@ -76,7 +76,7 @@ export default function FilterBar({
 
     const projectOptions = projects.map((project) => ({
       label: project.name,
-      value: project.name
+      value: project.code
     })) // Fetched projects options
 
     const finalFilterOptions = filterOptions.map((option) => {
