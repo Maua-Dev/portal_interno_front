@@ -95,10 +95,7 @@ export function MemberProvider({ children }: PropsWithChildren) {
         setIsOnHold(true)
       } else {
         console.error('Error in handleMember:', error)
-        // window.location.replace('/login')
-        // localStorage.removeItem('accessToken')
-        // localStorage.removeItem('refreshToken')
-        // localStorage.removeItem('idToken')
+        handleLogout()
       }
     }
   }

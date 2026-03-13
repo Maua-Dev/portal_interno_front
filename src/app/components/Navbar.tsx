@@ -71,7 +71,7 @@ export default function Navbar({ openOnChange }: NavbarProps) {
               : 'border-r-2 border-[#333533] bg-dev-gray text-white shadow-2xl shadow-black'
           } z-40 ${hover ? 'w-56' : 'w-28'}`}   // bug estava aqui
           // conflito na ordem de sobreposição 
-          // o z-60 estava aqui
+          // 
           // modal acabava ficando por cima do navbar
           // 
         >
