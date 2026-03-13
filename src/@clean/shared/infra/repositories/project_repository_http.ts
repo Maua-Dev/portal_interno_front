@@ -61,7 +61,7 @@ export class ProjectRepositoryHttp implements IProjectRepository {
         },
         {
           headers: {
-            Authorization: 'Bearer ' + token
+            Authorization: token
           }
         }
       )
@@ -84,7 +84,7 @@ export class ProjectRepositoryHttp implements IProjectRepository {
 
       const response = await this.http.delete(`/delete-project`, {
         headers: {
-          Authorization: 'Bearer ' + token
+          Authorization: token
         },
         data: {
           code: code
@@ -109,7 +109,7 @@ export class ProjectRepositoryHttp implements IProjectRepository {
 
       const response = await this.http.get('/get-all-projects', {
         headers: {
-          Authorization: 'Bearer ' + token
+          Authorization: token
         }
       })
 
@@ -146,7 +146,7 @@ export class ProjectRepositoryHttp implements IProjectRepository {
         `/get-project?code=${code}`,
         {
           headers: {
-            Authorization: 'Bearer ' + token
+            Authorization: token
           }
         }
       )
@@ -192,7 +192,7 @@ export class ProjectRepositoryHttp implements IProjectRepository {
         },
         {
           headers: {
-            Authorization: 'Bearer ' + token
+            Authorization: token
           }
         }
       )

@@ -22,14 +22,15 @@ export default function Login() {
       const tokenEndpoint = `https://${authDomain}/oauth2/token`
 
       
-      console.log("Fazendo requisição")
-      
+      console.log('Iniciando troca de código por tokens...')
       const response = await axios.post(
         tokenEndpoint,
         new URLSearchParams({
           grant_type: 'authorization_code',
-          code: code,
-          redirect_uri: `https://${window.location.hostname}/login`, // CORRIGIDO
+          code,
+          redirect_uri: import.meta.env.VITE_REDIRECT_URI 
+            ? import.meta.env.VITE_REDIRECT_URI
+            : `${window.location.protocol}//${window.location.hostname === 'localhost' ? '127.0.0.1' : window.location.hostname}:${window.location.port}/login`,
         }),
         {
           headers: {
@@ -39,21 +40,24 @@ export default function Login() {
         }
       )
 
+      console.log('Resposta do Cognito recebida:', response.status)
       const { id_token, access_token, refresh_token } = response.data
 
       if (id_token && refresh_token) {
-        console.log("Setando tokens")
+        console.log('Tokens válidos recebidos. Salvando no localStorage...')
         localStorage.setItem('idToken', id_token)
         localStorage.setItem('refreshToken', refresh_token)
         if (access_token) {
           localStorage.setItem('accessToken', access_token)
         }
+        console.log('Tokens salvos. Redirecionando para Home...')
         navigate('/')
       } else {
+        console.error('Resposta de token inválida:', response.data)
         throw new Error('Invalid token response')
       }
-    } catch (err) {
-      console.error('Error exchanging code for tokens:', err)
+    } catch (err: any) {
+      console.error('Erro na troca de código:', err.response?.data || err.message)
       setError('Falha na autenticação. Tente novamente.')
     } finally {
       setIsLoading(false)
@@ -90,7 +94,17 @@ export default function Login() {
   const handleRedirect = () => {
     const clientId = import.meta.env.VITE_USERPOOL_CLIENT_ID
     const authDomain = import.meta.env.VITE_AUTH_DOMAIN
-    const redirectUri = `https://${window.location.hostname}/login`
+    // Use environment variable if available, otherwise fallback to dynamic detection
+    const envRedirectUri = import.meta.env.VITE_REDIRECT_URI
+    
+    let redirectUri = ''
+    if (envRedirectUri) {
+       redirectUri = envRedirectUri
+    } else {
+       // Fallback logic
+       const hostname = window.location.hostname === 'localhost' ? '127.0.0.1' : window.location.hostname
+       redirectUri = `${window.location.protocol}//${hostname}:${window.location.port}/login`
+    }
     
     const authEndpoint = `https://${authDomain}/login`
     

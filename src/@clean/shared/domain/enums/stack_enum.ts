@@ -28,7 +28,7 @@ export function stackToEnum(value: string): STACK {
     case 'MKT':
       return STACK.MKT
     default:
-      throw new Error('Invalid value')
+      throw new Error(`Invalid stack value: ${value}`)
   }
 }
 

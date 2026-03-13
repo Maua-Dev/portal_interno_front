@@ -9,6 +9,8 @@ import { GetMemberUsecase } from '../../../modules/member/usecases/get_member_us
 import { GetAllMembersUsecase } from '../../../modules/member/usecases/get_all_members_usecase'
 import { GetAllMembersAdminUsecase } from '../../../modules/member/usecases/get_all_members_admin_usecase'
 import { UpdateMemberUsecase } from '../../../modules/member/usecases/update_member_usecase'
+import { CreateStrikeUsecase } from '../../../modules/member/usecases/create_strike_usecase' // 👈 1. Importe o usecase
+import { GetStrikeUsecase } from '../../../modules/member/usecases/get_strike_usecase'
 
 export const RegistryMember = {
   // Axios Adapter
@@ -24,7 +26,9 @@ export const RegistryMember = {
   GetMemberUsecase: Symbol.for('GetMemberUsecase'),
   UpdateMemberUsecase: Symbol.for('UpdateMemberUsecase'),
   GetAllMembersUsecase: Symbol.for('GetAllMembersUsecase'),
-  GetAllMembersAdimUsecase: Symbol.for('GetAllMembersAdimUsecase')
+  GetAllMembersAdimUsecase: Symbol.for('GetAllMembersAdimUsecase'),
+  CreateStrikeUsecase: Symbol.for('CreateStrikeUsecase'),
+  GetStrikeUsecase: Symbol.for('GetStrikeUseCase')
 }
 
 export const containerMember = new Container()
@@ -71,6 +75,7 @@ containerMember
   .bind(RegistryMember.GetAllMembersUsecase)
   .toDynamicValue((context) => {
     if (import.meta.env.VITE_STAGE === 'test') {
+      console.log('Using MemberRepositoryMock (test)')
       return new GetAllMembersUsecase(
         context.container.get(RegistryMember.MemberRepositoryMock)
       )
@@ -79,10 +84,12 @@ containerMember
       import.meta.env.VITE_STAGE === 'prod' ||
       import.meta.env.VITE_STAGE === 'homolog'
     ) {
+      console.log('Using MemberRepositoryHttp (dev/prod/homolog)')
       return new GetAllMembersUsecase(
         context.container.get(RegistryMember.MemberRepositoryHttp)
       )
     } else {
+      console.log('Using MemberRepositoryMock (fallback)')
       return new GetAllMembersUsecase(
         context.container.get(RegistryMember.MemberRepositoryMock)
       )
@@ -172,6 +179,40 @@ containerMember
       )
     } else {
       return new DeleteMemberUsecase(
+        context.container.get(RegistryMember.MemberRepositoryMock)
+      )
+    }
+  })
+containerMember
+  .bind(RegistryMember.CreateStrikeUsecase)
+  .toDynamicValue((context) => {
+    if (import.meta.env.VITE_STAGE === 'test') {
+      return new CreateStrikeUsecase(
+        context.container.get(RegistryMember.MemberRepositoryMock)
+      )
+    } else {
+      return new CreateStrikeUsecase(
+        context.container.get(RegistryMember.MemberRepositoryHttp)
+      )
+    }
+  })
+containerMember
+  .bind(RegistryMember.GetStrikeUsecase)
+  .toDynamicValue((context) => {
+    if (import.meta.env.VITE_STAGE === 'test') {
+      return new GetStrikeUsecase(
+        context.container.get(RegistryMember.MemberRepositoryMock)
+      )
+    } else if (
+      import.meta.env.VITE_STAGE === 'dev' ||
+      import.meta.env.VITE_STAGE === 'prod' ||
+      import.meta.env.VITE_STAGE === 'homolog'
+    ) {
+      return new GetStrikeUsecase(
+        context.container.get(RegistryMember.MemberRepositoryHttp)
+      )
+    } else {
+      return new GetStrikeUsecase(
         context.container.get(RegistryMember.MemberRepositoryMock)
       )
     }

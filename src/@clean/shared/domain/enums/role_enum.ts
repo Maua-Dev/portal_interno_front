@@ -28,7 +28,7 @@ export function roleToEnum(value: string): ROLE {
     case 'EXTERNAL':
       return ROLE.EXTERNAL
     default:
-      throw new Error('Invalid value')
+      throw new Error(`Invalid role value: ${value}`)
   }
 }
 
