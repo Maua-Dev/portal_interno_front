@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from 'react'
+import { FormEvent, useEffect, useState, useRef } from 'react'
 import { Member } from '../../../../@clean/shared/domain/entities/member'
 import { plainTextToRa } from '../../../utils/functions/formatters'
 import {
@@ -44,10 +44,13 @@ export function SelectorModal({
   const [search, setSearch] = useState('')
   const [fade, setFade] = useState(true)
 
+  const sectionRef = useRef<HTMLElement>(null)
+
   useEffect(() => {
     setTimeout(() => {
       setFade(false)
     })
+    sectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
   }, [])
 
   // Constants
@@ -74,12 +77,15 @@ export function SelectorModal({
 
   return (
     <div
+      onClick={handleCancel}
       className={`absolute left-0 top-0 z-[160] flex h-full w-full items-center justify-center bg-black bg-opacity-40 ${
         fade ? 'opacity-0' : 'opacity-100 transition-opacity duration-300'
       }`}
     >
       <section
-        className={`flex h-[40%] w-4/5 flex-col rounded-lg sm:w-1/3 lg:h-2/3 xl:w-1/4 ${
+        ref={sectionRef}
+        onClick={(e) => e.stopPropagation()}
+        className={`flex max-h-[80vh] w-4/5 flex-col rounded-lg sm:w-1/3 xl:w-1/4 ${
           darkMode ? 'bg-skin-secundary' : 'bg-white'
         }`}
       >
@@ -96,7 +102,7 @@ export function SelectorModal({
             onChange={(e) => setSearch(e.target.value)}
           />
         </header>
-        <div className="mt-5 flex h-full flex-col gap-3 overflow-y-scroll px-6 pb-4">
+        <div className="mt-5 flex flex-col gap-3 overflow-y-auto px-6 pb-4">
           {!isStack
             ? allMembers
                 ?.filter((member) => {
