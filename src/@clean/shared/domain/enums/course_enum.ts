@@ -1,4 +1,5 @@
 export enum COURSE {
+  ADS = 'ADS',
   ADM = 'ADM',
   ARQ = 'ARQ',
   DSG = 'DSG',
@@ -51,6 +52,8 @@ export function courseToEnum(value: string): COURSE {
       return COURSE.RIN
     case 'ARQ':
       return COURSE.ARQ
+    case 'ADS':
+      return COURSE.ADS
     default:
       throw new Error(`Invalid course value: ${value}`)
   }
@@ -60,6 +63,8 @@ export function translateCourse(value: string): string {
   switch (value) {
     case 'ADM':
       return 'Administração'
+    case 'ADS':
+      return 'Ánalise e Desenvolvimento de Sistemas'
     case 'DSG':
       return 'Design'
     case 'ARQ':
