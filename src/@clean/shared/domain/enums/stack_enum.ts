@@ -4,7 +4,8 @@ export enum STACK {
   INFRA = 'INFRA',
   UX_UI = 'UX_UI',
   INTERNAL = 'INTERNAL',
-  BUSINESS = 'BUSINESS'
+  BUSINESS = 'BUSINESS',
+  RH = 'RH'
 }
 
 export function stackToEnum(value: string): STACK {
@@ -21,8 +22,10 @@ export function stackToEnum(value: string): STACK {
       return STACK.INTERNAL
     case 'BUSINESS':
       return STACK.BUSINESS
+    case 'RH':
+      return STACK.RH
     default:
-      throw new Error('Invalid value')
+      throw new Error(`Invalid stack value: ${value}`)
   }
 }
 
@@ -40,6 +43,8 @@ export function translateStackTag(stack: string): string {
       return 'Interno'
     case 'BUSINESS':
       return 'Business'
+    case 'RH':
+      return 'Recursos Humanos'
     default:
       return 'Invalid value'
   }

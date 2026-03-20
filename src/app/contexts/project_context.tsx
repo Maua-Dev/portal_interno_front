@@ -4,7 +4,7 @@ import {
   containerProject
 } from '../../@clean/shared/infra/containers/container_project'
 import { GetAllProjectsUsecase } from '../../@clean/modules/project/usecases/get_all_projects_usecase'
-import { ProjectType } from '../../@clean/shared/infra/repositories/project_repository_http'
+import type { ProjectType } from '../../@clean/shared/infra/repositories/project_repository_http'
 import { DeleteProjectUsecase } from '../../@clean/modules/project/usecases/delete_project_usecase'
 import { CreateProjectUsecase } from '../../@clean/modules/project/usecases/create_project_usecase'
 import { UpdateProjectUsecase } from '../../@clean/modules/project/usecases/update_project_usecase'

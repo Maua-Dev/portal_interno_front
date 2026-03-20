@@ -21,7 +21,10 @@ export const actionsFilterOptions: FilterOptions[] = [
       { label: 'BACK', value: 'BACKEND' },
       { label: 'INFRA', value: 'INFRA' },
       { label: 'UX/UI', value: 'UX_UI' },
-      { label: 'INTERNAL', value: 'INTERNAL' }
+      { label: 'INTERNAL', value: 'INTERNAL' },
+      { label: 'BUSINESS', value: 'BUSINESS' },
+      { label: 'RH', value: 'RH' },
+      { label: 'MKT', value: 'MKT' }
     ]
   },
   {

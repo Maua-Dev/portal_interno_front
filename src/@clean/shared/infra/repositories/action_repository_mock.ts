@@ -10,8 +10,8 @@ import { COURSE } from '../../domain/enums/course_enum'
 import { ACTIVE } from '../../domain/enums/active_enum'
 import { ACTION_TYPE } from '../../domain/enums/action_type_enum'
 import { NoItemsFoundError } from '../../domain/helpers/errors/domain_error'
-import { IActionRepository } from '../../../modules/action/domain/repositories/action_repository_interface'
-import { historyResponse } from './action_repository_http'
+import type { IActionRepository } from '../../../modules/action/domain/repositories/action_repository_interface'
+import type { historyResponse } from './action_repository_http'
 
 export class ActionRepositoryMock implements IActionRepository {
   createAction(): Promise<Action> {
@@ -94,7 +94,7 @@ export class ActionRepositoryMock implements IActionRepository {
       name: 'Digao Siqueira',
       email: 'dsiqueira.devmaua@gmail.com',
       ra: '22006800',
-      role: ROLE.DEV,
+      role: ROLE.DIRECTOR,
       stack: STACK.FRONTEND,
       year: 3,
       cellphone: '11999999999',
@@ -105,7 +105,9 @@ export class ActionRepositoryMock implements IActionRepository {
       emailDev: 'dsiqueira.devmaua@gmail.com',
       hoursWorked: 3,
       project: ['MF', 'PT', 'SM', 'GM', 'PI'],
-      photo: 'photo1'
+      photo: 'photo1',
+      strikes: 2,
+      strikes_allowed: 4
     }),
     new Member({
       name: 'Bruno fevs',
@@ -122,7 +124,9 @@ export class ActionRepositoryMock implements IActionRepository {
       emailDev: 'bfevs.devmaua@maua.com',
       hoursWorked: 3,
       project: ['MF', 'PT', 'SM', 'GM', 'PI'],
-      photo: 'photo1'
+      photo: 'photo1',
+      strikes: 2,
+      strikes_allowed: 4
     }),
     new Member({
       name: 'Rubicks Cube',
@@ -139,7 +143,9 @@ export class ActionRepositoryMock implements IActionRepository {
       emailDev: 'rcube.devmaua@gmai.com',
       hoursWorked: 3,
       project: ['MF', 'PT', 'SM', 'GM', 'PI'],
-      photo: 'photo1'
+      photo: 'photo1',
+      strikes: 2,
+      strikes_allowed: 4
     }),
     new Member({
       name: 'Enzo sakas',
@@ -156,7 +162,9 @@ export class ActionRepositoryMock implements IActionRepository {
       emailDev: 'esakas.devmaua@gmail.com',
       hoursWorked: 3,
       project: ['MF', 'PT', 'SM', 'GM', 'PI'],
-      photo: 'photo1'
+      photo: 'photo1',
+      strikes: 2,
+      strikes_allowed: 4
     }),
     new Member({
       name: 'Lounis Televisas',
@@ -173,7 +181,9 @@ export class ActionRepositoryMock implements IActionRepository {
       emailDev: 'ltelevision.devmaua@gmail.com',
       hoursWorked: 3,
       project: ['MF', 'PT', 'SM', 'GM', 'PI'],
-      photo: 'photo1'
+      photo: 'photo1',
+      strikes: 2,
+      strikes_allowed: 4
     }),
     new Member({
       name: 'MAGIC WHITE HANDS',
@@ -190,7 +200,9 @@ export class ActionRepositoryMock implements IActionRepository {
       emailDev: 'jbranco.devmaua@gmail.com',
       hoursWorked: 3,
       project: ['MF', 'PT', 'SM', 'GM', 'PI'],
-      photo: 'photo1'
+      photo: 'photo1',
+      strikes: 2,
+      strikes_allowed: 4
     })
   ]
   private actions: Action[] = [

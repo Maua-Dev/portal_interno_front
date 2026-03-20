@@ -1,4 +1,5 @@
-import FilterBar, { FilterProps } from '../FilterBar'
+import FilterBar from '../FilterBar'
+import type { FilterProps } from '../FilterBar'
 import { memberFilterOptions } from './filterOptions.tsx'
 import { Users } from 'lucide-react'
 import { useContext, useEffect, useMemo, useState } from 'react'
@@ -18,7 +19,15 @@ import { exportToCSV } from './exportExcel.ts'
 import { useMember } from '../../hooks/useMember.ts'
 
 export default function Members() {
-  const [filterProps, setFilterProps] = useState<FilterProps>({})
+  const [filterProps, setFilterProps] = useState<FilterProps>({
+    searchText: '',
+    project: '',
+    year: '',
+    role: '',
+    stack: '',
+    orderBy: '',
+    situation: ''
+  })
   const { allMembers, member } = useMember()
   const [members, setMembers] = useState<Member[] | undefined>(undefined)
   const [hoursOfTheUserWithMoreHours, setHoursOfTheUserWithMoreHours] =
@@ -100,20 +109,27 @@ export default function Members() {
       )
     }
 
+    return currentMembers
+  }, [filterProps, members])
+
+  useEffect(() => {
     // Set the bigger hours based on the current filter
-    const maxHoursWorked = currentMembers.reduce((max, member) => {
+    const maxHoursWorked = filteredMembers.reduce((max, member) => {
       return member.hoursWorked && member.hoursWorked > max
         ? member.hoursWorked
         : max
     }, 0)
     setHoursOfTheUserWithMoreHours(millisecondsToHours(maxHoursWorked))
-
-    return currentMembers
-  }, [filterProps, members])
+  }, [filteredMembers])
 
   async function loadMembers() {
-    const response = await getAllMembers()
-    setMembers(response)
+    try {
+      const response = await getAllMembers()
+      setMembers(response)
+    } catch (error) {
+      console.error('Error loading members:', error)
+      setMembers([]) // Remove loader state
+    }
   }
 
   useEffect(() => {

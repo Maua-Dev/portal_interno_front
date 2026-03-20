@@ -13,95 +13,107 @@ export default function Login() {
   const [error, setError] = useState<string | null>(null)
 
   // OAuth2 token exchange function
-  const exchangeCodeForTokens = async (code: string) => {
-    try {
-      setIsLoading(true)
-      setError(null)
+  // Extrai a lógica do redirect_uri para evitar duplicação
+const getRedirectUri = () => {
+  const envRedirectUri = import.meta.env.VITE_REDIRECT_URI
+  if (envRedirectUri) return envRedirectUri
+  
+  const hostname = window.location.hostname === 'localhost' 
+    ? '127.0.0.1' 
+    : window.location.hostname
+  return `${window.location.protocol}//${hostname}:${window.location.port}/login`
+}
 
-      const authDomain = import.meta.env.VITE_AUTH_DOMAIN
-      const tokenEndpoint = `https://${authDomain}/oauth2/token`
+const exchangeCodeForTokens = async (code: string) => {
+  try {
+    setIsLoading(true)
+    setError(null)
 
-      
-      console.log("Fazendo requisição")
-      
-      const response = await axios.post(
-        tokenEndpoint,
-        new URLSearchParams({
-          grant_type: 'authorization_code',
-          code: code,
-          redirect_uri: `https://${window.location.hostname}/login`, // CORRIGIDO
-        }),
-        {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Authorization: `Basic ${import.meta.env.VITE_BASIC_AUTH_USERPOOL}`,
-          },
-        }
-      )
-
-      const { id_token, access_token, refresh_token } = response.data
-
-      if (id_token && refresh_token) {
-        console.log("Setando tokens")
-        localStorage.setItem('idToken', id_token)
-        localStorage.setItem('refreshToken', refresh_token)
-        if (access_token) {
-          localStorage.setItem('accessToken', access_token)
-        }
-        navigate('/')
-      } else {
-        throw new Error('Invalid token response')
-      }
-    } catch (err) {
-      console.error('Error exchanging code for tokens:', err)
-      setError('Falha na autenticação. Tente novamente.')
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  // Handle authorization code from URL and check for existing session
-  useEffect(() => {
-    // 1. Primeiro, verifica se o usuário já está logado
-    const token = localStorage.getItem('idToken')
-    if (token) {
-      console.log("token: ", token)
-      navigate('/')
-      return // Encerra a execução se já estiver logado
-    }
-
-    // 2. Depois, procura pelo código de autorização na URL
-    const urlParams = new URLSearchParams(window.location.search)
-    console.log("urlParams: ", window.location.search)
-    const code = urlParams.get('code')
-    console.log("code: ", code)
-
-    // Se encontrar o código, inicia a troca
-    if (code) {
-      // Limpa a URL para que o código não seja processado novamente
-      console.log("Tem token")
-      window.history.replaceState({}, document.title, window.location.pathname)
-      
-      // Chama a função para trocar o código por tokens
-      exchangeCodeForTokens(code)
-    }
-  }, [navigate])
-
-  const handleRedirect = () => {
-    const clientId = import.meta.env.VITE_USERPOOL_CLIENT_ID
     const authDomain = import.meta.env.VITE_AUTH_DOMAIN
-    const redirectUri = `https://${window.location.hostname}/login`
-    
-    const authEndpoint = `https://${authDomain}/login`
-    
-    window.location.replace(
-      `${authEndpoint}?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(
-        redirectUri
-      )}&scope=${encodeURIComponent(
-        'aws.cognito.signin.user.admin email openid phone profile'
-      )}`
+    const clientId = import.meta.env.VITE_USERPOOL_CLIENT_ID
+    const tokenEndpoint = `https://${authDomain}/oauth2/token`
+    const redirectUri = getRedirectUri()
+
+    console.log('redirect_uri usado no token exchange:', redirectUri)
+
+    const params: Record<string, string> = {
+      grant_type: 'authorization_code',
+      code,
+      redirect_uri: redirectUri,
+      client_id: clientId, // ✅ Adicionado
+    }
+
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    }
+
+    // ✅ Só envia Authorization Basic se o secret existir
+    const basicAuth = import.meta.env.VITE_BASIC_AUTH_USERPOOL
+    if (basicAuth) {
+      headers['Authorization'] = `Basic ${basicAuth}`
+    }
+
+    const response = await axios.post(
+      tokenEndpoint,
+      new URLSearchParams(params),
+      { headers }
     )
+
+    const { id_token, access_token, refresh_token } = response.data
+
+    if (id_token && refresh_token) {
+      localStorage.setItem('idToken', id_token)
+      localStorage.setItem('refreshToken', refresh_token)
+      if (access_token) localStorage.setItem('accessToken', access_token)
+      navigate('/')
+    } else {
+      throw new Error('Invalid token response')
+    }
+  } catch (err: any) {
+    console.error('Erro na troca de código:', err.response?.data || err.message)
+    setError('Falha na autenticação. Tente novamente.')
+  } finally {
+    setIsLoading(false)
   }
+}
+
+useEffect(() => {
+  const token = localStorage.getItem('idToken')
+  console.log('=== DEBUG LOGIN ===')
+  console.log('Token no localStorage:', token)
+  console.log('URL atual:', window.location.href)
+  console.log('Search params:', window.location.search)
+  
+  if (token) {
+    console.log('✅ Token encontrado, redirecionando para /')
+    navigate('/')
+    return
+  }
+
+  const urlParams = new URLSearchParams(window.location.search)
+  const code = urlParams.get('code')
+  console.log('Code na URL:', code)
+
+  if (code) {
+    console.log('✅ Code encontrado, iniciando troca...')
+    window.history.replaceState({}, document.title, window.location.pathname)
+    exchangeCodeForTokens(code)
+  } else {
+    console.log('❌ Nenhum code na URL e nenhum token salvo')
+  }
+}, [navigate])
+
+const handleRedirect = () => {
+  const clientId = import.meta.env.VITE_USERPOOL_CLIENT_ID
+  const authDomain = import.meta.env.VITE_AUTH_DOMAIN
+  const redirectUri = getRedirectUri() // ✅ Mesma função, garantia de consistência
+
+  console.log('redirect_uri usado no login:', redirectUri) // Compare com o de cima!
+
+  window.location.replace(
+    `https://${authDomain}/login?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent('aws.cognito.signin.user.admin email openid phone profile')}`
+  )
+}
 
   return (
     <main

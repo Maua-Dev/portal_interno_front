@@ -129,7 +129,7 @@ export class ActionRepositoryHttp implements IActionRepository {
         body,
         {
           headers: {
-            Authorization: 'Bearer ' + token
+            Authorization: token
           }
         }
       )
@@ -180,7 +180,7 @@ export class ActionRepositoryHttp implements IActionRepository {
           },
           {
             headers: {
-              Authorization: 'Bearer ' + token
+              Authorization: token
             }
           }
         )
@@ -208,7 +208,7 @@ export class ActionRepositoryHttp implements IActionRepository {
             amount
           },
           {
-            headers: { Authorization: 'Bearer ' + token }
+            headers: { Authorization: token }
           }
         )
         for (let i = 0; i < secondCase.data.actions.length; i++) {
@@ -235,7 +235,7 @@ export class ActionRepositoryHttp implements IActionRepository {
           },
           {
             headers: {
-              Authorization: 'Bearer ' + token
+              Authorization: token
             }
           }
         )
@@ -262,7 +262,7 @@ export class ActionRepositoryHttp implements IActionRepository {
           },
           {
             headers: {
-              Authorization: 'Bearer ' + token
+              Authorization: token
             }
           }
         )
@@ -285,7 +285,7 @@ export class ActionRepositoryHttp implements IActionRepository {
           {},
           {
             headers: {
-              Authorization: 'Bearer ' + token
+              Authorization: token
             }
           }
         )
@@ -338,7 +338,7 @@ export class ActionRepositoryHttp implements IActionRepository {
         bodyRequest,
         {
           headers: {
-            Authorization: 'Bearer ' + token
+            Authorization: token
           }
         }
       )
@@ -377,7 +377,7 @@ export class ActionRepositoryHttp implements IActionRepository {
         },
         {
           headers: {
-            Authorization: 'Bearer ' + token
+            Authorization: token
           }
         }
       )
@@ -397,7 +397,7 @@ export class ActionRepositoryHttp implements IActionRepository {
       }
       await this.http.delete('/delete-action', {
         headers: {
-          Authorization: 'Bearer ' + token
+          Authorization: token
         },
         data: {
           action_id: actionId

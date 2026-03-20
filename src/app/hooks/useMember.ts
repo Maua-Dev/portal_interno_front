@@ -6,6 +6,7 @@ export const useMember = () => {
     getMember,
     getAllMembers,
     memberError,
+    createStrike,
     createMember,
     updateMember,
     deleteMember,
@@ -16,7 +17,10 @@ export const useMember = () => {
     handleLogout,
     isRegister,
     isOnHold,
-    member
+    member,
+    getAllStrikes,
+    deleteStrike,
+    getStrike
   } = useContext(MemberContext)
 
   return {
@@ -26,6 +30,9 @@ export const useMember = () => {
     handleMember,
     allMembers,
     getMember,
+    createStrike,
+    deleteStrike,
+    getStrike,
     createMember,
     updateMember,
     deleteMember,
@@ -33,6 +40,7 @@ export const useMember = () => {
     memberError,
     isOnHold,
     handleLogout,
-    member
+    member,
+    getAllStrikes
   }
 }

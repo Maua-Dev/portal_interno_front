@@ -16,6 +16,6 @@ export function activeToEnum(value: string): ACTIVE {
     case 'DISCONNECTED':
       return ACTIVE.DISCONNECTED
     default:
-      throw new Error('Invalid value')
+      throw new Error(`Invalid active value: ${value}`)
   }
 }
