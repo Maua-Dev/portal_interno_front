@@ -16,6 +16,9 @@ export type JsonProps = {
     course: string
     hired_date: number
     deactivated_date?: number | null
+    strikes?: number | null
+    strikes_id?: string[]
+    strikes_allowed?: number | null
     active: string
     user_id: string
     hours_worked: number | undefined
@@ -33,6 +36,9 @@ export type MemberProps = {
   role: ROLE // ENUM
   stack: STACK // ENUM
   year: number
+  strikes: number | null
+  strikesId: string[]
+  strikes_allowed: number | null
   cellphone: string
   course: COURSE // ENUM
   hiredDate: number
@@ -53,6 +59,9 @@ export class Member {
   private _stack: STACK
   private _year: number
   private _cellphone: string
+  private _strikes: number | null
+  private _strikesId: string[]
+  private _strikes_allowed: number | null
   private _course: COURSE
   private _hiredDate: number
   private _deactivatedDate?: number | null
@@ -72,6 +81,9 @@ export class Member {
     year,
     cellphone,
     course,
+    strikes,
+    strikesId,
+    strikes_allowed,
     hiredDate,
     deactivatedDate,
     active,
@@ -89,6 +101,9 @@ export class Member {
     this._year = year
     this._cellphone = cellphone
     this._course = course
+    this._strikes = strikes
+    this._strikesId = strikesId || []
+    this._strikes_allowed = strikes_allowed
     this._hiredDate = hiredDate
     this._deactivatedDate = deactivatedDate
     this._active = active
@@ -229,6 +244,28 @@ export class Member {
   set photo(photo: string | null) {
     this._photo = photo
   }
+  get strikes(): number {
+    if (this._strikes == null) return 0
+    return this._strikes
+  }
+  set strikes(strikes: number | null) {
+    this._strikes = strikes
+  }
+
+  get strikesId(): string[] {
+    return this._strikesId
+  }
+  set strikesId(strikesId: string[]) {
+    this._strikesId = strikesId
+  }
+
+  get strikes_allowed(): number {
+    if (this._strikes_allowed == null) return 0
+    return this._strikes_allowed as number
+  }
+  set strikes_allowed(strikes_allowed: number) {
+    this._strikes_allowed = strikes_allowed
+  }
 
   // JSON conversion
 
@@ -245,6 +282,9 @@ export class Member {
       course: this.course,
       hired_date: this.hiredDate,
       deactivated_date: this.deactivatedDate,
+      strikes: this.strikes,
+      strikes_id: this.strikesId,
+      strikes_allowed: this.strikes_allowed,
       active: this.active,
       user_id: this.userId,
       hours_worked: this.hoursWorked,
@@ -254,6 +294,9 @@ export class Member {
   }
 
   static fromJSON(json: JsonProps) {
+    if (json.member.strikes_id && json.member.strikes_id.length > 0) {
+      console.log(`Member ${json.member.name} has strikes_id:`, json.member.strikes_id)
+    }
     return new Member({
       name: json.member.name,
       emailDev: json.member.email_dev,
@@ -261,6 +304,9 @@ export class Member {
       ra: json.member.ra,
       role: roleToEnum(json.member.role),
       stack: stackToEnum(json.member.stack),
+      strikesId: json.member.strikes_id || [],
+      strikes: json.member.strikes ?? null,
+      strikes_allowed: json.member.strikes_allowed ?? null,
       year: json.member.year,
       cellphone: json.member.cellphone,
       course: courseToEnum(json.member.course),

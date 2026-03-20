@@ -1,4 +1,4 @@
-import { HTMLAttributes, ReactElement, useState } from 'react'
+import { type HTMLAttributes, type ReactElement, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import Text from './FilterBar/components/Text'
 import {
@@ -13,7 +13,7 @@ import {
   Briefcase
 } from 'lucide-react'
 import { useDarkMode } from '../hooks/useDarkMode'
-import { MotionProps, motion, AnimatePresence } from 'framer-motion'
+import { type MotionProps, motion, AnimatePresence } from 'framer-motion'
 import { ACTIVE } from '../../@clean/shared/domain/enums/active_enum.ts'
 import HoverCard from './HoverCard.tsx'
 

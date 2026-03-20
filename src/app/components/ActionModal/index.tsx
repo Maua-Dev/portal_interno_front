@@ -181,7 +181,9 @@ export default function ActionModal({ action }: { action?: Action }) {
   return (
     <>
       <div
-        className={`flex w-full transform items-center justify-center overflow-x-hidden overflow-y-hidden py-24 transition-all duration-500 sm:pt-24 lg:h-dvh lg:py-12 lg:pt-24 ${
+        className={`flex w-full transform items-center justify-center overflow-x-hidden ${
+          isUpdateModal ? 'overflow-y-hidden' : 'overflow-y-auto'
+        } py-24 transition-all duration-500 sm:pt-24 lg:h-dvh lg:py-12 lg:pt-24 ${
           isUpdateModal
             ? 'absolute left-0 top-0 z-50 h-[100rem] bg-black bg-opacity-80 sm:h-[85rem] lg:pt-0'
             : 'h-full lg:pl-14'
@@ -194,10 +196,12 @@ export default function ActionModal({ action }: { action?: Action }) {
         }
         `}
       >
-        <div
-          className="absolute left-0 top-0 z-[60] h-full w-full"
-          onClick={isUpdateModal ? handleConfirmCloseModal : undefined}
-        ></div>
+        {isUpdateModal && (
+          <div
+            className="absolute left-0 top-0 z-[60] h-full w-full"
+            onClick={handleConfirmCloseModal}
+          ></div>
+        )}
         <div
           className={`z-[70] h-auto w-4/5 rounded-2xl transition-all duration-200 ${
             darkMode ? 'bg-skin-secundary text-white' : 'bg-white'

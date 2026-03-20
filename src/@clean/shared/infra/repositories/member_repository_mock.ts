@@ -1,10 +1,14 @@
 import { decorate, injectable } from 'inversify'
-import { IMemberRepository } from '../../../modules/member/domain/repositories/member_repository_interface'
+import type { IMemberRepository } from '../../../modules/member/domain/repositories/member_repository_interface'
 import { Member } from '../../domain/entities/member'
 import { ACTIVE } from '../../domain/enums/active_enum'
 import { COURSE } from '../../domain/enums/course_enum'
 import { ROLE } from '../../domain/enums/role_enum'
 import { STACK } from '../../domain/enums/stack_enum'
+// import type { StrikeCreationResponse } from './member_repository_http'
+import type { StrikeCreationResponse } from '../../domain/entities/strike'
+import { Strike } from '../../domain/entities/strike'
+import { STRIKE_CATEGORY } from '../../domain/enums/strike_category_enum'
 
 export class MemberRepositoryMock implements IMemberRepository {
   private members: Member[] = [
@@ -12,7 +16,7 @@ export class MemberRepositoryMock implements IMemberRepository {
       name: 'Digao Siqueira',
       email: 'dsiqueira.devmaua@gmail.com',
       ra: '22006800',
-      role: ROLE.DEV,
+      role: ROLE.DIRECTOR,
       stack: STACK.FRONTEND,
       year: 3,
       cellphone: '11999999999',
@@ -23,7 +27,10 @@ export class MemberRepositoryMock implements IMemberRepository {
       emailDev: 'dsiqueira.devmaua@gmail.com',
       hoursWorked: 3,
       project: ['MF', 'PT', 'SM', 'GM', 'PI'],
-      photo: 'photo1'
+      photo: 'photo1',
+      strikes: 2,
+      strikesId: [],
+      strikes_allowed: 4
     }),
     new Member({
       name: 'Bruno fevs',
@@ -40,7 +47,10 @@ export class MemberRepositoryMock implements IMemberRepository {
       emailDev: 'bfevs.devmaua@maua.com',
       hoursWorked: 3,
       project: ['MF', 'PT', 'SM', 'GM', 'PI'],
-      photo: 'photo1'
+      photo: 'photo1',
+      strikes: 2,
+      strikesId: [],
+      strikes_allowed: 4
     }),
     new Member({
       name: 'Rubicks Cube',
@@ -57,7 +67,10 @@ export class MemberRepositoryMock implements IMemberRepository {
       emailDev: 'rcube.devmaua@gmai.com',
       hoursWorked: 3,
       project: ['MF', 'PT', 'SM', 'GM', 'PI'],
-      photo: 'photo1'
+      photo: 'photo1',
+      strikes: 2,
+      strikesId: [],
+      strikes_allowed: 4
     }),
     new Member({
       name: 'Enzo sakas',
@@ -74,7 +87,10 @@ export class MemberRepositoryMock implements IMemberRepository {
       emailDev: 'esakas.devmaua@gmail.com',
       hoursWorked: 3,
       project: ['MF', 'PT', 'SM', 'GM', 'PI'],
-      photo: 'photo1'
+      photo: 'photo1',
+      strikes: 2,
+      strikesId: [],
+      strikes_allowed: 4
     }),
     new Member({
       name: 'Lounis Televisas',
@@ -91,7 +107,10 @@ export class MemberRepositoryMock implements IMemberRepository {
       emailDev: 'ltelevision.devmaua@gmail.com',
       hoursWorked: 3,
       project: ['MF', 'PT', 'SM', 'GM', 'PI'],
-      photo: 'photo1'
+      photo: 'photo1',
+      strikes: 2,
+      strikesId: [],
+      strikes_allowed: 4
     }),
     new Member({
       name: 'MAGIC WHITE HANDS',
@@ -108,7 +127,10 @@ export class MemberRepositoryMock implements IMemberRepository {
       emailDev: 'jbranco.devmaua@gmail.com',
       hoursWorked: 3,
       project: ['MF', 'PT', 'SM', 'GM', 'PI'],
-      photo: 'photo1'
+      photo: 'photo1',
+      strikes: 2,
+      strikesId: [],
+      strikes_allowed: 4
     })
   ]
 
@@ -136,7 +158,10 @@ export class MemberRepositoryMock implements IMemberRepository {
       year,
       hoursWorked: 3,
       project: ['MF', 'PT', 'SM', 'GM', 'PI'],
-      photo: 'photo1'
+      photo: 'photo1',
+      strikes: 2,
+      strikesId: [],
+      strikes_allowed: 4
     })
 
     this.members.push(member)
@@ -152,6 +177,53 @@ export class MemberRepositoryMock implements IMemberRepository {
     return this.members
   }
 
+  async createStrike(
+    memberUserId: string,
+    reason: STRIKE_CATEGORY,
+    comment: string,
+    date: number,
+    ownerUserId: string
+  ): Promise<StrikeCreationResponse> {
+    console.log(
+      '%c--- MOCK: createStrike ACIONADO ---',
+      'color: orange; font-weight: bold;'
+    )
+    console.log(` striking usuário: ${memberUserId}`)
+
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const memberToStrike = this.members.find(
+          (m) => m.userId === memberUserId
+        )
+
+        if (memberToStrike) {
+          memberToStrike.strikes = (memberToStrike.strikes || 0) + 1
+          console.log(
+            `Strikes de ${memberToStrike.name} atualizado para: ${memberToStrike.strikes}`
+          )
+        } else {
+          console.error(
+            `❌ Membro com ID ${memberUserId} não encontrado no mock.`
+          )
+        }
+
+        const response: StrikeCreationResponse = {
+          strike_id: `mock-strike-${Date.now()}`,
+          owner_user_id: memberUserId,
+          target_user_id: memberUserId,
+          applier_user_id: 'mock-admin-id',
+          occurred_date: date,
+          category: STRIKE_CATEGORY.OTHER, // Fixed from reason to match new enum type
+          description: comment,
+          case_number: 1,
+          message: 'Strike was created successfully via MOCK'
+        }
+
+        resolve(response)
+      }, 500) // 500ms de atraso
+    })
+  }
+
   async updateMember(
     memberUserId: string,
     newName?: string,
@@ -161,7 +233,8 @@ export class MemberRepositoryMock implements IMemberRepository {
     newYear?: number,
     newCellphone?: string,
     newCourse?: COURSE,
-    newActive?: ACTIVE
+    newActive?: ACTIVE,
+    newPhoto?: string
   ): Promise<Member> {
     const member = this.members[0]
 
@@ -199,6 +272,10 @@ export class MemberRepositoryMock implements IMemberRepository {
       member.active = newActive
     }
 
+    if (newPhoto) {
+      member.photo = newPhoto
+    }
+
     this.members.push(member)
 
     return member
@@ -213,7 +290,45 @@ export class MemberRepositoryMock implements IMemberRepository {
   }
 
   getAllMembersAdmin(): Promise<Member[]> {
-    return Promise.resolve([])
+    // No ambiente de teste/mock queremos simular o endpoint admin retornando todos os membros
+    // Em vez de array vazio (que gera NoItemsFoundError nos usecases)
+    return Promise.resolve(this.members)
+  }
+
+  async deleteStrike(strike_id: string): Promise<void> {
+    console.log(
+      '%c--- MOCK: deleteStrike ACIONADO ---',
+      'color: red; font-weight: bold;'
+    )
+    console.log(` excluindo strike: ${strike_id}`)
+    return Promise.resolve()
+  }
+
+  async getStrike(strikeId: string): Promise<Strike> {
+    const strike = new Strike({
+      strikeId: strikeId, // Use the passed ID
+      ownerUserId: 'mock-owner-id',
+      targetUserId: 'mock-target-id',
+      applierUserId: 'mock-applier-id',
+      occurredDate: Date.now(),
+      category: STRIKE_CATEGORY.OTHER,
+      description: 'Mock Description'
+    })
+    return Promise.resolve(strike)
+  }
+
+  async getAllStrikes(): Promise<Strike[]> {
+    return Promise.resolve([
+        new Strike({
+        strikeId: 'mock-strike-1',
+        ownerUserId: 'mock-owner-id',
+        targetUserId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627', // Matching one member
+        applierUserId: 'mock-applier-id',
+        occurredDate: Date.now(),
+        category: STRIKE_CATEGORY.OTHER,
+        description: 'Mock Description 1'
+        })
+    ])
   }
 }
 
