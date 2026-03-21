@@ -15,14 +15,7 @@ export default function Login() {
   // OAuth2 token exchange function
   // Extrai a lógica do redirect_uri para evitar duplicação
   const getRedirectUri = () => {
-    const envRedirectUri = import.meta.env.VITE_REDIRECT_URI
-    if (envRedirectUri) return envRedirectUri
-
-    const hostname =
-      window.location.hostname === 'localhost'
-        ? '127.0.0.1'
-        : window.location.hostname
-    return `${window.location.protocol}//${hostname}:${window.location.port}/login`
+    return import.meta.env.VITE_REDIRECT_URI
   }
 
   const exchangeCodeForTokens = async (code: string) => {
