@@ -18,14 +18,12 @@ export default function Login() {
     const envRedirectUri = import.meta.env.VITE_REDIRECT_URI
     if (envRedirectUri) return envRedirectUri
 
-    const hostname =
-      window.location.hostname === 'localhost'
-        ? '127.0.0.1'
-        : window.location.hostname
+    return `${window.location.protocol}//${window.location.host}/login`
 
-    const port = window.location.port ? `:${window.location.port}` : ''
-
-    return `${window.location.protocol}//${hostname}${port}/login`
+    console.log(
+      'redirect_uri construído dinamicamente:',
+      `${window.location.protocol}//${window.location.host}/login`
+    )
   }
 
   const exchangeCodeForTokens = async (code: string) => {
