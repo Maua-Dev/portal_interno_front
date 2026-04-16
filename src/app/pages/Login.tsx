@@ -31,7 +31,7 @@ export default function Login() {
       setError(null)
 
       const authDomain = import.meta.env.VITE_AUTH_DOMAIN
-      const clientId = import.meta.env.VITE_USERPOOL_CLIENT_ID
+      const clientId = import.meta.env.VITE_USERPOOL_CLIENT_ID?.trim()
       const tokenEndpoint = `https://${authDomain}/oauth2/token`
       const redirectUri = getRedirectUri()
 
@@ -40,18 +40,22 @@ export default function Login() {
       const params: Record<string, string> = {
         grant_type: 'authorization_code',
         code,
-        redirect_uri: redirectUri,
-        client_id: clientId // ✅ Adicionado
+        redirect_uri: redirectUri
       }
 
       const headers: Record<string, string> = {
         'Content-Type': 'application/x-www-form-urlencoded'
       }
 
-      // ✅ Só envia Authorization Basic se o secret existir
       const basicAuth = import.meta.env.VITE_BASIC_AUTH_USERPOOL
+      const clientSecret = import.meta.env.VITE_USERPOOL_CLIENT_SECRET?.trim()
+
       if (basicAuth) {
         headers['Authorization'] = `Basic ${basicAuth}`
+      } else if (clientSecret) {
+        headers['Authorization'] = `Basic ${btoa(clientId + ':' + clientSecret)}`
+      } else {
+        params.client_id = clientId
       }
 
       const response = await axios.post(
