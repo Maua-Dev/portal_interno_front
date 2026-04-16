@@ -39,17 +39,26 @@ http.interceptors.response.use(
         
         console.log('Attempting to refresh token with refresh_token:', refreshToken.substring(0, 10) + '...')
         
+        const clientId = import.meta.env.VITE_USERPOOL_CLIENT_ID?.trim()
+        const basicAuth = import.meta.env.VITE_BASIC_AUTH_USERPOOL
+        const clientSecret = import.meta.env.VITE_USERPOOL_CLIENT_SECRET?.trim()
+
+        const headers: Record<string, string> = {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+
+        if (basicAuth) {
+          headers['Authorization'] = `Basic ${basicAuth}`
+        } else if (clientSecret && clientId) {
+          headers['Authorization'] = `Basic ${btoa(clientId + ':' + clientSecret)}`
+        }
+
         const response = await axios.post(tokenEndpoint, 
           new URLSearchParams({
             grant_type: 'refresh_token',
             refresh_token: refreshToken
           }),
-          {
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-              'Authorization': `Basic ${import.meta.env.VITE_BASIC_AUTH_USERPOOL}`
-            }
-          }
+          { headers }
         )
         
         const newToken = response.data.id_token

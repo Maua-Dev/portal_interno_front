@@ -86,16 +86,24 @@ export function MemberProvider({ children }: PropsWithChildren) {
 
   const handleMember = async () => {
     try {
+      const token = localStorage.getItem('idToken')
+      if (!token) {
+        handleLogout()
+        return
+      }
       const member = await getMember()
       setMember(member)
     } catch (error: any) {
-      if (error.message.toLowerCase().includes('user is not registered')) {
+      const msg = (error.message || '').toLowerCase()
+      console.log('handleMember error message:', error.message)
+      console.log('handleMember error response:', error.response?.data)
+      console.log('handleMember error status:', error.response?.status)
+      if (msg.includes('user is not registered') || msg.includes('no items found')) {
         setIsRegister(true)
-      } else if (error.message.toLowerCase().includes('user is not active')) {
+      } else if (msg.includes('user is not active') || msg.includes('no permission')) {
         setIsOnHold(true)
       } else {
         console.error('Error in handleMember:', error)
-        handleLogout()
       }
     }
   }
