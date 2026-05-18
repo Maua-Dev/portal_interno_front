@@ -25,9 +25,39 @@ export default function NoticationMemberCard({
   const handleMemberDeletion = async () => {
     setDeletingMember(true)
 
-    setTimeout(() => {
-      setDeletingMember(false)
-    }, 2000)
+    const response = await updateMember(
+      member.userId,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      ACTIVE.DISCONNECTED
+    )
+
+    if (response) {
+      await handleAllMembers()
+
+      toast.success(
+        `A solicitação de ${
+          member.name.split(' ')[0]
+        } foi negada.`,
+        {
+          position: 'top-right',
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'colored'
+        }
+      )
+    }
+
+    setDeletingMember(false)
   }
 
   const handleMemberApprove = async () => {
