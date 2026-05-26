@@ -53,7 +53,9 @@ export default function Login() {
       if (basicAuth) {
         headers['Authorization'] = `Basic ${basicAuth}`
       } else if (clientSecret) {
-        headers['Authorization'] = `Basic ${btoa(clientId + ':' + clientSecret)}`
+        headers['Authorization'] = `Basic ${btoa(
+          clientId + ':' + clientSecret
+        )}`
       } else {
         params.client_id = clientId
       }

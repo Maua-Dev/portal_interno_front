@@ -41,9 +41,7 @@ export default function NoticationMemberCard({
       await handleAllMembers()
 
       toast.success(
-        `A solicitação de ${
-          member.name.split(' ')[0]
-        } foi negada.`,
+        `A solicitação de ${member.name.split(' ')[0]} foi negada.`,
         {
           position: 'top-right',
           autoClose: 4000,

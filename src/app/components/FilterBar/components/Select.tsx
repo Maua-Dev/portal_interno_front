@@ -4,7 +4,6 @@ import { twMerge } from 'tailwind-merge'
 import Text from './Text'
 import { useDarkMode } from '../../../hooks/useDarkMode.ts'
 
-
 type selectTypes = 'default' | 'withTextLabel'
 
 interface RootProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
@@ -13,7 +12,6 @@ interface RootProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
 }
 
 function Root({ label, variant, children, ...props }: RootProps) {
-
   return (
     <div
       className={twMerge(
@@ -49,11 +47,13 @@ interface ContentProps extends React.HTMLAttributes<HTMLOptionElement> {
 }
 
 function Content({ value, children, ...props }: ContentProps) {
-
   const { darkMode } = useDarkMode()
 
   return (
-    <option {...props} value={value} className={twMerge(props.className, darkMode ? 'bg-black' : '')}
+    <option
+      {...props}
+      value={value}
+      className={twMerge(props.className, darkMode ? 'bg-black' : '')}
     >
       {children}
     </option>

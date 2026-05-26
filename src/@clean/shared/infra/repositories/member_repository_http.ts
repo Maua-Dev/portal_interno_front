@@ -8,7 +8,10 @@ import { STACK, stackToEnum } from '../../domain/enums/stack_enum'
 import { decorate, injectable } from 'inversify'
 import { HTTP_STATUS_CODE } from '../../domain/enums/http_status_code'
 import { NoItemsFoundError } from '../../domain/helpers/errors/domain_error'
-import { Strike, type StrikeCreationResponse } from '../../domain/entities/strike'
+import {
+  Strike,
+  type StrikeCreationResponse
+} from '../../domain/entities/strike'
 import { STRIKE_CATEGORY } from '../../domain/enums/strike_category_enum'
 
 // interface memberRawResponse... (mantido comentado como no original)
@@ -97,7 +100,10 @@ export class MemberRepositoryHttp implements IMemberRepository {
 
       return response.data
     } catch (error: any) {
-      console.error('Detailed createStrike Error Response:', error.response?.data)
+      console.error(
+        'Detailed createStrike Error Response:',
+        error.response?.data
+      )
       const errorMessage = error.response?.data?.message || error.message
       throw new Error(`Error Creating Strike: ${errorMessage}`)
     }
@@ -112,7 +118,10 @@ export class MemberRepositoryHttp implements IMemberRepository {
         headers: { Authorization: token }
       })
     } catch (error: any) {
-      console.error('Detailed deleteStrike Error Response:', error.response?.data)
+      console.error(
+        'Detailed deleteStrike Error Response:',
+        error.response?.data
+      )
       const errorMessage = error.response?.data?.message || error.message
       throw new Error(`Error Deleting Strike: ${errorMessage}`)
     }
@@ -121,15 +130,14 @@ export class MemberRepositoryHttp implements IMemberRepository {
     const token = localStorage.getItem('idToken')
     const response = await this.http.get(`/get-strike`, {
       params: { strike_id: strikeId },
-      headers: { 
+      headers: {
         Authorization: token || '',
-        'Content-Type': undefined 
+        'Content-Type': undefined
       }
     })
     const strikeData = response.data.strike || response.data
     return Strike.fromJSON(strikeData)
   }
-
 
   async createMember(
     ra: string,
@@ -208,7 +216,10 @@ export class MemberRepositoryHttp implements IMemberRepository {
   async getAllMembers(): Promise<Member[]> {
     try {
       const token = localStorage.getItem('idToken')
-      console.log('MemberRepositoryHttp: Token encontrado para getAllMembers?', !!token)
+      console.log(
+        'MemberRepositoryHttp: Token encontrado para getAllMembers?',
+        !!token
+      )
 
       if (!token) {
         throw new Error('Token not found')
@@ -224,7 +235,10 @@ export class MemberRepositoryHttp implements IMemberRepository {
         }
       )
 
-      console.log('--- GET ALL MEMBERS RAW RESPONSE[0] ---:', response.data.members[0]?.member)
+      console.log(
+        '--- GET ALL MEMBERS RAW RESPONSE[0] ---:',
+        response.data.members[0]?.member
+      )
 
       const membersArray: Member[] = []
 

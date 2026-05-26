@@ -26,7 +26,11 @@ interface MemberDialogProps {
   setMembers?: React.Dispatch<React.SetStateAction<Member[] | undefined>>
 }
 
-export default function MemberDialog({ member, children, setMembers }: MemberDialogProps) {
+export default function MemberDialog({
+  member,
+  children,
+  setMembers
+}: MemberDialogProps) {
   const [open, setOpen] = useState(false)
   const [formDisabled, setFormDisabled] = useState(true)
   const { darkMode } = useDarkMode()
@@ -44,7 +48,15 @@ export default function MemberDialog({ member, children, setMembers }: MemberDia
   const [isReadOnly, setIsReadOnly] = useState(false)
 
   // conexão com o backend
-  const { createStrike, deleteStrike, getStrike, member: loggedInUser, allMembers, handleMember, getAllMembers } = useMember()
+  const {
+    createStrike,
+    deleteStrike,
+    getStrike,
+    member: loggedInUser,
+    allMembers,
+    handleMember,
+    getAllMembers
+  } = useMember()
 
   const [strikes, setStrikes] = useState<Strike[]>([])
   const [isLoadingStrikes, setIsLoadingStrikes] = useState(false)
@@ -55,20 +67,25 @@ export default function MemberDialog({ member, children, setMembers }: MemberDia
 
   const fetchStrikes = async () => {
     try {
-      console.log('Fetching strikes for member:', member.userId, 'Expected strikesId list:', member.strikesId)
-      
+      console.log(
+        'Fetching strikes for member:',
+        member.userId,
+        'Expected strikesId list:',
+        member.strikesId
+      )
+
       const memberStrikes: Strike[] = []
-      
+
       if (member.strikesId && member.strikesId.length > 0) {
         setIsLoadingStrikes(true)
-        const fetchPromises = member.strikesId.map(id => 
-          getStrike(id).catch(err => {
+        const fetchPromises = member.strikesId.map((id) =>
+          getStrike(id).catch((err) => {
             console.error(`Error fetching individual strike ${id}:`, err)
             return null
           })
         )
         const results = await Promise.all(fetchPromises)
-        results.forEach(s => {
+        results.forEach((s) => {
           if (s) memberStrikes.push(s)
         })
       }
@@ -127,13 +144,15 @@ export default function MemberDialog({ member, children, setMembers }: MemberDia
       if (newStrikeDetails && newStrikeDetails.strike_id) {
         try {
           const freshStrike = await getStrike(newStrikeDetails.strike_id)
-          const updatedStrikes = [...strikes, freshStrike].sort((a, b) => a.occurredDate - b.occurredDate)
+          const updatedStrikes = [...strikes, freshStrike].sort(
+            (a, b) => a.occurredDate - b.occurredDate
+          )
           setStrikes(updatedStrikes)
           setCurrentStrikes(updatedStrikes.length)
         } catch (err) {
-            console.error('Error fetching newly created strike', err)
-            // fallback caching
-            setCurrentStrikes(currentStrikes + 1)
+          console.error('Error fetching newly created strike', err)
+          // fallback caching
+          setCurrentStrikes(currentStrikes + 1)
         }
       } else {
         // Fallback if strikeId is not in return value properly or just missing
@@ -141,7 +160,7 @@ export default function MemberDialog({ member, children, setMembers }: MemberDia
       }
       // Update the member's global profile
       await handleMember()
-      
+
       // Auto-refresh the member list on the screen
       if (setMembers) {
         const freshMembers = await getAllMembers()
@@ -164,14 +183,24 @@ export default function MemberDialog({ member, children, setMembers }: MemberDia
       })
       return
     }
-    console.log('Star clicked:', index, 'Current strikes:', currentStrikes, 'Loaded strikes:', strikes.length)
+    console.log(
+      'Star clicked:',
+      index,
+      'Current strikes:',
+      currentStrikes,
+      'Loaded strikes:',
+      strikes.length
+    )
     if (index < currentStrikes) {
       const strikeToView = strikes[index]
       if (!strikeToView) {
-        toast.info('Carregando detalhes do strike... Tente novamente em um instante.', {
-          position: 'top-right',
-          autoClose: 2000
-        })
+        toast.info(
+          'Carregando detalhes do strike... Tente novamente em um instante.',
+          {
+            position: 'top-right',
+            autoClose: 2000
+          }
+        )
         console.warn('Strike data not found for index:', index)
         return
       }
@@ -179,7 +208,9 @@ export default function MemberDialog({ member, children, setMembers }: MemberDia
       if (strikeToView.ownerUserId === loggedInUser?.userId) {
         applierName = loggedInUser?.name || 'Desconhecido'
       } else {
-        const applier = allMembers?.find((m) => m.userId === strikeToView.ownerUserId)
+        const applier = allMembers?.find(
+          (m) => m.userId === strikeToView.ownerUserId
+        )
         if (applier) applierName = applier.name
       }
 
@@ -217,20 +248,22 @@ export default function MemberDialog({ member, children, setMembers }: MemberDia
       })
 
       // Recarrega strikes após deletar omitindo o strike que foi salvo localmente
-      const updatedStrikes = strikes.filter((strike) => strike.strikeId !== strikeId)
+      const updatedStrikes = strikes.filter(
+        (strike) => strike.strikeId !== strikeId
+      )
 
       setStrikes(updatedStrikes)
       setCurrentStrikes(updatedStrikes.length)
-      
+
       // update user locally regarding backend values
       await handleMember()
-      
+
       // Auto-refresh the member list on the screen
       if (setMembers) {
         const freshMembers = await getAllMembers()
         setMembers(freshMembers)
       }
-      
+
       setShowStrikeCard(false)
     } catch (error: any) {
       toast.error('Erro ao remover strike: ' + error.message)
@@ -253,7 +286,8 @@ export default function MemberDialog({ member, children, setMembers }: MemberDia
             Detalhes do Membro: {member.name}
           </DialogPrimitive.Title>
           <DialogPrimitive.Description className="sr-only">
-            Visualize e edite as informações do membro {member.name} e gerencie seus strikes.
+            Visualize e edite as informações do membro {member.name} e gerencie
+            seus strikes.
           </DialogPrimitive.Description>
           <div className="grid w-full grid-cols-2 gap-5">
             <div className="flex flex-col gap-1">
@@ -425,26 +459,28 @@ export default function MemberDialog({ member, children, setMembers }: MemberDia
               <span className="text-red-600">{}</span>
             </div>
           </div>
-          <div className="flex w-full flex-row items-center justify-between mt-4">
+          <div className="mt-4 flex w-full flex-row items-center justify-between">
             <div className="flex flex-col justify-center">
               <div className="flex items-center pr-2">
                 <h1 className="font-semi-bold text-lg">Strikes</h1>
               </div>
               <div className="flex items-center gap-1">
-                {Array.from({ length: member.strikes_allowed || 0 }).map((_, i) => (
-                  <AiFillStar
-                    key={i}
-                    className={`text-2xl transition-colors ${
-                      i < currentStrikes
-                        ? 'cursor-pointer text-yellow-400 hover:text-yellow-500' // Estrela Cheia
-                        : 'cursor-pointer text-gray-400 hover:text-yellow-300' // Estrela Vazia
-                    }`}
-                    onClick={() => handleStarClick(i)}
-                  />
-                ))}
+                {Array.from({ length: member.strikes_allowed || 0 }).map(
+                  (_, i) => (
+                    <AiFillStar
+                      key={i}
+                      className={`text-2xl transition-colors ${
+                        i < currentStrikes
+                          ? 'cursor-pointer text-yellow-400 hover:text-yellow-500' // Estrela Cheia
+                          : 'cursor-pointer text-gray-400 hover:text-yellow-300' // Estrela Vazia
+                      }`}
+                      onClick={() => handleStarClick(i)}
+                    />
+                  )
+                )}
               </div>
             </div>
-            
+
             <div className="flex items-center gap-4">
               <Button
                 variant="default"
@@ -455,16 +491,16 @@ export default function MemberDialog({ member, children, setMembers }: MemberDia
                 {formDisabled ? 'Editar' : 'Cancelar'}
               </Button>
 
-            {!formDisabled && (
-              <Button
-                variant="form"
-                onClick={() => {
-                  setOpen(false)
-                }}
-              >
-                Salvar
-              </Button>
-            )}
+              {!formDisabled && (
+                <Button
+                  variant="form"
+                  onClick={() => {
+                    setOpen(false)
+                  }}
+                >
+                  Salvar
+                </Button>
+              )}
             </div>
           </div>
           {showStrikeCard && (

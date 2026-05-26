@@ -136,9 +136,7 @@ export default function RegisterModal() {
   })
 
   return (
-    <div
-      className="fixed inset-0 z-[150] flex items-center justify-center overflow-hidden bg-black bg-opacity-60"
-    >
+    <div className="fixed inset-0 z-[150] flex items-center justify-center overflow-hidden bg-black bg-opacity-60">
       <form
         onSubmit={handleSubmit(handleRegisterMember)}
         className="flex max-h-[90dvh] w-4/5 flex-col gap-3 overflow-y-auto rounded-lg bg-white p-8 md:w-1/2"

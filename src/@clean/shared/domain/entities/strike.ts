@@ -1,4 +1,4 @@
-import { STRIKE_CATEGORY } from "../enums/strike_category_enum"
+import { STRIKE_CATEGORY } from '../enums/strike_category_enum'
 
 export type StrikeCreationResponse = {
   strike_id: string

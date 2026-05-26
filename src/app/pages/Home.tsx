@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import { OnHoldModal } from '../components/OnHoldModal'
 import Historic from '../components/Historic'
 import NotificationDrawer from '../components/NotificationDrawer'
+import ChatbotWidget from '../components/Chatbot/ChatbotWidget'
 
 export default function Home() {
   const { darkMode } = useDarkMode()
@@ -101,6 +102,7 @@ export default function Home() {
         {isOnHold ? <OnHoldModal /> : null}
         {isRegister ? <RegisterModal /> : null}
         {!isOnHold && !isRegister && modalContent}
+        {!isOnHold && !isRegister && initialized && <ChatbotWidget />}
         <ToastContainer
           position="top-right"
           autoClose={3000}
