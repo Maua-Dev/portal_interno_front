@@ -160,7 +160,9 @@ export default function StrikeCard({
                 className="rounded bg-red-600 px-4 py-2 text-white shadow hover:bg-red-700"
                 onClick={() => {
                   if (
-                    confirm('Deseja realmente excluir este strike permanentemente?')
+                    confirm(
+                      'Deseja realmente excluir este strike permanentemente?'
+                    )
                   ) {
                     onDelete(initialData.strikeId!)
                   }
@@ -172,10 +174,14 @@ export default function StrikeCard({
             )}
             {!readOnly && (
               <button
-                className={`rounded px-4 py-2 font-semibold duration-150 ease-in text-white shadow ${
-                  darkMode ? 'bg-green-700 hover:bg-green-800' : 'bg-green-600 hover:bg-green-700'
-                } disabled:opacity-50 disabled:cursor-not-allowed`}
-                onClick={() => onConfirm({ reason, comment, date: displayDate })}
+                className={`rounded px-4 py-2 font-semibold text-white shadow duration-150 ease-in ${
+                  darkMode
+                    ? 'bg-green-700 hover:bg-green-800'
+                    : 'bg-green-600 hover:bg-green-700'
+                } disabled:cursor-not-allowed disabled:opacity-50`}
+                onClick={() =>
+                  onConfirm({ reason, comment, date: displayDate })
+                }
                 disabled={isSubmitting || !reason}
               >
                 {isSubmitting ? 'Confirmando...' : 'Confirmar'}

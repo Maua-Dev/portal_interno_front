@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import { OnHoldModal } from '../components/OnHoldModal'
 import Historic from '../components/Historic'
 import NotificationDrawer from '../components/NotificationDrawer'
+import ChatbotWidget from '../components/Chatbot/ChatbotWidget'
 
 export default function Home() {
   const { darkMode } = useDarkMode()
@@ -20,12 +21,24 @@ export default function Home() {
   const { modalContent, changeModalContent } = useModal()
   const [notificationIsOpen, setNotificationIsOpen] = useState<boolean>(false)
 
+  const [initialized, setInitialized] = useState(false)
+
   useEffect(() => {
-    handleMember()
-    handleAllMembers()
-    changeModalContent(<Historic />)
+    const init = async () => {
+      await handleMember()
+      setInitialized(true)
+    }
+    init()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    if (initialized && !isRegister && !isOnHold) {
+      handleAllMembers()
+      changeModalContent(<Historic />)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialized, isRegister, isOnHold])
 
   useEffect(() => {
     if (actionSuccess) {
@@ -88,7 +101,8 @@ export default function Home() {
       >
         {isOnHold ? <OnHoldModal /> : null}
         {isRegister ? <RegisterModal /> : null}
-        {!isOnHold && modalContent}
+        {!isOnHold && !isRegister && modalContent}
+        {!isOnHold && !isRegister && initialized && <ChatbotWidget />}
         <ToastContainer
           position="top-right"
           autoClose={3000}

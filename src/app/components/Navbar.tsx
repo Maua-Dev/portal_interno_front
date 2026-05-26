@@ -69,11 +69,11 @@ export default function Navbar({ openOnChange }: NavbarProps) {
             !darkMode
               ? 'bg-white drop-shadow-md'
               : 'border-r-2 border-[#333533] bg-dev-gray text-white shadow-2xl shadow-black'
-          } z-40 ${hover ? 'w-56' : 'w-28'}`}   // bug estava aqui
-          // conflito na ordem de sobreposição 
-          // 
+          } z-40 ${hover ? 'w-56' : 'w-28'}`} // bug estava aqui
+          // conflito na ordem de sobreposição
+          //
           // modal acabava ficando por cima do navbar
-          // 
+          //
         >
           <div className="flex flex-col items-center gap-12">
             <img

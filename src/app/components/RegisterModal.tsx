@@ -136,23 +136,10 @@ export default function RegisterModal() {
   })
 
   return (
-    <div
-      className={`absolute left-0 top-0 z-[150] flex h-dvh w-full items-center justify-center overflow-y-auto bg-black bg-opacity-60 py-12 lg:h-full ${
-        errors.name ||
-        errors.course ||
-        errors.emailDev ||
-        errors.phone ||
-        errors.ra ||
-        errors.role ||
-        errors.stack ||
-        errors.year
-          ? 'pt-64'
-          : 'pt-24'
-      }`}
-    >
+    <div className="fixed inset-0 z-[150] flex items-center justify-center overflow-hidden bg-black bg-opacity-60">
       <form
         onSubmit={handleSubmit(handleRegisterMember)}
-        className="flex h-auto w-4/5 flex-col justify-center gap-3 overflow-y-auto rounded-lg bg-white p-8 md:w-1/2"
+        className="flex max-h-[90dvh] w-4/5 flex-col gap-3 overflow-y-auto rounded-lg bg-white p-8 md:w-1/2"
       >
         <h1 className="text-2xl font-bold">Ficha de cadastro de usuário</h1>
         <div className="flex flex-col gap-1">

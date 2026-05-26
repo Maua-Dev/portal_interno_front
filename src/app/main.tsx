@@ -9,6 +9,7 @@ import { ModalProvider } from './contexts/modal_context.tsx'
 import { MemberProvider } from './contexts/member_context.tsx'
 import { ProjectProvider } from './contexts/project_context.tsx'
 import { ActionModalProvider } from './components/ActionModal/contexts/action_modal_context.tsx'
+import { ChatProvider } from './contexts/chat_context.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -19,7 +20,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             <MemberProvider>
               <ModalProvider>
                 <ActionModalProvider>
-                  <AppRouter />
+                  <ChatProvider>
+                    <AppRouter />
+                  </ChatProvider>
                 </ActionModalProvider>
               </ModalProvider>
             </MemberProvider>

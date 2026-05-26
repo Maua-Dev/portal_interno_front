@@ -2,10 +2,16 @@ import { createContext, useState } from 'react'
 import type { PropsWithChildren } from 'react'
 import { http } from '../../@clean/shared/infra/http'
 import { Member } from '../../@clean/shared/domain/entities/member'
-import { COURSE, courseToEnum } from '../../@clean/shared/domain/enums/course_enum'
+import {
+  COURSE,
+  courseToEnum
+} from '../../@clean/shared/domain/enums/course_enum'
 import { ROLE, roleToEnum } from '../../@clean/shared/domain/enums/role_enum'
 import { STACK, stackToEnum } from '../../@clean/shared/domain/enums/stack_enum'
-import { ACTIVE, activeToEnum } from '../../@clean/shared/domain/enums/active_enum'
+import {
+  ACTIVE,
+  activeToEnum
+} from '../../@clean/shared/domain/enums/active_enum'
 import { Strike } from '../../@clean/shared/domain/entities/strike'
 import { STRIKE_CATEGORY } from '../../@clean/shared/domain/enums/strike_category_enum'
 import { MemberRepositoryHttp } from '../../@clean/shared/infra/repositories/member_repository_http'
@@ -13,7 +19,8 @@ import { MemberRepositoryHttp } from '../../@clean/shared/infra/repositories/mem
 import { defaultMemberContext } from './member_context_type'
 import type { MemberContextInterface } from './member_context_type'
 
-export const MemberContext = createContext<MemberContextInterface>(defaultMemberContext)
+export const MemberContext =
+  createContext<MemberContextInterface>(defaultMemberContext)
 
 export function MemberProvider({ children }: PropsWithChildren) {
   const memberRepository = new MemberRepositoryHttp(http)
@@ -86,16 +93,30 @@ export function MemberProvider({ children }: PropsWithChildren) {
 
   const handleMember = async () => {
     try {
+      const token = localStorage.getItem('idToken')
+      if (!token) {
+        handleLogout()
+        return
+      }
       const member = await getMember()
       setMember(member)
     } catch (error: any) {
-      if (error.message.toLowerCase().includes('user is not registered')) {
+      const msg = (error.message || '').toLowerCase()
+      console.log('handleMember error message:', error.message)
+      console.log('handleMember error response:', error.response?.data)
+      console.log('handleMember error status:', error.response?.status)
+      if (
+        msg.includes('user is not registered') ||
+        msg.includes('no items found')
+      ) {
         setIsRegister(true)
-      } else if (error.message.toLowerCase().includes('user is not active')) {
+      } else if (
+        msg.includes('user is not active') ||
+        msg.includes('no permission')
+      ) {
         setIsOnHold(true)
       } else {
         console.error('Error in handleMember:', error)
-        handleLogout()
       }
     }
   }
@@ -149,9 +170,10 @@ export function MemberProvider({ children }: PropsWithChildren) {
 
       if (response.data.members && Array.isArray(response.data.members)) {
         response.data.members.forEach((item: any, index: number) => {
-           const m = item.member
-           try {
-             membersList.push(new Member({
+          const m = item.member
+          try {
+            membersList.push(
+              new Member({
                 name: m.name,
                 emailDev: m.email_dev,
                 email: m.email,
@@ -171,10 +193,14 @@ export function MemberProvider({ children }: PropsWithChildren) {
                 strikes: m.strikes ?? 0,
                 strikesId: m.strikes_id ?? [],
                 strikes_allowed: m.strikes_allowed ?? 0
-             }))
-           } catch (e: any) {
-             console.warn(`Aviso: Pulando membro no índice ${index} devido a erro: ${e.message}`, m)
-           }
+              })
+            )
+          } catch (e: any) {
+            console.warn(
+              `Aviso: Pulando membro no índice ${index} devido a erro: ${e.message}`,
+              m
+            )
+          }
         })
       }
 
@@ -256,7 +282,7 @@ export function MemberProvider({ children }: PropsWithChildren) {
   async function changeMemberProfilePicture(newPhoto: string) {
     try {
       if (!member) throw new Error('Member not found')
-      
+
       const updatedMember = await memberRepository.updateMember(
         member.userId,
         undefined,

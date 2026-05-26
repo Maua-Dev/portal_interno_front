@@ -61,32 +61,31 @@ export function Avatar({ isEditable, member, ...props }: AvatarProps) {
     }
   }
 
-  // if (member && member.photo === null) {
+  const splitName = member ? member.name.trim().split(' ') : []
+  const firstName = splitName[0] || ''
+  const lastName = splitName.length > 1 ? splitName[splitName.length - 1] : ''
+
+  const styleJson = useMemo(() => {
+    if (!member || (!member.photo && !selectedFile)) {
+      return undefined
+    }
+
+    return {
+      backgroundImage:
+        selectedFile === undefined
+          ? member.photo !== null
+            ? `url(${member.photo})`
+            : 'none'
+          : `url(${URL.createObjectURL(selectedFile)})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      objectPosition: 'center',
+      transition: 'background 0.3s ease-in-out'
+    }
+  }, [member?.photo, selectedFile])
+
   if (member) {
-    const splitName = member.name.trim().split(' ')
-    const firstName = splitName[0]
-    const lastName = splitName.length > 1 ? splitName[splitName.length - 1] : ''
-
-    let styleJson = useMemo(() => {
-      if (!member.photo && !selectedFile) {
-        return undefined
-      }
-
-      return {
-        backgroundImage:
-          selectedFile === undefined
-            ? member.photo !== null
-              ? `url(${member.photo})`
-              : 'none'
-            : `url(${URL.createObjectURL(selectedFile)})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        objectPosition: 'center',
-        transition: 'background 0.3s ease-in-out'
-      }
-    }, [member.photo, selectedFile])
-
     return (
       <div
         {...props}

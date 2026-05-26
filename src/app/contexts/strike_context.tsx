@@ -1,8 +1,5 @@
 import type { Strike } from '../../@clean/shared/domain/entities/strike'
-import {
-  createContext,
-  useState, type ReactNode
-} from 'react'
+import { createContext, useState, type ReactNode } from 'react'
 
 export interface StrikeContextInterface {
   getStrikes: () => Promise<void>
@@ -18,7 +15,9 @@ export interface StrikeContextInterface {
   ) => Promise<void>
 }
 
-export const StrikeContext = createContext<StrikeContextInterface>({} as StrikeContextInterface)
+export const StrikeContext = createContext<StrikeContextInterface>(
+  {} as StrikeContextInterface
+)
 
 export function StrikeContextProvider({ children }: { children: ReactNode }) {
   const [strikes, setStrikes] = useState<Strike[]>([])

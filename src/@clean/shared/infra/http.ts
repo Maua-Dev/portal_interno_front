@@ -20,13 +20,16 @@ http.interceptors.response.use(
   async (error) => {
     console.log('HTTP Error Interceptor Status:', error.response?.status)
     console.log('URL:', error.config?.url)
-    
+
     const originalRequest = error.config
-    
+
     // Se o erro for 401 (Não autorizado), tentamos renovar o token
-    if (error.response?.status === HTTP_STATUS_CODE.UNAUTHORIZED && !originalRequest._retry) {
+    if (
+      error.response?.status === HTTP_STATUS_CODE.UNAUTHORIZED &&
+      !originalRequest._retry
+    ) {
       originalRequest._retry = true
-      
+
       try {
         const refreshToken = localStorage.getItem('refreshToken')
         if (!refreshToken) {
@@ -36,25 +39,40 @@ http.interceptors.response.use(
 
         const authDomain = getAuthDomain()
         const tokenEndpoint = `https://${authDomain}/oauth2/token`
-        
-        console.log('Attempting to refresh token with refresh_token:', refreshToken.substring(0, 10) + '...')
-        
-        const response = await axios.post(tokenEndpoint, 
+
+        console.log(
+          'Attempting to refresh token with refresh_token:',
+          refreshToken.substring(0, 10) + '...'
+        )
+
+        const clientId = import.meta.env.VITE_USERPOOL_CLIENT_ID?.trim()
+        const basicAuth = import.meta.env.VITE_BASIC_AUTH_USERPOOL
+        const clientSecret = import.meta.env.VITE_USERPOOL_CLIENT_SECRET?.trim()
+
+        const headers: Record<string, string> = {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+
+        if (basicAuth) {
+          headers['Authorization'] = `Basic ${basicAuth}`
+        } else if (clientSecret && clientId) {
+          headers['Authorization'] = `Basic ${btoa(
+            clientId + ':' + clientSecret
+          )}`
+        }
+
+        const response = await axios.post(
+          tokenEndpoint,
           new URLSearchParams({
             grant_type: 'refresh_token',
             refresh_token: refreshToken
           }),
-          {
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-              'Authorization': `Basic ${import.meta.env.VITE_BASIC_AUTH_USERPOOL}`
-            }
-          }
+          { headers }
         )
-        
+
         const newToken = response.data.id_token
         console.log('Token refreshed successfully')
-        
+
         localStorage.setItem('idToken', newToken)
         if (response.data.refresh_token) {
           localStorage.setItem('refreshToken', response.data.refresh_token)
@@ -62,7 +80,7 @@ http.interceptors.response.use(
         if (response.data.access_token) {
           localStorage.setItem('accessToken', response.data.access_token)
         }
-        
+
         // Atualiza o header da requisição original e tenta novamente
         originalRequest.headers.Authorization = newToken
         return http(originalRequest)
@@ -76,7 +94,7 @@ http.interceptors.response.use(
         return Promise.reject(refreshError)
       }
     }
-    
+
     return Promise.reject(error)
   }
 )

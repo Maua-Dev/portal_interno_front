@@ -319,7 +319,7 @@ export class MemberRepositoryMock implements IMemberRepository {
 
   async getAllStrikes(): Promise<Strike[]> {
     return Promise.resolve([
-        new Strike({
+      new Strike({
         strikeId: 'mock-strike-1',
         ownerUserId: 'mock-owner-id',
         targetUserId: 'f28a92a3-0434-4efd-8f1b-a9c0af6ee627', // Matching one member
@@ -327,7 +327,7 @@ export class MemberRepositoryMock implements IMemberRepository {
         occurredDate: Date.now(),
         category: STRIKE_CATEGORY.OTHER,
         description: 'Mock Description 1'
-        })
+      })
     ])
   }
 }

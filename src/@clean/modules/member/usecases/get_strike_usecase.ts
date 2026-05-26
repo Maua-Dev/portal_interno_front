@@ -4,6 +4,6 @@ export class GetStrikeUsecase {
   constructor(private repo: IMemberRepository) {}
 
   async execute(strikeId: string) {
-    return await this.repo.getStrike(strikeId);
+    return await this.repo.getStrike(strikeId)
   }
 }

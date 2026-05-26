@@ -21,23 +21,24 @@ export function ProfileModal() {
   const [strikes, setStrikes] = useState<Strike[]>([])
   const [isLoadingStrikes, setIsLoadingStrikes] = useState(false)
   const [showStrikeCard, setShowStrikeCard] = useState(false)
-  const [selectedStrikeToView, setSelectedStrikeToView] = useState<StrikeData | null>(null)
+  const [selectedStrikeToView, setSelectedStrikeToView] =
+    useState<StrikeData | null>(null)
 
   const fetchStrikes = async () => {
     if (!member) return
     try {
       const memberStrikes: Strike[] = []
-      
+
       if (member.strikesId && member.strikesId.length > 0) {
         setIsLoadingStrikes(true)
-        const fetchPromises = member.strikesId.map(id => 
-          getStrike(id).catch(err => {
+        const fetchPromises = member.strikesId.map((id) =>
+          getStrike(id).catch((err) => {
             console.error(`Error fetching individual strike ${id}:`, err)
             return null
           })
         )
         const results = await Promise.all(fetchPromises)
-        results.forEach(s => {
+        results.forEach((s) => {
           if (s) memberStrikes.push(s)
         })
       }
@@ -76,18 +77,21 @@ export function ProfileModal() {
     if (index < currentStrikes) {
       const strikeToView = strikes[index]
       if (!strikeToView) {
-        toast.info('Carregando detalhes do strike... Tente novamente em um instante.', {
-          position: 'top-right',
-          autoClose: 2000
-        })
+        toast.info(
+          'Carregando detalhes do strike... Tente novamente em um instante.',
+          {
+            position: 'top-right',
+            autoClose: 2000
+          }
+        )
         return
       }
-      
+
       setSelectedStrikeToView({
         strikeId: strikeToView.strikeId,
         reason: strikeToView.category,
         comment: strikeToView.description,
-        date: strikeToView.occurredDate,
+        date: strikeToView.occurredDate
       })
       setShowStrikeCard(true)
     }
@@ -189,15 +193,15 @@ export function ProfileModal() {
             {/* member?.strikes_allowed define o número TOTAL de estrelas */}
             {Array.from({ length: member?.strikes_allowed || 0 }).map(
               (_, i) => (
-                  <AiFillStar
-                    key={i}
-                    onClick={() => handleStarClick(i)}
-                    className={`text-4xl transition-colors ${
-                      i < currentStrikes
-                        ? 'cursor-pointer text-yellow-400 hover:text-yellow-500'
-                        : 'text-gray-400'
-                    }`}
-                  />
+                <AiFillStar
+                  key={i}
+                  onClick={() => handleStarClick(i)}
+                  className={`text-4xl transition-colors ${
+                    i < currentStrikes
+                      ? 'cursor-pointer text-yellow-400 hover:text-yellow-500'
+                      : 'text-gray-400'
+                  }`}
+                />
               )
             )}
             {/* {activeStrikes.map((active, i) => (
